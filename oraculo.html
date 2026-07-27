@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oráculo — I Ching — Caos Astral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .provenance-flag{
+    display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-faint);
+    border:1px solid var(--line-bright); padding:8px 14px; margin:24px 0;
+  }
+</style>
+</head>
+<body>
+<header class="site-header"><nav class="wrap">
+  <a href="index.html" class="logo"><svg class="star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 1 L13.6 9.5 L22 8 L15.2 13.2 L20 21 L12 16.4 L4 21 L8.8 13.2 L2 8 L10.4 9.5 Z"/></svg>Caos Astral</a>
+  <div class="nav-links"><a href="kit.html">O kit</a><a href="retorno.html">Retorno</a><a href="ressonancia.html">O terceiro</a><a href="oraculo.html" class="active">Oráculo</a><a href="raizes.html">Raízes</a><a href="blog.html">Blog</a><a href="manifesto.html">Manifesto</a></div>
+  <a href="planos.html" class="btn btn-ghost mono">Abrir meu kit</a>
+</nav></header>
+
+<main>
+  <section class="page-hero">
+    <div class="wrap-narrow">
+      <p class="eyebrow center"><span class="glyph">☰</span> oráculo — tradição separada</p>
+      <h1>I Ching: uma consulta, não uma extensão do seu kit</h1>
+      <p class="sub">Diferente do resto do produto, o Oráculo não usa o vocabulário Caos Astral. É outra tradição — chinesa, com milênios de história própria — apresentada aqui com o mesmo respeito de proveniência que damos a tudo o mais.</p>
+    </div>
+  </section>
+
+  <section class="tight">
+    <div class="prose">
+      <div class="provenance-flag"><span style="color:var(--accent-bright);">⚠</span> tradição independente, não traduzida para o vocabulário do kit</div>
+      <p>O I Ching (Livro das Mutações) é um sistema de consulta chinês com milhares de anos, organizado em 64 hexagramas — figuras de seis linhas, cheias ou partidas, que respondem a uma pergunta lançada por moedas ou varas de milefólio. Tem cosmologia própria: o Tao, o par yin/yang, a ideia de mutação constante como princípio do real.</p>
+      <p>Usamos aqui a tradução pioneira de <strong>James Legge (1882)</strong>, hoje em domínio público mundial. O texto original dos hexagramas e suas linhas é apresentado como Legge o traduziu — não adaptamos hexagrama pra "núcleo" nem linha mutante pra "fricção". Misturar vocabulários seria exatamente o tipo de bricolagem sem rigor que o resto deste produto se recusa a fazer.</p>
+      <p>Sua consulta fica salva no seu histórico privado, e pode — se você quiser — ser lida ao lado da sua Janela do dia. Não como se fossem o mesmo sistema, mas como duas leituras independentes que, juntas, podem te dar mais contexto.</p>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- ENGINE (I CHING): módulo separado do motor astrológico principal.
+       Consulta gera 6 linhas (método de moedas: 3 lançamentos por linha), identifica hexagrama
+       primário e, se houver linha(s) mutante(s), hexagrama resultante. Texto de Legge (1882,
+       domínio público) indexado por hexagrama + linha. Salvar histórico em tabela própria,
+       RLS privado (auth.uid()), SEM cruzar nomenclatura com tabelas de planeta/casa/aspecto. -->
+  <section class="bg-panel">
+    <div class="wrap-narrow" style="text-align:center;">
+      <div class="diagram-box" style="max-width:160px; margin:0 auto 30px;">
+        <svg viewBox="0 0 100 140">
+          <g stroke="var(--ink)" stroke-width="6" stroke-linecap="round">
+            <line x1="10" y1="10" x2="90" y2="10"/>
+            <line x1="10" y1="34" x2="42" y2="34"/><line x1="58" y1="34" x2="90" y2="34"/>
+            <line x1="10" y1="58" x2="90" y2="58"/>
+            <line x1="10" y1="82" x2="90" y2="82"/>
+            <line x1="10" y1="106" x2="42" y2="106"/><line x1="58" y1="106" x2="90" y2="106"/>
+            <line x1="10" y1="130" x2="90" y2="130"/>
+          </g>
+        </svg>
+      </div>
+      <a href="#" class="btn btn-solid mono">Lançar consulta</a>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="gate-note">Motor do Oráculo desenvolvido em módulo separado. Ver <a href="raizes-i-ching.html" class="link-out mono" style="border:none;">Raízes — I Ching</a> para contexto histórico completo.</div></div>
+</main>
+
+<footer class="site-footer"><div class="wrap">
+  <h2>Ninguém vai carregar seu destino no colo. Mas você pode aprender a ler o terreno.</h2>
+  <a href="planos.html" class="btn btn-solid mono">Abrir meu kit — grátis</a>
+  <div class="footer-bottom"><span>© Caos Astral</span><div class="footer-links"><a href="manifesto.html">Manifesto</a><a href="intento.html">Intento</a><a href="raizes.html">Raízes</a><a href="diario.html">Diário</a><a href="planos.html">Planos</a></div></div>
+</div></footer>
+</body>
+</html>

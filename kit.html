@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O Kit — Caos Astral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .kit-wheel-box{ max-width:420px; margin:0 auto 60px; }
+  .data-table{ width:100%; border-collapse:collapse; font-family:'IBM Plex Mono', monospace; font-size:0.85rem; }
+  .data-table th{ text-align:left; color:var(--ink-faint); font-weight:400; padding:10px 14px; border-bottom:1px solid var(--line-bright); text-transform:uppercase; letter-spacing:0.05em; font-size:0.7rem; }
+  .data-table td{ padding:12px 14px; border-bottom:1px solid var(--line); color:var(--ink-dim); }
+  .data-table td.strong{ color:var(--ink); }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="wrap">
+    <a href="index.html" class="logo"><svg class="star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 1 L13.6 9.5 L22 8 L15.2 13.2 L20 21 L12 16.4 L4 21 L8.8 13.2 L2 8 L10.4 9.5 Z"/></svg>Caos Astral</a>
+    <div class="nav-links">
+      <a href="kit.html" class="active">O kit</a>
+      <a href="retorno.html">Retorno</a>
+      <a href="ressonancia.html">O terceiro</a>
+      <a href="oraculo.html">Oráculo</a>
+      <a href="raizes.html">Raízes</a>
+      <a href="blog.html">Blog</a>
+      <a href="manifesto.html">Manifesto</a>
+    </div>
+    <a href="planos.html" class="btn btn-ghost mono">Abrir meu kit</a>
+  </nav>
+</header>
+
+<main>
+  <section class="page-hero">
+    <div class="wrap-narrow">
+      <p class="eyebrow center"><span class="glyph">◈</span> o kit</p>
+      <h1>Seu kit não é personalidade. É ferramenta de uso.</h1>
+      <p class="sub">Esqueça "signo de touro, ascendente em leão". Aqui, seu mapa vira um kit de operação — cada peça calculada com precisão real, inclusive Quíron.</p>
+    </div>
+  </section>
+
+  <!-- ENGINE: bloco abaixo é onde o cálculo real (núcleo/fome/máscara/territórios/aspectos/Quíron)
+       deve ser injetado a partir dos dados de nascimento do usuário logado (tabela profiles).
+       Roda SVG abaixo é placeholder estático — substituir por render dinâmico da posição real. -->
+  <section class="tight">
+    <div class="wrap">
+      <div class="kit-wheel-box">
+        <svg viewBox="0 0 400 400" id="kit-wheel-svg">
+          <circle cx="200" cy="200" r="182" fill="none" stroke="var(--line-bright)" stroke-width="1"/>
+          <circle cx="200" cy="200" r="140" fill="none" stroke="var(--line)" stroke-width="0.6"/>
+          <circle cx="200" cy="200" r="60" fill="none" stroke="var(--line)" stroke-width="0.6"/>
+          <g stroke="var(--ink-dim)" stroke-width="0.6" opacity="0.7">
+            <line x1="200" y1="18" x2="200" y2="382"/><line x1="18" y1="200" x2="382" y2="200"/>
+            <line x1="61" y1="61" x2="339" y2="339"/><line x1="339" y1="61" x2="61" y2="339"/>
+          </g>
+          <text x="196" y="70" font-family="IBM Plex Mono" font-size="15" fill="var(--ink)">☉</text>
+          <text x="292" y="140" font-family="IBM Plex Mono" font-size="15" fill="var(--ink)">☽</text>
+          <text x="110" y="300" font-family="IBM Plex Mono" font-size="14" fill="var(--accent-bright)">⚷</text>
+          <text x="270" y="290" font-family="IBM Plex Mono" font-size="13" fill="var(--ink)">♄</text>
+        </svg>
+      </div>
+
+      <div class="section-head center" style="margin-bottom:20px;">
+        <p class="eyebrow center"><span class="glyph">☰</span> dados do kit</p>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>Peça</th><th>Signo</th><th>Território</th><th>Grau</th></tr></thead>
+        <tbody id="kit-data-body">
+          <!-- ENGINE: preencher linhas dinamicamente: Núcleo (Sol), Fome (Lua), Máscara (Asc),
+               Mercúrio, Vênus, Marte, Júpiter, Saturno, Urano, Netuno, Plutão, Quíron, Meio do Céu, Descendente, Fundo do Céu -->
+          <tr><td class="strong">Núcleo</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td class="strong">Fome</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td class="strong">Máscara</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td class="strong">Cicatriz (Quíron)</td><td>—</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section class="bg-panel">
+    <div class="wrap">
+      <div class="section-head center">
+        <p class="eyebrow center"><span class="glyph">◈</span> as peças</p>
+        <h2>Cinco cards, cinco funções</h2>
+      </div>
+      <div class="card-grid">
+        <div class="card"><span class="glyph mono">☉</span><h3>Núcleo</h3><p>O motor que não se negocia. Signo solar — a força que anima.</p></div>
+        <div class="card"><span class="glyph mono">☽</span><h3>Fome</h3><p>O apetite cru que pede satisfação. Signo lunar — o que recebe e gesta.</p></div>
+        <div class="card"><span class="glyph mono">▲</span><h3>Máscara</h3><p>A interface que o mundo vê primeiro. Ascendente.</p></div>
+        <div class="card"><span class="glyph mono">⌂</span><h3>Territórios</h3><p>As doze áreas onde núcleo e fome operam. Casas astrológicas.</p></div>
+        <div class="card scar" style="border-top:1px solid var(--accent);"><span class="glyph mono">⚷</span><h3>Cicatriz</h3><p>O que sobrou depois que a dor já fez seu trabalho. Quíron — órbita kepleriana real, via JPL SBDB.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap feature-split">
+      <div>
+        <p class="eyebrow"><span class="glyph">◇</span> fricção e corrente</p>
+        <h2>Onde as peças se tocam</h2>
+        <p style="margin:18px 0;">Cada par de peças forma um aspecto — <strong style="color:var(--ink)">fricção</strong> (atrito que exige decisão) ou <strong style="color:var(--ink)">corrente</strong> (fluxo que já existe, fácil de mais até). Quíron entra nesse cálculo com todos os outros pontos, do mesmo jeito que qualquer planeta.</p>
+      </div>
+      <div class="diagram-col">
+        <div class="diagram-box">
+          <svg viewBox="0 0 300 300">
+            <circle cx="150" cy="150" r="130" fill="none" stroke="var(--line-bright)" stroke-width="1"/>
+            <line x1="60" y1="90" x2="230" y2="200" stroke="var(--accent-bright)" stroke-width="1.2"/>
+            <line x1="90" y1="230" x2="220" y2="70" stroke="var(--ink-dim)" stroke-width="1"/>
+            <circle cx="60" cy="90" r="3" fill="var(--ink)"/><circle cx="230" cy="200" r="3" fill="var(--ink)"/>
+            <circle cx="90" cy="230" r="3" fill="var(--ink)"/><circle cx="220" cy="70" r="3" fill="var(--ink)"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="gate-note">Este produto é gratuito, sempre — mapa completo calculado, Quíron incluso. Leitura expandida de todos os territórios, frições e correntes fica na assinatura. <a href="planos.html" class="link-out mono" style="border:none;">Ver planos →</a></div></div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <h2>Ninguém vai carregar seu destino no colo. Mas você pode aprender a ler o terreno.</h2>
+    <a href="planos.html" class="btn btn-solid mono">Abrir meu kit — grátis</a>
+    <div class="footer-bottom">
+      <span>© Caos Astral</span>
+      <div class="footer-links"><a href="manifesto.html">Manifesto</a><a href="intento.html">Intento</a><a href="raizes.html">Raízes</a><a href="diario.html">Diário</a><a href="planos.html">Planos</a></div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
