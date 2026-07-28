@@ -195,56 +195,43 @@
   .coin-row{
     display:flex;
     justify-content:center;
-    gap: 22px;
+    gap: 26px;
     margin-bottom: 14px;
-    perspective: 600px;
+    perspective: 700px;
   }
   .coin{
-    width: 78px;
-    height: 78px;
-    border-radius: 50%;
+    width: 84px;
+    height: 84px;
     position: relative;
-    background:
-      radial-gradient(circle at 32% 26%, #9fae82 0%, #7d8f63 22%, #6a7a4f 48%, #566640 74%, #495638 100%);
-    box-shadow:
-      0 4px 10px rgba(0,0,0,0.35),
-      inset 0 2px 3px rgba(255,255,255,0.25),
-      inset 0 -3px 5px rgba(0,0,0,0.35);
+  }
+  .coin-inner{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transform: rotateY(0deg);
+  }
+  .coin.resting .coin-inner{
+    filter: grayscale(0.15) brightness(0.9);
+    opacity: 0.75;
+  }
+  .coin-face{
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     display:flex;
     align-items:center;
     justify-content:center;
-    transform-style: preserve-3d;
-    transition: transform 0.15s ease;
   }
-  .coin::before{
-    /* rim reeding + faint engraved-character suggestion */
-    content:"";
-    position:absolute;
-    inset: 4px;
-    border-radius:50%;
-    border: 1px solid rgba(0,0,0,0.25);
-    box-shadow:
-      inset 0 0 0 1px rgba(255,255,255,0.15),
-      inset 0 0 10px rgba(0,0,0,0.15);
-    background:
-      repeating-conic-gradient(from 0deg, rgba(0,0,0,0.05) 0deg 2deg, transparent 2deg 22.5deg);
+  .coin-face img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
   }
-  .coin .hole{
-    width: 24px;
-    height: 24px;
-    background: var(--paper);
-    box-shadow:
-      inset 0 2px 3px rgba(0,0,0,0.35),
-      0 1px 0 rgba(255,255,255,0.3);
-    position: relative;
-    z-index: 1;
-  }
-  .coin.resting .hole{ background: var(--paper-dark); opacity: 0.9; }
-  .coin.flip{ animation: flipcoin 0.7s cubic-bezier(.4,.1,.2,1); }
-  @keyframes flipcoin{
-    0%{ transform: rotateY(0deg) scale(1); }
-    45%{ transform: rotateY(540deg) scale(1.15); }
-    100%{ transform: rotateY(1080deg) scale(1); }
+  .coin-face.back{
+    transform: rotateY(180deg);
   }
   .coin-face-label{
     margin-top: 8px;
@@ -256,10 +243,10 @@
   .coin-labels{
     display:flex;
     justify-content:center;
-    gap: 22px;
+    gap: 26px;
     margin-bottom: 10px;
   }
-  .coin-labels > div{ width: 78px; }
+  .coin-labels > div{ width: 84px; }
   .coin-sum{
     font-size: 14px;
     color: var(--ink-soft);
@@ -270,10 +257,9 @@
   .coin-sum strong{ color: var(--cinnabar-dark); font-style: normal; }
 
   @media (max-width: 480px){
-    .coin{ width: 62px; height: 62px; }
-    .coin .hole{ width: 19px; height: 19px; }
-    .coin-row, .coin-labels{ gap: 14px; }
-    .coin-labels > div{ width: 62px; }
+    .coin{ width: 66px; height: 66px; }
+    .coin-row, .coin-labels{ gap: 16px; }
+    .coin-labels > div{ width: 66px; }
   }
 
   .info{
@@ -350,7 +336,7 @@
   }
 
   @media (prefers-reduced-motion: reduce){
-    .coin.flip{ animation: none; }
+    .coin-inner{ transition: none !important; }
   }
 </style>
 </head>
@@ -371,9 +357,24 @@
       <div class="coin-stage" id="coinStage">
         <div class="coin-stage-label" id="coinLabel">Preparando</div>
         <div class="coin-row" id="coinRow">
-          <div class="coin resting"><div class="hole"></div></div>
-          <div class="coin resting"><div class="hole"></div></div>
-          <div class="coin resting"><div class="hole"></div></div>
+          <div class="coin resting">
+            <div class="coin-inner">
+              <div class="coin-face front"><img src="assets/cara.webp" alt="Cara"></div>
+              <div class="coin-face back"><img src="assets/coroa.webp" alt="Coroa"></div>
+            </div>
+          </div>
+          <div class="coin resting">
+            <div class="coin-inner">
+              <div class="coin-face front"><img src="assets/cara.webp" alt="Cara"></div>
+              <div class="coin-face back"><img src="assets/coroa.webp" alt="Coroa"></div>
+            </div>
+          </div>
+          <div class="coin resting">
+            <div class="coin-inner">
+              <div class="coin-face front"><img src="assets/cara.webp" alt="Cara"></div>
+              <div class="coin-face back"><img src="assets/coroa.webp" alt="Coroa"></div>
+            </div>
+          </div>
         </div>
         <div class="coin-labels" id="coinLabels">
           <div></div><div></div><div></div>
@@ -509,19 +510,32 @@ const coinLabel = document.getElementById('coinLabel');
 const coinRow = document.getElementById('coinRow');
 const coinLabels = document.getElementById('coinLabels');
 const coinSum = document.getElementById('coinSum');
+const coinRotations = [0, 0, 0];
+const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function delay(ms){ return new Promise(r=>setTimeout(r, ms)); }
 
-function coinGlyph(v){ return v===3 ? '陽' : '陰'; }
+function coinGlyph(v){ return v===3 ? '陽 (cara)' : '陰 (coroa)'; }
+
+function flipCoinTo(innerEl, index, isCara){
+  const currentMod = ((coinRotations[index] % 360) + 360) % 360;
+  const targetMod = isCara ? 0 : 180;
+  const diff = ((targetMod - currentMod) + 360) % 360;
+  const extraSpins = prefersReducedMotion ? 0 : 720;
+  coinRotations[index] += extraSpins + diff;
+  innerEl.style.transition = prefersReducedMotion ? 'none' : 'transform 0.75s cubic-bezier(.3,.05,.15,1)';
+  innerEl.style.transform = `rotateY(${coinRotations[index]}deg)`;
+}
 
 const LINE_NAMES = ['primeira','segunda','terceira','quarta','quinta','sexta'];
 
 async function castLine(index, totalLines){
   const coinEls = Array.from(coinRow.querySelectorAll('.coin'));
+  const innerEls = coinEls.map(c=>c.querySelector('.coin-inner'));
   const labelEls = Array.from(coinLabels.querySelectorAll('div'));
 
-  // reset to resting state
-  coinEls.forEach(c=>{ c.classList.remove('flip'); c.classList.add('resting'); });
+  // reset to resting (dimmed) state
+  coinEls.forEach(c=>{ c.classList.add('resting'); });
   labelEls.forEach(l=>{ l.textContent = ''; });
   coinSum.innerHTML = '&nbsp;';
 
@@ -536,10 +550,10 @@ async function castLine(index, totalLines){
   const {coins, sum} = tossLine();
   for(let i=0;i<3;i++){
     coinEls[i].classList.remove('resting');
-    coinEls[i].classList.add('flip');
+    flipCoinTo(innerEls[i], i, coins[i] === 3);
     await delay(240);
   }
-  await delay(500); // let the last coin's flip animation finish settling
+  await delay(600); // let the last coin's flip animation finish settling
 
   coinEls.forEach((c,i)=>{ labelEls[i].textContent = coinGlyph(coins[i]); });
 
