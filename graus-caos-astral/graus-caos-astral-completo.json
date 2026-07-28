@@ -1,0 +1,2550 @@
+{
+  "sistema": "graus-caos-astral",
+  "nota": "Sistema autoral de 360 símbolos de grau (Caos Astral), formato tradicional (imagem simbólica por grau), conteúdo 100% original. Estrutura em 3 decanatos de 10 graus por signo, com temperos de regência tradicional (triplicidade).",
+  "signos": {
+    "áries": [
+      {
+        "grau": 1,
+        "decanato": 1,
+        "tempero": "marte",
+        "imagem": "uma faísca salta de duas pedras batendo às cegas no escuro.",
+        "leitura": "o impulso nasce antes de qualquer plano — não é erro, é o motor tentando ligar. serve pra começar, não pra sustentar sozinho."
+      },
+      {
+        "grau": 2,
+        "decanato": 1,
+        "tempero": "marte",
+        "imagem": "um corredor dispara antes do tiro de largada soar.",
+        "leitura": "a pressa aqui não é falta de disciplina, é o núcleo testando se a pista já existe."
+      },
+      {
+        "grau": 3,
+        "decanato": 1,
+        "tempero": "marte",
+        "imagem": "uma porta é chutada aberta antes de alguém verificar o que tem do outro lado.",
+        "leitura": "entrar sem checar é o risco e o combustível do mesmo gesto — o que tem do outro lado só se descobre depois."
+      },
+      {
+        "grau": 4,
+        "decanato": 1,
+        "tempero": "marte",
+        "imagem": "um recém-nascido solta o primeiro grito antes de saber que existe um mundo fora.",
+        "leitura": "presença antes de contexto. reivindicar espaço não precisa de permissão prévia."
+      },
+      {
+        "grau": 5,
+        "decanato": 1,
+        "tempero": "marte",
+        "imagem": "uma lâmina recém-forjada, ainda quente, corta o primeiro objeto que encontra.",
+        "leitura": "força recém-feita não escolhe alvo com cuidado ainda — ela só corta pra confirmar que corta."
+      },
+      {
+        "grau": 6,
+        "decanato": 1,
+        "tempero": "marte",
+        "imagem": "um cachorro puxa a coleira na direção contrária de quem segura.",
+        "leitura": "o impulso quer ir mais rápido que quem seria responsável por ele. a tensão é o dado, não o defeito."
+      },
+      {
+        "grau": 7,
+        "decanato": 1,
+        "tempero": "marte",
+        "imagem": "um fósforo é riscado dentro de um cômodo cheio de gás.",
+        "leitura": "ação sem inventário do risco. pode ser coragem ou descuido — a diferença só aparece depois do estalo."
+      },
+      {
+        "grau": 8,
+        "decanato": 1,
+        "tempero": "marte",
+        "imagem": "uma criança derruba a torre de blocos só pra ver ela cair.",
+        "leitura": "destruir também é forma de aprender a mecânica de alguma coisa. não é sabotagem, é curiosidade crua."
+      },
+      {
+        "grau": 9,
+        "decanato": 1,
+        "tempero": "marte",
+        "imagem": "um motor é ligado antes do óleo terminar de circular.",
+        "leitura": "pressa de funcionar antes de estar pronto — pode falhar, mas também é assim que motor aprende a rodar."
+      },
+      {
+        "grau": 10,
+        "decanato": 1,
+        "tempero": "marte",
+        "imagem": "uma flecha já solta, ainda no ar, sem poder ser chamada de volta.",
+        "leitura": "decisão que já não aceita revisão. depois desse grau, o que importa é mirar antes, não depois."
+      },
+      {
+        "grau": 11,
+        "decanato": 2,
+        "tempero": "sol",
+        "imagem": "um ator pisa no palco antes de decorar a última fala.",
+        "leitura": "performar antes de dominar. a plateia raramente nota o que falta — só quem está no palco sabe."
+      },
+      {
+        "grau": 12,
+        "decanato": 2,
+        "tempero": "sol",
+        "imagem": "uma bandeira é fincada no topo antes de contar quantos já chegaram lá.",
+        "leitura": "reivindicar o topo antes de confirmar a companhia. vitória e solidão chegam juntas nesse grau."
+      },
+      {
+        "grau": 13,
+        "decanato": 2,
+        "tempero": "sol",
+        "imagem": "um leão marca território rugindo, sem checar se há outro leão por perto.",
+        "leitura": "presença que ocupa espaço primeiro, negocia depois — ou nunca."
+      },
+      {
+        "grau": 14,
+        "decanato": 2,
+        "tempero": "sol",
+        "imagem": "alguém assina o próprio nome em letra garrafal, embaixo de uma promessa que ainda não cumpriu.",
+        "leitura": "o nome já ocupa o espaço que o resultado ainda vai ter que preencher."
+      },
+      {
+        "grau": 15,
+        "decanato": 2,
+        "tempero": "sol",
+        "imagem": "uma vitrine é montada com o produto ainda incompleto.",
+        "leitura": "mostrar antes de terminar. funciona se o resto for entregue rápido — se não, vira só fachada."
+      },
+      {
+        "grau": 16,
+        "decanato": 2,
+        "tempero": "sol",
+        "imagem": "um general aponta a espada pro horizonte antes de contar os próprios soldados.",
+        "leitura": "convicção que sai na frente do inventário. quem segue por trás precisa ser perguntado, não presumido."
+      },
+      {
+        "grau": 17,
+        "decanato": 2,
+        "tempero": "sol",
+        "imagem": "um foguete de artifício sobe sozinho, barulhento, sem plateia nenhuma olhando.",
+        "leitura": "brilhar não depende de quem está olhando — mas sem ninguém olhando, a energia também se perde rápido."
+      },
+      {
+        "grau": 18,
+        "decanato": 2,
+        "tempero": "sol",
+        "imagem": "uma pessoa se declara campeã antes do juiz apitar o fim do jogo.",
+        "leitura": "confiança que aposta no resultado antes de garanti-lo. pode ser profecia ou pode ser vexame — o jogo ainda não acabou."
+      },
+      {
+        "grau": 19,
+        "decanato": 2,
+        "tempero": "sol",
+        "imagem": "uma fogueira é acesa alta demais pro tamanho da lenha que a sustenta.",
+        "leitura": "entusiasmo maior que a estrutura disponível. bonito enquanto dura, exige mais lenha rápido."
+      },
+      {
+        "grau": 20,
+        "decanato": 2,
+        "tempero": "sol",
+        "imagem": "um espelho é quebrado só pra ver os cacos multiplicando o próprio reflexo.",
+        "leitura": "precisar de mais de uma imagem de si pra se sentir inteiro. cada caco ainda é você, só fragmentado."
+      },
+      {
+        "grau": 21,
+        "decanato": 3,
+        "tempero": "júpiter",
+        "imagem": "um cavaleiro cruza a fronteira do mapa conhecido sem perguntar o que tem depois.",
+        "leitura": "ir além do que já foi testado, sem esperar relatório de quem já foi lá."
+      },
+      {
+        "grau": 22,
+        "decanato": 3,
+        "tempero": "júpiter",
+        "imagem": "uma seta é apontada pro horizonte mais distante que os olhos alcançam.",
+        "leitura": "mirar mais longe do que os olhos alcançam. a pontaria aqui é fé funcional, não garantia."
+      },
+      {
+        "grau": 23,
+        "decanato": 3,
+        "tempero": "júpiter",
+        "imagem": "alguém prega um sermão pra uma plateia que ainda não chegou.",
+        "leitura": "convicção que fala antes de ter quem escute. ou é visão, ou é ensaio — só o tempo separa as duas."
+      },
+      {
+        "grau": 24,
+        "decanato": 3,
+        "tempero": "júpiter",
+        "imagem": "um viajante joga fora o mapa e confia só na bússola.",
+        "leitura": "trocar instrução externa por direção interna. funciona se a bússola for confiável — e só dá pra saber tentando."
+      },
+      {
+        "grau": 25,
+        "decanato": 3,
+        "tempero": "júpiter",
+        "imagem": "um professor bate o livro na mesa no meio da própria explicação, exigindo mais.",
+        "leitura": "convicção que empurra além do previsto, mesmo no meio do próprio raciocínio."
+      },
+      {
+        "grau": 26,
+        "decanato": 3,
+        "tempero": "júpiter",
+        "imagem": "uma trombeta anuncia a guerra antes do exército terminar de se formar.",
+        "leitura": "declarar antes de estar pronto — o anúncio vira pressão pra alcançar o que já foi prometido."
+      },
+      {
+        "grau": 27,
+        "decanato": 3,
+        "tempero": "júpiter",
+        "imagem": "um profeta grita a verdade numa praça vazia.",
+        "leitura": "convicção que não precisa de plateia pra ser real — mas sem eco, fica sem saber se acertou."
+      },
+      {
+        "grau": 28,
+        "decanato": 3,
+        "tempero": "júpiter",
+        "imagem": "um explorador planta a bandeira num pico ainda coberto de neblina, sem ver o outro lado.",
+        "leitura": "reivindicar a conquista antes de ver o que tem do outro lado. coragem e pressa dividem o mesmo gesto."
+      },
+      {
+        "grau": 29,
+        "decanato": 3,
+        "tempero": "júpiter",
+        "imagem": "um atleta cruza a linha de chegada e já aponta pro próximo campeonato.",
+        "leitura": "nunca descansar na conquista feita — o grau que já vive no próximo ciclo antes de fechar o atual."
+      },
+      {
+        "grau": 30,
+        "decanato": 3,
+        "tempero": "júpiter",
+        "imagem": "um foguete deixa a atmosfera, motor rugindo, sem olhar pra trás pro chão que deixou.",
+        "leitura": "ruptura total com o que ficou pra trás. fim de um ciclo que não pede licença pra outro começar. (grau anarético)"
+      }
+    ],
+    "touro": [
+      {
+        "grau": 1,
+        "decanato": 1,
+        "tempero": "vênus",
+        "imagem": "Uma mão fecha em volta de uma fruta madura antes de perguntar se pode colher.",
+        "leitura": "O corpo quer primeiro, pergunta depois. Desejo cru não pede licença, só reconhecimento."
+      },
+      {
+        "grau": 2,
+        "decanato": 1,
+        "tempero": "vênus",
+        "imagem": "Um bebê agarra o dedo de quem o segura e não solta.",
+        "leitura": "Segurar é o primeiro modo de confirmar que algo é seu."
+      },
+      {
+        "grau": 3,
+        "decanato": 1,
+        "tempero": "vênus",
+        "imagem": "Uma raiz se enterra mais fundo antes de a árvore crescer um centímetro visível.",
+        "leitura": "Construir base invisível antes de qualquer resultado que apareça por fora."
+      },
+      {
+        "grau": 4,
+        "decanato": 1,
+        "tempero": "vênus",
+        "imagem": "Alguém prova o primeiro gole de um vinho e fecha os olhos.",
+        "leitura": "Prazer que exige atenção total pra ser sentido de verdade, não só consumido."
+      },
+      {
+        "grau": 5,
+        "decanato": 1,
+        "tempero": "vênus",
+        "imagem": "Um cofre é trancado antes mesmo de guardar o que ainda não chegou.",
+        "leitura": "Proteger o que ainda vai vir. Prevenção que às vezes chega cedo demais."
+      },
+      {
+        "grau": 6,
+        "decanato": 1,
+        "tempero": "vênus",
+        "imagem": "Uma vaca pasta devagar num campo enorme, sem pressa de terminar.",
+        "leitura": "Ritmo que não se apressa por ninguém — o tempo dela é a única métrica que importa."
+      },
+      {
+        "grau": 7,
+        "decanato": 1,
+        "tempero": "vênus",
+        "imagem": "Uma pedra preciosa é encontrada em bruto, ainda coberta de terra.",
+        "leitura": "Valor real que ainda não foi lapidado nem reconhecido por ninguém além de quem achou."
+      },
+      {
+        "grau": 8,
+        "decanato": 1,
+        "tempero": "vênus",
+        "imagem": "Duas mãos amassam barro até virar forma.",
+        "leitura": "Paciência física que transforma matéria bruta em algo com propósito."
+      },
+      {
+        "grau": 9,
+        "decanato": 1,
+        "tempero": "vênus",
+        "imagem": "Um cão enterra um osso num lugar que só ele lembra.",
+        "leitura": "Guardar recursos com uma lógica que só faz sentido pra quem guardou."
+      },
+      {
+        "grau": 10,
+        "decanato": 1,
+        "tempero": "vênus",
+        "imagem": "Uma âncora é lançada e prende no fundo do mar.",
+        "leitura": "Parar de vez, fincar posição — fim do decanato: não se mover mais até que valha a pena."
+      },
+      {
+        "grau": 11,
+        "decanato": 2,
+        "tempero": "mercúrio",
+        "imagem": "Um joalheiro examina uma pedra sob lupa antes de dar o preço.",
+        "leitura": "Avaliar com precisão o que antes era só desejo cru. O valor exige exame, não só vontade."
+      },
+      {
+        "grau": 12,
+        "decanato": 2,
+        "tempero": "mercúrio",
+        "imagem": "Uma balança comercial pesa grãos, um punhado de cada vez.",
+        "leitura": "Medir com cuidado o que se troca — prazer sem cálculo vira prejuízo."
+      },
+      {
+        "grau": 13,
+        "decanato": 2,
+        "tempero": "mercúrio",
+        "imagem": "Um agricultor testa a terra com os dedos antes de plantar.",
+        "leitura": "Verificar a condição real antes de investir esforço. Sentir o material, não assumir."
+      },
+      {
+        "grau": 14,
+        "decanato": 2,
+        "tempero": "mercúrio",
+        "imagem": "Uma receita antiga é seguida à risca, colher por colher.",
+        "leitura": "Repetir o que já funcionou, sem improviso — segurança que vem da fórmula testada."
+      },
+      {
+        "grau": 15,
+        "decanato": 2,
+        "tempero": "mercúrio",
+        "imagem": "Um contador soma moedas numa mesa de madeira gasta.",
+        "leitura": "Cuidar do que já existe, centavo por centavo, antes de sonhar com mais."
+      },
+      {
+        "grau": 16,
+        "decanato": 2,
+        "tempero": "mercúrio",
+        "imagem": "Um artesão lixa a mesma superfície pela décima vez, buscando o acabamento certo.",
+        "leitura": "Repetição que refina, não que cansa. O resultado só aparece depois de insistir."
+      },
+      {
+        "grau": 17,
+        "decanato": 2,
+        "tempero": "mercúrio",
+        "imagem": "Um fazendeiro conserta a cerca antes que o gado escape.",
+        "leitura": "Manutenção que evita perda maior depois. Prevenção enfadonha, mas eficaz."
+      },
+      {
+        "grau": 18,
+        "decanato": 2,
+        "tempero": "mercúrio",
+        "imagem": "Uma costureira mede o tecido duas vezes antes de cortar uma vez.",
+        "leitura": "Cautela que evita desperdício. O cálculo aqui protege o material, não o ego."
+      },
+      {
+        "grau": 19,
+        "decanato": 2,
+        "tempero": "mercúrio",
+        "imagem": "Um comerciante organiza sua mercadoria em fileiras exatas.",
+        "leitura": "Ordem que facilita o próximo passo — o que está arrumado já está meio resolvido."
+      },
+      {
+        "grau": 20,
+        "decanato": 2,
+        "tempero": "mercúrio",
+        "imagem": "Uma mesa farta é posta, prato por prato, antes dos convidados chegarem.",
+        "leitura": "Preparar fartura com antecedência. O que sustenta os outros também exige planejamento."
+      },
+      {
+        "grau": 21,
+        "decanato": 3,
+        "tempero": "saturno",
+        "imagem": "Uma muralha de pedra é erguida bloco por bloco, sem pressa de terminar.",
+        "leitura": "Construção que aceita ser lenta, porque o que se ergue rápido também cai rápido."
+      },
+      {
+        "grau": 22,
+        "decanato": 3,
+        "tempero": "saturno",
+        "imagem": "Um carvalho antigo não se move nem com vento forte.",
+        "leitura": "Raiz funda que recusa ceder — força que não precisa provar nada, só permanece."
+      },
+      {
+        "grau": 23,
+        "decanato": 3,
+        "tempero": "saturno",
+        "imagem": "Um cofre de banco é fechado com três chaves diferentes, cada uma com um guardião.",
+        "leitura": "Proteção que distribui responsabilidade — o valor grande demais pra confiar numa mão só."
+      },
+      {
+        "grau": 24,
+        "decanato": 3,
+        "tempero": "saturno",
+        "imagem": "Um fazendeiro guarda grãos suficientes pra sobreviver ao inverno mais longo.",
+        "leitura": "Provisão pensada pro pior cenário, não só pro dia de hoje."
+      },
+      {
+        "grau": 25,
+        "decanato": 3,
+        "tempero": "saturno",
+        "imagem": "Uma estátua de pedra resiste séculos ao tempo, sem trocar de expressão.",
+        "leitura": "Permanência que não pede aprovação de ninguém — só dura."
+      },
+      {
+        "grau": 26,
+        "decanato": 3,
+        "tempero": "saturno",
+        "imagem": "Um cofre-forte é escondido atrás de uma parede comum, sem nenhuma marca visível.",
+        "leitura": "Guardar valor sem ostentar — proteção que aposta na discrição, não na exibição."
+      },
+      {
+        "grau": 27,
+        "decanato": 3,
+        "tempero": "saturno",
+        "imagem": "Um velho agricultor ainda planta árvores que só darão fruto depois que ele morrer.",
+        "leitura": "Investir em algo que não vai colher — construir legado maior que a própria vida."
+      },
+      {
+        "grau": 28,
+        "decanato": 3,
+        "tempero": "saturno",
+        "imagem": "Uma montanha de sal se acumula lentamente numa salina, grão por grão.",
+        "leitura": "Acúmulo que não tem pressa nenhuma — o resultado só aparece depois de muito tempo repetindo o mesmo gesto."
+      },
+      {
+        "grau": 29,
+        "decanato": 3,
+        "tempero": "saturno",
+        "imagem": "Um testamento é lacrado e guardado num cofre até a hora certa de ser aberto.",
+        "leitura": "O que foi decidido com cuidado espera o momento certo pra valer."
+      },
+      {
+        "grau": 30,
+        "decanato": 3,
+        "tempero": "saturno",
+        "imagem": "Uma pedra fundamental é assentada, e sobre ela toda a construção seguinte vai se apoiar.",
+        "leitura": "O que se decide agora sustenta tudo que vem depois — grau anarético que fecha o ciclo virando alicerce."
+      }
+    ],
+    "gemeos": [
+      {
+        "grau": 1,
+        "decanato": 1,
+        "tempero": "mercúrio",
+        "imagem": "Duas crianças trocam segredos sussurrando ao mesmo tempo, sem esperar a vez uma da outra.",
+        "leitura": "Trocar informação rápido demais pra processar tudo — o impulso de falar chega antes do de ouvir."
+      },
+      {
+        "grau": 2,
+        "decanato": 1,
+        "tempero": "mercúrio",
+        "imagem": "Um telefone toca em duas casas ao mesmo tempo.",
+        "leitura": "Estar em dois lugares ao mesmo tempo, mesmo sem sair do lugar."
+      },
+      {
+        "grau": 3,
+        "decanato": 1,
+        "tempero": "mercúrio",
+        "imagem": "Uma pomba-correio carrega duas mensagens contraditórias em asas diferentes.",
+        "leitura": "Duas versões da mesma verdade, ambas parcialmente certas."
+      },
+      {
+        "grau": 4,
+        "decanato": 1,
+        "tempero": "mercúrio",
+        "imagem": "Um papagaio repete uma frase que ouviu sem entender o que ela significa.",
+        "leitura": "Repetir informação antes de digerir seu sentido — comunicação que ainda não virou compreensão."
+      },
+      {
+        "grau": 5,
+        "decanato": 1,
+        "tempero": "mercúrio",
+        "imagem": "Duas crianças gêmeas terminam a frase uma da outra.",
+        "leitura": "Pensamento que se completa em dupla, mais rápido do que sozinho."
+      },
+      {
+        "grau": 6,
+        "decanato": 1,
+        "tempero": "mercúrio",
+        "imagem": "Uma carta é escrita e reescrita três vezes antes de ser enviada.",
+        "leitura": "A mente girando em volta da própria formulação, tentando acertar o tom certo."
+      },
+      {
+        "grau": 7,
+        "decanato": 1,
+        "tempero": "mercúrio",
+        "imagem": "Um vendedor ambulante grita o preço da mercadoria pra quem passa apressado.",
+        "leitura": "Informação lançada rápido, sem garantia de que alguém pare pra ouvir."
+      },
+      {
+        "grau": 8,
+        "decanato": 1,
+        "tempero": "mercúrio",
+        "imagem": "Uma criança aprende a mesma palavra em dois idiomas no mesmo dia.",
+        "leitura": "A mente absorvendo mais de um sistema ao mesmo tempo, sem cansar."
+      },
+      {
+        "grau": 9,
+        "decanato": 1,
+        "tempero": "mercúrio",
+        "imagem": "Um jornal impresso sai com a tinta ainda fresca, borrando ao toque.",
+        "leitura": "Notícia tão nova que ainda nem terminou de se fixar."
+      },
+      {
+        "grau": 10,
+        "decanato": 1,
+        "tempero": "mercúrio",
+        "imagem": "Um bilhete é passado de mão em mão numa sala de aula até chegar torto ao destino.",
+        "leitura": "A mensagem muda de forma a cada mão que a repassa — fim do decanato: a informação já não é mais a original."
+      },
+      {
+        "grau": 11,
+        "decanato": 2,
+        "tempero": "vênus",
+        "imagem": "Duas pessoas conversam à mesa de um café, cada uma esperando a vez certa de falar.",
+        "leitura": "Diálogo que aprende timing — trocar já não é só falar rápido, é escutar também."
+      },
+      {
+        "grau": 12,
+        "decanato": 2,
+        "tempero": "vênus",
+        "imagem": "Uma carta de amor é escrita com caligrafia cuidadosa, cada palavra pesada antes de ser escrita.",
+        "leitura": "Comunicação que já cuida do efeito que vai causar no outro."
+      },
+      {
+        "grau": 13,
+        "decanato": 2,
+        "tempero": "vênus",
+        "imagem": "Dois comerciantes fecham negócio com um aperto de mão, sem contrato assinado.",
+        "leitura": "Confiar na palavra dada — troca que aposta na relação, não só no documento."
+      },
+      {
+        "grau": 14,
+        "decanato": 2,
+        "tempero": "vênus",
+        "imagem": "Um casal de dançarinos espelha os passos um do outro sem combinar antes.",
+        "leitura": "Sincronia que nasce de prestar atenção no outro, não de plano prévio."
+      },
+      {
+        "grau": 15,
+        "decanato": 2,
+        "tempero": "vênus",
+        "imagem": "Uma sala de negociação tem duas cadeiras de frente uma pra outra, mesma altura.",
+        "leitura": "Diálogo que só funciona quando nenhum dos dois lados fala de cima."
+      },
+      {
+        "grau": 16,
+        "decanato": 2,
+        "tempero": "vênus",
+        "imagem": "Um mediador senta entre duas partes brigando, sem tomar lado nenhum.",
+        "leitura": "Equilíbrio que exige não escolher — a solução vem do meio, não de um dos extremos."
+      },
+      {
+        "grau": 17,
+        "decanato": 2,
+        "tempero": "vênus",
+        "imagem": "Duas cartas são trocadas ao mesmo tempo pelo correio, cruzando no caminho.",
+        "leitura": "Duas pessoas dizendo a mesma coisa sem saber que a outra já tinha dito."
+      },
+      {
+        "grau": 18,
+        "decanato": 2,
+        "tempero": "vênus",
+        "imagem": "Um casal decide, junto, o nome que vão dar ao filho.",
+        "leitura": "Decisão que só existe porque duas vontades se encontraram no meio."
+      },
+      {
+        "grau": 19,
+        "decanato": 2,
+        "tempero": "vênus",
+        "imagem": "Uma balança de comerciante equilibra perfeitamente dois pesos diferentes.",
+        "leitura": "Equilíbrio real, não fingido — as duas partes pesam o que dizem pesar."
+      },
+      {
+        "grau": 20,
+        "decanato": 2,
+        "tempero": "vênus",
+        "imagem": "Um par de luvas é costurado de forma idêntica, mão esquerda e direita.",
+        "leitura": "Simetria que serve pros dois lados igualmente — fim do decanato: a troca virou parceria."
+      },
+      {
+        "grau": 21,
+        "decanato": 3,
+        "tempero": "saturno",
+        "imagem": "Um telégrafo transmite código através de fios que cruzam um continente inteiro.",
+        "leitura": "A mensagem virou sistema — não depende mais de quem fala, só do código combinado."
+      },
+      {
+        "grau": 22,
+        "decanato": 3,
+        "tempero": "saturno",
+        "imagem": "Um arquivista organiza milhares de cartas por data, sem ler o conteúdo de nenhuma.",
+        "leitura": "Informação tratada como estrutura, não como sentimento — frieza que serve pra não se perder no meio de tanto dado."
+      },
+      {
+        "grau": 23,
+        "decanato": 3,
+        "tempero": "saturno",
+        "imagem": "Uma rede de sinais de fumaça conecta postos de vigia distantes um do outro.",
+        "leitura": "Comunicação que já não depende de proximidade — só do sistema estar de pé."
+      },
+      {
+        "grau": 24,
+        "decanato": 3,
+        "tempero": "saturno",
+        "imagem": "Um matemático prova um teorema usando só símbolos, sem nenhuma palavra.",
+        "leitura": "Linguagem que abandona a ambiguidade da fala comum em troca de precisão total."
+      },
+      {
+        "grau": 25,
+        "decanato": 3,
+        "tempero": "saturno",
+        "imagem": "Um grupo de estranhos se organiza em silêncio, cada um sabendo exatamente sua função.",
+        "leitura": "Coordenação que dispensa conversa — o sistema já foi combinado antes, agora só se executa."
+      },
+      {
+        "grau": 26,
+        "decanato": 3,
+        "tempero": "saturno",
+        "imagem": "Uma biblioteca cataloga livros num sistema numérico que qualquer bibliotecário do mundo entende.",
+        "leitura": "Linguagem universal que troca calor humano por alcance máximo."
+      },
+      {
+        "grau": 27,
+        "decanato": 3,
+        "tempero": "saturno",
+        "imagem": "Um relógio de estação sincroniza o horário de uma cidade inteira.",
+        "leitura": "Um único sinal organizando o comportamento de milhares de pessoas ao mesmo tempo."
+      },
+      {
+        "grau": 28,
+        "decanato": 3,
+        "tempero": "saturno",
+        "imagem": "Uma rede de estradas conecta cidades que nunca se falaram diretamente.",
+        "leitura": "Conexão que existe mesmo sem contato direto — infraestrutura no lugar de intimidade."
+      },
+      {
+        "grau": 29,
+        "decanato": 3,
+        "tempero": "saturno",
+        "imagem": "Um satélite retransmite um sinal pra milhões de aparelhos ao mesmo tempo.",
+        "leitura": "Alcance imenso, contato zero. Informação que chega em todo lugar e não pertence a ninguém em particular."
+      },
+      {
+        "grau": 30,
+        "decanato": 3,
+        "tempero": "saturno",
+        "imagem": "Um código é traduzido automaticamente pra cem idiomas diferentes ao mesmo tempo.",
+        "leitura": "Comunicação que se multiplica até perder o rosto de quem falou primeiro — grau anarético: fim de um jeito de trocar, início de outro totalmente impessoal."
+      }
+    ],
+    "cancer": [
+      {
+        "grau": 1,
+        "decanato": 1,
+        "tempero": "lua",
+        "imagem": "Um recém-nascido procura o calor do peito da mãe antes de abrir os olhos.",
+        "leitura": "Instinto que age antes da consciência — buscar proteção nem precisa ser aprendido."
+      },
+      {
+        "grau": 2,
+        "decanato": 1,
+        "tempero": "lua",
+        "imagem": "Um caranguejo recua pra dentro da própria concha ao menor sinal de perigo.",
+        "leitura": "Proteção automática. Recuar aqui não é fraqueza, é reflexo de sobrevivência."
+      },
+      {
+        "grau": 3,
+        "decanato": 1,
+        "tempero": "lua",
+        "imagem": "Uma mãe pássaro cobre os filhotes com as asas durante a tempestade.",
+        "leitura": "Abrigo que se oferece sem cálculo, só resposta direta ao perigo."
+      },
+      {
+        "grau": 4,
+        "decanato": 1,
+        "tempero": "lua",
+        "imagem": "Uma criança segura o cobertor da infância mesmo já crescida.",
+        "leitura": "Memória do conforto antigo que ainda ancora, mesmo sem necessidade prática."
+      },
+      {
+        "grau": 5,
+        "decanato": 1,
+        "tempero": "lua",
+        "imagem": "Uma maré sobe e cobre a praia inteira antes de recuar de novo.",
+        "leitura": "Ciclo emocional que vai e volta sozinho, sem pedir licença pro relógio."
+      },
+      {
+        "grau": 6,
+        "decanato": 1,
+        "tempero": "lua",
+        "imagem": "Um cão fareja o cheiro de casa a quilômetros de distância.",
+        "leitura": "Reconhecer pertencimento pelo instinto, antes de qualquer explicação racional."
+      },
+      {
+        "grau": 7,
+        "decanato": 1,
+        "tempero": "lua",
+        "imagem": "Uma criança chora ao ver a mãe sair da sala, mesmo sabendo que ela volta.",
+        "leitura": "Medo de abandono que existe mesmo quando a razão já sabe que está seguro."
+      },
+      {
+        "grau": 8,
+        "decanato": 1,
+        "tempero": "lua",
+        "imagem": "Um ninho é forrado de penas macias antes do primeiro ovo ser posto.",
+        "leitura": "Preparar o abrigo antes mesmo de precisar dele — cuidado que antecipa a necessidade."
+      },
+      {
+        "grau": 9,
+        "decanato": 1,
+        "tempero": "lua",
+        "imagem": "Uma concha vazia é carregada pela maré até a areia, ainda com a forma de quem já morou nela.",
+        "leitura": "O formato de um lar antigo que permanece mesmo depois que quem morava foi embora."
+      },
+      {
+        "grau": 10,
+        "decanato": 1,
+        "tempero": "lua",
+        "imagem": "Uma criança dorme enroscada, protegendo o peito com os braços cruzados.",
+        "leitura": "Proteger o centro mole de si mesmo, mesmo dormindo, mesmo sem ameaça visível."
+      },
+      {
+        "grau": 11,
+        "decanato": 2,
+        "tempero": "marte",
+        "imagem": "Uma mãe ursa ataca sem hesitar qualquer coisa que se aproxime dos filhotes.",
+        "leitura": "Proteção que vira força total quando o que se ama está ameaçado."
+      },
+      {
+        "grau": 12,
+        "decanato": 2,
+        "tempero": "marte",
+        "imagem": "Um portão de ferro é trancado com três fechaduras diferentes.",
+        "leitura": "Defesa redundante — quando o medo é grande, uma trava só nunca parece suficiente."
+      },
+      {
+        "grau": 13,
+        "decanato": 2,
+        "tempero": "marte",
+        "imagem": "Um cão de guarda não dorme enquanto sente um estranho perto do quintal.",
+        "leitura": "Vigilância que não descansa até a ameaça sumir de vez."
+      },
+      {
+        "grau": 14,
+        "decanato": 2,
+        "tempero": "marte",
+        "imagem": "Uma família esconde o que é mais precioso embaixo do próprio chão da casa.",
+        "leitura": "Proteger o que importa escondendo, não expondo — segurança que aposta no segredo."
+      },
+      {
+        "grau": 15,
+        "decanato": 2,
+        "tempero": "marte",
+        "imagem": "Uma serpente protege seus ovos enrolando o corpo inteiro ao redor deles.",
+        "leitura": "Proteção que ocupa todo o espaço disponível, sem deixar brecha nenhuma."
+      },
+      {
+        "grau": 16,
+        "decanato": 2,
+        "tempero": "marte",
+        "imagem": "Uma fortaleza é construída com um único portão estreito, fácil de defender.",
+        "leitura": "Reduzir os pontos fracos ao mínimo possível — proteção que pensa como ataque."
+      },
+      {
+        "grau": 17,
+        "decanato": 2,
+        "tempero": "marte",
+        "imagem": "Uma mulher esconde uma faca sob o travesseiro antes de dormir sozinha.",
+        "leitura": "Preparar defesa mesmo sem ameaça confirmada — instinto que não relaxa fácil."
+      },
+      {
+        "grau": 18,
+        "decanato": 2,
+        "tempero": "marte",
+        "imagem": "Um lobo marca o território com o próprio cheiro, avisando os outros à distância.",
+        "leitura": "Proteção que age antes do conflito, avisando limite sem precisar brigar ainda."
+      },
+      {
+        "grau": 19,
+        "decanato": 2,
+        "tempero": "marte",
+        "imagem": "Uma criança bate em quem tentou machucar o irmão mais novo.",
+        "leitura": "Agressão que nasce só quando é preciso proteger alguém mais vulnerável."
+      },
+      {
+        "grau": 20,
+        "decanato": 2,
+        "tempero": "marte",
+        "imagem": "Uma casa é cercada por um muro alto, com cacos de vidro no topo.",
+        "leitura": "Defesa que vira também isolamento — proteger tanto que ninguém mais entra, nem quem devia."
+      },
+      {
+        "grau": 21,
+        "decanato": 3,
+        "tempero": "júpiter",
+        "imagem": "Uma casa abre as portas pra abrigar quem perdeu a própria durante a enchente.",
+        "leitura": "O cuidado que cabia só na família se expande pra quem precisa, mesmo sendo estranho."
+      },
+      {
+        "grau": 22,
+        "decanato": 3,
+        "tempero": "júpiter",
+        "imagem": "Uma mãe adota um filhote de outra espécie que perdeu a própria mãe.",
+        "leitura": "Instinto de nutrir que ultrapassa os limites do próprio sangue."
+      },
+      {
+        "grau": 23,
+        "decanato": 3,
+        "tempero": "júpiter",
+        "imagem": "Uma cozinha comunitária alimenta o bairro inteiro sem cobrar nada.",
+        "leitura": "Nutrição que deixou de ser só da própria casa e virou oferta pra qualquer um com fome."
+      },
+      {
+        "grau": 24,
+        "decanato": 3,
+        "tempero": "júpiter",
+        "imagem": "Um rio transborda e irriga terras que nunca tinham visto água antes.",
+        "leitura": "Transbordamento que, ao invés de destruir, nutre o que estava seco."
+      },
+      {
+        "grau": 25,
+        "decanato": 3,
+        "tempero": "júpiter",
+        "imagem": "Uma freira acolhe crianças órfãs de guerras que não são a dela.",
+        "leitura": "Proteção que escolhe abraçar o mundo inteiro como família, não só quem já nasceu dentro dela."
+      },
+      {
+        "grau": 26,
+        "decanato": 3,
+        "tempero": "júpiter",
+        "imagem": "Uma casa de portas sempre abertas nunca sabe quantos vão dormir lá à noite.",
+        "leitura": "Hospitalidade sem controle nem cálculo — o abrigo vira oferta incondicional."
+      },
+      {
+        "grau": 27,
+        "decanato": 3,
+        "tempero": "júpiter",
+        "imagem": "Um oceano inteiro recebe todos os rios que desembocam nele, sem discriminar a origem.",
+        "leitura": "Acolhimento tão grande que perde a fronteira entre o que é seu e o que é de todos."
+      },
+      {
+        "grau": 28,
+        "decanato": 3,
+        "tempero": "júpiter",
+        "imagem": "Uma enfermeira chora junto com uma família que não é a dela, no hospital.",
+        "leitura": "O cuidado ultrapassa o dever profissional e vira compaixão de verdade, sem cobrar nada em troca."
+      },
+      {
+        "grau": 29,
+        "decanato": 3,
+        "tempero": "júpiter",
+        "imagem": "Uma comunidade inteira reconstrói a casa de um vizinho que perdeu tudo no incêndio.",
+        "leitura": "O instinto de proteger a própria casa se estende até virar responsabilidade coletiva."
+      },
+      {
+        "grau": 30,
+        "decanato": 3,
+        "tempero": "júpiter",
+        "imagem": "As águas de todos os rios do mundo finalmente se encontram no mesmo oceano.",
+        "leitura": "Todo abrigo individual desemboca, no fim, num pertencimento maior que ninguém possui sozinho — grau anarético."
+      }
+    ],
+    "leao": [
+      {
+        "grau": 1,
+        "decanato": 1,
+        "tempero": "sol",
+        "imagem": "Um recém-nascido sol nasce no horizonte e ilumina tudo ao redor sem pedir licença.",
+        "leitura": "Existir e brilhar são o mesmo gesto aqui — não precisa justificar a própria luz."
+      },
+      {
+        "grau": 2,
+        "decanato": 1,
+        "tempero": "sol",
+        "imagem": "Uma criança dança sozinha no meio da sala, sem ninguém olhando.",
+        "leitura": "Expressão que nasce da alegria de existir, não da aprovação de plateia nenhuma."
+      },
+      {
+        "grau": 3,
+        "decanato": 1,
+        "tempero": "sol",
+        "imagem": "Um girassol vira o rosto inteiro na direção do sol, o dia inteiro.",
+        "leitura": "Orientar-se pela própria fonte de vitalidade, sem se distrair com mais nada."
+      },
+      {
+        "grau": 4,
+        "decanato": 1,
+        "tempero": "sol",
+        "imagem": "Uma criança grita \"olha pra mim\" antes de pular na piscina.",
+        "leitura": "Precisar de testemunha pro próprio feito — a alegria cresce quando é vista."
+      },
+      {
+        "grau": 5,
+        "decanato": 1,
+        "tempero": "sol",
+        "imagem": "Um leão filhote ruge pela primeira vez, um som ainda fraco, mas já seu.",
+        "leitura": "A primeira tentativa de ocupar espaço com a própria voz, mesmo sem força ainda."
+      },
+      {
+        "grau": 6,
+        "decanato": 1,
+        "tempero": "sol",
+        "imagem": "Uma fogueira é acesa no centro de um acampamento, e todos se aproximam do calor.",
+        "leitura": "Presença que atrai gente ao redor sem precisar chamar ninguém."
+      },
+      {
+        "grau": 7,
+        "decanato": 1,
+        "tempero": "sol",
+        "imagem": "Uma criança se veste com a roupa mais colorida do guarda-roupa pra ir à escola.",
+        "leitura": "Expressão que escolhe aparecer, não se camuflar."
+      },
+      {
+        "grau": 8,
+        "decanato": 1,
+        "tempero": "sol",
+        "imagem": "Um pavão abre a cauda inteira mesmo sem nenhuma fêmea por perto.",
+        "leitura": "Exibir a própria beleza é, às vezes, só sobre ser inteiro, não sobre conquistar ninguém."
+      },
+      {
+        "grau": 9,
+        "decanato": 1,
+        "tempero": "sol",
+        "imagem": "Uma criança desenha um sol enorme no centro de qualquer folha de papel.",
+        "leitura": "Colocar a própria luz no centro da cena — instinto que nem precisa de motivo."
+      },
+      {
+        "grau": 10,
+        "decanato": 1,
+        "tempero": "sol",
+        "imagem": "Um coração recém-formado bate pela primeira vez, sozinho, sem plateia.",
+        "leitura": "Vitalidade que existe antes de qualquer aplauso — fim do decanato: o pulso é a primeira prova de vida."
+      },
+      {
+        "grau": 11,
+        "decanato": 2,
+        "tempero": "júpiter",
+        "imagem": "Um rei distribui ouro pra toda a cidade no dia da própria coroação.",
+        "leitura": "Generosidade que nasce do excesso — dar tanto quanto se tem, sem calcular o resto."
+      },
+      {
+        "grau": 12,
+        "decanato": 2,
+        "tempero": "júpiter",
+        "imagem": "Um anfitrião serve o dobro de comida do que os convidados poderiam comer.",
+        "leitura": "Fartura que vira gesto de amor, mesmo quando passa do necessário."
+      },
+      {
+        "grau": 13,
+        "decanato": 2,
+        "tempero": "júpiter",
+        "imagem": "Um ator recebe aplausos de pé e faz três reverências antes de sair do palco.",
+        "leitura": "Aceitar o reconhecimento por inteiro, sem fingir modéstia que não sente."
+      },
+      {
+        "grau": 14,
+        "decanato": 2,
+        "tempero": "júpiter",
+        "imagem": "Um professor generoso ensina de graça pra quem não pode pagar.",
+        "leitura": "Compartilhar o próprio brilho sem cobrar por isso — a luz que ilumina sem se apagar."
+      },
+      {
+        "grau": 15,
+        "decanato": 2,
+        "tempero": "júpiter",
+        "imagem": "Uma festa de casamento dura três dias inteiros de celebração.",
+        "leitura": "Comemorar em excesso porque a alegria, quando é grande de verdade, não cabe num dia só."
+      },
+      {
+        "grau": 16,
+        "decanato": 2,
+        "tempero": "júpiter",
+        "imagem": "Um patrono financia uma orquestra inteira só pelo prazer de ver a música acontecer.",
+        "leitura": "Generosidade que investe no brilho alheio, mesmo sem retorno garantido."
+      },
+      {
+        "grau": 17,
+        "decanato": 2,
+        "tempero": "júpiter",
+        "imagem": "Um líder promete mais do que consegue entregar, na euforia do discurso.",
+        "leitura": "O entusiasmo generoso às vezes ultrapassa o que a realidade permite cumprir."
+      },
+      {
+        "grau": 18,
+        "decanato": 2,
+        "tempero": "júpiter",
+        "imagem": "Uma criança dá de presente o brinquedo favorito pro amigo que está triste.",
+        "leitura": "Generosidade que dói um pouco — dar o que é mais precioso, não só o que sobra."
+      },
+      {
+        "grau": 19,
+        "decanato": 2,
+        "tempero": "júpiter",
+        "imagem": "Um artista pinta um mural enorme na parede pública, sem cobrar nada pela obra.",
+        "leitura": "Colocar a própria expressão no mundo, grande, visível, de graça."
+      },
+      {
+        "grau": 20,
+        "decanato": 2,
+        "tempero": "júpiter",
+        "imagem": "Um circo monta a maior tenda da cidade pra caber todo mundo que quiser ver o espetáculo.",
+        "leitura": "O desejo de incluir todo mundo na própria celebração — quanto maior a alegria, maior o convite."
+      },
+      {
+        "grau": 21,
+        "decanato": 3,
+        "tempero": "marte",
+        "imagem": "Um campeão ergue o troféu no alto, sozinho, no centro do estádio.",
+        "leitura": "Orgulho conquistado com esforço — o brilho aqui foi ganho, não só dado."
+      },
+      {
+        "grau": 22,
+        "decanato": 3,
+        "tempero": "marte",
+        "imagem": "Um artista compete pelo papel principal e não aceita o segundo lugar.",
+        "leitura": "Ambição que recusa se contentar com menos que o centro do palco."
+      },
+      {
+        "grau": 23,
+        "decanato": 3,
+        "tempero": "marte",
+        "imagem": "Um general condecorado exibe as medalhas no peito, uma a uma.",
+        "leitura": "Cada conquista exposta com orgulho — a prova visível do que já foi enfrentado."
+      },
+      {
+        "grau": 24,
+        "decanato": 3,
+        "tempero": "marte",
+        "imagem": "Uma dançarina desafia a companhia inteira até conseguir o solo principal.",
+        "leitura": "Brilhar aqui exige disputa — o centro do palco não sobra pra quem não luta por ele."
+      },
+      {
+        "grau": 25,
+        "decanato": 3,
+        "tempero": "marte",
+        "imagem": "Um boxeador ergue os braços antes mesmo do juiz anunciar o vencedor.",
+        "leitura": "Confiança que já comemora antes da confirmação — orgulho que aposta em si mesmo primeiro."
+      },
+      {
+        "grau": 26,
+        "decanato": 3,
+        "tempero": "marte",
+        "imagem": "Um rei desafia qualquer pretendente ao trono pra um duelo aberto.",
+        "leitura": "Defender o próprio brilho com as próprias mãos, sem terceirizar a disputa."
+      },
+      {
+        "grau": 27,
+        "decanato": 3,
+        "tempero": "marte",
+        "imagem": "Um cantor solo recusa dividir os holofotes até com a própria banda.",
+        "leitura": "Orgulho que, levado longe demais, isola quem deveria estar comemorando junto."
+      },
+      {
+        "grau": 28,
+        "decanato": 3,
+        "tempero": "marte",
+        "imagem": "Um atleta se recusa a comemorar até quebrar o próprio recorde, não só o dos outros.",
+        "leitura": "Competir consigo mesmo depois de já vencer todo mundo ao redor."
+      },
+      {
+        "grau": 29,
+        "decanato": 3,
+        "tempero": "marte",
+        "imagem": "Um leão idoso ainda defende a própria posição na manada, mesmo diante de um rival mais jovem.",
+        "leitura": "Orgulho que resiste até o fim, recusando ceder o próprio lugar sem briga."
+      },
+      {
+        "grau": 30,
+        "decanato": 3,
+        "tempero": "marte",
+        "imagem": "Uma última vela de aniversário se apaga sozinha, e a plateia inteira aplaude de pé.",
+        "leitura": "O brilho que se encerra, mas deixa reconhecimento atrás de si — grau anarético: fim de ciclo celebrado, não escondido."
+      }
+    ],
+    "virgem": [
+      {
+        "grau": 1,
+        "decanato": 1,
+        "tempero": "mercúrio",
+        "imagem": "Uma costureira encontra o único fio solto numa peça de roupa inteira.",
+        "leitura": "Atenção que enxerga o detalhe que passa despercebido pra qualquer outra pessoa."
+      },
+      {
+        "grau": 2,
+        "decanato": 1,
+        "tempero": "mercúrio",
+        "imagem": "Um relojoeiro desmonta um mecanismo inteiro pra achar a peça exata que está errada.",
+        "leitura": "Paciência analítica que não desiste até encontrar a causa real do problema."
+      },
+      {
+        "grau": 3,
+        "decanato": 1,
+        "tempero": "mercúrio",
+        "imagem": "Uma criança organiza os lápis de cor em ordem exata do arco-íris.",
+        "leitura": "Precisar de ordem pra sentir que o mundo está certo — não é frescura, é necessidade real."
+      },
+      {
+        "grau": 4,
+        "decanato": 1,
+        "tempero": "mercúrio",
+        "imagem": "Um copista revisa o mesmo texto três vezes procurando erros de grafia.",
+        "leitura": "Cuidado que se repete até ter certeza — a versão final só sai depois de exaustão."
+      },
+      {
+        "grau": 5,
+        "decanato": 1,
+        "tempero": "mercúrio",
+        "imagem": "Um médico examina cada sintoma separadamente antes de arriscar um diagnóstico.",
+        "leitura": "Recusar conclusão apressada — o cuidado real exige olhar peça por peça."
+      },
+      {
+        "grau": 6,
+        "decanato": 1,
+        "tempero": "mercúrio",
+        "imagem": "Uma abelha operária inspeciona cada célula do favo antes de aceitar como pronta.",
+        "leitura": "Trabalho que não aceita \"quase certo\" — cada parte precisa estar exatamente no lugar."
+      },
+      {
+        "grau": 7,
+        "decanato": 1,
+        "tempero": "mercúrio",
+        "imagem": "Um contador confere a mesma soma duas vezes antes de fechar o balanço.",
+        "leitura": "Desconfiar até da própria conta — checagem dupla como forma de cuidado, não de insegurança."
+      },
+      {
+        "grau": 8,
+        "decanato": 1,
+        "tempero": "mercúrio",
+        "imagem": "Uma enfermeira organiza os remédios em compartimentos com etiquetas exatas.",
+        "leitura": "Ordem que existe pra proteger alguém de um erro que poderia custar caro."
+      },
+      {
+        "grau": 9,
+        "decanato": 1,
+        "tempero": "mercúrio",
+        "imagem": "Um crítico aponta o único verso fraco num poema inteiro bem escrito.",
+        "leitura": "Enxergar a falha específica mesmo dentro de algo que já é bom — o cuidado que exige mais."
+      },
+      {
+        "grau": 10,
+        "decanato": 1,
+        "tempero": "mercúrio",
+        "imagem": "Um artesão lixa a mesma dobradiça até ela parar de ranger.",
+        "leitura": "Insistir no pequeno detalhe até ele parar de incomodar — fim do decanato: nada escapa da checagem."
+      },
+      {
+        "grau": 11,
+        "decanato": 2,
+        "tempero": "saturno",
+        "imagem": "Um monge segue a mesma rotina exata há quarenta anos, sem falhar um dia.",
+        "leitura": "Disciplina que virou identidade — o rigor não é imposição, é estrutura de vida."
+      },
+      {
+        "grau": 12,
+        "decanato": 2,
+        "tempero": "saturno",
+        "imagem": "Um mestre de obras recusa liberar a construção até cada prego estar correto.",
+        "leitura": "Responsabilidade que não aceita atalho, mesmo sob pressão de prazo."
+      },
+      {
+        "grau": 13,
+        "decanato": 2,
+        "tempero": "saturno",
+        "imagem": "Um treinador exige a mesma repetição cem vezes até o movimento ficar automático.",
+        "leitura": "Repetição exaustiva como único caminho real pra excelência de verdade."
+      },
+      {
+        "grau": 14,
+        "decanato": 2,
+        "tempero": "saturno",
+        "imagem": "Um funcionário público carimba cada documento seguindo o mesmo protocolo, sem exceção.",
+        "leitura": "Seguir a regra à risca mesmo quando parece burocracia excessiva — o sistema depende disso."
+      },
+      {
+        "grau": 15,
+        "decanato": 2,
+        "tempero": "saturno",
+        "imagem": "Um agricultor mede a chuva todos os dias, no mesmo horário, há décadas.",
+        "leitura": "Constância que só rende fruto depois de muito tempo repetindo o gesto exato."
+      },
+      {
+        "grau": 16,
+        "decanato": 2,
+        "tempero": "saturno",
+        "imagem": "Um artesão de relógios recusa entregar a peça um dia antes do previsto, mesmo pronta.",
+        "leitura": "Cumprir o próprio padrão de qualidade, mesmo quando ninguém cobraria isso."
+      },
+      {
+        "grau": 17,
+        "decanato": 2,
+        "tempero": "saturno",
+        "imagem": "Um professor corrige o mesmo erro de português pela centésima vez, sem cansar o tom.",
+        "leitura": "Paciência disciplinada que não perde a régua mesmo diante da repetição do erro alheio."
+      },
+      {
+        "grau": 18,
+        "decanato": 2,
+        "tempero": "saturno",
+        "imagem": "Um soldado limpa a própria arma todos os dias, mesmo sem guerra à vista.",
+        "leitura": "Manter o padrão de prontidão mesmo quando parece desnecessário."
+      },
+      {
+        "grau": 19,
+        "decanato": 2,
+        "tempero": "saturno",
+        "imagem": "Um bibliotecário recatalogar um livro fora do lugar antes de fechar a biblioteca.",
+        "leitura": "Corrigir o pequeno desvio antes que vire bagunça maior depois."
+      },
+      {
+        "grau": 20,
+        "decanato": 2,
+        "tempero": "saturno",
+        "imagem": "Um artesão entrega a peça só quando ela atinge o próprio padrão, não o do cliente.",
+        "leitura": "Rigor interno que não negocia mesmo sob pressão externa — fim do decanato: a régua é sua, não emprestada."
+      },
+      {
+        "grau": 21,
+        "decanato": 3,
+        "tempero": "vênus",
+        "imagem": "Um chef prova o prato sete vezes ajustando o tempero, grão de sal por grão de sal.",
+        "leitura": "Precisão que serve o prazer, não o substitui — o rigor aqui existe pra deixar algo gostoso de verdade."
+      },
+      {
+        "grau": 22,
+        "decanato": 3,
+        "tempero": "vênus",
+        "imagem": "Um perfumista mistura óleos numa proporção exata até o aroma ficar perfeito.",
+        "leitura": "Refinamento que exige tanto cálculo quanto sensibilidade — arte que também é ciência."
+      },
+      {
+        "grau": 23,
+        "decanato": 3,
+        "tempero": "vênus",
+        "imagem": "Um jardineiro poda cada galho com cuidado exato pra manter a forma da árvore bonita.",
+        "leitura": "Disciplina aplicada a favor da beleza, não contra ela."
+      },
+      {
+        "grau": 24,
+        "decanato": 3,
+        "tempero": "vênus",
+        "imagem": "Uma costureira borda um único fio de ouro numa peça de seda simples.",
+        "leitura": "Detalhe mínimo que eleva o todo — o cuidado pequeno que faz toda a diferença visível."
+      },
+      {
+        "grau": 25,
+        "decanato": 3,
+        "tempero": "vênus",
+        "imagem": "Um sommelier identifica a safra exata de um vinho só pelo cheiro.",
+        "leitura": "Sensibilidade treinada até virar precisão quase impossível de replicar."
+      },
+      {
+        "grau": 26,
+        "decanato": 3,
+        "tempero": "vênus",
+        "imagem": "Um confeiteiro decora um bolo com a mesma flor repetida cem vezes, cada uma idêntica à anterior.",
+        "leitura": "Repetição meticulosa a serviço do deleite alheio, não só da própria vaidade técnica."
+      },
+      {
+        "grau": 27,
+        "decanato": 3,
+        "tempero": "vênus",
+        "imagem": "Um artesão de móveis escolhe a veta exata da madeira pra combinar com o resto da peça.",
+        "leitura": "Atenção que respeita o material como ele é, sem forçar contra sua natureza."
+      },
+      {
+        "grau": 28,
+        "decanato": 3,
+        "tempero": "vênus",
+        "imagem": "Uma tecelã ajusta a tensão de cada fio antes de começar o tapete inteiro.",
+        "leitura": "Preparar o detalhe invisível que vai sustentar toda a beleza visível depois."
+      },
+      {
+        "grau": 29,
+        "decanato": 3,
+        "tempero": "vênus",
+        "imagem": "Um mestre chocolateiro tempera o chocolate na temperatura exata, grau a grau.",
+        "leitura": "Prazer que só existe por causa do rigor técnico por trás — nada é acidente aqui."
+      },
+      {
+        "grau": 30,
+        "decanato": 3,
+        "tempero": "vênus",
+        "imagem": "Uma última pincelada de verniz seca lenta, protegendo todo o trabalho feito antes dela.",
+        "leitura": "O cuidado final que preserva tudo o que foi construído com precisão — grau anarético: o rigor vira proteção duradoura."
+      }
+    ],
+    "libra": [
+      {
+        "grau": 1,
+        "decanato": 1,
+        "tempero": "vênus",
+        "imagem": "Uma balança de mercado se equilibra perfeitamente entre dois pesos iguais.",
+        "leitura": "O alívio de ver as duas partes finalmente no mesmo nível."
+      },
+      {
+        "grau": 2,
+        "decanato": 1,
+        "tempero": "vênus",
+        "imagem": "Duas mãos se encontram no meio de um aperto, nenhuma apertando mais forte que a outra.",
+        "leitura": "Encontro que só funciona quando nenhum dos lados domina o outro."
+      },
+      {
+        "grau": 3,
+        "decanato": 1,
+        "tempero": "vênus",
+        "imagem": "Um espelho reflete um rosto de volta, exato, sem distorcer nada.",
+        "leitura": "Precisar ver a própria imagem refletida em algo pra se sentir real."
+      },
+      {
+        "grau": 4,
+        "decanato": 1,
+        "tempero": "vênus",
+        "imagem": "Duas taças de cristal, idênticas, são postas lado a lado numa mesa.",
+        "leitura": "Buscar simetria mesmo em coisas pequenas — o conforto de pares que combinam."
+      },
+      {
+        "grau": 5,
+        "decanato": 1,
+        "tempero": "vênus",
+        "imagem": "Um casal de patos nada exatamente na mesma velocidade, lado a lado.",
+        "leitura": "Companhia que se ajusta ao ritmo do outro sem que ninguém precise pedir."
+      },
+      {
+        "grau": 6,
+        "decanato": 1,
+        "tempero": "vênus",
+        "imagem": "Uma flor se abre em pétalas perfeitamente simétricas.",
+        "leitura": "Beleza que nasce naturalmente equilibrada, sem esforço visível pra parecer bonita."
+      },
+      {
+        "grau": 7,
+        "decanato": 1,
+        "tempero": "vênus",
+        "imagem": "Duas crianças dividem o mesmo doce ao meio, cada metade do mesmo tamanho.",
+        "leitura": "Justiça instintiva, antes mesmo de aprender a palavra \"justo\"."
+      },
+      {
+        "grau": 8,
+        "decanato": 1,
+        "tempero": "vênus",
+        "imagem": "Um pintor mistura duas cores até achar o tom exato entre elas.",
+        "leitura": "Buscar o ponto médio certo, nem uma cor nem outra, mas a combinação das duas."
+      },
+      {
+        "grau": 9,
+        "decanato": 1,
+        "tempero": "vênus",
+        "imagem": "Uma dupla de dançarinos gira em perfeita simetria, sem pisar um no pé do outro.",
+        "leitura": "Coordenação que só existe quando os dois prestam atenção no outro o tempo todo."
+      },
+      {
+        "grau": 10,
+        "decanato": 1,
+        "tempero": "vênus",
+        "imagem": "Duas velas idênticas são acesas ao mesmo tempo, dos dois lados do altar.",
+        "leitura": "Equilíbrio ritual — fim do decanato: harmonia pede repetição dos dois lados."
+      },
+      {
+        "grau": 11,
+        "decanato": 2,
+        "tempero": "saturno",
+        "imagem": "Um juiz olha pros dois lados do tribunal antes de decidir, sem favorecer nenhum.",
+        "leitura": "Justiça que exige distância de ambos os lados pra ser real."
+      },
+      {
+        "grau": 12,
+        "decanato": 2,
+        "tempero": "saturno",
+        "imagem": "Um contrato é assinado por duas partes, cada uma com uma cópia idêntica.",
+        "leitura": "Acordo formalizado — o equilíbrio agora depende de documento, não só de boa vontade."
+      },
+      {
+        "grau": 13,
+        "decanato": 2,
+        "tempero": "saturno",
+        "imagem": "Um tribunal internacional pesa os argumentos de duas nações em conflito.",
+        "leitura": "Mediação que exige neutralidade absoluta, mesmo sendo impossível agradar os dois lados por completo."
+      },
+      {
+        "grau": 14,
+        "decanato": 2,
+        "tempero": "saturno",
+        "imagem": "Uma árbitra apita uma falta contra o próprio time que ela mais gosta.",
+        "leitura": "Imparcialidade que exige ir contra a própria preferência quando a regra exige."
+      },
+      {
+        "grau": 15,
+        "decanato": 2,
+        "tempero": "saturno",
+        "imagem": "Uma balança de justiça de mármore fica no centro de uma praça pública.",
+        "leitura": "Princípio abstrato colocado acima de qualquer interesse pessoal."
+      },
+      {
+        "grau": 16,
+        "decanato": 2,
+        "tempero": "saturno",
+        "imagem": "Um mediador de divórcio divide os bens do casal item por item, sem se emocionar.",
+        "leitura": "Manter distância emocional pra garantir que a divisão seja justa, não apenas confortável."
+      },
+      {
+        "grau": 17,
+        "decanato": 2,
+        "tempero": "saturno",
+        "imagem": "Um comitê vota empatado e precisa esperar um voto de minerva pra decidir.",
+        "leitura": "Equilíbrio tão perfeito que trava a decisão — às vezes o empate exige um terceiro elemento."
+      },
+      {
+        "grau": 18,
+        "decanato": 2,
+        "tempero": "saturno",
+        "imagem": "Uma lei é aplicada da mesma forma pro rico e pro pobre, sem exceção.",
+        "leitura": "Justiça que só é justiça de verdade quando não muda de acordo com quem está na frente dela."
+      },
+      {
+        "grau": 19,
+        "decanato": 2,
+        "tempero": "saturno",
+        "imagem": "Um casal assina um acordo pré-nupcial antes de decidir se casar por amor.",
+        "leitura": "Proteger o equilíbrio futuro com estrutura fria, mesmo em meio a um sentimento quente."
+      },
+      {
+        "grau": 20,
+        "decanato": 2,
+        "tempero": "saturno",
+        "imagem": "Uma ponte suspensa distribui o peso igualmente entre duas torres distantes.",
+        "leitura": "Estrutura que só se sustenta porque a carga foi calculada com precisão — fim do decanato: equilíbrio virou engenharia."
+      },
+      {
+        "grau": 21,
+        "decanato": 3,
+        "tempero": "mercúrio",
+        "imagem": "Dois embaixadores trocam propostas de paz, cada um cedendo um pouco.",
+        "leitura": "Negociação real, onde ninguém sai com tudo que queria, mas os dois saem com algo."
+      },
+      {
+        "grau": 22,
+        "decanato": 3,
+        "tempero": "mercúrio",
+        "imagem": "Um casal decide, depois de horas de conversa, um nome que agrada os dois.",
+        "leitura": "Diálogo prolongado até encontrar a palavra que serve pros dois lados."
+      },
+      {
+        "grau": 23,
+        "decanato": 3,
+        "tempero": "mercúrio",
+        "imagem": "Um vendedor e um comprador regateiam o preço até um número que os dois aceitam.",
+        "leitura": "Acordo que nasce da conversa, não da imposição."
+      },
+      {
+        "grau": 24,
+        "decanato": 3,
+        "tempero": "mercúrio",
+        "imagem": "Dois sócios revisam o contrato linha por linha antes de assinar juntos.",
+        "leitura": "Cuidado mútuo que garante que nenhum dos dois saia prejudicado depois."
+      },
+      {
+        "grau": 25,
+        "decanato": 3,
+        "tempero": "mercúrio",
+        "imagem": "Um casal terapeuta media uma discussão, dando a palavra pra cada lado, em turnos iguais.",
+        "leitura": "Diálogo estruturado que impede que uma voz abafe a outra."
+      },
+      {
+        "grau": 26,
+        "decanato": 3,
+        "tempero": "mercúrio",
+        "imagem": "Dois países assinam um tratado depois de anos de conversas diplomáticas.",
+        "leitura": "Paz construída devagar, frase por frase, cláusula por cláusula."
+      },
+      {
+        "grau": 27,
+        "decanato": 3,
+        "tempero": "mercúrio",
+        "imagem": "Um casal de tradutores simultâneos revezam a cada frase, sem atropelar um ao outro.",
+        "leitura": "Comunicação que só flui quando cada um sabe a hora de falar e a hora de ceder."
+      },
+      {
+        "grau": 28,
+        "decanato": 3,
+        "tempero": "mercúrio",
+        "imagem": "Uma dupla de escritores revisa o mesmo capítulo até a versão final agradar aos dois.",
+        "leitura": "Criação compartilhada que exige ego pequeno o suficiente pra aceitar a ideia do outro."
+      },
+      {
+        "grau": 29,
+        "decanato": 3,
+        "tempero": "mercúrio",
+        "imagem": "Dois advogados apertam as mãos depois de um acordo fechado fora do tribunal.",
+        "leitura": "Resolver o conflito antes de chegar ao ponto de ruptura total."
+      },
+      {
+        "grau": 30,
+        "decanato": 3,
+        "tempero": "mercúrio",
+        "imagem": "Uma balança antiga, usada por gerações, ainda pesa exatamente igual dos dois lados.",
+        "leitura": "O equilíbrio que atravessa o tempo, testado e nunca corrompido — grau anarético: o diálogo virou tradição confiável."
+      }
+    ],
+    "escorpiao": [
+      {
+        "grau": 1,
+        "decanato": 1,
+        "tempero": "marte",
+        "imagem": "Um escorpião ergue a cauda antes mesmo de ser tocado.",
+        "leitura": "Defesa que se prepara antes da ameaça se confirmar — intensidade que não espera pra reagir."
+      },
+      {
+        "grau": 2,
+        "decanato": 1,
+        "tempero": "marte",
+        "imagem": "Uma porta trancada esconde algo que ninguém tem permissão de ver.",
+        "leitura": "O instinto de proteger o que é íntimo demais pra ser exposto."
+      },
+      {
+        "grau": 3,
+        "decanato": 1,
+        "tempero": "marte",
+        "imagem": "Duas pessoas se encaram em silêncio, nenhuma disposta a desviar o olhar primeiro.",
+        "leitura": "Disputa de vontade que não precisa de palavra nenhuma pra ser sentida."
+      },
+      {
+        "grau": 4,
+        "decanato": 1,
+        "tempero": "marte",
+        "imagem": "Uma faca é afiada em segredo, longe de qualquer olhar.",
+        "leitura": "Preparar-se pro confronto sem anunciar a ninguém que ele está vindo."
+      },
+      {
+        "grau": 5,
+        "decanato": 1,
+        "tempero": "marte",
+        "imagem": "Um vulcão borbulha por baixo da terra sem que a superfície mostre sinal nenhum.",
+        "leitura": "Intensidade contida que ainda não decidiu se vai explodir."
+      },
+      {
+        "grau": 6,
+        "decanato": 1,
+        "tempero": "marte",
+        "imagem": "Uma serpente troca de pele, deixando o invólucro antigo largado no chão.",
+        "leitura": "Transformação que exige abandonar completamente uma versão anterior de si."
+      },
+      {
+        "grau": 7,
+        "decanato": 1,
+        "tempero": "marte",
+        "imagem": "Alguém guarda uma carta nunca enviada dentro de uma gaveta trancada.",
+        "leitura": "Sentimento intenso demais pra ser dito, mas real demais pra ser jogado fora."
+      },
+      {
+        "grau": 8,
+        "decanato": 1,
+        "tempero": "marte",
+        "imagem": "Um predador espera imóvel, horas, até o momento exato de atacar.",
+        "leitura": "Paciência que serve à intensidade — o ataque só vale a pena no timing certo."
+      },
+      {
+        "grau": 9,
+        "decanato": 1,
+        "tempero": "marte",
+        "imagem": "Duas mãos se apertam com força além do necessário num cumprimento tenso.",
+        "leitura": "Intensidade que vaza pelo corpo mesmo quando as palavras tentam parecer neutras."
+      },
+      {
+        "grau": 10,
+        "decanato": 1,
+        "tempero": "marte",
+        "imagem": "Uma fechadura é trocada depois de alguém descobrir que tinha cópia da chave.",
+        "leitura": "Reagir com força total à sensação de traição — fim do decanato: a linha entre confiança e controle."
+      },
+      {
+        "grau": 11,
+        "decanato": 2,
+        "tempero": "júpiter",
+        "imagem": "Alguém mergulha no oceano à noite, sem saber a profundidade real da água.",
+        "leitura": "Entregar-se ao desconhecido, confiando em algo maior que não pode ser medido."
+      },
+      {
+        "grau": 12,
+        "decanato": 2,
+        "tempero": "júpiter",
+        "imagem": "Um monge fica em silêncio absoluto por quarenta dias, buscando algo que não tem nome.",
+        "leitura": "Intensidade que se volta pra dentro, em busca de uma verdade que a palavra não alcança."
+      },
+      {
+        "grau": 13,
+        "decanato": 2,
+        "tempero": "júpiter",
+        "imagem": "Uma pessoa chora sem motivo aparente, sentindo uma dor que não é só sua.",
+        "leitura": "Sensibilidade que absorve mais do que consegue processar sozinha."
+      },
+      {
+        "grau": 14,
+        "decanato": 2,
+        "tempero": "júpiter",
+        "imagem": "Um xamã entra em transe guiado por tambores, perdendo a noção do próprio corpo.",
+        "leitura": "Dissolver os limites de si mesmo em troca de contato com algo maior."
+      },
+      {
+        "grau": 15,
+        "decanato": 2,
+        "tempero": "júpiter",
+        "imagem": "Uma mulher grávida sente o próprio corpo sendo tomado por outra vida crescendo dentro dela.",
+        "leitura": "Intensidade que aceita ser habitada por algo que não controla totalmente."
+      },
+      {
+        "grau": 16,
+        "decanato": 2,
+        "tempero": "júpiter",
+        "imagem": "Alguém perdoa quem nunca vai pedir desculpa, só pra se libertar do próprio peso.",
+        "leitura": "Entrega que solta o controle da vingança em troca de paz interna."
+      },
+      {
+        "grau": 17,
+        "decanato": 2,
+        "tempero": "júpiter",
+        "imagem": "Um oráculo entrega uma resposta que ninguém pediu, mas todos precisavam ouvir.",
+        "leitura": "Verdade que emerge sem ser convocada — poder que vem de fora do controle racional."
+      },
+      {
+        "grau": 18,
+        "decanato": 2,
+        "tempero": "júpiter",
+        "imagem": "Um afogado é resgatado no último segundo, entre a vida e a morte.",
+        "leitura": "Intensidade levada ao limite absoluto, onde só resta entrega total à sorte."
+      },
+      {
+        "grau": 19,
+        "decanato": 2,
+        "tempero": "júpiter",
+        "imagem": "Alguém reza sozinho numa igreja vazia, sem esperar resposta nenhuma.",
+        "leitura": "Fé que não exige prova — entrega completa a algo que não se pode controlar nem ver."
+      },
+      {
+        "grau": 20,
+        "decanato": 2,
+        "tempero": "júpiter",
+        "imagem": "Uma pessoa aceita finalmente que não vai entender certos lutos, só atravessá-los.",
+        "leitura": "Render-se ao mistério da dor — fim do decanato: intensidade que aceita não ter controle total."
+      },
+      {
+        "grau": 21,
+        "decanato": 3,
+        "tempero": "lua",
+        "imagem": "Alguém guarda uma cicatriz debaixo da roupa, visível só pra quem já foi convidado a ver.",
+        "leitura": "Vulnerabilidade que se protege, mas ainda existe, esperando o momento certo de ser mostrada."
+      },
+      {
+        "grau": 22,
+        "decanato": 3,
+        "tempero": "lua",
+        "imagem": "Um diário é escrito com cadeado, guardando segredos que nem a própria família conhece.",
+        "leitura": "Intimidade que só se revela em condições muito específicas de confiança."
+      },
+      {
+        "grau": 23,
+        "decanato": 3,
+        "tempero": "lua",
+        "imagem": "Uma pessoa chora escondida no banheiro pra não preocupar quem ela ama.",
+        "leitura": "Proteger os outros da própria dor, mesmo quando isso custa caro por dentro."
+      },
+      {
+        "grau": 24,
+        "decanato": 3,
+        "tempero": "lua",
+        "imagem": "Uma mãe esconde o próprio medo pra não assustar o filho doente.",
+        "leitura": "Força que nasce de esconder a fragilidade real por trás de um rosto calmo."
+      },
+      {
+        "grau": 25,
+        "decanato": 3,
+        "tempero": "lua",
+        "imagem": "Alguém guarda a foto de quem já morreu dentro da carteira, sem mostrar pra ninguém.",
+        "leitura": "Luto vivido em silêncio, carregado por perto, mas nunca exposto."
+      },
+      {
+        "grau": 26,
+        "decanato": 3,
+        "tempero": "lua",
+        "imagem": "Uma casa antiga guarda cartas de amor escondidas atrás de uma parede falsa.",
+        "leitura": "Segredo protegido tão bem que só é encontrado por acidente, muito tempo depois."
+      },
+      {
+        "grau": 27,
+        "decanato": 3,
+        "tempero": "lua",
+        "imagem": "Um sobrevivente de trauma só conta a própria história pra quem já passou por algo parecido.",
+        "leitura": "Vulnerabilidade que só se abre em presença de quem realmente pode entender."
+      },
+      {
+        "grau": 28,
+        "decanato": 3,
+        "tempero": "lua",
+        "imagem": "Alguém dorme abraçado a um objeto que pertenceu a quem já se foi.",
+        "leitura": "Buscar conforto físico numa lembrança que não pode mais abraçar de volta."
+      },
+      {
+        "grau": 29,
+        "decanato": 3,
+        "tempero": "lua",
+        "imagem": "Uma pessoa perdoa em silêncio, sem nunca dizer isso em voz alta pra quem a machucou.",
+        "leitura": "Cura que acontece por dentro, sem precisar de reconhecimento externo nenhum."
+      },
+      {
+        "grau": 30,
+        "decanato": 3,
+        "tempero": "lua",
+        "imagem": "Uma concha antiga é encontrada, ainda guardando dentro dela o eco baixinho do mar.",
+        "leitura": "O que passou continua ecoando por dentro — grau anarético: intensidade que virou memória guardada, não mais ferida aberta."
+      }
+    ],
+    "sagitario": [
+      {
+        "grau": 1,
+        "decanato": 1,
+        "tempero": "júpiter",
+        "imagem": "Um cavalo dispara solto pelo campo aberto, sem cerca nenhuma à vista.",
+        "leitura": "Liberdade que se sente antes mesmo de saber pra onde vai."
+      },
+      {
+        "grau": 2,
+        "decanato": 1,
+        "tempero": "júpiter",
+        "imagem": "Uma criança pergunta \"por quê\" pela quinta vez seguida, sem se satisfazer com a resposta anterior.",
+        "leitura": "Fome de sentido que não aceita explicação superficial."
+      },
+      {
+        "grau": 3,
+        "decanato": 1,
+        "tempero": "júpiter",
+        "imagem": "Um mapa é desenhado com um espaço em branco enorme escrito \"território desconhecido\".",
+        "leitura": "O que ainda não foi explorado atrai mais do que assusta."
+      },
+      {
+        "grau": 4,
+        "decanato": 1,
+        "tempero": "júpiter",
+        "imagem": "Alguém compra uma passagem só de ida pra um lugar que nunca visitou.",
+        "leitura": "Confiar no caminho antes mesmo de saber exatamente onde ele leva."
+      },
+      {
+        "grau": 5,
+        "decanato": 1,
+        "tempero": "júpiter",
+        "imagem": "Um cachorro corre atrás do próprio horizonte, sem nunca alcançar de fato.",
+        "leitura": "Buscar sempre mais longe, mesmo sabendo que a linha do horizonte sempre recua também."
+      },
+      {
+        "grau": 6,
+        "decanato": 1,
+        "tempero": "júpiter",
+        "imagem": "Uma criança aponta pro céu perguntando o que existe depois das estrelas.",
+        "leitura": "Curiosidade que não se contenta com os limites do que já foi explicado."
+      },
+      {
+        "grau": 7,
+        "decanato": 1,
+        "tempero": "júpiter",
+        "imagem": "Um cavalo selvagem se recusa a aceitar sela pela primeira vez.",
+        "leitura": "Resistir a qualquer coisa que pareça limitar o movimento livre."
+      },
+      {
+        "grau": 8,
+        "decanato": 1,
+        "tempero": "júpiter",
+        "imagem": "Alguém sai de casa carregando só uma mochila pequena, decidido a não voltar tão cedo.",
+        "leitura": "Leveza que escolhe liberdade no lugar de segurança conhecida."
+      },
+      {
+        "grau": 9,
+        "decanato": 1,
+        "tempero": "júpiter",
+        "imagem": "Um livro de mitologia é aberto numa página aleatória, revelando uma história nunca lida antes.",
+        "leitura": "Buscar sentido em qualquer fonte disponível, mesmo sem plano de onde vai parar."
+      },
+      {
+        "grau": 10,
+        "decanato": 1,
+        "tempero": "júpiter",
+        "imagem": "Um arqueiro solta a flecha mirando mais longe do que qualquer um ali já tentou.",
+        "leitura": "Ambição que testa o próprio limite — fim do decanato: a convicção ainda crua, mas já em movimento."
+      },
+      {
+        "grau": 11,
+        "decanato": 2,
+        "tempero": "marte",
+        "imagem": "Um explorador corta caminho pela mata fechada, ignorando a trilha já demarcada.",
+        "leitura": "Pressa de chegar que não aceita esperar pelo caminho mais seguro."
+      },
+      {
+        "grau": 12,
+        "decanato": 2,
+        "tempero": "marte",
+        "imagem": "Alguém discute com um professor, recusando aceitar uma resposta só porque veio de autoridade.",
+        "leitura": "Convicção que exige provar por si mesmo, não aceitar de segunda mão."
+      },
+      {
+        "grau": 13,
+        "decanato": 2,
+        "tempero": "marte",
+        "imagem": "Um viajante troca de rota no meio da viagem, sem aviso, seguindo só um pressentimento.",
+        "leitura": "Impulso que confia mais na intuição do que no plano original."
+      },
+      {
+        "grau": 14,
+        "decanato": 2,
+        "tempero": "marte",
+        "imagem": "Um estudante debate o próprio mestre em público, defendendo uma ideia nova.",
+        "leitura": "Convicção que não teme confronto, mesmo contra quem ensinou."
+      },
+      {
+        "grau": 15,
+        "decanato": 2,
+        "tempero": "marte",
+        "imagem": "Alguém atravessa um rio a nado em vez de esperar a ponte ser construída.",
+        "leitura": "Impaciência que prefere o risco imediato à espera segura."
+      },
+      {
+        "grau": 16,
+        "decanato": 2,
+        "tempero": "marte",
+        "imagem": "Um cavaleiro corre à frente do próprio exército, sem esperar reforço.",
+        "leitura": "Convicção que sai na frente, mesmo sem garantia de apoio."
+      },
+      {
+        "grau": 17,
+        "decanato": 2,
+        "tempero": "marte",
+        "imagem": "Uma pessoa larga o emprego estável pra seguir uma ideia em que só ela acredita ainda.",
+        "leitura": "Fé no próprio caminho forte o bastante pra abrir mão da segurança."
+      },
+      {
+        "grau": 18,
+        "decanato": 2,
+        "tempero": "marte",
+        "imagem": "Um filósofo desafia publicamente a crença mais aceita da sua época.",
+        "leitura": "Convicção que não recua diante da opinião da maioria."
+      },
+      {
+        "grau": 19,
+        "decanato": 2,
+        "tempero": "marte",
+        "imagem": "Alguém sobe uma montanha sem guia, confiando só no próprio instinto de direção.",
+        "leitura": "Fé em si mesmo levada ao ponto de dispensar ajuda externa."
+      },
+      {
+        "grau": 20,
+        "decanato": 2,
+        "tempero": "marte",
+        "imagem": "Um jovem discute com os pais, insistindo em estudar longe, sozinho, sem rede de apoio.",
+        "leitura": "Convicção que escolhe a distância como preço da própria expansão — fim do decanato."
+      },
+      {
+        "grau": 21,
+        "decanato": 3,
+        "tempero": "sol",
+        "imagem": "Um professor dá aula pra uma plateia lotada, contando a própria jornada como exemplo.",
+        "leitura": "Convicção que quer ser vista e compartilhada, não só vivida em silêncio."
+      },
+      {
+        "grau": 22,
+        "decanato": 3,
+        "tempero": "sol",
+        "imagem": "Alguém sobe num palco e conta, orgulhoso, a crença que descobriu sozinho.",
+        "leitura": "Fé pessoal que se torna pública, na esperança de inspirar mais gente."
+      },
+      {
+        "grau": 23,
+        "decanato": 3,
+        "tempero": "sol",
+        "imagem": "Um líder religioso funda um templo pra abrigar quem acredita na mesma verdade.",
+        "leitura": "Convicção que cria estrutura pra durar além da vida de quem a teve primeiro."
+      },
+      {
+        "grau": 24,
+        "decanato": 3,
+        "tempero": "sol",
+        "imagem": "Um escritor publica o livro que defendia uma ideia que ninguém mais aceitava antes.",
+        "leitura": "Colocar a própria visão no mundo, mesmo sem garantia de que vão concordar."
+      },
+      {
+        "grau": 25,
+        "decanato": 3,
+        "tempero": "sol",
+        "imagem": "Um professor universitário é aplaudido de pé depois de defender uma tese revolucionária.",
+        "leitura": "Reconhecimento que confirma que a busca solitária valeu o risco."
+      },
+      {
+        "grau": 26,
+        "decanato": 3,
+        "tempero": "sol",
+        "imagem": "Um viajante volta pra casa e reúne a cidade inteira pra contar o que descobriu lá fora.",
+        "leitura": "A descoberta pessoal vira presente coletivo quando é compartilhada em voz alta."
+      },
+      {
+        "grau": 27,
+        "decanato": 3,
+        "tempero": "sol",
+        "imagem": "Um mestre funda uma escola pra ensinar tudo que aprendeu sozinho, ao longo de décadas.",
+        "leitura": "Transformar experiência individual em legado que outros podem herdar."
+      },
+      {
+        "grau": 28,
+        "decanato": 3,
+        "tempero": "sol",
+        "imagem": "Alguém planta uma bandeira representando uma ideia nova no topo de uma instituição antiga.",
+        "leitura": "Convicção que desafia a tradição abertamente, sem esconder a intenção."
+      },
+      {
+        "grau": 29,
+        "decanato": 3,
+        "tempero": "sol",
+        "imagem": "Um professor aposentado ainda dá palestras lotadas, décadas depois de ter começado.",
+        "leitura": "A busca por sentido que virou legado tão forte que continua atraindo gente."
+      },
+      {
+        "grau": 30,
+        "decanato": 3,
+        "tempero": "sol",
+        "imagem": "Um mapa-múndi inteiro é finalmente completado, sem nenhum espaço em branco restando.",
+        "leitura": "A busca que começou sem destino certo finalmente enxerga o território inteiro — grau anarético: a convicção virou visão completa."
+      }
+    ],
+    "capricornio": [
+      {
+        "grau": 1,
+        "decanato": 1,
+        "tempero": "saturno",
+        "imagem": "Uma cabra sobe um penhasco íngreme, um passo calculado de cada vez.",
+        "leitura": "Ambição que não pula etapa, mesmo quando o topo parece longe demais."
+      },
+      {
+        "grau": 2,
+        "decanato": 1,
+        "tempero": "saturno",
+        "imagem": "Um operário chega ao trabalho antes do sol nascer, todos os dias, sem exceção.",
+        "leitura": "Disciplina que não depende de vontade — virou rotina inegociável."
+      },
+      {
+        "grau": 3,
+        "decanato": 1,
+        "tempero": "saturno",
+        "imagem": "Uma criança aprende a engatinhar antes de tentar andar, sem pular a etapa.",
+        "leitura": "Construção que respeita a ordem certa das coisas, mesmo impaciente por chegar no fim."
+      },
+      {
+        "grau": 4,
+        "decanato": 1,
+        "tempero": "saturno",
+        "imagem": "Um andaime é montado nível por nível antes do prédio começar a subir de verdade.",
+        "leitura": "Preparar a estrutura de base antes de qualquer resultado visível aparecer."
+      },
+      {
+        "grau": 5,
+        "decanato": 1,
+        "tempero": "saturno",
+        "imagem": "Um relógio de sol marca a passagem do tempo sem nunca acelerar nem atrasar.",
+        "leitura": "Aceitar o ritmo real das coisas, mesmo quando a pressa pede mais rápido."
+      },
+      {
+        "grau": 6,
+        "decanato": 1,
+        "tempero": "saturno",
+        "imagem": "Um alpinista carrega o próprio peso de equipamento, subindo devagar, sem atalho.",
+        "leitura": "Esforço que aceita ser lento porque o atalho custaria caro demais depois."
+      },
+      {
+        "grau": 7,
+        "decanato": 1,
+        "tempero": "saturno",
+        "imagem": "Um aprendiz de ofício varre o chão da oficina por anos antes de tocar na primeira ferramenta.",
+        "leitura": "Humildade que aceita começar de baixo, mesmo sabendo que merece mais."
+      },
+      {
+        "grau": 8,
+        "decanato": 1,
+        "tempero": "saturno",
+        "imagem": "Uma represa é construída pedra por pedra pra conter um rio inteiro.",
+        "leitura": "Conter uma força grande demais exige estrutura construída com paciência extrema."
+      },
+      {
+        "grau": 9,
+        "decanato": 1,
+        "tempero": "saturno",
+        "imagem": "Um funcionário recusa o atalho que o chefe sugeriu, preferindo o processo correto mais longo.",
+        "leitura": "Integridade que escolhe o caminho certo mesmo quando ninguém notaria a diferença."
+      },
+      {
+        "grau": 10,
+        "decanato": 1,
+        "tempero": "saturno",
+        "imagem": "Uma escada de pedra sobe uma montanha inteira, degrau que foi entalhado há séculos.",
+        "leitura": "Esforço acumulado que só existe porque muita gente aceitou construir devagar — fim do decanato."
+      },
+      {
+        "grau": 11,
+        "decanato": 2,
+        "tempero": "vênus",
+        "imagem": "Um agricultor colhe, finalmente, o pomar que plantou anos atrás.",
+        "leitura": "O prazer que só chega depois de muito tempo de espera — recompensa que não veio de graça."
+      },
+      {
+        "grau": 12,
+        "decanato": 2,
+        "tempero": "vênus",
+        "imagem": "Um artesão vende a primeira peça feita com as próprias mãos, depois de anos de aprendizado.",
+        "leitura": "O valor do trabalho reconhecido, finalmente, em troca justa."
+      },
+      {
+        "grau": 13,
+        "decanato": 2,
+        "tempero": "vênus",
+        "imagem": "Um casal comemora bodas de ouro, cinquenta anos depois do primeiro compromisso.",
+        "leitura": "Permanência que rende, com o tempo, uma intimidade que pressa nenhuma constrói mais rápido."
+      },
+      {
+        "grau": 14,
+        "decanato": 2,
+        "tempero": "vênus",
+        "imagem": "Um executivo compra a casa que sonhava depois de décadas subindo de cargo.",
+        "leitura": "Ambição que finalmente se converte em conforto tangível, merecido pelo esforço."
+      },
+      {
+        "grau": 15,
+        "decanato": 2,
+        "tempero": "vênus",
+        "imagem": "Um professor recebe uma homenagem depois de quarenta anos de sala de aula.",
+        "leitura": "Reconhecimento tardio que pesa mais justamente por ter demorado tanto."
+      },
+      {
+        "grau": 16,
+        "decanato": 2,
+        "tempero": "vênus",
+        "imagem": "Um vinhedo antigo produz sua melhor safra depois de décadas de cultivo da mesma terra.",
+        "leitura": "Qualidade que só a maturação do tempo consegue entregar de verdade."
+      },
+      {
+        "grau": 17,
+        "decanato": 2,
+        "tempero": "vênus",
+        "imagem": "Um empresário aposenta-se e finalmente aproveita o dinheiro que levou a vida inteira acumulando.",
+        "leitura": "O prazer adiado por tanto tempo que quase se esqueceu de existir, chegando enfim."
+      },
+      {
+        "grau": 18,
+        "decanato": 2,
+        "tempero": "vênus",
+        "imagem": "Um alpinista experiente escala a montanha mais fácil, só pelo prazer, sem provar nada a ninguém.",
+        "leitura": "Ter conquistado tanto que já pode simplesmente aproveitar, sem pressão nenhuma."
+      },
+      {
+        "grau": 19,
+        "decanato": 2,
+        "tempero": "vênus",
+        "imagem": "Uma família se muda pra casa construída com as próprias economias, tijolo por tijolo.",
+        "leitura": "O lar como resultado direto e tangível de anos de sacrifício."
+      },
+      {
+        "grau": 20,
+        "decanato": 2,
+        "tempero": "vênus",
+        "imagem": "Um mestre artesão finalmente aceita um encomendante pagar o preço justo pelo que ele sabe fazer.",
+        "leitura": "Reconhecer o próprio valor depois de anos aceitando menos do que merecia — fim do decanato."
+      },
+      {
+        "grau": 21,
+        "decanato": 3,
+        "tempero": "mercúrio",
+        "imagem": "Um arquiteto revisa a planta do prédio linha por linha antes da fundação ser lançada.",
+        "leitura": "Ambição que se apoia em cálculo exato, não só em vontade de crescer."
+      },
+      {
+        "grau": 22,
+        "decanato": 3,
+        "tempero": "mercúrio",
+        "imagem": "Um estrategista planeja cada etapa da construção de um império, ano após ano.",
+        "leitura": "Visão de longo prazo que exige paciência estrutural, não só desejo de poder."
+      },
+      {
+        "grau": 23,
+        "decanato": 3,
+        "tempero": "mercúrio",
+        "imagem": "Um engenheiro testa cada viga da ponte antes de liberar a passagem de qualquer carro.",
+        "leitura": "Responsabilidade que verifica cada detalhe antes de assumir o risco de falhar."
+      },
+      {
+        "grau": 24,
+        "decanato": 3,
+        "tempero": "mercúrio",
+        "imagem": "Um CEO organiza a sucessão da empresa com anos de antecedência, treinando o substituto certo.",
+        "leitura": "Poder que pensa além da própria permanência — construir o que continua depois de você."
+      },
+      {
+        "grau": 25,
+        "decanato": 3,
+        "tempero": "mercúrio",
+        "imagem": "Um general revisa o mapa da batalha uma última vez antes de dar a ordem de avanço.",
+        "leitura": "Ambição que não age sem plano — o controle nasce da preparação exaustiva."
+      },
+      {
+        "grau": 26,
+        "decanato": 3,
+        "tempero": "mercúrio",
+        "imagem": "Um administrador público audita as próprias contas antes que alguém precise pedir.",
+        "leitura": "Disciplina que se antecipa à cobrança, por integridade, não por medo."
+      },
+      {
+        "grau": 27,
+        "decanato": 3,
+        "tempero": "mercúrio",
+        "imagem": "Um mestre de obras entrega o prédio um dia antes do prazo, sem nenhum erro estrutural.",
+        "leitura": "Excelência que combina ambição com exatidão — chegar longe sem deixar rachadura pra trás."
+      },
+      {
+        "grau": 28,
+        "decanato": 3,
+        "tempero": "mercúrio",
+        "imagem": "Um economista calcula décadas à frente o impacto de uma única decisão de hoje.",
+        "leitura": "Poder de verdade que pensa em consequência de longo prazo, não só ganho imediato."
+      },
+      {
+        "grau": 29,
+        "decanato": 3,
+        "tempero": "mercúrio",
+        "imagem": "Um professor de ofício entrega, com precisão total, tudo o que sabe pro aprendiz mais dedicado.",
+        "leitura": "Legado transmitido com exatidão — o que foi construído com rigor merece continuar com o mesmo padrão."
+      },
+      {
+        "grau": 30,
+        "decanato": 3,
+        "tempero": "mercúrio",
+        "imagem": "Uma pirâmide inteira é finalmente concluída, cada pedra encaixada no lugar exato planejado séculos atrás.",
+        "leitura": "Ambição que atravessa gerações e se cumpre exatamente como foi arquitetada — grau anarético: estrutura permanente."
+      }
+    ],
+    "aquario": [
+      {
+        "grau": 1,
+        "decanato": 1,
+        "tempero": "saturno",
+        "imagem": "Um inventor desmonta uma máquina inteira só pra entender por que ela funciona do jeito que funciona.",
+        "leitura": "Curiosidade fria que prefere entender o sistema a aceitá-lo como está."
+      },
+      {
+        "grau": 2,
+        "decanato": 1,
+        "tempero": "saturno",
+        "imagem": "Uma criança pergunta por que a regra existe, em vez de só obedecer.",
+        "leitura": "Questionar a estrutura antes de aceitar que ela é a única forma possível."
+      },
+      {
+        "grau": 3,
+        "decanato": 1,
+        "tempero": "saturno",
+        "imagem": "Um cientista propõe uma teoria que contradiz tudo que já foi aceito até ali.",
+        "leitura": "Convicção que aceita ficar isolada temporariamente em troca de estar certa depois."
+      },
+      {
+        "grau": 4,
+        "decanato": 1,
+        "tempero": "saturno",
+        "imagem": "Uma máquina é desligada da rede elétrica só pra testar se funciona sozinha.",
+        "leitura": "Testar independência mesmo quando isso significa abrir mão do suporte já garantido."
+      },
+      {
+        "grau": 5,
+        "decanato": 1,
+        "tempero": "saturno",
+        "imagem": "Um grupo de jovens organiza um protesto sem líder nenhum no centro.",
+        "leitura": "Estrutura horizontal que dispensa hierarquia tradicional pra funcionar."
+      },
+      {
+        "grau": 6,
+        "decanato": 1,
+        "tempero": "saturno",
+        "imagem": "Alguém troca o próprio nome de família por um que escolheu sozinho.",
+        "leitura": "Reconstruir a própria identidade fora da estrutura que foi dada de nascença."
+      },
+      {
+        "grau": 7,
+        "decanato": 1,
+        "tempero": "saturno",
+        "imagem": "Um relógio quebrado é consertado com uma peça que nunca foi feita pra aquele modelo.",
+        "leitura": "Solução que ignora o manual original pra fazer o sistema funcionar de outro jeito."
+      },
+      {
+        "grau": 8,
+        "decanato": 1,
+        "tempero": "saturno",
+        "imagem": "Uma comunidade isolada desenvolve as próprias leis, diferentes de qualquer país vizinho.",
+        "leitura": "Criar sistema próprio, mesmo indo contra o que já era esperado ao redor."
+      },
+      {
+        "grau": 9,
+        "decanato": 1,
+        "tempero": "saturno",
+        "imagem": "Um professor recusa dar nota, avaliando os alunos de um jeito que a escola nunca aceitou antes.",
+        "leitura": "Romper com o sistema estabelecido, mesmo sabendo que isso gera atrito."
+      },
+      {
+        "grau": 10,
+        "decanato": 1,
+        "tempero": "saturno",
+        "imagem": "Uma engrenagem nova, de formato estranho, é encaixada numa máquina antiga e ela volta a funcionar.",
+        "leitura": "Inovação que parece errada até provar que resolve o que o sistema antigo não resolvia mais — fim do decanato."
+      },
+      {
+        "grau": 11,
+        "decanato": 2,
+        "tempero": "mercúrio",
+        "imagem": "Uma sala cheia de estranhos troca ideias rapidamente, cada um contribuindo um pedaço diferente.",
+        "leitura": "Inteligência coletiva que nasce da troca rápida entre muitas cabeças diferentes."
+      },
+      {
+        "grau": 12,
+        "decanato": 2,
+        "tempero": "mercúrio",
+        "imagem": "Uma carta é copiada e enviada simultaneamente pra cem endereços diferentes.",
+        "leitura": "Uma ideia que se multiplica rápido demais pra ser controlada por quem a criou."
+      },
+      {
+        "grau": 13,
+        "decanato": 2,
+        "tempero": "mercúrio",
+        "imagem": "Um grupo de pesquisadores em países diferentes chega à mesma descoberta ao mesmo tempo.",
+        "leitura": "Pensamento que atravessa distância, como se a ideia já estivesse no ar esperando ser captada."
+      },
+      {
+        "grau": 14,
+        "decanato": 2,
+        "tempero": "mercúrio",
+        "imagem": "Uma rede de estudantes troca anotações de aula sem que nenhum professor tenha pedido isso.",
+        "leitura": "Cooperação espontânea que nasce fora da estrutura oficial."
+      },
+      {
+        "grau": 15,
+        "decanato": 2,
+        "tempero": "mercúrio",
+        "imagem": "Um grupo online organiza uma causa que nenhum jornal tinha noticiado ainda.",
+        "leitura": "Conexão que cria movimento antes mesmo de qualquer autoridade perceber que ele existe."
+      },
+      {
+        "grau": 16,
+        "decanato": 2,
+        "tempero": "mercúrio",
+        "imagem": "Um inventor publica a fórmula da própria descoberta de graça, pra qualquer um usar.",
+        "leitura": "Abrir mão do controle exclusivo em nome do avanço coletivo."
+      },
+      {
+        "grau": 17,
+        "decanato": 2,
+        "tempero": "mercúrio",
+        "imagem": "Uma orquestra improvisada se forma com músicos que nunca tinham se visto antes.",
+        "leitura": "Colaboração instantânea que dispensa ensaio prévio — a rede se organiza sozinha."
+      },
+      {
+        "grau": 18,
+        "decanato": 2,
+        "tempero": "mercúrio",
+        "imagem": "Um grupo de cientistas amadores catalogam estrelas de casas diferentes, unindo os dados numa lista só.",
+        "leitura": "Conhecimento construído em conjunto, peça por peça, sem que ninguém precise fazer tudo sozinho."
+      },
+      {
+        "grau": 19,
+        "decanato": 2,
+        "tempero": "mercúrio",
+        "imagem": "Uma ideia nasce numa conversa de bar e, meses depois, aparece repetida em cidades sem contato entre si.",
+        "leitura": "Pensamento coletivo que se espalha por caminhos que ninguém consegue rastrear direito."
+      },
+      {
+        "grau": 20,
+        "decanato": 2,
+        "tempero": "mercúrio",
+        "imagem": "Um grupo de vizinhos desconhecidos organiza a reconstrução da praça pública sem esperar o governo agir.",
+        "leitura": "Rede que resolve o que a estrutura oficial ainda não resolveu — fim do decanato."
+      },
+      {
+        "grau": 21,
+        "decanato": 3,
+        "tempero": "vênus",
+        "imagem": "Uma cidade inteira é projetada com espaço igual pra cada família, sem favorecer ninguém.",
+        "leitura": "Idealismo que tenta desenhar justiça direto na estrutura, não só na intenção."
+      },
+      {
+        "grau": 22,
+        "decanato": 3,
+        "tempero": "vênus",
+        "imagem": "Um grupo assina um manifesto pedindo direitos iguais pra todos, sem exceção.",
+        "leitura": "Visão de futuro que recusa aceitar desigualdade como algo natural ou definitivo."
+      },
+      {
+        "grau": 23,
+        "decanato": 3,
+        "tempero": "vênus",
+        "imagem": "Uma cooperativa divide o lucro igualmente entre todos que trabalharam, sem hierarquia de cargo.",
+        "leitura": "Estrutura que tenta corrigir, na prática, o que o sistema tradicional normalizou como desigual."
+      },
+      {
+        "grau": 24,
+        "decanato": 3,
+        "tempero": "vênus",
+        "imagem": "Um grupo de amigos cria um fundo comum pra ajudar quem precisar, sem juros, sem cobrança.",
+        "leitura": "Solidariedade organizada como sistema, não como favor pontual."
+      },
+      {
+        "grau": 25,
+        "decanato": 3,
+        "tempero": "vênus",
+        "imagem": "Uma nova constituição é escrita coletivamente, frase por frase, em assembleia pública.",
+        "leitura": "Idealismo que aceita o trabalho lento de construir consenso, em vez de impor de cima pra baixo."
+      },
+      {
+        "grau": 26,
+        "decanato": 3,
+        "tempero": "vênus",
+        "imagem": "Um grupo de cientistas divide livremente uma vacina, recusando patentear a fórmula.",
+        "leitura": "Colocar o bem coletivo acima do lucro individual, mesmo abrindo mão de recompensa própria."
+      },
+      {
+        "grau": 27,
+        "decanato": 3,
+        "tempero": "vênus",
+        "imagem": "Uma comunidade planeja a cidade do futuro com espaço verde garantido pra todo bairro, rico ou pobre.",
+        "leitura": "Visão que tenta garantir, de forma estrutural, que ninguém fique de fora do que é bom."
+      },
+      {
+        "grau": 28,
+        "decanato": 3,
+        "tempero": "vênus",
+        "imagem": "Um grupo de voluntários reconstrói uma escola pública sem cobrar nada da prefeitura.",
+        "leitura": "Idealismo que age direto, sem esperar autorização de quem deveria ter agido primeiro."
+      },
+      {
+        "grau": 29,
+        "decanato": 3,
+        "tempero": "vênus",
+        "imagem": "Uma rede internacional troca sementes raras de graça entre agricultores de países diferentes.",
+        "leitura": "Cooperação que ultrapassa fronteira, movida só pela crença de que recurso bom deveria circular livre."
+      },
+      {
+        "grau": 30,
+        "decanato": 3,
+        "tempero": "vênus",
+        "imagem": "Uma constelação de satélites conecta até a aldeia mais isolada do planeta à mesma rede.",
+        "leitura": "O ideal de conexão igualitária alcançando até quem estava mais longe — grau anarético: rede que virou alcance universal."
+      }
+    ],
+    "peixes": [
+      {
+        "grau": 1,
+        "decanato": 1,
+        "tempero": "júpiter",
+        "imagem": "Alguém reza por um estranho que nunca vai saber que foi lembrado.",
+        "leitura": "Compaixão que não exige retorno nem reconhecimento pra existir."
+      },
+      {
+        "grau": 2,
+        "decanato": 1,
+        "tempero": "júpiter",
+        "imagem": "Uma pessoa doa sangue sem saber quem vai recebê-lo.",
+        "leitura": "Generosidade que se oferece ao anônimo, confiando que vai chegar a quem precisa."
+      },
+      {
+        "grau": 3,
+        "decanato": 1,
+        "tempero": "júpiter",
+        "imagem": "Um sonhador acredita em algo que nunca viu prova nenhuma de que é real.",
+        "leitura": "Fé que não depende de evidência — só do desejo de que o mundo seja maior do que parece."
+      },
+      {
+        "grau": 4,
+        "decanato": 1,
+        "tempero": "júpiter",
+        "imagem": "Uma criança perdoa o amigo antes mesmo de ouvir o pedido de desculpa.",
+        "leitura": "Misericórdia que chega antes de ser merecida — perdão que não calcula."
+      },
+      {
+        "grau": 5,
+        "decanato": 1,
+        "tempero": "júpiter",
+        "imagem": "Alguém chora vendo a notícia de uma tragédia do outro lado do mundo.",
+        "leitura": "Sentir a dor de estranhos como se fosse próxima — fronteira entre eu e outro se dissolvendo."
+      },
+      {
+        "grau": 6,
+        "decanato": 1,
+        "tempero": "júpiter",
+        "imagem": "Um artista pinta um mundo que só existe na própria imaginação.",
+        "leitura": "Criar algo que não tinha lugar no real até alguém imaginar primeiro."
+      },
+      {
+        "grau": 7,
+        "decanato": 1,
+        "tempero": "júpiter",
+        "imagem": "Uma pessoa oferece abrigo a um estranho que bateu na porta durante a tempestade.",
+        "leitura": "Confiar no desconhecido além do que a prudência recomendaria."
+      },
+      {
+        "grau": 8,
+        "decanato": 1,
+        "tempero": "júpiter",
+        "imagem": "Um monge budista medita pedindo o fim do sofrimento de todos os seres, não só o próprio.",
+        "leitura": "Compaixão que se recusa a parar nas próprias fronteiras."
+      },
+      {
+        "grau": 9,
+        "decanato": 1,
+        "tempero": "júpiter",
+        "imagem": "Uma criança inventa um amigo imaginário pra não se sentir sozinha.",
+        "leitura": "Imaginação usada como refúgio real diante de uma solidão concreta."
+      },
+      {
+        "grau": 10,
+        "decanato": 1,
+        "tempero": "júpiter",
+        "imagem": "Uma vela é acesa em memória de alguém que a pessoa nunca chegou a conhecer.",
+        "leitura": "Luto e cuidado que se estendem além do próprio círculo direto — fim do decanato."
+      },
+      {
+        "grau": 11,
+        "decanato": 2,
+        "tempero": "lua",
+        "imagem": "Uma pessoa sente a tristeza de um amigo antes mesmo de ele contar o que aconteceu.",
+        "leitura": "Sensibilidade que absorve o estado emocional alheio sem precisar de explicação."
+      },
+      {
+        "grau": 12,
+        "decanato": 2,
+        "tempero": "lua",
+        "imagem": "Uma mãe chora junto com o filho, sentindo a dor dele como se fosse sua também.",
+        "leitura": "Empatia tão profunda que a fronteira entre as duas dores desaparece."
+      },
+      {
+        "grau": 13,
+        "decanato": 2,
+        "tempero": "lua",
+        "imagem": "Alguém sonha repetidamente com uma pessoa que está longe, sem saber que ela está mal.",
+        "leitura": "Conexão que atravessa distância física através de algum canal que a razão não explica."
+      },
+      {
+        "grau": 14,
+        "decanato": 2,
+        "tempero": "lua",
+        "imagem": "Uma pessoa absorve o clima de uma sala inteira só de entrar nela.",
+        "leitura": "Sensibilidade que capta o que está no ar antes de qualquer palavra ser dita."
+      },
+      {
+        "grau": 15,
+        "decanato": 2,
+        "tempero": "lua",
+        "imagem": "Um terapeuta sai exausto depois de uma sessão, carregando um pouco da dor do paciente.",
+        "leitura": "Cuidado que custa energia real de quem oferece, não é gratuito por dentro."
+      },
+      {
+        "grau": 16,
+        "decanato": 2,
+        "tempero": "lua",
+        "imagem": "Uma pessoa chora vendo um filme, mesmo sabendo que a história é inventada.",
+        "leitura": "Emoção que não distingue entre real e imaginado quando a sensibilidade está aberta."
+      },
+      {
+        "grau": 17,
+        "decanato": 2,
+        "tempero": "lua",
+        "imagem": "Alguém sente vontade de proteger um estranho triste no ônibus, sem saber por quê.",
+        "leitura": "Compaixão instintiva que dispensa explicação lógica pra existir."
+      },
+      {
+        "grau": 18,
+        "decanato": 2,
+        "tempero": "lua",
+        "imagem": "Uma família inteira sente o luto de um membro que está longe, mesmo sem saber os detalhes.",
+        "leitura": "Vínculo emocional que continua ativo à distância, sem precisar de contato direto."
+      },
+      {
+        "grau": 19,
+        "decanato": 2,
+        "tempero": "lua",
+        "imagem": "Uma pessoa absorve tanto da dor alheia que esquece de cuidar da própria.",
+        "leitura": "Generosidade emocional que, sem limite, também pode custar caro demais pra quem oferece."
+      },
+      {
+        "grau": 20,
+        "decanato": 2,
+        "tempero": "lua",
+        "imagem": "Alguém aprende, com o tempo, a sentir o outro sem se afogar junto na mesma dor.",
+        "leitura": "Aprender o limite entre acolher e se dissolver por completo — fim do decanato."
+      },
+      {
+        "grau": 21,
+        "decanato": 3,
+        "tempero": "marte",
+        "imagem": "Uma correnteza puxa um nadador pra mais fundo do que ele pretendia ir.",
+        "leitura": "Entrega que passa do ponto de controle — dissolver-se além do que era seguro."
+      },
+      {
+        "grau": 22,
+        "decanato": 3,
+        "tempero": "marte",
+        "imagem": "Alguém atravessa o luto mais difícil da vida sozinho, no silêncio absoluto da própria dor.",
+        "leitura": "Intensidade que não pede socorro, mesmo precisando dele."
+      },
+      {
+        "grau": 23,
+        "decanato": 3,
+        "tempero": "marte",
+        "imagem": "Uma pessoa sacrifica o próprio conforto pra cuidar de alguém até o último momento.",
+        "leitura": "Entrega total que não guarda nada de reserva pra si mesma."
+      },
+      {
+        "grau": 24,
+        "decanato": 3,
+        "tempero": "marte",
+        "imagem": "Um náufrago se agarra ao último pedaço de madeira flutuante, recusando se soltar.",
+        "leitura": "Resistência final antes da entrega completa ao que não se pode controlar."
+      },
+      {
+        "grau": 25,
+        "decanato": 3,
+        "tempero": "marte",
+        "imagem": "Alguém revive, em sonho, o mesmo momento doloroso repetidas vezes, buscando um sentido escondido nele.",
+        "leitura": "A mente insistindo em reprocessar até encontrar paz onde só havia ferida."
+      },
+      {
+        "grau": 26,
+        "decanato": 3,
+        "tempero": "marte",
+        "imagem": "Uma pessoa desiste de lutar contra a própria exaustão e finalmente se deixa cair de cansaço.",
+        "leitura": "Render-se ao limite do próprio corpo depois de resistir tempo demais."
+      },
+      {
+        "grau": 27,
+        "decanato": 3,
+        "tempero": "marte",
+        "imagem": "Um artista termina a obra mais intensa da vida logo antes de desaparecer de cena por completo.",
+        "leitura": "Entregar tudo que resta de si numa última expressão, sem guardar nada pra depois."
+      },
+      {
+        "grau": 28,
+        "decanato": 3,
+        "tempero": "marte",
+        "imagem": "Alguém solta, finalmente, o rancor mais antigo que carregava, sentindo o corpo mais leve na hora.",
+        "leitura": "A dissolução de algo que pesava há tanto tempo que a pessoa nem lembrava mais do peso."
+      },
+      {
+        "grau": 29,
+        "decanato": 3,
+        "tempero": "marte",
+        "imagem": "Uma onda gigante se ergue no mar aberto antes de finalmente quebrar e se dissolver na espuma.",
+        "leitura": "Intensidade que atinge o pico só pra se desfazer completamente logo em seguida."
+      },
+      {
+        "grau": 30,
+        "decanato": 3,
+        "tempero": "marte",
+        "imagem": "O último grau do zodíaco se dissolve de volta no ponto zero, onde tudo começa de novo.",
+        "leitura": "O fim que não é fim — grau anarético que fecha a roda: só a dissolução final antes de um novo ciclo inteiro recomeçar do primeiro grau de Áries."
+      }
+    ]
+  }
+}

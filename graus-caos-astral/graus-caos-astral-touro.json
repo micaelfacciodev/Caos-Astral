@@ -1,0 +1,216 @@
+{
+  "sistema": "graus-caos-astral",
+  "signo": "touro",
+  "graus": [
+    {
+      "grau": 1,
+      "decanato": 1,
+      "tempero": "vênus",
+      "imagem": "Uma mão fecha em volta de uma fruta madura antes de perguntar se pode colher.",
+      "leitura": "O corpo quer primeiro, pergunta depois. Desejo cru não pede licença, só reconhecimento."
+    },
+    {
+      "grau": 2,
+      "decanato": 1,
+      "tempero": "vênus",
+      "imagem": "Um bebê agarra o dedo de quem o segura e não solta.",
+      "leitura": "Segurar é o primeiro modo de confirmar que algo é seu."
+    },
+    {
+      "grau": 3,
+      "decanato": 1,
+      "tempero": "vênus",
+      "imagem": "Uma raiz se enterra mais fundo antes de a árvore crescer um centímetro visível.",
+      "leitura": "Construir base invisível antes de qualquer resultado que apareça por fora."
+    },
+    {
+      "grau": 4,
+      "decanato": 1,
+      "tempero": "vênus",
+      "imagem": "Alguém prova o primeiro gole de um vinho e fecha os olhos.",
+      "leitura": "Prazer que exige atenção total pra ser sentido de verdade, não só consumido."
+    },
+    {
+      "grau": 5,
+      "decanato": 1,
+      "tempero": "vênus",
+      "imagem": "Um cofre é trancado antes mesmo de guardar o que ainda não chegou.",
+      "leitura": "Proteger o que ainda vai vir. Prevenção que às vezes chega cedo demais."
+    },
+    {
+      "grau": 6,
+      "decanato": 1,
+      "tempero": "vênus",
+      "imagem": "Uma vaca pasta devagar num campo enorme, sem pressa de terminar.",
+      "leitura": "Ritmo que não se apressa por ninguém — o tempo dela é a única métrica que importa."
+    },
+    {
+      "grau": 7,
+      "decanato": 1,
+      "tempero": "vênus",
+      "imagem": "Uma pedra preciosa é encontrada em bruto, ainda coberta de terra.",
+      "leitura": "Valor real que ainda não foi lapidado nem reconhecido por ninguém além de quem achou."
+    },
+    {
+      "grau": 8,
+      "decanato": 1,
+      "tempero": "vênus",
+      "imagem": "Duas mãos amassam barro até virar forma.",
+      "leitura": "Paciência física que transforma matéria bruta em algo com propósito."
+    },
+    {
+      "grau": 9,
+      "decanato": 1,
+      "tempero": "vênus",
+      "imagem": "Um cão enterra um osso num lugar que só ele lembra.",
+      "leitura": "Guardar recursos com uma lógica que só faz sentido pra quem guardou."
+    },
+    {
+      "grau": 10,
+      "decanato": 1,
+      "tempero": "vênus",
+      "imagem": "Uma âncora é lançada e prende no fundo do mar.",
+      "leitura": "Parar de vez, fincar posição — fim do decanato: não se mover mais até que valha a pena."
+    },
+    {
+      "grau": 11,
+      "decanato": 2,
+      "tempero": "mercúrio",
+      "imagem": "Um joalheiro examina uma pedra sob lupa antes de dar o preço.",
+      "leitura": "Avaliar com precisão o que antes era só desejo cru. O valor exige exame, não só vontade."
+    },
+    {
+      "grau": 12,
+      "decanato": 2,
+      "tempero": "mercúrio",
+      "imagem": "Uma balança comercial pesa grãos, um punhado de cada vez.",
+      "leitura": "Medir com cuidado o que se troca — prazer sem cálculo vira prejuízo."
+    },
+    {
+      "grau": 13,
+      "decanato": 2,
+      "tempero": "mercúrio",
+      "imagem": "Um agricultor testa a terra com os dedos antes de plantar.",
+      "leitura": "Verificar a condição real antes de investir esforço. Sentir o material, não assumir."
+    },
+    {
+      "grau": 14,
+      "decanato": 2,
+      "tempero": "mercúrio",
+      "imagem": "Uma receita antiga é seguida à risca, colher por colher.",
+      "leitura": "Repetir o que já funcionou, sem improviso — segurança que vem da fórmula testada."
+    },
+    {
+      "grau": 15,
+      "decanato": 2,
+      "tempero": "mercúrio",
+      "imagem": "Um contador soma moedas numa mesa de madeira gasta.",
+      "leitura": "Cuidar do que já existe, centavo por centavo, antes de sonhar com mais."
+    },
+    {
+      "grau": 16,
+      "decanato": 2,
+      "tempero": "mercúrio",
+      "imagem": "Um artesão lixa a mesma superfície pela décima vez, buscando o acabamento certo.",
+      "leitura": "Repetição que refina, não que cansa. O resultado só aparece depois de insistir."
+    },
+    {
+      "grau": 17,
+      "decanato": 2,
+      "tempero": "mercúrio",
+      "imagem": "Um fazendeiro conserta a cerca antes que o gado escape.",
+      "leitura": "Manutenção que evita perda maior depois. Prevenção enfadonha, mas eficaz."
+    },
+    {
+      "grau": 18,
+      "decanato": 2,
+      "tempero": "mercúrio",
+      "imagem": "Uma costureira mede o tecido duas vezes antes de cortar uma vez.",
+      "leitura": "Cautela que evita desperdício. O cálculo aqui protege o material, não o ego."
+    },
+    {
+      "grau": 19,
+      "decanato": 2,
+      "tempero": "mercúrio",
+      "imagem": "Um comerciante organiza sua mercadoria em fileiras exatas.",
+      "leitura": "Ordem que facilita o próximo passo — o que está arrumado já está meio resolvido."
+    },
+    {
+      "grau": 20,
+      "decanato": 2,
+      "tempero": "mercúrio",
+      "imagem": "Uma mesa farta é posta, prato por prato, antes dos convidados chegarem.",
+      "leitura": "Preparar fartura com antecedência. O que sustenta os outros também exige planejamento."
+    },
+    {
+      "grau": 21,
+      "decanato": 3,
+      "tempero": "saturno",
+      "imagem": "Uma muralha de pedra é erguida bloco por bloco, sem pressa de terminar.",
+      "leitura": "Construção que aceita ser lenta, porque o que se ergue rápido também cai rápido."
+    },
+    {
+      "grau": 22,
+      "decanato": 3,
+      "tempero": "saturno",
+      "imagem": "Um carvalho antigo não se move nem com vento forte.",
+      "leitura": "Raiz funda que recusa ceder — força que não precisa provar nada, só permanece."
+    },
+    {
+      "grau": 23,
+      "decanato": 3,
+      "tempero": "saturno",
+      "imagem": "Um cofre de banco é fechado com três chaves diferentes, cada uma com um guardião.",
+      "leitura": "Proteção que distribui responsabilidade — o valor grande demais pra confiar numa mão só."
+    },
+    {
+      "grau": 24,
+      "decanato": 3,
+      "tempero": "saturno",
+      "imagem": "Um fazendeiro guarda grãos suficientes pra sobreviver ao inverno mais longo.",
+      "leitura": "Provisão pensada pro pior cenário, não só pro dia de hoje."
+    },
+    {
+      "grau": 25,
+      "decanato": 3,
+      "tempero": "saturno",
+      "imagem": "Uma estátua de pedra resiste séculos ao tempo, sem trocar de expressão.",
+      "leitura": "Permanência que não pede aprovação de ninguém — só dura."
+    },
+    {
+      "grau": 26,
+      "decanato": 3,
+      "tempero": "saturno",
+      "imagem": "Um cofre-forte é escondido atrás de uma parede comum, sem nenhuma marca visível.",
+      "leitura": "Guardar valor sem ostentar — proteção que aposta na discrição, não na exibição."
+    },
+    {
+      "grau": 27,
+      "decanato": 3,
+      "tempero": "saturno",
+      "imagem": "Um velho agricultor ainda planta árvores que só darão fruto depois que ele morrer.",
+      "leitura": "Investir em algo que não vai colher — construir legado maior que a própria vida."
+    },
+    {
+      "grau": 28,
+      "decanato": 3,
+      "tempero": "saturno",
+      "imagem": "Uma montanha de sal se acumula lentamente numa salina, grão por grão.",
+      "leitura": "Acúmulo que não tem pressa nenhuma — o resultado só aparece depois de muito tempo repetindo o mesmo gesto."
+    },
+    {
+      "grau": 29,
+      "decanato": 3,
+      "tempero": "saturno",
+      "imagem": "Um testamento é lacrado e guardado num cofre até a hora certa de ser aberto.",
+      "leitura": "O que foi decidido com cuidado espera o momento certo pra valer."
+    },
+    {
+      "grau": 30,
+      "decanato": 3,
+      "tempero": "saturno",
+      "imagem": "Uma pedra fundamental é assentada, e sobre ela toda a construção seguinte vai se apoiar.",
+      "leitura": "O que se decide agora sustenta tudo que vem depois — grau anarético que fecha o ciclo virando alicerce."
+    }
+  ]
+}

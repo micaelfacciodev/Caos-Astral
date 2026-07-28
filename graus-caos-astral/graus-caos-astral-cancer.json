@@ -1,0 +1,216 @@
+{
+  "sistema": "graus-caos-astral",
+  "signo": "cancer",
+  "graus": [
+    {
+      "grau": 1,
+      "decanato": 1,
+      "tempero": "lua",
+      "imagem": "Um recém-nascido procura o calor do peito da mãe antes de abrir os olhos.",
+      "leitura": "Instinto que age antes da consciência — buscar proteção nem precisa ser aprendido."
+    },
+    {
+      "grau": 2,
+      "decanato": 1,
+      "tempero": "lua",
+      "imagem": "Um caranguejo recua pra dentro da própria concha ao menor sinal de perigo.",
+      "leitura": "Proteção automática. Recuar aqui não é fraqueza, é reflexo de sobrevivência."
+    },
+    {
+      "grau": 3,
+      "decanato": 1,
+      "tempero": "lua",
+      "imagem": "Uma mãe pássaro cobre os filhotes com as asas durante a tempestade.",
+      "leitura": "Abrigo que se oferece sem cálculo, só resposta direta ao perigo."
+    },
+    {
+      "grau": 4,
+      "decanato": 1,
+      "tempero": "lua",
+      "imagem": "Uma criança segura o cobertor da infância mesmo já crescida.",
+      "leitura": "Memória do conforto antigo que ainda ancora, mesmo sem necessidade prática."
+    },
+    {
+      "grau": 5,
+      "decanato": 1,
+      "tempero": "lua",
+      "imagem": "Uma maré sobe e cobre a praia inteira antes de recuar de novo.",
+      "leitura": "Ciclo emocional que vai e volta sozinho, sem pedir licença pro relógio."
+    },
+    {
+      "grau": 6,
+      "decanato": 1,
+      "tempero": "lua",
+      "imagem": "Um cão fareja o cheiro de casa a quilômetros de distância.",
+      "leitura": "Reconhecer pertencimento pelo instinto, antes de qualquer explicação racional."
+    },
+    {
+      "grau": 7,
+      "decanato": 1,
+      "tempero": "lua",
+      "imagem": "Uma criança chora ao ver a mãe sair da sala, mesmo sabendo que ela volta.",
+      "leitura": "Medo de abandono que existe mesmo quando a razão já sabe que está seguro."
+    },
+    {
+      "grau": 8,
+      "decanato": 1,
+      "tempero": "lua",
+      "imagem": "Um ninho é forrado de penas macias antes do primeiro ovo ser posto.",
+      "leitura": "Preparar o abrigo antes mesmo de precisar dele — cuidado que antecipa a necessidade."
+    },
+    {
+      "grau": 9,
+      "decanato": 1,
+      "tempero": "lua",
+      "imagem": "Uma concha vazia é carregada pela maré até a areia, ainda com a forma de quem já morou nela.",
+      "leitura": "O formato de um lar antigo que permanece mesmo depois que quem morava foi embora."
+    },
+    {
+      "grau": 10,
+      "decanato": 1,
+      "tempero": "lua",
+      "imagem": "Uma criança dorme enroscada, protegendo o peito com os braços cruzados.",
+      "leitura": "Proteger o centro mole de si mesmo, mesmo dormindo, mesmo sem ameaça visível."
+    },
+    {
+      "grau": 11,
+      "decanato": 2,
+      "tempero": "marte",
+      "imagem": "Uma mãe ursa ataca sem hesitar qualquer coisa que se aproxime dos filhotes.",
+      "leitura": "Proteção que vira força total quando o que se ama está ameaçado."
+    },
+    {
+      "grau": 12,
+      "decanato": 2,
+      "tempero": "marte",
+      "imagem": "Um portão de ferro é trancado com três fechaduras diferentes.",
+      "leitura": "Defesa redundante — quando o medo é grande, uma trava só nunca parece suficiente."
+    },
+    {
+      "grau": 13,
+      "decanato": 2,
+      "tempero": "marte",
+      "imagem": "Um cão de guarda não dorme enquanto sente um estranho perto do quintal.",
+      "leitura": "Vigilância que não descansa até a ameaça sumir de vez."
+    },
+    {
+      "grau": 14,
+      "decanato": 2,
+      "tempero": "marte",
+      "imagem": "Uma família esconde o que é mais precioso embaixo do próprio chão da casa.",
+      "leitura": "Proteger o que importa escondendo, não expondo — segurança que aposta no segredo."
+    },
+    {
+      "grau": 15,
+      "decanato": 2,
+      "tempero": "marte",
+      "imagem": "Uma serpente protege seus ovos enrolando o corpo inteiro ao redor deles.",
+      "leitura": "Proteção que ocupa todo o espaço disponível, sem deixar brecha nenhuma."
+    },
+    {
+      "grau": 16,
+      "decanato": 2,
+      "tempero": "marte",
+      "imagem": "Uma fortaleza é construída com um único portão estreito, fácil de defender.",
+      "leitura": "Reduzir os pontos fracos ao mínimo possível — proteção que pensa como ataque."
+    },
+    {
+      "grau": 17,
+      "decanato": 2,
+      "tempero": "marte",
+      "imagem": "Uma mulher esconde uma faca sob o travesseiro antes de dormir sozinha.",
+      "leitura": "Preparar defesa mesmo sem ameaça confirmada — instinto que não relaxa fácil."
+    },
+    {
+      "grau": 18,
+      "decanato": 2,
+      "tempero": "marte",
+      "imagem": "Um lobo marca o território com o próprio cheiro, avisando os outros à distância.",
+      "leitura": "Proteção que age antes do conflito, avisando limite sem precisar brigar ainda."
+    },
+    {
+      "grau": 19,
+      "decanato": 2,
+      "tempero": "marte",
+      "imagem": "Uma criança bate em quem tentou machucar o irmão mais novo.",
+      "leitura": "Agressão que nasce só quando é preciso proteger alguém mais vulnerável."
+    },
+    {
+      "grau": 20,
+      "decanato": 2,
+      "tempero": "marte",
+      "imagem": "Uma casa é cercada por um muro alto, com cacos de vidro no topo.",
+      "leitura": "Defesa que vira também isolamento — proteger tanto que ninguém mais entra, nem quem devia."
+    },
+    {
+      "grau": 21,
+      "decanato": 3,
+      "tempero": "júpiter",
+      "imagem": "Uma casa abre as portas pra abrigar quem perdeu a própria durante a enchente.",
+      "leitura": "O cuidado que cabia só na família se expande pra quem precisa, mesmo sendo estranho."
+    },
+    {
+      "grau": 22,
+      "decanato": 3,
+      "tempero": "júpiter",
+      "imagem": "Uma mãe adota um filhote de outra espécie que perdeu a própria mãe.",
+      "leitura": "Instinto de nutrir que ultrapassa os limites do próprio sangue."
+    },
+    {
+      "grau": 23,
+      "decanato": 3,
+      "tempero": "júpiter",
+      "imagem": "Uma cozinha comunitária alimenta o bairro inteiro sem cobrar nada.",
+      "leitura": "Nutrição que deixou de ser só da própria casa e virou oferta pra qualquer um com fome."
+    },
+    {
+      "grau": 24,
+      "decanato": 3,
+      "tempero": "júpiter",
+      "imagem": "Um rio transborda e irriga terras que nunca tinham visto água antes.",
+      "leitura": "Transbordamento que, ao invés de destruir, nutre o que estava seco."
+    },
+    {
+      "grau": 25,
+      "decanato": 3,
+      "tempero": "júpiter",
+      "imagem": "Uma freira acolhe crianças órfãs de guerras que não são a dela.",
+      "leitura": "Proteção que escolhe abraçar o mundo inteiro como família, não só quem já nasceu dentro dela."
+    },
+    {
+      "grau": 26,
+      "decanato": 3,
+      "tempero": "júpiter",
+      "imagem": "Uma casa de portas sempre abertas nunca sabe quantos vão dormir lá à noite.",
+      "leitura": "Hospitalidade sem controle nem cálculo — o abrigo vira oferta incondicional."
+    },
+    {
+      "grau": 27,
+      "decanato": 3,
+      "tempero": "júpiter",
+      "imagem": "Um oceano inteiro recebe todos os rios que desembocam nele, sem discriminar a origem.",
+      "leitura": "Acolhimento tão grande que perde a fronteira entre o que é seu e o que é de todos."
+    },
+    {
+      "grau": 28,
+      "decanato": 3,
+      "tempero": "júpiter",
+      "imagem": "Uma enfermeira chora junto com uma família que não é a dela, no hospital.",
+      "leitura": "O cuidado ultrapassa o dever profissional e vira compaixão de verdade, sem cobrar nada em troca."
+    },
+    {
+      "grau": 29,
+      "decanato": 3,
+      "tempero": "júpiter",
+      "imagem": "Uma comunidade inteira reconstrói a casa de um vizinho que perdeu tudo no incêndio.",
+      "leitura": "O instinto de proteger a própria casa se estende até virar responsabilidade coletiva."
+    },
+    {
+      "grau": 30,
+      "decanato": 3,
+      "tempero": "júpiter",
+      "imagem": "As águas de todos os rios do mundo finalmente se encontram no mesmo oceano.",
+      "leitura": "Todo abrigo individual desemboca, no fim, num pertencimento maior que ninguém possui sozinho — grau anarético."
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+{
+  "sistema": "graus-caos-astral",
+  "signo": "leao",
+  "graus": [
+    {
+      "grau": 1,
+      "decanato": 1,
+      "tempero": "sol",
+      "imagem": "Um recém-nascido sol nasce no horizonte e ilumina tudo ao redor sem pedir licença.",
+      "leitura": "Existir e brilhar são o mesmo gesto aqui — não precisa justificar a própria luz."
+    },
+    {
+      "grau": 2,
+      "decanato": 1,
+      "tempero": "sol",
+      "imagem": "Uma criança dança sozinha no meio da sala, sem ninguém olhando.",
+      "leitura": "Expressão que nasce da alegria de existir, não da aprovação de plateia nenhuma."
+    },
+    {
+      "grau": 3,
+      "decanato": 1,
+      "tempero": "sol",
+      "imagem": "Um girassol vira o rosto inteiro na direção do sol, o dia inteiro.",
+      "leitura": "Orientar-se pela própria fonte de vitalidade, sem se distrair com mais nada."
+    },
+    {
+      "grau": 4,
+      "decanato": 1,
+      "tempero": "sol",
+      "imagem": "Uma criança grita \"olha pra mim\" antes de pular na piscina.",
+      "leitura": "Precisar de testemunha pro próprio feito — a alegria cresce quando é vista."
+    },
+    {
+      "grau": 5,
+      "decanato": 1,
+      "tempero": "sol",
+      "imagem": "Um leão filhote ruge pela primeira vez, um som ainda fraco, mas já seu.",
+      "leitura": "A primeira tentativa de ocupar espaço com a própria voz, mesmo sem força ainda."
+    },
+    {
+      "grau": 6,
+      "decanato": 1,
+      "tempero": "sol",
+      "imagem": "Uma fogueira é acesa no centro de um acampamento, e todos se aproximam do calor.",
+      "leitura": "Presença que atrai gente ao redor sem precisar chamar ninguém."
+    },
+    {
+      "grau": 7,
+      "decanato": 1,
+      "tempero": "sol",
+      "imagem": "Uma criança se veste com a roupa mais colorida do guarda-roupa pra ir à escola.",
+      "leitura": "Expressão que escolhe aparecer, não se camuflar."
+    },
+    {
+      "grau": 8,
+      "decanato": 1,
+      "tempero": "sol",
+      "imagem": "Um pavão abre a cauda inteira mesmo sem nenhuma fêmea por perto.",
+      "leitura": "Exibir a própria beleza é, às vezes, só sobre ser inteiro, não sobre conquistar ninguém."
+    },
+    {
+      "grau": 9,
+      "decanato": 1,
+      "tempero": "sol",
+      "imagem": "Uma criança desenha um sol enorme no centro de qualquer folha de papel.",
+      "leitura": "Colocar a própria luz no centro da cena — instinto que nem precisa de motivo."
+    },
+    {
+      "grau": 10,
+      "decanato": 1,
+      "tempero": "sol",
+      "imagem": "Um coração recém-formado bate pela primeira vez, sozinho, sem plateia.",
+      "leitura": "Vitalidade que existe antes de qualquer aplauso — fim do decanato: o pulso é a primeira prova de vida."
+    },
+    {
+      "grau": 11,
+      "decanato": 2,
+      "tempero": "júpiter",
+      "imagem": "Um rei distribui ouro pra toda a cidade no dia da própria coroação.",
+      "leitura": "Generosidade que nasce do excesso — dar tanto quanto se tem, sem calcular o resto."
+    },
+    {
+      "grau": 12,
+      "decanato": 2,
+      "tempero": "júpiter",
+      "imagem": "Um anfitrião serve o dobro de comida do que os convidados poderiam comer.",
+      "leitura": "Fartura que vira gesto de amor, mesmo quando passa do necessário."
+    },
+    {
+      "grau": 13,
+      "decanato": 2,
+      "tempero": "júpiter",
+      "imagem": "Um ator recebe aplausos de pé e faz três reverências antes de sair do palco.",
+      "leitura": "Aceitar o reconhecimento por inteiro, sem fingir modéstia que não sente."
+    },
+    {
+      "grau": 14,
+      "decanato": 2,
+      "tempero": "júpiter",
+      "imagem": "Um professor generoso ensina de graça pra quem não pode pagar.",
+      "leitura": "Compartilhar o próprio brilho sem cobrar por isso — a luz que ilumina sem se apagar."
+    },
+    {
+      "grau": 15,
+      "decanato": 2,
+      "tempero": "júpiter",
+      "imagem": "Uma festa de casamento dura três dias inteiros de celebração.",
+      "leitura": "Comemorar em excesso porque a alegria, quando é grande de verdade, não cabe num dia só."
+    },
+    {
+      "grau": 16,
+      "decanato": 2,
+      "tempero": "júpiter",
+      "imagem": "Um patrono financia uma orquestra inteira só pelo prazer de ver a música acontecer.",
+      "leitura": "Generosidade que investe no brilho alheio, mesmo sem retorno garantido."
+    },
+    {
+      "grau": 17,
+      "decanato": 2,
+      "tempero": "júpiter",
+      "imagem": "Um líder promete mais do que consegue entregar, na euforia do discurso.",
+      "leitura": "O entusiasmo generoso às vezes ultrapassa o que a realidade permite cumprir."
+    },
+    {
+      "grau": 18,
+      "decanato": 2,
+      "tempero": "júpiter",
+      "imagem": "Uma criança dá de presente o brinquedo favorito pro amigo que está triste.",
+      "leitura": "Generosidade que dói um pouco — dar o que é mais precioso, não só o que sobra."
+    },
+    {
+      "grau": 19,
+      "decanato": 2,
+      "tempero": "júpiter",
+      "imagem": "Um artista pinta um mural enorme na parede pública, sem cobrar nada pela obra.",
+      "leitura": "Colocar a própria expressão no mundo, grande, visível, de graça."
+    },
+    {
+      "grau": 20,
+      "decanato": 2,
+      "tempero": "júpiter",
+      "imagem": "Um circo monta a maior tenda da cidade pra caber todo mundo que quiser ver o espetáculo.",
+      "leitura": "O desejo de incluir todo mundo na própria celebração — quanto maior a alegria, maior o convite."
+    },
+    {
+      "grau": 21,
+      "decanato": 3,
+      "tempero": "marte",
+      "imagem": "Um campeão ergue o troféu no alto, sozinho, no centro do estádio.",
+      "leitura": "Orgulho conquistado com esforço — o brilho aqui foi ganho, não só dado."
+    },
+    {
+      "grau": 22,
+      "decanato": 3,
+      "tempero": "marte",
+      "imagem": "Um artista compete pelo papel principal e não aceita o segundo lugar.",
+      "leitura": "Ambição que recusa se contentar com menos que o centro do palco."
+    },
+    {
+      "grau": 23,
+      "decanato": 3,
+      "tempero": "marte",
+      "imagem": "Um general condecorado exibe as medalhas no peito, uma a uma.",
+      "leitura": "Cada conquista exposta com orgulho — a prova visível do que já foi enfrentado."
+    },
+    {
+      "grau": 24,
+      "decanato": 3,
+      "tempero": "marte",
+      "imagem": "Uma dançarina desafia a companhia inteira até conseguir o solo principal.",
+      "leitura": "Brilhar aqui exige disputa — o centro do palco não sobra pra quem não luta por ele."
+    },
+    {
+      "grau": 25,
+      "decanato": 3,
+      "tempero": "marte",
+      "imagem": "Um boxeador ergue os braços antes mesmo do juiz anunciar o vencedor.",
+      "leitura": "Confiança que já comemora antes da confirmação — orgulho que aposta em si mesmo primeiro."
+    },
+    {
+      "grau": 26,
+      "decanato": 3,
+      "tempero": "marte",
+      "imagem": "Um rei desafia qualquer pretendente ao trono pra um duelo aberto.",
+      "leitura": "Defender o próprio brilho com as próprias mãos, sem terceirizar a disputa."
+    },
+    {
+      "grau": 27,
+      "decanato": 3,
+      "tempero": "marte",
+      "imagem": "Um cantor solo recusa dividir os holofotes até com a própria banda.",
+      "leitura": "Orgulho que, levado longe demais, isola quem deveria estar comemorando junto."
+    },
+    {
+      "grau": 28,
+      "decanato": 3,
+      "tempero": "marte",
+      "imagem": "Um atleta se recusa a comemorar até quebrar o próprio recorde, não só o dos outros.",
+      "leitura": "Competir consigo mesmo depois de já vencer todo mundo ao redor."
+    },
+    {
+      "grau": 29,
+      "decanato": 3,
+      "tempero": "marte",
+      "imagem": "Um leão idoso ainda defende a própria posição na manada, mesmo diante de um rival mais jovem.",
+      "leitura": "Orgulho que resiste até o fim, recusando ceder o próprio lugar sem briga."
+    },
+    {
+      "grau": 30,
+      "decanato": 3,
+      "tempero": "marte",
+      "imagem": "Uma última vela de aniversário se apaga sozinha, e a plateia inteira aplaude de pé.",
+      "leitura": "O brilho que se encerra, mas deixa reconhecimento atrás de si — grau anarético: fim de ciclo celebrado, não escondido."
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+{
+  "sistema": "graus-caos-astral",
+  "signo": "escorpiao",
+  "graus": [
+    {
+      "grau": 1,
+      "decanato": 1,
+      "tempero": "marte",
+      "imagem": "Um escorpião ergue a cauda antes mesmo de ser tocado.",
+      "leitura": "Defesa que se prepara antes da ameaça se confirmar — intensidade que não espera pra reagir."
+    },
+    {
+      "grau": 2,
+      "decanato": 1,
+      "tempero": "marte",
+      "imagem": "Uma porta trancada esconde algo que ninguém tem permissão de ver.",
+      "leitura": "O instinto de proteger o que é íntimo demais pra ser exposto."
+    },
+    {
+      "grau": 3,
+      "decanato": 1,
+      "tempero": "marte",
+      "imagem": "Duas pessoas se encaram em silêncio, nenhuma disposta a desviar o olhar primeiro.",
+      "leitura": "Disputa de vontade que não precisa de palavra nenhuma pra ser sentida."
+    },
+    {
+      "grau": 4,
+      "decanato": 1,
+      "tempero": "marte",
+      "imagem": "Uma faca é afiada em segredo, longe de qualquer olhar.",
+      "leitura": "Preparar-se pro confronto sem anunciar a ninguém que ele está vindo."
+    },
+    {
+      "grau": 5,
+      "decanato": 1,
+      "tempero": "marte",
+      "imagem": "Um vulcão borbulha por baixo da terra sem que a superfície mostre sinal nenhum.",
+      "leitura": "Intensidade contida que ainda não decidiu se vai explodir."
+    },
+    {
+      "grau": 6,
+      "decanato": 1,
+      "tempero": "marte",
+      "imagem": "Uma serpente troca de pele, deixando o invólucro antigo largado no chão.",
+      "leitura": "Transformação que exige abandonar completamente uma versão anterior de si."
+    },
+    {
+      "grau": 7,
+      "decanato": 1,
+      "tempero": "marte",
+      "imagem": "Alguém guarda uma carta nunca enviada dentro de uma gaveta trancada.",
+      "leitura": "Sentimento intenso demais pra ser dito, mas real demais pra ser jogado fora."
+    },
+    {
+      "grau": 8,
+      "decanato": 1,
+      "tempero": "marte",
+      "imagem": "Um predador espera imóvel, horas, até o momento exato de atacar.",
+      "leitura": "Paciência que serve à intensidade — o ataque só vale a pena no timing certo."
+    },
+    {
+      "grau": 9,
+      "decanato": 1,
+      "tempero": "marte",
+      "imagem": "Duas mãos se apertam com força além do necessário num cumprimento tenso.",
+      "leitura": "Intensidade que vaza pelo corpo mesmo quando as palavras tentam parecer neutras."
+    },
+    {
+      "grau": 10,
+      "decanato": 1,
+      "tempero": "marte",
+      "imagem": "Uma fechadura é trocada depois de alguém descobrir que tinha cópia da chave.",
+      "leitura": "Reagir com força total à sensação de traição — fim do decanato: a linha entre confiança e controle."
+    },
+    {
+      "grau": 11,
+      "decanato": 2,
+      "tempero": "júpiter",
+      "imagem": "Alguém mergulha no oceano à noite, sem saber a profundidade real da água.",
+      "leitura": "Entregar-se ao desconhecido, confiando em algo maior que não pode ser medido."
+    },
+    {
+      "grau": 12,
+      "decanato": 2,
+      "tempero": "júpiter",
+      "imagem": "Um monge fica em silêncio absoluto por quarenta dias, buscando algo que não tem nome.",
+      "leitura": "Intensidade que se volta pra dentro, em busca de uma verdade que a palavra não alcança."
+    },
+    {
+      "grau": 13,
+      "decanato": 2,
+      "tempero": "júpiter",
+      "imagem": "Uma pessoa chora sem motivo aparente, sentindo uma dor que não é só sua.",
+      "leitura": "Sensibilidade que absorve mais do que consegue processar sozinha."
+    },
+    {
+      "grau": 14,
+      "decanato": 2,
+      "tempero": "júpiter",
+      "imagem": "Um xamã entra em transe guiado por tambores, perdendo a noção do próprio corpo.",
+      "leitura": "Dissolver os limites de si mesmo em troca de contato com algo maior."
+    },
+    {
+      "grau": 15,
+      "decanato": 2,
+      "tempero": "júpiter",
+      "imagem": "Uma mulher grávida sente o próprio corpo sendo tomado por outra vida crescendo dentro dela.",
+      "leitura": "Intensidade que aceita ser habitada por algo que não controla totalmente."
+    },
+    {
+      "grau": 16,
+      "decanato": 2,
+      "tempero": "júpiter",
+      "imagem": "Alguém perdoa quem nunca vai pedir desculpa, só pra se libertar do próprio peso.",
+      "leitura": "Entrega que solta o controle da vingança em troca de paz interna."
+    },
+    {
+      "grau": 17,
+      "decanato": 2,
+      "tempero": "júpiter",
+      "imagem": "Um oráculo entrega uma resposta que ninguém pediu, mas todos precisavam ouvir.",
+      "leitura": "Verdade que emerge sem ser convocada — poder que vem de fora do controle racional."
+    },
+    {
+      "grau": 18,
+      "decanato": 2,
+      "tempero": "júpiter",
+      "imagem": "Um afogado é resgatado no último segundo, entre a vida e a morte.",
+      "leitura": "Intensidade levada ao limite absoluto, onde só resta entrega total à sorte."
+    },
+    {
+      "grau": 19,
+      "decanato": 2,
+      "tempero": "júpiter",
+      "imagem": "Alguém reza sozinho numa igreja vazia, sem esperar resposta nenhuma.",
+      "leitura": "Fé que não exige prova — entrega completa a algo que não se pode controlar nem ver."
+    },
+    {
+      "grau": 20,
+      "decanato": 2,
+      "tempero": "júpiter",
+      "imagem": "Uma pessoa aceita finalmente que não vai entender certos lutos, só atravessá-los.",
+      "leitura": "Render-se ao mistério da dor — fim do decanato: intensidade que aceita não ter controle total."
+    },
+    {
+      "grau": 21,
+      "decanato": 3,
+      "tempero": "lua",
+      "imagem": "Alguém guarda uma cicatriz debaixo da roupa, visível só pra quem já foi convidado a ver.",
+      "leitura": "Vulnerabilidade que se protege, mas ainda existe, esperando o momento certo de ser mostrada."
+    },
+    {
+      "grau": 22,
+      "decanato": 3,
+      "tempero": "lua",
+      "imagem": "Um diário é escrito com cadeado, guardando segredos que nem a própria família conhece.",
+      "leitura": "Intimidade que só se revela em condições muito específicas de confiança."
+    },
+    {
+      "grau": 23,
+      "decanato": 3,
+      "tempero": "lua",
+      "imagem": "Uma pessoa chora escondida no banheiro pra não preocupar quem ela ama.",
+      "leitura": "Proteger os outros da própria dor, mesmo quando isso custa caro por dentro."
+    },
+    {
+      "grau": 24,
+      "decanato": 3,
+      "tempero": "lua",
+      "imagem": "Uma mãe esconde o próprio medo pra não assustar o filho doente.",
+      "leitura": "Força que nasce de esconder a fragilidade real por trás de um rosto calmo."
+    },
+    {
+      "grau": 25,
+      "decanato": 3,
+      "tempero": "lua",
+      "imagem": "Alguém guarda a foto de quem já morreu dentro da carteira, sem mostrar pra ninguém.",
+      "leitura": "Luto vivido em silêncio, carregado por perto, mas nunca exposto."
+    },
+    {
+      "grau": 26,
+      "decanato": 3,
+      "tempero": "lua",
+      "imagem": "Uma casa antiga guarda cartas de amor escondidas atrás de uma parede falsa.",
+      "leitura": "Segredo protegido tão bem que só é encontrado por acidente, muito tempo depois."
+    },
+    {
+      "grau": 27,
+      "decanato": 3,
+      "tempero": "lua",
+      "imagem": "Um sobrevivente de trauma só conta a própria história pra quem já passou por algo parecido.",
+      "leitura": "Vulnerabilidade que só se abre em presença de quem realmente pode entender."
+    },
+    {
+      "grau": 28,
+      "decanato": 3,
+      "tempero": "lua",
+      "imagem": "Alguém dorme abraçado a um objeto que pertenceu a quem já se foi.",
+      "leitura": "Buscar conforto físico numa lembrança que não pode mais abraçar de volta."
+    },
+    {
+      "grau": 29,
+      "decanato": 3,
+      "tempero": "lua",
+      "imagem": "Uma pessoa perdoa em silêncio, sem nunca dizer isso em voz alta pra quem a machucou.",
+      "leitura": "Cura que acontece por dentro, sem precisar de reconhecimento externo nenhum."
+    },
+    {
+      "grau": 30,
+      "decanato": 3,
+      "tempero": "lua",
+      "imagem": "Uma concha antiga é encontrada, ainda guardando dentro dela o eco baixinho do mar.",
+      "leitura": "O que passou continua ecoando por dentro — grau anarético: intensidade que virou memória guardada, não mais ferida aberta."
+    }
+  ]
+}

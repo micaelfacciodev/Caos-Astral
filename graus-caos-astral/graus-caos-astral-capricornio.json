@@ -1,0 +1,216 @@
+{
+  "sistema": "graus-caos-astral",
+  "signo": "capricornio",
+  "graus": [
+    {
+      "grau": 1,
+      "decanato": 1,
+      "tempero": "saturno",
+      "imagem": "Uma cabra sobe um penhasco íngreme, um passo calculado de cada vez.",
+      "leitura": "Ambição que não pula etapa, mesmo quando o topo parece longe demais."
+    },
+    {
+      "grau": 2,
+      "decanato": 1,
+      "tempero": "saturno",
+      "imagem": "Um operário chega ao trabalho antes do sol nascer, todos os dias, sem exceção.",
+      "leitura": "Disciplina que não depende de vontade — virou rotina inegociável."
+    },
+    {
+      "grau": 3,
+      "decanato": 1,
+      "tempero": "saturno",
+      "imagem": "Uma criança aprende a engatinhar antes de tentar andar, sem pular a etapa.",
+      "leitura": "Construção que respeita a ordem certa das coisas, mesmo impaciente por chegar no fim."
+    },
+    {
+      "grau": 4,
+      "decanato": 1,
+      "tempero": "saturno",
+      "imagem": "Um andaime é montado nível por nível antes do prédio começar a subir de verdade.",
+      "leitura": "Preparar a estrutura de base antes de qualquer resultado visível aparecer."
+    },
+    {
+      "grau": 5,
+      "decanato": 1,
+      "tempero": "saturno",
+      "imagem": "Um relógio de sol marca a passagem do tempo sem nunca acelerar nem atrasar.",
+      "leitura": "Aceitar o ritmo real das coisas, mesmo quando a pressa pede mais rápido."
+    },
+    {
+      "grau": 6,
+      "decanato": 1,
+      "tempero": "saturno",
+      "imagem": "Um alpinista carrega o próprio peso de equipamento, subindo devagar, sem atalho.",
+      "leitura": "Esforço que aceita ser lento porque o atalho custaria caro demais depois."
+    },
+    {
+      "grau": 7,
+      "decanato": 1,
+      "tempero": "saturno",
+      "imagem": "Um aprendiz de ofício varre o chão da oficina por anos antes de tocar na primeira ferramenta.",
+      "leitura": "Humildade que aceita começar de baixo, mesmo sabendo que merece mais."
+    },
+    {
+      "grau": 8,
+      "decanato": 1,
+      "tempero": "saturno",
+      "imagem": "Uma represa é construída pedra por pedra pra conter um rio inteiro.",
+      "leitura": "Conter uma força grande demais exige estrutura construída com paciência extrema."
+    },
+    {
+      "grau": 9,
+      "decanato": 1,
+      "tempero": "saturno",
+      "imagem": "Um funcionário recusa o atalho que o chefe sugeriu, preferindo o processo correto mais longo.",
+      "leitura": "Integridade que escolhe o caminho certo mesmo quando ninguém notaria a diferença."
+    },
+    {
+      "grau": 10,
+      "decanato": 1,
+      "tempero": "saturno",
+      "imagem": "Uma escada de pedra sobe uma montanha inteira, degrau que foi entalhado há séculos.",
+      "leitura": "Esforço acumulado que só existe porque muita gente aceitou construir devagar — fim do decanato."
+    },
+    {
+      "grau": 11,
+      "decanato": 2,
+      "tempero": "vênus",
+      "imagem": "Um agricultor colhe, finalmente, o pomar que plantou anos atrás.",
+      "leitura": "O prazer que só chega depois de muito tempo de espera — recompensa que não veio de graça."
+    },
+    {
+      "grau": 12,
+      "decanato": 2,
+      "tempero": "vênus",
+      "imagem": "Um artesão vende a primeira peça feita com as próprias mãos, depois de anos de aprendizado.",
+      "leitura": "O valor do trabalho reconhecido, finalmente, em troca justa."
+    },
+    {
+      "grau": 13,
+      "decanato": 2,
+      "tempero": "vênus",
+      "imagem": "Um casal comemora bodas de ouro, cinquenta anos depois do primeiro compromisso.",
+      "leitura": "Permanência que rende, com o tempo, uma intimidade que pressa nenhuma constrói mais rápido."
+    },
+    {
+      "grau": 14,
+      "decanato": 2,
+      "tempero": "vênus",
+      "imagem": "Um executivo compra a casa que sonhava depois de décadas subindo de cargo.",
+      "leitura": "Ambição que finalmente se converte em conforto tangível, merecido pelo esforço."
+    },
+    {
+      "grau": 15,
+      "decanato": 2,
+      "tempero": "vênus",
+      "imagem": "Um professor recebe uma homenagem depois de quarenta anos de sala de aula.",
+      "leitura": "Reconhecimento tardio que pesa mais justamente por ter demorado tanto."
+    },
+    {
+      "grau": 16,
+      "decanato": 2,
+      "tempero": "vênus",
+      "imagem": "Um vinhedo antigo produz sua melhor safra depois de décadas de cultivo da mesma terra.",
+      "leitura": "Qualidade que só a maturação do tempo consegue entregar de verdade."
+    },
+    {
+      "grau": 17,
+      "decanato": 2,
+      "tempero": "vênus",
+      "imagem": "Um empresário aposenta-se e finalmente aproveita o dinheiro que levou a vida inteira acumulando.",
+      "leitura": "O prazer adiado por tanto tempo que quase se esqueceu de existir, chegando enfim."
+    },
+    {
+      "grau": 18,
+      "decanato": 2,
+      "tempero": "vênus",
+      "imagem": "Um alpinista experiente escala a montanha mais fácil, só pelo prazer, sem provar nada a ninguém.",
+      "leitura": "Ter conquistado tanto que já pode simplesmente aproveitar, sem pressão nenhuma."
+    },
+    {
+      "grau": 19,
+      "decanato": 2,
+      "tempero": "vênus",
+      "imagem": "Uma família se muda pra casa construída com as próprias economias, tijolo por tijolo.",
+      "leitura": "O lar como resultado direto e tangível de anos de sacrifício."
+    },
+    {
+      "grau": 20,
+      "decanato": 2,
+      "tempero": "vênus",
+      "imagem": "Um mestre artesão finalmente aceita um encomendante pagar o preço justo pelo que ele sabe fazer.",
+      "leitura": "Reconhecer o próprio valor depois de anos aceitando menos do que merecia — fim do decanato."
+    },
+    {
+      "grau": 21,
+      "decanato": 3,
+      "tempero": "mercúrio",
+      "imagem": "Um arquiteto revisa a planta do prédio linha por linha antes da fundação ser lançada.",
+      "leitura": "Ambição que se apoia em cálculo exato, não só em vontade de crescer."
+    },
+    {
+      "grau": 22,
+      "decanato": 3,
+      "tempero": "mercúrio",
+      "imagem": "Um estrategista planeja cada etapa da construção de um império, ano após ano.",
+      "leitura": "Visão de longo prazo que exige paciência estrutural, não só desejo de poder."
+    },
+    {
+      "grau": 23,
+      "decanato": 3,
+      "tempero": "mercúrio",
+      "imagem": "Um engenheiro testa cada viga da ponte antes de liberar a passagem de qualquer carro.",
+      "leitura": "Responsabilidade que verifica cada detalhe antes de assumir o risco de falhar."
+    },
+    {
+      "grau": 24,
+      "decanato": 3,
+      "tempero": "mercúrio",
+      "imagem": "Um CEO organiza a sucessão da empresa com anos de antecedência, treinando o substituto certo.",
+      "leitura": "Poder que pensa além da própria permanência — construir o que continua depois de você."
+    },
+    {
+      "grau": 25,
+      "decanato": 3,
+      "tempero": "mercúrio",
+      "imagem": "Um general revisa o mapa da batalha uma última vez antes de dar a ordem de avanço.",
+      "leitura": "Ambição que não age sem plano — o controle nasce da preparação exaustiva."
+    },
+    {
+      "grau": 26,
+      "decanato": 3,
+      "tempero": "mercúrio",
+      "imagem": "Um administrador público audita as próprias contas antes que alguém precise pedir.",
+      "leitura": "Disciplina que se antecipa à cobrança, por integridade, não por medo."
+    },
+    {
+      "grau": 27,
+      "decanato": 3,
+      "tempero": "mercúrio",
+      "imagem": "Um mestre de obras entrega o prédio um dia antes do prazo, sem nenhum erro estrutural.",
+      "leitura": "Excelência que combina ambição com exatidão — chegar longe sem deixar rachadura pra trás."
+    },
+    {
+      "grau": 28,
+      "decanato": 3,
+      "tempero": "mercúrio",
+      "imagem": "Um economista calcula décadas à frente o impacto de uma única decisão de hoje.",
+      "leitura": "Poder de verdade que pensa em consequência de longo prazo, não só ganho imediato."
+    },
+    {
+      "grau": 29,
+      "decanato": 3,
+      "tempero": "mercúrio",
+      "imagem": "Um professor de ofício entrega, com precisão total, tudo o que sabe pro aprendiz mais dedicado.",
+      "leitura": "Legado transmitido com exatidão — o que foi construído com rigor merece continuar com o mesmo padrão."
+    },
+    {
+      "grau": 30,
+      "decanato": 3,
+      "tempero": "mercúrio",
+      "imagem": "Uma pirâmide inteira é finalmente concluída, cada pedra encaixada no lugar exato planejado séculos atrás.",
+      "leitura": "Ambição que atravessa gerações e se cumpre exatamente como foi arquitetada — grau anarético: estrutura permanente."
+    }
+  ]
+}

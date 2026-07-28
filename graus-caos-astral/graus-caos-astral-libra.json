@@ -1,0 +1,216 @@
+{
+  "sistema": "graus-caos-astral",
+  "signo": "libra",
+  "graus": [
+    {
+      "grau": 1,
+      "decanato": 1,
+      "tempero": "vênus",
+      "imagem": "Uma balança de mercado se equilibra perfeitamente entre dois pesos iguais.",
+      "leitura": "O alívio de ver as duas partes finalmente no mesmo nível."
+    },
+    {
+      "grau": 2,
+      "decanato": 1,
+      "tempero": "vênus",
+      "imagem": "Duas mãos se encontram no meio de um aperto, nenhuma apertando mais forte que a outra.",
+      "leitura": "Encontro que só funciona quando nenhum dos lados domina o outro."
+    },
+    {
+      "grau": 3,
+      "decanato": 1,
+      "tempero": "vênus",
+      "imagem": "Um espelho reflete um rosto de volta, exato, sem distorcer nada.",
+      "leitura": "Precisar ver a própria imagem refletida em algo pra se sentir real."
+    },
+    {
+      "grau": 4,
+      "decanato": 1,
+      "tempero": "vênus",
+      "imagem": "Duas taças de cristal, idênticas, são postas lado a lado numa mesa.",
+      "leitura": "Buscar simetria mesmo em coisas pequenas — o conforto de pares que combinam."
+    },
+    {
+      "grau": 5,
+      "decanato": 1,
+      "tempero": "vênus",
+      "imagem": "Um casal de patos nada exatamente na mesma velocidade, lado a lado.",
+      "leitura": "Companhia que se ajusta ao ritmo do outro sem que ninguém precise pedir."
+    },
+    {
+      "grau": 6,
+      "decanato": 1,
+      "tempero": "vênus",
+      "imagem": "Uma flor se abre em pétalas perfeitamente simétricas.",
+      "leitura": "Beleza que nasce naturalmente equilibrada, sem esforço visível pra parecer bonita."
+    },
+    {
+      "grau": 7,
+      "decanato": 1,
+      "tempero": "vênus",
+      "imagem": "Duas crianças dividem o mesmo doce ao meio, cada metade do mesmo tamanho.",
+      "leitura": "Justiça instintiva, antes mesmo de aprender a palavra \"justo\"."
+    },
+    {
+      "grau": 8,
+      "decanato": 1,
+      "tempero": "vênus",
+      "imagem": "Um pintor mistura duas cores até achar o tom exato entre elas.",
+      "leitura": "Buscar o ponto médio certo, nem uma cor nem outra, mas a combinação das duas."
+    },
+    {
+      "grau": 9,
+      "decanato": 1,
+      "tempero": "vênus",
+      "imagem": "Uma dupla de dançarinos gira em perfeita simetria, sem pisar um no pé do outro.",
+      "leitura": "Coordenação que só existe quando os dois prestam atenção no outro o tempo todo."
+    },
+    {
+      "grau": 10,
+      "decanato": 1,
+      "tempero": "vênus",
+      "imagem": "Duas velas idênticas são acesas ao mesmo tempo, dos dois lados do altar.",
+      "leitura": "Equilíbrio ritual — fim do decanato: harmonia pede repetição dos dois lados."
+    },
+    {
+      "grau": 11,
+      "decanato": 2,
+      "tempero": "saturno",
+      "imagem": "Um juiz olha pros dois lados do tribunal antes de decidir, sem favorecer nenhum.",
+      "leitura": "Justiça que exige distância de ambos os lados pra ser real."
+    },
+    {
+      "grau": 12,
+      "decanato": 2,
+      "tempero": "saturno",
+      "imagem": "Um contrato é assinado por duas partes, cada uma com uma cópia idêntica.",
+      "leitura": "Acordo formalizado — o equilíbrio agora depende de documento, não só de boa vontade."
+    },
+    {
+      "grau": 13,
+      "decanato": 2,
+      "tempero": "saturno",
+      "imagem": "Um tribunal internacional pesa os argumentos de duas nações em conflito.",
+      "leitura": "Mediação que exige neutralidade absoluta, mesmo sendo impossível agradar os dois lados por completo."
+    },
+    {
+      "grau": 14,
+      "decanato": 2,
+      "tempero": "saturno",
+      "imagem": "Uma árbitra apita uma falta contra o próprio time que ela mais gosta.",
+      "leitura": "Imparcialidade que exige ir contra a própria preferência quando a regra exige."
+    },
+    {
+      "grau": 15,
+      "decanato": 2,
+      "tempero": "saturno",
+      "imagem": "Uma balança de justiça de mármore fica no centro de uma praça pública.",
+      "leitura": "Princípio abstrato colocado acima de qualquer interesse pessoal."
+    },
+    {
+      "grau": 16,
+      "decanato": 2,
+      "tempero": "saturno",
+      "imagem": "Um mediador de divórcio divide os bens do casal item por item, sem se emocionar.",
+      "leitura": "Manter distância emocional pra garantir que a divisão seja justa, não apenas confortável."
+    },
+    {
+      "grau": 17,
+      "decanato": 2,
+      "tempero": "saturno",
+      "imagem": "Um comitê vota empatado e precisa esperar um voto de minerva pra decidir.",
+      "leitura": "Equilíbrio tão perfeito que trava a decisão — às vezes o empate exige um terceiro elemento."
+    },
+    {
+      "grau": 18,
+      "decanato": 2,
+      "tempero": "saturno",
+      "imagem": "Uma lei é aplicada da mesma forma pro rico e pro pobre, sem exceção.",
+      "leitura": "Justiça que só é justiça de verdade quando não muda de acordo com quem está na frente dela."
+    },
+    {
+      "grau": 19,
+      "decanato": 2,
+      "tempero": "saturno",
+      "imagem": "Um casal assina um acordo pré-nupcial antes de decidir se casar por amor.",
+      "leitura": "Proteger o equilíbrio futuro com estrutura fria, mesmo em meio a um sentimento quente."
+    },
+    {
+      "grau": 20,
+      "decanato": 2,
+      "tempero": "saturno",
+      "imagem": "Uma ponte suspensa distribui o peso igualmente entre duas torres distantes.",
+      "leitura": "Estrutura que só se sustenta porque a carga foi calculada com precisão — fim do decanato: equilíbrio virou engenharia."
+    },
+    {
+      "grau": 21,
+      "decanato": 3,
+      "tempero": "mercúrio",
+      "imagem": "Dois embaixadores trocam propostas de paz, cada um cedendo um pouco.",
+      "leitura": "Negociação real, onde ninguém sai com tudo que queria, mas os dois saem com algo."
+    },
+    {
+      "grau": 22,
+      "decanato": 3,
+      "tempero": "mercúrio",
+      "imagem": "Um casal decide, depois de horas de conversa, um nome que agrada os dois.",
+      "leitura": "Diálogo prolongado até encontrar a palavra que serve pros dois lados."
+    },
+    {
+      "grau": 23,
+      "decanato": 3,
+      "tempero": "mercúrio",
+      "imagem": "Um vendedor e um comprador regateiam o preço até um número que os dois aceitam.",
+      "leitura": "Acordo que nasce da conversa, não da imposição."
+    },
+    {
+      "grau": 24,
+      "decanato": 3,
+      "tempero": "mercúrio",
+      "imagem": "Dois sócios revisam o contrato linha por linha antes de assinar juntos.",
+      "leitura": "Cuidado mútuo que garante que nenhum dos dois saia prejudicado depois."
+    },
+    {
+      "grau": 25,
+      "decanato": 3,
+      "tempero": "mercúrio",
+      "imagem": "Um casal terapeuta media uma discussão, dando a palavra pra cada lado, em turnos iguais.",
+      "leitura": "Diálogo estruturado que impede que uma voz abafe a outra."
+    },
+    {
+      "grau": 26,
+      "decanato": 3,
+      "tempero": "mercúrio",
+      "imagem": "Dois países assinam um tratado depois de anos de conversas diplomáticas.",
+      "leitura": "Paz construída devagar, frase por frase, cláusula por cláusula."
+    },
+    {
+      "grau": 27,
+      "decanato": 3,
+      "tempero": "mercúrio",
+      "imagem": "Um casal de tradutores simultâneos revezam a cada frase, sem atropelar um ao outro.",
+      "leitura": "Comunicação que só flui quando cada um sabe a hora de falar e a hora de ceder."
+    },
+    {
+      "grau": 28,
+      "decanato": 3,
+      "tempero": "mercúrio",
+      "imagem": "Uma dupla de escritores revisa o mesmo capítulo até a versão final agradar aos dois.",
+      "leitura": "Criação compartilhada que exige ego pequeno o suficiente pra aceitar a ideia do outro."
+    },
+    {
+      "grau": 29,
+      "decanato": 3,
+      "tempero": "mercúrio",
+      "imagem": "Dois advogados apertam as mãos depois de um acordo fechado fora do tribunal.",
+      "leitura": "Resolver o conflito antes de chegar ao ponto de ruptura total."
+    },
+    {
+      "grau": 30,
+      "decanato": 3,
+      "tempero": "mercúrio",
+      "imagem": "Uma balança antiga, usada por gerações, ainda pesa exatamente igual dos dois lados.",
+      "leitura": "O equilíbrio que atravessa o tempo, testado e nunca corrompido — grau anarético: o diálogo virou tradição confiável."
+    }
+  ]
+}

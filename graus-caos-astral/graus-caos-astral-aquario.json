@@ -1,0 +1,216 @@
+{
+  "sistema": "graus-caos-astral",
+  "signo": "aquario",
+  "graus": [
+    {
+      "grau": 1,
+      "decanato": 1,
+      "tempero": "saturno",
+      "imagem": "Um inventor desmonta uma máquina inteira só pra entender por que ela funciona do jeito que funciona.",
+      "leitura": "Curiosidade fria que prefere entender o sistema a aceitá-lo como está."
+    },
+    {
+      "grau": 2,
+      "decanato": 1,
+      "tempero": "saturno",
+      "imagem": "Uma criança pergunta por que a regra existe, em vez de só obedecer.",
+      "leitura": "Questionar a estrutura antes de aceitar que ela é a única forma possível."
+    },
+    {
+      "grau": 3,
+      "decanato": 1,
+      "tempero": "saturno",
+      "imagem": "Um cientista propõe uma teoria que contradiz tudo que já foi aceito até ali.",
+      "leitura": "Convicção que aceita ficar isolada temporariamente em troca de estar certa depois."
+    },
+    {
+      "grau": 4,
+      "decanato": 1,
+      "tempero": "saturno",
+      "imagem": "Uma máquina é desligada da rede elétrica só pra testar se funciona sozinha.",
+      "leitura": "Testar independência mesmo quando isso significa abrir mão do suporte já garantido."
+    },
+    {
+      "grau": 5,
+      "decanato": 1,
+      "tempero": "saturno",
+      "imagem": "Um grupo de jovens organiza um protesto sem líder nenhum no centro.",
+      "leitura": "Estrutura horizontal que dispensa hierarquia tradicional pra funcionar."
+    },
+    {
+      "grau": 6,
+      "decanato": 1,
+      "tempero": "saturno",
+      "imagem": "Alguém troca o próprio nome de família por um que escolheu sozinho.",
+      "leitura": "Reconstruir a própria identidade fora da estrutura que foi dada de nascença."
+    },
+    {
+      "grau": 7,
+      "decanato": 1,
+      "tempero": "saturno",
+      "imagem": "Um relógio quebrado é consertado com uma peça que nunca foi feita pra aquele modelo.",
+      "leitura": "Solução que ignora o manual original pra fazer o sistema funcionar de outro jeito."
+    },
+    {
+      "grau": 8,
+      "decanato": 1,
+      "tempero": "saturno",
+      "imagem": "Uma comunidade isolada desenvolve as próprias leis, diferentes de qualquer país vizinho.",
+      "leitura": "Criar sistema próprio, mesmo indo contra o que já era esperado ao redor."
+    },
+    {
+      "grau": 9,
+      "decanato": 1,
+      "tempero": "saturno",
+      "imagem": "Um professor recusa dar nota, avaliando os alunos de um jeito que a escola nunca aceitou antes.",
+      "leitura": "Romper com o sistema estabelecido, mesmo sabendo que isso gera atrito."
+    },
+    {
+      "grau": 10,
+      "decanato": 1,
+      "tempero": "saturno",
+      "imagem": "Uma engrenagem nova, de formato estranho, é encaixada numa máquina antiga e ela volta a funcionar.",
+      "leitura": "Inovação que parece errada até provar que resolve o que o sistema antigo não resolvia mais — fim do decanato."
+    },
+    {
+      "grau": 11,
+      "decanato": 2,
+      "tempero": "mercúrio",
+      "imagem": "Uma sala cheia de estranhos troca ideias rapidamente, cada um contribuindo um pedaço diferente.",
+      "leitura": "Inteligência coletiva que nasce da troca rápida entre muitas cabeças diferentes."
+    },
+    {
+      "grau": 12,
+      "decanato": 2,
+      "tempero": "mercúrio",
+      "imagem": "Uma carta é copiada e enviada simultaneamente pra cem endereços diferentes.",
+      "leitura": "Uma ideia que se multiplica rápido demais pra ser controlada por quem a criou."
+    },
+    {
+      "grau": 13,
+      "decanato": 2,
+      "tempero": "mercúrio",
+      "imagem": "Um grupo de pesquisadores em países diferentes chega à mesma descoberta ao mesmo tempo.",
+      "leitura": "Pensamento que atravessa distância, como se a ideia já estivesse no ar esperando ser captada."
+    },
+    {
+      "grau": 14,
+      "decanato": 2,
+      "tempero": "mercúrio",
+      "imagem": "Uma rede de estudantes troca anotações de aula sem que nenhum professor tenha pedido isso.",
+      "leitura": "Cooperação espontânea que nasce fora da estrutura oficial."
+    },
+    {
+      "grau": 15,
+      "decanato": 2,
+      "tempero": "mercúrio",
+      "imagem": "Um grupo online organiza uma causa que nenhum jornal tinha noticiado ainda.",
+      "leitura": "Conexão que cria movimento antes mesmo de qualquer autoridade perceber que ele existe."
+    },
+    {
+      "grau": 16,
+      "decanato": 2,
+      "tempero": "mercúrio",
+      "imagem": "Um inventor publica a fórmula da própria descoberta de graça, pra qualquer um usar.",
+      "leitura": "Abrir mão do controle exclusivo em nome do avanço coletivo."
+    },
+    {
+      "grau": 17,
+      "decanato": 2,
+      "tempero": "mercúrio",
+      "imagem": "Uma orquestra improvisada se forma com músicos que nunca tinham se visto antes.",
+      "leitura": "Colaboração instantânea que dispensa ensaio prévio — a rede se organiza sozinha."
+    },
+    {
+      "grau": 18,
+      "decanato": 2,
+      "tempero": "mercúrio",
+      "imagem": "Um grupo de cientistas amadores catalogam estrelas de casas diferentes, unindo os dados numa lista só.",
+      "leitura": "Conhecimento construído em conjunto, peça por peça, sem que ninguém precise fazer tudo sozinho."
+    },
+    {
+      "grau": 19,
+      "decanato": 2,
+      "tempero": "mercúrio",
+      "imagem": "Uma ideia nasce numa conversa de bar e, meses depois, aparece repetida em cidades sem contato entre si.",
+      "leitura": "Pensamento coletivo que se espalha por caminhos que ninguém consegue rastrear direito."
+    },
+    {
+      "grau": 20,
+      "decanato": 2,
+      "tempero": "mercúrio",
+      "imagem": "Um grupo de vizinhos desconhecidos organiza a reconstrução da praça pública sem esperar o governo agir.",
+      "leitura": "Rede que resolve o que a estrutura oficial ainda não resolveu — fim do decanato."
+    },
+    {
+      "grau": 21,
+      "decanato": 3,
+      "tempero": "vênus",
+      "imagem": "Uma cidade inteira é projetada com espaço igual pra cada família, sem favorecer ninguém.",
+      "leitura": "Idealismo que tenta desenhar justiça direto na estrutura, não só na intenção."
+    },
+    {
+      "grau": 22,
+      "decanato": 3,
+      "tempero": "vênus",
+      "imagem": "Um grupo assina um manifesto pedindo direitos iguais pra todos, sem exceção.",
+      "leitura": "Visão de futuro que recusa aceitar desigualdade como algo natural ou definitivo."
+    },
+    {
+      "grau": 23,
+      "decanato": 3,
+      "tempero": "vênus",
+      "imagem": "Uma cooperativa divide o lucro igualmente entre todos que trabalharam, sem hierarquia de cargo.",
+      "leitura": "Estrutura que tenta corrigir, na prática, o que o sistema tradicional normalizou como desigual."
+    },
+    {
+      "grau": 24,
+      "decanato": 3,
+      "tempero": "vênus",
+      "imagem": "Um grupo de amigos cria um fundo comum pra ajudar quem precisar, sem juros, sem cobrança.",
+      "leitura": "Solidariedade organizada como sistema, não como favor pontual."
+    },
+    {
+      "grau": 25,
+      "decanato": 3,
+      "tempero": "vênus",
+      "imagem": "Uma nova constituição é escrita coletivamente, frase por frase, em assembleia pública.",
+      "leitura": "Idealismo que aceita o trabalho lento de construir consenso, em vez de impor de cima pra baixo."
+    },
+    {
+      "grau": 26,
+      "decanato": 3,
+      "tempero": "vênus",
+      "imagem": "Um grupo de cientistas divide livremente uma vacina, recusando patentear a fórmula.",
+      "leitura": "Colocar o bem coletivo acima do lucro individual, mesmo abrindo mão de recompensa própria."
+    },
+    {
+      "grau": 27,
+      "decanato": 3,
+      "tempero": "vênus",
+      "imagem": "Uma comunidade planeja a cidade do futuro com espaço verde garantido pra todo bairro, rico ou pobre.",
+      "leitura": "Visão que tenta garantir, de forma estrutural, que ninguém fique de fora do que é bom."
+    },
+    {
+      "grau": 28,
+      "decanato": 3,
+      "tempero": "vênus",
+      "imagem": "Um grupo de voluntários reconstrói uma escola pública sem cobrar nada da prefeitura.",
+      "leitura": "Idealismo que age direto, sem esperar autorização de quem deveria ter agido primeiro."
+    },
+    {
+      "grau": 29,
+      "decanato": 3,
+      "tempero": "vênus",
+      "imagem": "Uma rede internacional troca sementes raras de graça entre agricultores de países diferentes.",
+      "leitura": "Cooperação que ultrapassa fronteira, movida só pela crença de que recurso bom deveria circular livre."
+    },
+    {
+      "grau": 30,
+      "decanato": 3,
+      "tempero": "vênus",
+      "imagem": "Uma constelação de satélites conecta até a aldeia mais isolada do planeta à mesma rede.",
+      "leitura": "O ideal de conexão igualitária alcançando até quem estava mais longe — grau anarético: rede que virou alcance universal."
+    }
+  ]
+}

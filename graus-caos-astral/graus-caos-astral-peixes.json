@@ -1,0 +1,216 @@
+{
+  "sistema": "graus-caos-astral",
+  "signo": "peixes",
+  "graus": [
+    {
+      "grau": 1,
+      "decanato": 1,
+      "tempero": "júpiter",
+      "imagem": "Alguém reza por um estranho que nunca vai saber que foi lembrado.",
+      "leitura": "Compaixão que não exige retorno nem reconhecimento pra existir."
+    },
+    {
+      "grau": 2,
+      "decanato": 1,
+      "tempero": "júpiter",
+      "imagem": "Uma pessoa doa sangue sem saber quem vai recebê-lo.",
+      "leitura": "Generosidade que se oferece ao anônimo, confiando que vai chegar a quem precisa."
+    },
+    {
+      "grau": 3,
+      "decanato": 1,
+      "tempero": "júpiter",
+      "imagem": "Um sonhador acredita em algo que nunca viu prova nenhuma de que é real.",
+      "leitura": "Fé que não depende de evidência — só do desejo de que o mundo seja maior do que parece."
+    },
+    {
+      "grau": 4,
+      "decanato": 1,
+      "tempero": "júpiter",
+      "imagem": "Uma criança perdoa o amigo antes mesmo de ouvir o pedido de desculpa.",
+      "leitura": "Misericórdia que chega antes de ser merecida — perdão que não calcula."
+    },
+    {
+      "grau": 5,
+      "decanato": 1,
+      "tempero": "júpiter",
+      "imagem": "Alguém chora vendo a notícia de uma tragédia do outro lado do mundo.",
+      "leitura": "Sentir a dor de estranhos como se fosse próxima — fronteira entre eu e outro se dissolvendo."
+    },
+    {
+      "grau": 6,
+      "decanato": 1,
+      "tempero": "júpiter",
+      "imagem": "Um artista pinta um mundo que só existe na própria imaginação.",
+      "leitura": "Criar algo que não tinha lugar no real até alguém imaginar primeiro."
+    },
+    {
+      "grau": 7,
+      "decanato": 1,
+      "tempero": "júpiter",
+      "imagem": "Uma pessoa oferece abrigo a um estranho que bateu na porta durante a tempestade.",
+      "leitura": "Confiar no desconhecido além do que a prudência recomendaria."
+    },
+    {
+      "grau": 8,
+      "decanato": 1,
+      "tempero": "júpiter",
+      "imagem": "Um monge budista medita pedindo o fim do sofrimento de todos os seres, não só o próprio.",
+      "leitura": "Compaixão que se recusa a parar nas próprias fronteiras."
+    },
+    {
+      "grau": 9,
+      "decanato": 1,
+      "tempero": "júpiter",
+      "imagem": "Uma criança inventa um amigo imaginário pra não se sentir sozinha.",
+      "leitura": "Imaginação usada como refúgio real diante de uma solidão concreta."
+    },
+    {
+      "grau": 10,
+      "decanato": 1,
+      "tempero": "júpiter",
+      "imagem": "Uma vela é acesa em memória de alguém que a pessoa nunca chegou a conhecer.",
+      "leitura": "Luto e cuidado que se estendem além do próprio círculo direto — fim do decanato."
+    },
+    {
+      "grau": 11,
+      "decanato": 2,
+      "tempero": "lua",
+      "imagem": "Uma pessoa sente a tristeza de um amigo antes mesmo de ele contar o que aconteceu.",
+      "leitura": "Sensibilidade que absorve o estado emocional alheio sem precisar de explicação."
+    },
+    {
+      "grau": 12,
+      "decanato": 2,
+      "tempero": "lua",
+      "imagem": "Uma mãe chora junto com o filho, sentindo a dor dele como se fosse sua também.",
+      "leitura": "Empatia tão profunda que a fronteira entre as duas dores desaparece."
+    },
+    {
+      "grau": 13,
+      "decanato": 2,
+      "tempero": "lua",
+      "imagem": "Alguém sonha repetidamente com uma pessoa que está longe, sem saber que ela está mal.",
+      "leitura": "Conexão que atravessa distância física através de algum canal que a razão não explica."
+    },
+    {
+      "grau": 14,
+      "decanato": 2,
+      "tempero": "lua",
+      "imagem": "Uma pessoa absorve o clima de uma sala inteira só de entrar nela.",
+      "leitura": "Sensibilidade que capta o que está no ar antes de qualquer palavra ser dita."
+    },
+    {
+      "grau": 15,
+      "decanato": 2,
+      "tempero": "lua",
+      "imagem": "Um terapeuta sai exausto depois de uma sessão, carregando um pouco da dor do paciente.",
+      "leitura": "Cuidado que custa energia real de quem oferece, não é gratuito por dentro."
+    },
+    {
+      "grau": 16,
+      "decanato": 2,
+      "tempero": "lua",
+      "imagem": "Uma pessoa chora vendo um filme, mesmo sabendo que a história é inventada.",
+      "leitura": "Emoção que não distingue entre real e imaginado quando a sensibilidade está aberta."
+    },
+    {
+      "grau": 17,
+      "decanato": 2,
+      "tempero": "lua",
+      "imagem": "Alguém sente vontade de proteger um estranho triste no ônibus, sem saber por quê.",
+      "leitura": "Compaixão instintiva que dispensa explicação lógica pra existir."
+    },
+    {
+      "grau": 18,
+      "decanato": 2,
+      "tempero": "lua",
+      "imagem": "Uma família inteira sente o luto de um membro que está longe, mesmo sem saber os detalhes.",
+      "leitura": "Vínculo emocional que continua ativo à distância, sem precisar de contato direto."
+    },
+    {
+      "grau": 19,
+      "decanato": 2,
+      "tempero": "lua",
+      "imagem": "Uma pessoa absorve tanto da dor alheia que esquece de cuidar da própria.",
+      "leitura": "Generosidade emocional que, sem limite, também pode custar caro demais pra quem oferece."
+    },
+    {
+      "grau": 20,
+      "decanato": 2,
+      "tempero": "lua",
+      "imagem": "Alguém aprende, com o tempo, a sentir o outro sem se afogar junto na mesma dor.",
+      "leitura": "Aprender o limite entre acolher e se dissolver por completo — fim do decanato."
+    },
+    {
+      "grau": 21,
+      "decanato": 3,
+      "tempero": "marte",
+      "imagem": "Uma correnteza puxa um nadador pra mais fundo do que ele pretendia ir.",
+      "leitura": "Entrega que passa do ponto de controle — dissolver-se além do que era seguro."
+    },
+    {
+      "grau": 22,
+      "decanato": 3,
+      "tempero": "marte",
+      "imagem": "Alguém atravessa o luto mais difícil da vida sozinho, no silêncio absoluto da própria dor.",
+      "leitura": "Intensidade que não pede socorro, mesmo precisando dele."
+    },
+    {
+      "grau": 23,
+      "decanato": 3,
+      "tempero": "marte",
+      "imagem": "Uma pessoa sacrifica o próprio conforto pra cuidar de alguém até o último momento.",
+      "leitura": "Entrega total que não guarda nada de reserva pra si mesma."
+    },
+    {
+      "grau": 24,
+      "decanato": 3,
+      "tempero": "marte",
+      "imagem": "Um náufrago se agarra ao último pedaço de madeira flutuante, recusando se soltar.",
+      "leitura": "Resistência final antes da entrega completa ao que não se pode controlar."
+    },
+    {
+      "grau": 25,
+      "decanato": 3,
+      "tempero": "marte",
+      "imagem": "Alguém revive, em sonho, o mesmo momento doloroso repetidas vezes, buscando um sentido escondido nele.",
+      "leitura": "A mente insistindo em reprocessar até encontrar paz onde só havia ferida."
+    },
+    {
+      "grau": 26,
+      "decanato": 3,
+      "tempero": "marte",
+      "imagem": "Uma pessoa desiste de lutar contra a própria exaustão e finalmente se deixa cair de cansaço.",
+      "leitura": "Render-se ao limite do próprio corpo depois de resistir tempo demais."
+    },
+    {
+      "grau": 27,
+      "decanato": 3,
+      "tempero": "marte",
+      "imagem": "Um artista termina a obra mais intensa da vida logo antes de desaparecer de cena por completo.",
+      "leitura": "Entregar tudo que resta de si numa última expressão, sem guardar nada pra depois."
+    },
+    {
+      "grau": 28,
+      "decanato": 3,
+      "tempero": "marte",
+      "imagem": "Alguém solta, finalmente, o rancor mais antigo que carregava, sentindo o corpo mais leve na hora.",
+      "leitura": "A dissolução de algo que pesava há tanto tempo que a pessoa nem lembrava mais do peso."
+    },
+    {
+      "grau": 29,
+      "decanato": 3,
+      "tempero": "marte",
+      "imagem": "Uma onda gigante se ergue no mar aberto antes de finalmente quebrar e se dissolver na espuma.",
+      "leitura": "Intensidade que atinge o pico só pra se desfazer completamente logo em seguida."
+    },
+    {
+      "grau": 30,
+      "decanato": 3,
+      "tempero": "marte",
+      "imagem": "O último grau do zodíaco se dissolve de volta no ponto zero, onde tudo começa de novo.",
+      "leitura": "O fim que não é fim — grau anarético que fecha a roda: só a dissolução final antes de um novo ciclo inteiro recomeçar do primeiro grau de Áries."
+    }
+  ]
+}

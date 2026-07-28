@@ -1,0 +1,216 @@
+{
+  "sistema": "graus-caos-astral",
+  "signo": "sagitario",
+  "graus": [
+    {
+      "grau": 1,
+      "decanato": 1,
+      "tempero": "júpiter",
+      "imagem": "Um cavalo dispara solto pelo campo aberto, sem cerca nenhuma à vista.",
+      "leitura": "Liberdade que se sente antes mesmo de saber pra onde vai."
+    },
+    {
+      "grau": 2,
+      "decanato": 1,
+      "tempero": "júpiter",
+      "imagem": "Uma criança pergunta \"por quê\" pela quinta vez seguida, sem se satisfazer com a resposta anterior.",
+      "leitura": "Fome de sentido que não aceita explicação superficial."
+    },
+    {
+      "grau": 3,
+      "decanato": 1,
+      "tempero": "júpiter",
+      "imagem": "Um mapa é desenhado com um espaço em branco enorme escrito \"território desconhecido\".",
+      "leitura": "O que ainda não foi explorado atrai mais do que assusta."
+    },
+    {
+      "grau": 4,
+      "decanato": 1,
+      "tempero": "júpiter",
+      "imagem": "Alguém compra uma passagem só de ida pra um lugar que nunca visitou.",
+      "leitura": "Confiar no caminho antes mesmo de saber exatamente onde ele leva."
+    },
+    {
+      "grau": 5,
+      "decanato": 1,
+      "tempero": "júpiter",
+      "imagem": "Um cachorro corre atrás do próprio horizonte, sem nunca alcançar de fato.",
+      "leitura": "Buscar sempre mais longe, mesmo sabendo que a linha do horizonte sempre recua também."
+    },
+    {
+      "grau": 6,
+      "decanato": 1,
+      "tempero": "júpiter",
+      "imagem": "Uma criança aponta pro céu perguntando o que existe depois das estrelas.",
+      "leitura": "Curiosidade que não se contenta com os limites do que já foi explicado."
+    },
+    {
+      "grau": 7,
+      "decanato": 1,
+      "tempero": "júpiter",
+      "imagem": "Um cavalo selvagem se recusa a aceitar sela pela primeira vez.",
+      "leitura": "Resistir a qualquer coisa que pareça limitar o movimento livre."
+    },
+    {
+      "grau": 8,
+      "decanato": 1,
+      "tempero": "júpiter",
+      "imagem": "Alguém sai de casa carregando só uma mochila pequena, decidido a não voltar tão cedo.",
+      "leitura": "Leveza que escolhe liberdade no lugar de segurança conhecida."
+    },
+    {
+      "grau": 9,
+      "decanato": 1,
+      "tempero": "júpiter",
+      "imagem": "Um livro de mitologia é aberto numa página aleatória, revelando uma história nunca lida antes.",
+      "leitura": "Buscar sentido em qualquer fonte disponível, mesmo sem plano de onde vai parar."
+    },
+    {
+      "grau": 10,
+      "decanato": 1,
+      "tempero": "júpiter",
+      "imagem": "Um arqueiro solta a flecha mirando mais longe do que qualquer um ali já tentou.",
+      "leitura": "Ambição que testa o próprio limite — fim do decanato: a convicção ainda crua, mas já em movimento."
+    },
+    {
+      "grau": 11,
+      "decanato": 2,
+      "tempero": "marte",
+      "imagem": "Um explorador corta caminho pela mata fechada, ignorando a trilha já demarcada.",
+      "leitura": "Pressa de chegar que não aceita esperar pelo caminho mais seguro."
+    },
+    {
+      "grau": 12,
+      "decanato": 2,
+      "tempero": "marte",
+      "imagem": "Alguém discute com um professor, recusando aceitar uma resposta só porque veio de autoridade.",
+      "leitura": "Convicção que exige provar por si mesmo, não aceitar de segunda mão."
+    },
+    {
+      "grau": 13,
+      "decanato": 2,
+      "tempero": "marte",
+      "imagem": "Um viajante troca de rota no meio da viagem, sem aviso, seguindo só um pressentimento.",
+      "leitura": "Impulso que confia mais na intuição do que no plano original."
+    },
+    {
+      "grau": 14,
+      "decanato": 2,
+      "tempero": "marte",
+      "imagem": "Um estudante debate o próprio mestre em público, defendendo uma ideia nova.",
+      "leitura": "Convicção que não teme confronto, mesmo contra quem ensinou."
+    },
+    {
+      "grau": 15,
+      "decanato": 2,
+      "tempero": "marte",
+      "imagem": "Alguém atravessa um rio a nado em vez de esperar a ponte ser construída.",
+      "leitura": "Impaciência que prefere o risco imediato à espera segura."
+    },
+    {
+      "grau": 16,
+      "decanato": 2,
+      "tempero": "marte",
+      "imagem": "Um cavaleiro corre à frente do próprio exército, sem esperar reforço.",
+      "leitura": "Convicção que sai na frente, mesmo sem garantia de apoio."
+    },
+    {
+      "grau": 17,
+      "decanato": 2,
+      "tempero": "marte",
+      "imagem": "Uma pessoa larga o emprego estável pra seguir uma ideia em que só ela acredita ainda.",
+      "leitura": "Fé no próprio caminho forte o bastante pra abrir mão da segurança."
+    },
+    {
+      "grau": 18,
+      "decanato": 2,
+      "tempero": "marte",
+      "imagem": "Um filósofo desafia publicamente a crença mais aceita da sua época.",
+      "leitura": "Convicção que não recua diante da opinião da maioria."
+    },
+    {
+      "grau": 19,
+      "decanato": 2,
+      "tempero": "marte",
+      "imagem": "Alguém sobe uma montanha sem guia, confiando só no próprio instinto de direção.",
+      "leitura": "Fé em si mesmo levada ao ponto de dispensar ajuda externa."
+    },
+    {
+      "grau": 20,
+      "decanato": 2,
+      "tempero": "marte",
+      "imagem": "Um jovem discute com os pais, insistindo em estudar longe, sozinho, sem rede de apoio.",
+      "leitura": "Convicção que escolhe a distância como preço da própria expansão — fim do decanato."
+    },
+    {
+      "grau": 21,
+      "decanato": 3,
+      "tempero": "sol",
+      "imagem": "Um professor dá aula pra uma plateia lotada, contando a própria jornada como exemplo.",
+      "leitura": "Convicção que quer ser vista e compartilhada, não só vivida em silêncio."
+    },
+    {
+      "grau": 22,
+      "decanato": 3,
+      "tempero": "sol",
+      "imagem": "Alguém sobe num palco e conta, orgulhoso, a crença que descobriu sozinho.",
+      "leitura": "Fé pessoal que se torna pública, na esperança de inspirar mais gente."
+    },
+    {
+      "grau": 23,
+      "decanato": 3,
+      "tempero": "sol",
+      "imagem": "Um líder religioso funda um templo pra abrigar quem acredita na mesma verdade.",
+      "leitura": "Convicção que cria estrutura pra durar além da vida de quem a teve primeiro."
+    },
+    {
+      "grau": 24,
+      "decanato": 3,
+      "tempero": "sol",
+      "imagem": "Um escritor publica o livro que defendia uma ideia que ninguém mais aceitava antes.",
+      "leitura": "Colocar a própria visão no mundo, mesmo sem garantia de que vão concordar."
+    },
+    {
+      "grau": 25,
+      "decanato": 3,
+      "tempero": "sol",
+      "imagem": "Um professor universitário é aplaudido de pé depois de defender uma tese revolucionária.",
+      "leitura": "Reconhecimento que confirma que a busca solitária valeu o risco."
+    },
+    {
+      "grau": 26,
+      "decanato": 3,
+      "tempero": "sol",
+      "imagem": "Um viajante volta pra casa e reúne a cidade inteira pra contar o que descobriu lá fora.",
+      "leitura": "A descoberta pessoal vira presente coletivo quando é compartilhada em voz alta."
+    },
+    {
+      "grau": 27,
+      "decanato": 3,
+      "tempero": "sol",
+      "imagem": "Um mestre funda uma escola pra ensinar tudo que aprendeu sozinho, ao longo de décadas.",
+      "leitura": "Transformar experiência individual em legado que outros podem herdar."
+    },
+    {
+      "grau": 28,
+      "decanato": 3,
+      "tempero": "sol",
+      "imagem": "Alguém planta uma bandeira representando uma ideia nova no topo de uma instituição antiga.",
+      "leitura": "Convicção que desafia a tradição abertamente, sem esconder a intenção."
+    },
+    {
+      "grau": 29,
+      "decanato": 3,
+      "tempero": "sol",
+      "imagem": "Um professor aposentado ainda dá palestras lotadas, décadas depois de ter começado.",
+      "leitura": "A busca por sentido que virou legado tão forte que continua atraindo gente."
+    },
+    {
+      "grau": 30,
+      "decanato": 3,
+      "tempero": "sol",
+      "imagem": "Um mapa-múndi inteiro é finalmente completado, sem nenhum espaço em branco restando.",
+      "leitura": "A busca que começou sem destino certo finalmente enxerga o território inteiro — grau anarético: a convicção virou visão completa."
+    }
+  ]
+}

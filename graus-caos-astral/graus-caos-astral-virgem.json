@@ -1,0 +1,216 @@
+{
+  "sistema": "graus-caos-astral",
+  "signo": "virgem",
+  "graus": [
+    {
+      "grau": 1,
+      "decanato": 1,
+      "tempero": "mercúrio",
+      "imagem": "Uma costureira encontra o único fio solto numa peça de roupa inteira.",
+      "leitura": "Atenção que enxerga o detalhe que passa despercebido pra qualquer outra pessoa."
+    },
+    {
+      "grau": 2,
+      "decanato": 1,
+      "tempero": "mercúrio",
+      "imagem": "Um relojoeiro desmonta um mecanismo inteiro pra achar a peça exata que está errada.",
+      "leitura": "Paciência analítica que não desiste até encontrar a causa real do problema."
+    },
+    {
+      "grau": 3,
+      "decanato": 1,
+      "tempero": "mercúrio",
+      "imagem": "Uma criança organiza os lápis de cor em ordem exata do arco-íris.",
+      "leitura": "Precisar de ordem pra sentir que o mundo está certo — não é frescura, é necessidade real."
+    },
+    {
+      "grau": 4,
+      "decanato": 1,
+      "tempero": "mercúrio",
+      "imagem": "Um copista revisa o mesmo texto três vezes procurando erros de grafia.",
+      "leitura": "Cuidado que se repete até ter certeza — a versão final só sai depois de exaustão."
+    },
+    {
+      "grau": 5,
+      "decanato": 1,
+      "tempero": "mercúrio",
+      "imagem": "Um médico examina cada sintoma separadamente antes de arriscar um diagnóstico.",
+      "leitura": "Recusar conclusão apressada — o cuidado real exige olhar peça por peça."
+    },
+    {
+      "grau": 6,
+      "decanato": 1,
+      "tempero": "mercúrio",
+      "imagem": "Uma abelha operária inspeciona cada célula do favo antes de aceitar como pronta.",
+      "leitura": "Trabalho que não aceita \"quase certo\" — cada parte precisa estar exatamente no lugar."
+    },
+    {
+      "grau": 7,
+      "decanato": 1,
+      "tempero": "mercúrio",
+      "imagem": "Um contador confere a mesma soma duas vezes antes de fechar o balanço.",
+      "leitura": "Desconfiar até da própria conta — checagem dupla como forma de cuidado, não de insegurança."
+    },
+    {
+      "grau": 8,
+      "decanato": 1,
+      "tempero": "mercúrio",
+      "imagem": "Uma enfermeira organiza os remédios em compartimentos com etiquetas exatas.",
+      "leitura": "Ordem que existe pra proteger alguém de um erro que poderia custar caro."
+    },
+    {
+      "grau": 9,
+      "decanato": 1,
+      "tempero": "mercúrio",
+      "imagem": "Um crítico aponta o único verso fraco num poema inteiro bem escrito.",
+      "leitura": "Enxergar a falha específica mesmo dentro de algo que já é bom — o cuidado que exige mais."
+    },
+    {
+      "grau": 10,
+      "decanato": 1,
+      "tempero": "mercúrio",
+      "imagem": "Um artesão lixa a mesma dobradiça até ela parar de ranger.",
+      "leitura": "Insistir no pequeno detalhe até ele parar de incomodar — fim do decanato: nada escapa da checagem."
+    },
+    {
+      "grau": 11,
+      "decanato": 2,
+      "tempero": "saturno",
+      "imagem": "Um monge segue a mesma rotina exata há quarenta anos, sem falhar um dia.",
+      "leitura": "Disciplina que virou identidade — o rigor não é imposição, é estrutura de vida."
+    },
+    {
+      "grau": 12,
+      "decanato": 2,
+      "tempero": "saturno",
+      "imagem": "Um mestre de obras recusa liberar a construção até cada prego estar correto.",
+      "leitura": "Responsabilidade que não aceita atalho, mesmo sob pressão de prazo."
+    },
+    {
+      "grau": 13,
+      "decanato": 2,
+      "tempero": "saturno",
+      "imagem": "Um treinador exige a mesma repetição cem vezes até o movimento ficar automático.",
+      "leitura": "Repetição exaustiva como único caminho real pra excelência de verdade."
+    },
+    {
+      "grau": 14,
+      "decanato": 2,
+      "tempero": "saturno",
+      "imagem": "Um funcionário público carimba cada documento seguindo o mesmo protocolo, sem exceção.",
+      "leitura": "Seguir a regra à risca mesmo quando parece burocracia excessiva — o sistema depende disso."
+    },
+    {
+      "grau": 15,
+      "decanato": 2,
+      "tempero": "saturno",
+      "imagem": "Um agricultor mede a chuva todos os dias, no mesmo horário, há décadas.",
+      "leitura": "Constância que só rende fruto depois de muito tempo repetindo o gesto exato."
+    },
+    {
+      "grau": 16,
+      "decanato": 2,
+      "tempero": "saturno",
+      "imagem": "Um artesão de relógios recusa entregar a peça um dia antes do previsto, mesmo pronta.",
+      "leitura": "Cumprir o próprio padrão de qualidade, mesmo quando ninguém cobraria isso."
+    },
+    {
+      "grau": 17,
+      "decanato": 2,
+      "tempero": "saturno",
+      "imagem": "Um professor corrige o mesmo erro de português pela centésima vez, sem cansar o tom.",
+      "leitura": "Paciência disciplinada que não perde a régua mesmo diante da repetição do erro alheio."
+    },
+    {
+      "grau": 18,
+      "decanato": 2,
+      "tempero": "saturno",
+      "imagem": "Um soldado limpa a própria arma todos os dias, mesmo sem guerra à vista.",
+      "leitura": "Manter o padrão de prontidão mesmo quando parece desnecessário."
+    },
+    {
+      "grau": 19,
+      "decanato": 2,
+      "tempero": "saturno",
+      "imagem": "Um bibliotecário recatalogar um livro fora do lugar antes de fechar a biblioteca.",
+      "leitura": "Corrigir o pequeno desvio antes que vire bagunça maior depois."
+    },
+    {
+      "grau": 20,
+      "decanato": 2,
+      "tempero": "saturno",
+      "imagem": "Um artesão entrega a peça só quando ela atinge o próprio padrão, não o do cliente.",
+      "leitura": "Rigor interno que não negocia mesmo sob pressão externa — fim do decanato: a régua é sua, não emprestada."
+    },
+    {
+      "grau": 21,
+      "decanato": 3,
+      "tempero": "vênus",
+      "imagem": "Um chef prova o prato sete vezes ajustando o tempero, grão de sal por grão de sal.",
+      "leitura": "Precisão que serve o prazer, não o substitui — o rigor aqui existe pra deixar algo gostoso de verdade."
+    },
+    {
+      "grau": 22,
+      "decanato": 3,
+      "tempero": "vênus",
+      "imagem": "Um perfumista mistura óleos numa proporção exata até o aroma ficar perfeito.",
+      "leitura": "Refinamento que exige tanto cálculo quanto sensibilidade — arte que também é ciência."
+    },
+    {
+      "grau": 23,
+      "decanato": 3,
+      "tempero": "vênus",
+      "imagem": "Um jardineiro poda cada galho com cuidado exato pra manter a forma da árvore bonita.",
+      "leitura": "Disciplina aplicada a favor da beleza, não contra ela."
+    },
+    {
+      "grau": 24,
+      "decanato": 3,
+      "tempero": "vênus",
+      "imagem": "Uma costureira borda um único fio de ouro numa peça de seda simples.",
+      "leitura": "Detalhe mínimo que eleva o todo — o cuidado pequeno que faz toda a diferença visível."
+    },
+    {
+      "grau": 25,
+      "decanato": 3,
+      "tempero": "vênus",
+      "imagem": "Um sommelier identifica a safra exata de um vinho só pelo cheiro.",
+      "leitura": "Sensibilidade treinada até virar precisão quase impossível de replicar."
+    },
+    {
+      "grau": 26,
+      "decanato": 3,
+      "tempero": "vênus",
+      "imagem": "Um confeiteiro decora um bolo com a mesma flor repetida cem vezes, cada uma idêntica à anterior.",
+      "leitura": "Repetição meticulosa a serviço do deleite alheio, não só da própria vaidade técnica."
+    },
+    {
+      "grau": 27,
+      "decanato": 3,
+      "tempero": "vênus",
+      "imagem": "Um artesão de móveis escolhe a veta exata da madeira pra combinar com o resto da peça.",
+      "leitura": "Atenção que respeita o material como ele é, sem forçar contra sua natureza."
+    },
+    {
+      "grau": 28,
+      "decanato": 3,
+      "tempero": "vênus",
+      "imagem": "Uma tecelã ajusta a tensão de cada fio antes de começar o tapete inteiro.",
+      "leitura": "Preparar o detalhe invisível que vai sustentar toda a beleza visível depois."
+    },
+    {
+      "grau": 29,
+      "decanato": 3,
+      "tempero": "vênus",
+      "imagem": "Um mestre chocolateiro tempera o chocolate na temperatura exata, grau a grau.",
+      "leitura": "Prazer que só existe por causa do rigor técnico por trás — nada é acidente aqui."
+    },
+    {
+      "grau": 30,
+      "decanato": 3,
+      "tempero": "vênus",
+      "imagem": "Uma última pincelada de verniz seca lenta, protegendo todo o trabalho feito antes dela.",
+      "leitura": "O cuidado final que preserva tudo o que foi construído com precisão — grau anarético: o rigor vira proteção duradoura."
+    }
+  ]
+}
