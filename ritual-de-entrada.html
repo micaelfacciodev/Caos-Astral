@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ritual de Entrada — Caos Astral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  body{ overflow-x:hidden; }
+  .ritual-wrap{
+    min-height:100svh; display:grid; grid-template-columns: 1fr 1fr;
+    padding-top:72px;
+  }
+  @media (max-width:900px){ .ritual-wrap{ grid-template-columns:1fr; } }
+
+  /* ---- painel esquerdo: prévia viva do kit ---- */
+  .preview-panel{
+    background: var(--bg-panel);
+    border-right:1px solid var(--line);
+    padding: 60px 50px;
+    display:flex; flex-direction:column; justify-content:center;
+    position:relative; overflow:hidden;
+  }
+  @media (max-width:900px){ .preview-panel{ border-right:none; border-bottom:1px solid var(--line); padding:44px 28px; min-height:280px; } }
+  .preview-wheel{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:120%; opacity:0.06; pointer-events:none; }
+  .preview-eyebrow{ margin-bottom:26px; }
+  .preview-title{ font-size:clamp(1.5rem,2.6vw,2.1rem); margin-bottom:34px; max-width:420px; }
+  .preview-fields{ display:flex; flex-direction:column; gap:2px; max-width:420px; }
+  .pf-row{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:14px 18px; background:var(--bg); border:1px solid var(--line);
+    font-family:'IBM Plex Mono', monospace; font-size:0.85rem;
+    opacity:0.35; transition: opacity .5s ease, border-color .5s ease, background .5s ease;
+  }
+  .pf-row.filled{ opacity:1; border-color:var(--line-bright); }
+  .pf-row.revealed{ border-color:var(--accent); background:var(--bg-panel-2); }
+  .pf-label{ color:var(--ink-dim); text-transform:uppercase; letter-spacing:0.05em; font-size:0.72rem; }
+  .pf-value{ color:var(--ink); }
+  .pf-value.pending{ color:var(--ink-faint); font-style:italic; }
+  .pf-value.accent{ color:var(--accent-bright); }
+
+  /* ---- painel direito: formulário por etapas ---- */
+  .form-panel{ padding:60px 50px; display:flex; flex-direction:column; justify-content:center; }
+  @media (max-width:900px){ .form-panel{ padding:44px 28px; } }
+  .form-inner{ max-width:420px; width:100%; margin:0 auto; }
+
+  .steps-track{ display:flex; gap:6px; margin-bottom:40px; }
+  .steps-track .dot{ height:2px; flex:1; background:var(--line); transition:background .3s ease; }
+  .steps-track .dot.done{ background:var(--accent); }
+  .steps-track .dot.current{ background:var(--accent-bright); }
+
+  .step{ display:none; }
+  .step.active{ display:block; animation:fadein .35s ease; }
+  @keyframes fadein{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
+
+  .step-hint{ font-family:'IBM Plex Mono', monospace; font-size:0.78rem; color:var(--ink-faint); margin-top:-6px; margin-bottom:22px; line-height:1.6; }
+  .step-nav{ display:flex; justify-content:space-between; align-items:center; margin-top:32px; }
+  .step-back{ font-family:'IBM Plex Mono', monospace; font-size:0.78rem; color:var(--ink-dim); background:none; border:none; cursor:pointer; }
+  .step-back:hover{ color:var(--ink); }
+  .step-back:disabled{ visibility:hidden; }
+
+  .oauth-btn{
+    width:100%; display:flex; align-items:center; justify-content:center; gap:12px;
+    padding:14px; border:1px solid var(--line-bright); background:var(--bg-panel-2); color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif; font-size:0.95rem; cursor:pointer; margin-bottom:22px;
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .oauth-btn:hover{ border-color:var(--ink-dim); background:var(--bg-panel); }
+  .divider-or{ display:flex; align-items:center; gap:14px; margin-bottom:22px; font-family:'IBM Plex Mono', monospace; font-size:0.72rem; color:var(--ink-faint); text-transform:uppercase; }
+  .divider-or::before, .divider-or::after{ content:""; flex:1; height:1px; background:var(--line); }
+
+  .terms-row{ display:flex; align-items:flex-start; gap:10px; margin:20px 0; font-size:0.82rem; color:var(--ink-dim); }
+  .terms-row input{ margin-top:3px; }
+  .terms-row a{ color:var(--ink); border-bottom:1px solid var(--line-bright); }
+
+  .checkbox-card{
+    display:flex; align-items:flex-start; gap:12px; padding:16px 18px;
+    border:1px solid var(--line); background:var(--bg-panel-2); margin-bottom:12px; cursor:pointer;
+    transition:border-color .2s ease;
+  }
+  .checkbox-card:hover{ border-color:var(--line-bright); }
+  .checkbox-card input{ margin-top:3px; }
+  .checkbox-card .cc-title{ font-size:0.95rem; color:var(--ink); margin-bottom:3px; }
+  .checkbox-card .cc-sub{ font-size:0.82rem; color:var(--ink-faint); }
+
+  .success-icon{ width:44px; height:44px; margin-bottom:22px; color:var(--accent-bright); }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="wrap">
+    <a href="index.html" class="logo"><svg class="star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 1 L13.6 9.5 L22 8 L15.2 13.2 L20 21 L12 16.4 L4 21 L8.8 13.2 L2 8 L10.4 9.5 Z"/></svg>Caos Astral</a>
+    <div class="nav-links">
+      <a href="kit.html">O kit</a>
+      <a href="retorno.html">Retorno</a>
+      <a href="ressonancia.html">O terceiro</a>
+      <a href="oraculo.html">Oráculo</a>
+      <a href="raizes.html">Raízes</a>
+      <a href="blog.html">Blog</a>
+      <a href="manifesto.html">Manifesto</a>
+    </div>
+    <a href="ritual-de-entrada.html" class="btn btn-ghost mono">Abrir meu kit</a>
+  </nav>
+</header>
+
+<div class="ritual-wrap">
+
+  <!-- ===== PAINEL ESQUERDO — prévia viva ===== -->
+  <div class="preview-panel">
+    <svg class="preview-wheel" viewBox="0 0 400 400">
+      <circle cx="200" cy="200" r="182" fill="none" stroke="var(--ink-dim)" stroke-width="1"/>
+      <circle cx="200" cy="200" r="140" fill="none" stroke="var(--ink-dim)" stroke-width="0.6"/>
+      <circle cx="200" cy="200" r="60" fill="none" stroke="var(--ink-dim)" stroke-width="0.6"/>
+      <g stroke="var(--ink-dim)" stroke-width="0.6"><line x1="200" y1="18" x2="200" y2="382"/><line x1="18" y1="200" x2="382" y2="200"/></g>
+    </svg>
+    <p class="eyebrow preview-eyebrow"><span class="glyph">✦</span> ritual de entrada</p>
+    <h1 class="preview-title">Cada resposta abre uma peça do seu kit.</h1>
+    <div class="preview-fields" id="previewFields">
+      <div class="pf-row" data-field="nome"><span class="pf-label">Nome</span><span class="pf-value pending">—</span></div>
+      <div class="pf-row" data-field="nucleo"><span class="pf-label">☉ Núcleo</span><span class="pf-value pending">—</span></div>
+      <div class="pf-row" data-field="territorio"><span class="pf-label">⌂ Território de abertura</span><span class="pf-value pending">—</span></div>
+      <div class="pf-row" data-field="fome"><span class="pf-label">☽ Fome</span><span class="pf-value pending">—</span></div>
+      <div class="pf-row" data-field="mascara"><span class="pf-label">▲ Máscara</span><span class="pf-value pending">—</span></div>
+    </div>
+  </div>
+
+  <!-- ===== PAINEL DIREITO — formulário por etapas ===== -->
+  <div class="form-panel">
+    <div class="form-inner">
+      <div class="steps-track" id="stepsTrack">
+        <div class="dot current" data-step="0"></div>
+        <div class="dot" data-step="1"></div>
+        <div class="dot" data-step="2"></div>
+        <div class="dot" data-step="3"></div>
+        <div class="dot" data-step="4"></div>
+      </div>
+
+      <!-- STEP 0 — nome + data de nascimento -->
+      <div class="step active" data-step="0">
+        <h2 style="margin-bottom:10px;">Qual é o seu nome?</h2>
+        <p class="step-hint">✦ nome completo, como no registro — ajuda a evitar ambiguidade de cálculo em nomes muito comuns</p>
+        <div class="field"><label>Nome completo</label><input type="text" id="inpNome" placeholder="Seu nome"></div>
+        <div class="field"><label>Data de nascimento</label><input type="date" id="inpData"></div>
+        <div class="step-nav">
+          <button class="step-back" disabled>← voltar</button>
+          <button class="btn btn-solid mono" id="btnStep0">Continuar</button>
+        </div>
+      </div>
+
+      <!-- STEP 1 — local de nascimento -->
+      <div class="step" data-step="1">
+        <h2 style="margin-bottom:10px;">Onde você nasceu?</h2>
+        <p class="step-hint">✦ isso define o território de abertura do seu kit e a leitura de fricção/corrente com precisão geográfica real</p>
+        <div class="field"><label>Cidade de nascimento</label><input type="text" id="inpLocal" placeholder="Cidade, estado, país"></div>
+        <div class="step-nav">
+          <button class="step-back">← voltar</button>
+          <button class="btn btn-solid mono" id="btnStep1">Continuar</button>
+        </div>
+      </div>
+
+      <!-- STEP 2 — hora de nascimento -->
+      <div class="step" data-step="2">
+        <h2 style="margin-bottom:10px;">Que horas você nasceu?</h2>
+        <p class="step-hint">✦ isso define máscara e territórios com exatidão. Se não souber a hora exata, dá pra ajustar depois — mas o kit fica incompleto até lá</p>
+        <div class="field"><label>Hora de nascimento</label><input type="time" id="inpHora"></div>
+        <div class="step-nav">
+          <button class="step-back">← voltar</button>
+          <button class="btn btn-solid mono" id="btnStep2">Continuar</button>
+        </div>
+      </div>
+
+      <!-- STEP 3 — autenticação -->
+      <div class="step" data-step="3">
+        <h2 style="margin-bottom:10px;">Como você quer voltar aqui depois?</h2>
+        <p class="step-hint">✦ seus dados de nascimento e diário ficam privados — só você acessa (RLS ativo, auth.uid())</p>
+        <!-- ENGINE: botão abaixo dispara o fluxo Google OAuth nativo do Supabase Auth -->
+        <button class="oauth-btn" id="btnGoogle">
+          <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.67 9c0-.59.1-1.17.28-1.7V4.97H.96A9 9 0 0 0 0 9c0 1.45.35 2.83.96 4.03l2.99-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.97l2.99 2.33C4.66 5.17 6.65 3.58 9 3.58z"/></svg>
+          Continuar com Google
+        </button>
+        <div class="divider-or">ou com e-mail</div>
+        <div class="field"><label>E-mail</label><input type="email" id="inpEmail" placeholder="voce@email.com"></div>
+        <div class="field"><label>Crie sua senha</label><input type="password" id="inpSenha" placeholder="mínimo 8 caracteres"></div>
+        <div class="terms-row">
+          <input type="checkbox" id="inpTermos">
+          <label for="inpTermos">Li e concordo com os <a href="#">termos de uso</a> e a <a href="#">privacidade</a> do Caos Astral.</label>
+        </div>
+        <div class="step-nav">
+          <button class="step-back">← voltar</button>
+          <button class="btn btn-solid mono" id="btnStep3">Abrir meu kit</button>
+        </div>
+      </div>
+
+      <!-- STEP 4 — confirmação / preferências de janela -->
+      <div class="step" data-step="4">
+        <svg class="success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>
+        <h2 style="margin-bottom:10px;" id="successName">Seu kit foi aberto.</h2>
+        <p class="step-hint" style="margin-bottom:24px;">Como você quer receber sua Janela do dia?</p>
+
+        <label class="checkbox-card">
+          <input type="checkbox" checked>
+          <div><div class="cc-title">Notificação no navegador</div><div class="cc-sub">A leitura tática do dia, direto quando abrir o kit</div></div>
+        </label>
+        <label class="checkbox-card">
+          <input type="checkbox">
+          <div><div class="cc-title">E-mail diário</div><div class="cc-sub">Sua janela, todo dia, na caixa de entrada</div></div>
+        </label>
+
+        <div class="step-nav" style="justify-content:flex-end;">
+          <a href="kit.html" class="btn btn-solid mono">Ver meu kit →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  // ===================================================================
+  // ENGINE: este script controla só a NAVEGAÇÃO entre etapas e a prévia
+  // visual local (dados fake, sem cálculo real). O agente do engine deve:
+  // 1. Substituir a autenticação do botão Google por chamada real ao
+  //    Supabase Auth (signInWithOAuth, provider: 'google').
+  // 2. No submit do step 3, criar/atualizar a linha em `profiles` com
+  //    nome, data_nascimento, hora_nascimento, cidade_nascimento.
+  // 3. Disparar `compute-natal-chart` e usar o retorno real (núcleo,
+  //    fome, máscara, território de abertura) no lugar dos valores
+  //    fake do preview abaixo, atualizando os campos ANTES de avançar
+  //    pro step de confirmação.
+  // 4. No step 4, gravar as preferências de notificação em `daily_readings`
+  //    ou tabela de preferências do usuário.
+  // ===================================================================
+
+  let current = 0;
+  const steps = document.querySelectorAll('.step');
+  const dots = document.querySelectorAll('.steps-track .dot');
+
+  function goTo(n){
+    steps.forEach(s => s.classList.toggle('active', +s.dataset.step === n));
+    dots.forEach(d => {
+      const ds = +d.dataset.step;
+      d.classList.toggle('done', ds < n);
+      d.classList.toggle('current', ds === n);
+    });
+    current = n;
+  }
+
+  function revealField(field, value, accent){
+    const row = document.querySelector(`.pf-row[data-field="${field}"]`);
+    if(!row) return;
+    row.classList.add('filled');
+    if(accent) row.classList.add('revealed');
+    const val = row.querySelector('.pf-value');
+    val.textContent = value;
+    val.classList.remove('pending');
+    if(accent) val.classList.add('accent');
+  }
+
+  // placeholders determinísticos só para dar vida à prévia — trocar por dado real do engine
+  const FAKE_NUCLEO = ['Áries','Touro','Gêmeos','Câncer','Leão','Virgem','Libra','Escorpião','Sagitário','Capricórnio','Aquário','Peixes'];
+  const FAKE_TERRITORIOS = ['dos vínculos','do ofício','da fala','da casa','do prazer','do corpo'];
+
+  document.getElementById('btnStep0').addEventListener('click', () => {
+    const nome = document.getElementById('inpNome').value.trim();
+    const data = document.getElementById('inpData').value;
+    if(!nome || !data){ return; }
+    revealField('nome', nome);
+    const idx = new Date(data).getMonth();
+    revealField('nucleo', FAKE_NUCLEO[idx % 12], true);
+    goTo(1);
+  });
+
+  document.getElementById('btnStep1').addEventListener('click', () => {
+    const local = document.getElementById('inpLocal').value.trim();
+    if(!local){ return; }
+    revealField('territorio', FAKE_TERRITORIOS[local.length % FAKE_TERRITORIOS.length]);
+    goTo(2);
+  });
+
+  document.getElementById('btnStep2').addEventListener('click', () => {
+    const hora = document.getElementById('inpHora').value;
+    if(!hora){ return; }
+    const h = parseInt(hora.split(':')[0], 10);
+    revealField('fome', FAKE_NUCLEO[(h+3) % 12]);
+    revealField('mascara', FAKE_NUCLEO[(h+7) % 12], true);
+    goTo(3);
+  });
+
+  document.getElementById('btnStep3').addEventListener('click', () => {
+    const termos = document.getElementById('inpTermos').checked;
+    if(!termos){ return; }
+    const nome = document.getElementById('inpNome').value.trim().split(' ')[0] || '';
+    document.getElementById('successName').textContent = nome ? `${nome}, seu kit foi aberto.` : 'Seu kit foi aberto.';
+    goTo(4);
+  });
+
+  document.getElementById('btnGoogle').addEventListener('click', () => {
+    // ENGINE: substituir por supabase.auth.signInWithOAuth({ provider: 'google' })
+    goTo(4);
+  });
+
+  document.querySelectorAll('.step-back').forEach(btn => {
+    btn.addEventListener('click', () => { if(current > 0) goTo(current - 1); });
+  });
+</script>
+
+</body>
+</html>
