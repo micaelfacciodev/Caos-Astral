@@ -96,31 +96,31 @@ da seção 7.
 
 ---
 
-## Correção 5 — Oráculo (I Ching): decisão de identidade visual
+## Correção 5 — Oráculo (I Ching): decisão de identidade visual [ATUALIZADO]
 
-Decisão tomada: **por ora, o Oráculo mantém identidade visual própria**
-(paleta papel/tinta/cinábrio, serifada), deliberadamente diferente do
-resto do site. Foco atual é funcionalidade, não padronização visual —
-isso fica para uma fase posterior de unificação de layout (já listada
-como pendência na seção 7 do CLAUDE.md original).
+**Decisão revertida em sessão posterior**: o Oráculo (tanto a ferramenta de
+consulta quanto a página de história) **não mantém mais identidade visual
+própria**. Ambos agora usam o design system padrão do site
+(`assets/style.css` — fundo preto, IBM Plex + Unbounded, tokens
+`--bg`/`--accent`/`--ink` etc.), com apenas CSS específico de widget
+(moedas, timeline, cards) em `<style>` escopado por página — mesmo padrão
+usado em outras páginas do site. A paleta papel/tinta/cinábrio foi
+descartada.
 
-Ação imediata de organização de arquivos:
-- **Duas páginas de história do I Ching foram fundidas em uma só**:
-  `origens-do-iching.html` (linha do tempo, lendas, métodos de consulta,
-  citação do "Homem Superior" — conteúdo do agente de I Ching) +
-  `raizes-i-ching.html` (moldura editorial: por que o vocabulário do
-  Oráculo não se mistura com o do kit — conteúdo do front). O arquivo
-  fundido usa o nome `raizes-i-ching.html` e a identidade visual
-  papel/cinábrio. **Apagar `origens-do-iching.html` do repo** — está
-  substituído.
-- `oraculo.html` (versão antiga, dentro do design system escuro do
-  site, estática) fica obsoleta agora que `i-ching.html` é a versão
-  funcional real. Avaliar se `oraculo.html` deve virar um simples
-  redirecionamento/link para `i-ching.html`, ou ser removida — decisão
-  do time, não urgente.
-- `raizes.html` (hub de Raízes) deve linkar para `raizes-i-ching.html`
-  (já corrigido do lado do front) — conferir se o link aponta pro
-  arquivo certo depois da fusão.
+Nomes de arquivo definitivos (correção do que estava escrito antes):
+- **`oraculo.html`** é a ferramenta funcional real (não `i-ching.html`,
+  que foi apagado). Contém o motor de lançamento de moedas + hexagramas.
+  Engine em `assets/iching-engine.js`, dados em
+  `iching_legge_oracular_text.json`, imagens das moedas em
+  `assets/cara.webp` / `assets/coroa.webp`.
+- **`raizes-i-ching.html`** é a página de história (lendas, linha do
+  tempo, métodos de consulta, citação do "Homem Superior") — já fundida
+  anteriormente, apenas restilizada para o tema escuro padrão nesta
+  sessão. `origens-do-iching.html` foi apagado (estava duplicado).
+- "I Ching" não aparece no nome de arquivo além destes dois — no resto
+  (alt text, comentários) pode aparecer normalmente.
+
+
 
 ---
 
@@ -141,9 +141,10 @@ qual é o real.
 - [ ] Criar tabela/lógica para `solar_returns` (Retorno)
 - [ ] Decidir e implementar armazenamento de O Terceiro (tabela própria
       ou coluna em `synastry_readings`)
-- [ ] Apagar `origens-do-iching.html` (substituído pela versão fundida
+- [x] Apagar `origens-do-iching.html` (substituído pela versão fundida
       de `raizes-i-ching.html`)
-- [ ] Decidir destino de `oraculo.html` (redirecionar ou remover)
+- [x] Decidir destino de `oraculo.html` (resolvido: `oraculo.html` é a
+      ferramenta funcional definitiva; `i-ching.html` foi apagado)
 - [ ] Apagar `caos-astral-landing.html`
 - [ ] Adicionar Edge Functions pendentes (sinastria já estava
       pendente; agora também Retorno e O Terceiro) à seção 7
