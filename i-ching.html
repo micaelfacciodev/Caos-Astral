@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I Ching — O Livro das Mutações</title>
+<style>
+  :root{
+    --ink: #1c1712;
+    --ink-soft: #3a2f24;
+    --paper: #eee5d2;
+    --paper-dark: #e2d6bc;
+    --cinnabar: #a8321f;
+    --cinnabar-dark: #7f2417;
+    --brass: #ad8c4f;
+    --brass-light: #cbad72;
+    --line-h: 14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background: var(--ink);
+    background-image:
+      radial-gradient(ellipse at 20% 0%, #2a2119 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 100%, #241b13 0%, transparent 50%);
+    color: var(--paper);
+    font-family: Georgia, 'Times New Roman', serif;
+    min-height: 100vh;
+    display:flex;
+    justify-content:center;
+    padding: 32px 16px 64px;
+  }
+  .app{
+    width:100%;
+    max-width: 640px;
+  }
+  .header{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    margin-bottom: 28px;
+  }
+  .seal{
+    flex-shrink:0;
+    width:56px;height:56px;
+    border-radius:6px;
+    background: var(--cinnabar);
+    color: var(--paper);
+    display:flex;align-items:center;justify-content:center;
+    font-size: 30px;
+    box-shadow: 0 0 0 1px rgba(238,229,210,0.15), 3px 3px 0 rgba(0,0,0,0.35);
+    transform: rotate(-2deg);
+  }
+  h1{
+    font-size: 26px;
+    letter-spacing: 0.02em;
+    margin:0;
+    color: var(--paper);
+    font-weight: 400;
+  }
+  h1 small{
+    display:block;
+    font-size: 13px;
+    color: var(--brass-light);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .panel{
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 4px;
+    padding: 26px 28px;
+    box-shadow: 0 12px 34px rgba(0,0,0,0.45);
+    position: relative;
+    overflow: hidden;
+  }
+  .panel::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0.015) 0 2px, transparent 2px 4px);
+    pointer-events:none;
+  }
+  label.qlabel{
+    display:block;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  textarea{
+    width:100%;
+    min-height: 56px;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 15px;
+    padding: 10px 12px;
+    border: 1px solid rgba(28,23,18,0.25);
+    border-radius: 3px;
+    background: rgba(255,255,255,0.35);
+    color: var(--ink);
+  }
+  textarea:focus{ outline: 2px solid var(--cinnabar); outline-offset: 1px; }
+
+  .cast-btn{
+    margin-top: 16px;
+    width: 100%;
+    padding: 13px 18px;
+    background: var(--cinnabar);
+    color: var(--paper);
+    border: none;
+    border-radius: 3px;
+    font-size: 16px;
+    letter-spacing: 0.04em;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  .cast-btn:hover{ background: var(--cinnabar-dark); }
+  .cast-btn:active{ transform: scale(0.99); }
+  .cast-btn:disabled{ opacity:0.5; cursor:default; }
+  .cast-btn:focus-visible{ outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  .cast-stage{
+    margin-top: 26px;
+  }
+  .hex-info-row{
+    display:flex;
+    gap: 28px;
+  }
+  .hexcol{
+    flex-shrink:0;
+    display:flex;
+    flex-direction: column-reverse;
+    gap: 10px;
+    width: 150px;
+  }
+  .line-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-height: var(--line-h);
+  }
+  .line-bar{
+    height: var(--line-h);
+    flex:1;
+    display:flex;
+    gap: 8px;
+    position:relative;
+  }
+  .bar-seg{
+    background: var(--ink);
+    height:100%;
+    flex:1;
+    border-radius: 1px;
+  }
+  .line-row.yin .bar-seg{ }
+  .line-row.empty .bar-seg{ background: rgba(28,23,18,0.12); }
+  .moving-mark{
+    position:absolute;
+    right: -18px;
+    top:50%;
+    transform: translateY(-50%);
+    width:8px;height:8px;
+    border-radius:50%;
+    background: var(--cinnabar);
+  }
+
+  /* ===== COIN CASTING STAGE ===== */
+  .coin-stage{
+    background: rgba(28,23,18,0.03);
+    border: 1px solid rgba(28,23,18,0.12);
+    border-radius: 6px;
+    padding: 22px 18px 20px;
+    margin-bottom: 22px;
+    text-align: center;
+  }
+  .coin-stage-label{
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+    min-height: 16px;
+    transition: opacity 0.3s ease;
+  }
+  .coin-stage-label.focusing{
+    animation: pulseFocus 1.4s ease-in-out infinite;
+  }
+  @keyframes pulseFocus{
+    0%, 100%{ opacity: 0.55; }
+    50%{ opacity: 1; }
+  }
+  .coin-row{
+    display:flex;
+    justify-content:center;
+    gap: 22px;
+    margin-bottom: 14px;
+    perspective: 600px;
+  }
+  .coin{
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+    position: relative;
+    background:
+      radial-gradient(circle at 32% 28%, #e2c583 0%, #c9a45f 28%, #a9803f 62%, #8a672f 100%);
+    box-shadow:
+      0 4px 10px rgba(0,0,0,0.35),
+      inset 0 2px 3px rgba(255,255,255,0.45),
+      inset 0 -3px 5px rgba(0,0,0,0.25);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transform-style: preserve-3d;
+    transition: transform 0.15s ease;
+  }
+  .coin::before{
+    /* rim reeding texture */
+    content:"";
+    position:absolute;
+    inset: 4px;
+    border-radius:50%;
+    border: 1px solid rgba(0,0,0,0.15);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25);
+  }
+  .coin .hole{
+    width: 24px;
+    height: 24px;
+    background: var(--paper);
+    box-shadow:
+      inset 0 2px 3px rgba(0,0,0,0.35),
+      0 1px 0 rgba(255,255,255,0.3);
+    position: relative;
+    z-index: 1;
+  }
+  .coin.resting .hole{ background: var(--paper-dark); opacity: 0.9; }
+  .coin.flip{ animation: flipcoin 0.7s cubic-bezier(.4,.1,.2,1); }
+  @keyframes flipcoin{
+    0%{ transform: rotateY(0deg) scale(1); }
+    45%{ transform: rotateY(540deg) scale(1.15); }
+    100%{ transform: rotateY(1080deg) scale(1); }
+  }
+  .coin-face-label{
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    letter-spacing: 0.04em;
+    min-height: 16px;
+  }
+  .coin-labels{
+    display:flex;
+    justify-content:center;
+    gap: 22px;
+    margin-bottom: 10px;
+  }
+  .coin-labels > div{ width: 78px; }
+  .coin-sum{
+    font-size: 14px;
+    color: var(--ink-soft);
+    font-style: italic;
+    min-height: 20px;
+    transition: opacity 0.3s ease;
+  }
+  .coin-sum strong{ color: var(--cinnabar-dark); font-style: normal; }
+
+  @media (max-width: 480px){
+    .coin{ width: 62px; height: 62px; }
+    .coin .hole{ width: 19px; height: 19px; }
+    .coin-row, .coin-labels{ gap: 14px; }
+    .coin-labels > div{ width: 62px; }
+  }
+
+  .info{
+    flex:1;
+    min-width: 0;
+  }
+  .info .num{
+    font-size: 13px;
+    color: var(--cinnabar-dark);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom:2px;
+  }
+  .info h2{
+    margin: 0 0 2px;
+    font-size: 24px;
+    font-weight: 400;
+  }
+  .info .trig{
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+  .info p.judgment{
+    font-size: 15px;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .divider{
+    margin: 26px 0;
+    border: none;
+    border-top: 1px dashed rgba(28,23,18,0.25);
+  }
+
+  .result-future .num{ color: var(--brass); }
+  .result-future h2{ color: var(--ink); }
+
+  .placeholder{
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  .reset-row{
+    margin-top: 22px;
+    text-align:center;
+  }
+  .reset-btn{
+    background:none;
+    border: 1px solid var(--brass);
+    color: var(--brass);
+    padding: 8px 20px;
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    cursor:pointer;
+  }
+  .reset-btn:hover{ background: rgba(173,140,79,0.12); }
+
+  .footnote{
+    margin-top: 20px;
+    font-size: 12.5px;
+    color: rgba(238,229,210,0.5);
+    text-align:center;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 480px){
+    .hex-info-row{ flex-direction: column; gap: 20px; }
+    .hexcol{ width: 100%; flex-direction: column-reverse; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .coin.flip{ animation: none; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="seal">易</div>
+    <h1>I Ching<small>O Livro das Mutações</small></h1>
+  </div>
+
+  <div class="panel">
+    <label class="qlabel" for="question">Sua pergunta (opcional)</label>
+    <textarea id="question" placeholder="Sobre o que você deseja consultar o oráculo?"></textarea>
+    <button class="cast-btn" id="castBtn">Lançar as Moedas</button>
+
+    <div class="cast-stage" id="stage" style="display:none;">
+      <div class="coin-stage" id="coinStage">
+        <div class="coin-stage-label" id="coinLabel">Preparando</div>
+        <div class="coin-row" id="coinRow">
+          <div class="coin resting"><div class="hole"></div></div>
+          <div class="coin resting"><div class="hole"></div></div>
+          <div class="coin resting"><div class="hole"></div></div>
+        </div>
+        <div class="coin-labels" id="coinLabels">
+          <div></div><div></div><div></div>
+        </div>
+        <div class="coin-sum" id="coinSum">&nbsp;</div>
+      </div>
+      <div class="hex-info-row">
+        <div class="hexcol" id="hexcol"></div>
+        <div class="info" id="primaryInfo"></div>
+      </div>
+    </div>
+
+    <div id="afterCast"></div>
+
+    <div class="reset-row" id="resetRow" style="display:none;">
+      <button class="reset-btn" id="resetBtn">Nova Consulta</button>
+    </div>
+  </div>
+
+  <p class="footnote">Três moedas são lançadas seis vezes, de baixo para cima, formando o hexagrama. Linhas 6 e 9 são linhas em movimento — elas se transformam e revelam um segundo hexagrama, a tendência do desdobramento da situação.</p>
+</div>
+
+<script>
+const TRIGRAMS = {
+  qian:{symbol:'☰', nome:'Céu',      code:'111'},
+  kun: {symbol:'☷', nome:'Terra',    code:'000'},
+  zhen:{symbol:'☳', nome:'Trovão',   code:'100'},
+  kan: {symbol:'☵', nome:'Água',     code:'010'},
+  gen: {symbol:'☶', nome:'Montanha', code:'001'},
+  xun: {symbol:'☴', nome:'Vento',    code:'011'},
+  li:  {symbol:'☲', nome:'Fogo',     code:'101'},
+  dui: {symbol:'☱', nome:'Lago',     code:'110'},
+};
+
+const HEXAGRAMS = [
+{n:1,u:'qian',l:'qian',py:'Qian',pt:'O Criativo',t:'Força pura e ininterrupta. Momento de iniciativa, liderança e ação alinhada com um propósito elevado. O céu gira sem cansar-se — persista com integridade e a energia criativa encontrará seu caminho.'},
+{n:2,u:'kun',l:'kun',py:'Kun',pt:'O Receptivo',t:'Terra que sustenta tudo. Tempo de receptividade, paciência e devoção ao invés de iniciativa própria. O sucesso vem de seguir, apoiar e nutrir, não de forçar. Ceda espaço para que as coisas amadureçam.'},
+{n:3,u:'kan',l:'zhen',py:'Zhun',pt:'Dificuldade Inicial',t:'Como um broto rompendo a terra dura, o começo é confuso e cheio de obstáculos. Não avance sozinho: busque aliados e organize-se antes de agir. A dificuldade presente é sinal de crescimento, não de fracasso.'},
+{n:4,u:'gen',l:'kan',py:'Meng',pt:'Loucura Juvenil',t:'Inexperiência diante do desconhecido. É hora de aprender com humildade, aceitar orientação e não fingir saber o que ainda não se sabe. A pergunta sincera abre a porta ao entendimento.'},
+{n:5,u:'kan',l:'qian',py:'Xu',pt:'A Espera',t:'O perigo está adiante, mas ainda não é hora de agir. Espere com serenidade e confiança, preparando-se internamente. A paciência nutrida evita o desgaste de uma ação prematura.'},
+{n:6,u:'qian',l:'kan',py:'Song',pt:'O Conflito',t:'Tensão entre vontades opostas. Evite levar a disputa até o fim; buscar um meio-termo ou recuar a tempo poupa forças maiores. Vitórias por confronto direto raramente duram.'},
+{n:7,u:'kun',l:'kan',py:'Shi',pt:'O Exército',t:'Disciplina coletiva a serviço de um objetivo justo. Um bom líder organiza, não domina; a força só é legítima quando serve ao bem comum e é conduzida com clareza de regras.'},
+{n:8,u:'kan',l:'kun',py:'Bi',pt:'Solidariedade',t:'União verdadeira em torno de um centro comum. É tempo de estreitar laços e buscar aliados por afinidade genuína, não por conveniência. Quem chega tarde à união perde a oportunidade.'},
+{n:9,u:'xun',l:'qian',py:'Xiao Chu',pt:'Pequeno Domínio',t:'Força contida por circunstâncias momentâneas, como vento que ainda não vira tempestade. Pequenos ajustes e gentileza acumulam efeito; não é hora de grandes empreitadas, mas de refinamento paciente.'},
+{n:10,u:'qian',l:'dui',py:'Lu',pt:'O Andar (Conduta)',t:'Caminhar sobre a cauda do tigre sem ser mordido: trata-se de conduta cuidadosa diante de uma força maior. Cortesia, cautela e respeito às hierarquias evitam o perigo.'},
+{n:11,u:'kun',l:'qian',py:'Tai',pt:'Paz',t:'Céu e terra em comunhão: prosperidade, harmonia e fluxo livre entre as partes. É tempo favorável para empreender e compartilhar; use a abundância para fortalecer os vínculos, não para acomodar-se.'},
+{n:12,u:'qian',l:'kun',py:'Pi',pt:'Estagnação',t:'Céu e terra se afastam: comunicação bloqueada, estagnação social ou pessoal. Não é tempo de grandes ações públicas; recolha-se, cultive a integridade interior e aguarde a virada do ciclo.'},
+{n:13,u:'qian',l:'li',py:'Tong Ren',pt:'Companheirismo',t:'Comunhão entre pessoas com um propósito compartilhado e claro, sem panelinhas nem interesses ocultos. Comunidades verdadeiras se formam à luz do dia, com franqueza.'},
+{n:14,u:'li',l:'qian',py:'Da You',pt:'Grande Posse',t:'Abundância de recursos, talento ou reconhecimento sob a luz clara do bom caráter. O sucesso pede humildade e generosidade para não se corromper em excesso ou arrogância.'},
+{n:15,u:'kun',l:'gen',py:'Qian',pt:'Modéstia',t:'A montanha escondida sob a terra: força real que não precisa se exibir. A modéstia verdadeira, e não a falsa humildade, atrai apoio natural e sustenta o sucesso duradouro.'},
+{n:16,u:'zhen',l:'kun',py:'Yu',pt:'Entusiasmo',t:'Movimento que nasce em harmonia com o momento certo, como um trovão que desperta a terra. Entusiasmo genuíno mobiliza pessoas; mas é preciso preparar-se antes de agir para não se dispersar.'},
+{n:17,u:'dui',l:'zhen',py:'Sui',pt:'Seguir',t:'Adaptar-se com discernimento às mudanças do momento, sabendo quando liderar e quando seguir. Seguir com sinceridade quem merece confiança traz proveito mútuo.'},
+{n:18,u:'gen',l:'xun',py:'Gu',pt:'Trabalho no Corrompido',t:'Algo foi negligenciado e começou a apodrecer — um projeto, uma relação, um hábito. É preciso coragem para reconhecer o dano e paciência para restaurá-lo pela raiz, não apenas na superfície.'},
+{n:19,u:'kun',l:'dui',py:'Lin',pt:'Aproximação',t:'Uma influência positiva se aproxima e cresce. É tempo de agir com generosidade e ensinar pelo exemplo, sabendo que toda maré, mesmo favorável, também um dia recua.'},
+{n:20,u:'xun',l:'kun',py:'Guan',pt:'Contemplação',t:'Observar antes de agir, como quem sobe a um mirante para ver com clareza. Um líder que se observa a si mesmo com honestidade se torna modelo para os outros sem precisar impor nada.'},
+{n:21,u:'li',l:'zhen',py:'Shi He',pt:'Morder e Partir',t:'Há um obstáculo concreto — uma injustiça, um mal-entendido, um impedimento — que precisa ser mordido e partido com firmeza e clareza, não ignorado ou evitado.'},
+{n:22,u:'gen',l:'li',py:'Bi',pt:'Graça',t:'Beleza e forma que adornam o conteúdo, mas não o substituem. Cuide da aparência e da elegância nas relações, sem deixar que o ornamento esconda a falta de substância.'},
+{n:23,u:'gen',l:'kun',py:'Bo',pt:'Ruptura',t:'Uma estrutura está sendo corroída de baixo para cima, como uma cama cujos pés apodrecem. Não é hora de resistir de frente; recolha-se, preserve o essencial e espere o ciclo se completar.'},
+{n:24,u:'kun',l:'zhen',py:'Fu',pt:'Retorno',t:'Depois do declínio, uma nova força começa a retornar, discreta como o primeiro traço yang sob cinco linhas yin. É tempo de recomeçar com simplicidade, sem forçar o ritmo do renascimento.'},
+{n:25,u:'qian',l:'zhen',py:'Wu Wang',pt:'Inocência',t:'Agir em sintonia espontânea com o que é correto, sem cálculo nem segunda intenção. Resultados forçados ou manipulados fracassam; a ação genuína e desinteressada é a que floresce.'},
+{n:26,u:'gen',l:'qian',py:'Da Chu',pt:'Grande Domínio',t:'Grande força interior contida e disciplinada, como a montanha que guarda o céu. Estudar, acumular experiência e conter os impulsos antes de agir gera um poder duradouro.'},
+{n:27,u:'gen',l:'zhen',py:'Yi',pt:'Nutrição',t:'Cuidado com o que se alimenta — literal e figurativamente: palavras, pensamentos, relações. Observe de onde vem seu sustento e o que você oferece aos outros para nutrir-se mutuamente.'},
+{n:28,u:'dui',l:'xun',py:'Da Guo',pt:'Grande Excesso',t:'A viga central está sobrecarregada e prestes a ceder: uma situação extraordinária pede medidas extraordinárias, mas com cautela para não colapsar sob o próprio peso.'},
+{n:29,u:'kan',l:'kan',py:'Kan',pt:'O Abismal',t:'Perigo repetido, como água que corre sem parar através dos desfiladeiros. A saída não é evitar o abismo, mas atravessá-lo com constância interior, confiando no próprio curso.'},
+{n:30,u:'li',l:'li',py:'Li',pt:'O Que se Agarra (Fogo)',t:'A chama precisa de algo a que se agarrar para brilhar, assim como a clareza depende daquilo a que nos dedicamos. Persista com luminosidade e discernimento, evitando o excesso que consome.'},
+{n:31,u:'dui',l:'gen',py:'Xian',pt:'Influência',t:'Atração mútua e espontânea, como o lago sobre a montanha. As relações verdadeiras começam por uma sensibilidade recíproca e desinteressada, não por conquista ou insistência.'},
+{n:32,u:'zhen',l:'xun',py:'Heng',pt:'Duração',t:'O que perdura não é o que fica parado, mas o que se renova constantemente dentro de um padrão constante — como o trovão e o vento, sempre em movimento, sempre reconhecíveis.'},
+{n:33,u:'qian',l:'gen',py:'Dun',pt:'Retirada',t:'Quando as forças contrárias avançam, recuar a tempo com dignidade é sabedoria, não derrota. Preserve energia e princípios retirando-se antes que a situação se torne insustentável.'},
+{n:34,u:'zhen',l:'qian',py:'Da Zhuang',pt:'Grande Poder',t:'Força considerável à disposição, mas o poder verdadeiro se mede pelo controle que se tem sobre ele. Use a força apenas de acordo com o que é correto, não pelo simples prazer de exercê-la.'},
+{n:35,u:'li',l:'kun',py:'Jin',pt:'Progresso',t:'Avanço rápido e visível, como o sol nascendo sobre a terra. É tempo de reconhecimento e expansão; avance com clareza, mas sem perder a humildade que sustenta o crescimento.'},
+{n:36,u:'kun',l:'li',py:'Ming Yi',pt:'Obscurecimento da Luz',t:'A luz está ferida ou oculta por circunstâncias adversas — talvez seja preciso esconder o brilho próprio por um tempo para atravessar um período hostil sem se expor desnecessariamente.'},
+{n:37,u:'xun',l:'li',py:'Jia Ren',pt:'A Família',t:'A ordem começa em casa: papéis claros, respeito mútuo e comunicação sincera entre os que convivem próximos formam a base de qualquer ordem maior.'},
+{n:38,u:'li',l:'dui',py:'Kui',pt:'Oposição',t:'Duas forças se afastam mesmo compartilhando um mesmo campo. Nas pequenas diferenças ainda há espaço para entendimento; aceite a diversidade sem forçar uma unidade que não existe.'},
+{n:39,u:'kan',l:'gen',py:'Jian',pt:'Obstrução',t:'Um obstáculo genuíno bloqueia o caminho à frente. Não adianta insistir de frente; busque um caminho lateral, peça ajuda e use a pausa para se preparar melhor.'},
+{n:40,u:'zhen',l:'kan',py:'Jie',pt:'Libertação',t:'A tensão finalmente se rompe e o alívio chega. É hora de perdoar, soltar antigos fardos e agir rapidamente para consolidar a liberdade recém-conquistada antes que novas tensões se acumulem.'},
+{n:41,u:'gen',l:'dui',py:'Sun',pt:'Diminuição',t:'Reduzir o que é excessivo embaixo para fortalecer o que é essencial em cima — como poupar hoje para investir no que realmente importa. A simplicidade voluntária tem seu próprio ganho.'},
+{n:42,u:'xun',l:'zhen',py:'Yi',pt:'Aumento',t:'Um momento favorável em que o que está acima se dispõe a beneficiar o que está abaixo. Aproveite a maré de apoio para agir com generosidade e iniciativa construtiva.'},
+{n:43,u:'dui',l:'qian',py:'Guai',pt:'Ruptura Decidida',t:'Uma última resistência precisa ser superada com determinação, mas sem violência ou arrogância — a firmeza justa, exposta com clareza a todos, prevalece sobre o confronto bruto.'},
+{n:44,u:'qian',l:'xun',py:'Gou',pt:'Vir ao Encontro',t:'Um encontro inesperado ou uma influência sutil se insinua. É preciso discernimento para saber se acolher esse encontro fortalece ou corrói a integridade da situação.'},
+{n:45,u:'dui',l:'kun',py:'Cui',pt:'Reunião',t:'Pessoas se reúnem em torno de um propósito ou uma liderança comum, como água se acumulando num lago. É tempo de organizar essa energia coletiva com clareza e prevenção contra o imprevisto.'},
+{n:46,u:'kun',l:'xun',py:'Sheng',pt:'Ascensão',t:'Crescimento gradual e constante, como uma árvore que sobe da terra sem pressa. O esforço sustentado, passo a passo, é o que realmente eleva — não o salto repentino.'},
+{n:47,u:'dui',l:'kan',py:'Kun',pt:'Opressão',t:'Um período de esgotamento ou escassez em que os recursos parecem faltar. A dignidade interior e a serenidade diante da adversidade preservam a força para quando as circunstâncias mudarem.'},
+{n:48,u:'kan',l:'xun',py:'Jing',pt:'O Poço',t:'Uma fonte de sustento profunda e constante, disponível a todos que sabem alcançá-la — mas de nada serve o poço se o balde não desce fundo o suficiente ou se quebra no caminho.'},
+{n:49,u:'dui',l:'li',py:'Ge',pt:'Revolução',t:'Uma mudança profunda e necessária, como a troca das estações. Só se justifica quando o momento está maduro e conduzida com clareza de propósito, não por impulso ou vaidade.'},
+{n:50,u:'li',l:'xun',py:'Ding',pt:'O Caldeirão',t:'Transformação através da preparação cuidadosa, como alimentos cozidos ao fogo lento. É tempo de refinar, nutrir a comunidade e consolidar aquilo que foi construído com cuidado.'},
+{n:51,u:'zhen',l:'zhen',py:'Zhen',pt:'O Despertar',t:'Um choque súbito sacode a rotina, como um trovão. O susto inicial é passageiro; quem mantém a serenidade interior mesmo abalado sai fortalecido e mais desperto.'},
+{n:52,u:'gen',l:'gen',py:'Gen',pt:'Imobilidade',t:'Parar no momento certo, como a montanha que não se move. A quietude verdadeira não é ausência de vida, mas o ponto de repouso a partir do qual toda ação clara se origina.'},
+{n:53,u:'xun',l:'gen',py:'Jian',pt:'Desenvolvimento Gradual',t:'Como uma árvore que cresce devagar até dar frutos sólidos, o progresso duradouro se constrói passo a passo, respeitando o tempo natural de cada etapa.'},
+{n:54,u:'zhen',l:'dui',py:'Gui Mei',pt:'A Jovem Noiva',t:'Entrar numa situação em posição subordinada ou irregular exige cautela redobrada e consciência do próprio lugar, para que o que começa desigual não termine em prejuízo.'},
+{n:55,u:'zhen',l:'li',py:'Feng',pt:'Abundância',t:'Um momento de plenitude e clareza, como o sol ao meio-dia. É breve por natureza — aproveite a fartura presente com discernimento, sabendo que todo apogeu já contém o declínio.'},
+{n:56,u:'li',l:'gen',py:'Lu',pt:'O Viajante',t:'Em terreno alheio, sem raízes fixas, a prudência e a cortesia substituem a força. O viajante que se comporta com modéstia e adaptabilidade encontra acolhida onde quer que vá.'},
+{n:57,u:'xun',l:'xun',py:'Xun',pt:'O Suave (Vento)',t:'Influenciar suavemente e de modo repetido, como o vento que penetra sem confrontar. A persistência gentil e a clareza de intenção movem obstáculos que a força direta não moveria.'},
+{n:58,u:'dui',l:'dui',py:'Dui',pt:'O Alegre (Lago)',t:'Alegria compartilhada que se multiplica no encontro sincero com os outros. O contentamento verdadeiro nutre e fortalece os vínculos, mas se corrompe quando vira busca vazia de agrado.'},
+{n:59,u:'xun',l:'kan',py:'Huan',pt:'Dispersão',t:'Dissolver rigidezes e divisões acumuladas, como o vento que dispersa a névoa sobre a água. É tempo de reunir o que estava fragmentado através de um propósito comum e generoso.'},
+{n:60,u:'kan',l:'dui',py:'Jie',pt:'Limitação',t:'Todo rio precisa de margens para seguir seu curso. Limites bem colocados — não excessivos, não ausentes — são o que dá forma e sustentabilidade a qualquer empreitada.'},
+{n:61,u:'xun',l:'dui',py:'Zhong Fu',pt:'Verdade Interior',t:'Uma sinceridade que vem do centro do ser e alcança até os que estão distantes, como quem confia mesmo sem certezas externas. A verdade interior, e não a persuasão, é o que realmente comove.'},
+{n:62,u:'zhen',l:'gen',py:'Xiao Guo',pt:'Pequeno Excesso',t:'Atenção aos detalhes pequenos e imediatos, sem tentar voos grandes neste momento. Um leve exagero no cuidado — mais modéstia, mais economia — é apropriado agora.'},
+{n:63,u:'kan',l:'li',py:'Ji Ji',pt:'Depois da Conclusão',t:'Tudo parece resolvido e em ordem, mas é justamente aqui que o descuido se instala. A conclusão bem-sucedida pede vigilância contínua, pois o equilíbrio alcançado tende a se desfazer se for negligenciado.'},
+{n:64,u:'li',l:'kan',py:'Wei Ji',pt:'Antes da Conclusão',t:'Quase lá, mas ainda não: a travessia não terminou. É preciso cautela redobrada exatamente quando o objetivo parece próximo, para não estragar no último passo o que foi conquistado com cuidado.'},
+];
+
+const BIN_TO_HEX = {};
+HEXAGRAMS.forEach(h=>{
+  const bin = TRIGRAMS[h.l].code + TRIGRAMS[h.u].code; // bottom(lower)+top(upper), each already bottom-to-top
+  BIN_TO_HEX[bin] = h;
+});
+
+function getHexagram(binStr){
+  return BIN_TO_HEX[binStr] || null;
+}
+
+// ---- casting logic ----
+function tossCoin(){
+  return Math.random() < 0.5 ? 3 : 2; // 3 = yang face, 2 = yin face
+}
+function tossLine(){
+  const coins = [tossCoin(), tossCoin(), tossCoin()];
+  const sum = coins[0]+coins[1]+coins[2];
+  return {coins, sum}; // 6,7,8,9
+}
+function lineIsYang(sum){ return sum===7 || sum===9; }
+function lineIsMoving(sum){ return sum===6 || sum===9; }
+
+const stage = document.getElementById('stage');
+const hexcol = document.getElementById('hexcol');
+const primaryInfo = document.getElementById('primaryInfo');
+const afterCast = document.getElementById('afterCast');
+const castBtn = document.getElementById('castBtn');
+const resetRow = document.getElementById('resetRow');
+const resetBtn = document.getElementById('resetBtn');
+const questionEl = document.getElementById('question');
+
+function delay(ms){ return new Promise(r=>setTimeout(r, ms)); }
+
+function coinGlyph(v){ return v===3 ? '陽' : '陰'; }
+
+async function castLine(index){
+  const row = document.createElement('div');
+  row.className = 'line-row empty';
+  row.innerHTML = `
+    <div class="line-bar" id="bar-${index}"></div>
+    <div class="coins" id="coins-${index}">
+      <div class="toss">
+        <div class="coin">?</div><div class="coin">?</div><div class="coin">?</div>
+      </div>
+    </div>
+  `;
+  hexcol.appendChild(row);
+
+  const coinEls = row.querySelectorAll('.coin');
+  coinEls.forEach(c=>c.classList.add('flip'));
+  await delay(450);
+
+  const {coins, sum} = tossLine();
+  coinEls.forEach((c,i)=>{ c.textContent = coinGlyph(coins[i]); });
+
+  const yang = lineIsYang(sum);
+  const moving = lineIsMoving(sum);
+
+  row.classList.remove('empty');
+  row.classList.add(yang ? 'yang' : 'yin');
+
+  const bar = document.getElementById(`bar-${index}`);
+  bar.innerHTML = '';
+  if(yang){
+    const seg = document.createElement('div');
+    seg.className = 'bar-seg';
+    bar.appendChild(seg);
+  } else {
+    const seg1 = document.createElement('div'); seg1.className='bar-seg';
+    const seg2 = document.createElement('div'); seg2.className='bar-seg';
+    bar.appendChild(seg1); bar.appendChild(seg2);
+  }
+  if(moving){
+    const mark = document.createElement('div');
+    mark.className = 'moving-mark';
+    bar.appendChild(mark);
+  }
+
+  const coinsWrap = document.getElementById(`coins-${index}`);
+  const totalEl = document.createElement('div');
+  totalEl.className = 'total';
+  totalEl.textContent = `soma ${sum}${moving ? ' · em movimento' : ''}`;
+  coinsWrap.appendChild(totalEl);
+
+  await delay(150);
+  return { yang, moving, sum };
+}
+
+function renderInfo(container, hex, label, colorClass){
+  container.className = `info ${colorClass||''}`;
+  container.innerHTML = `
+    <div class="num">${label ? label + ' · ' : ''}Hexagrama ${hex.n}</div>
+    <h2>${hex.pt}</h2>
+    <div class="trig">${TRIGRAMS[hex.u].symbol} ${TRIGRAMS[hex.u].nome} sobre ${TRIGRAMS[hex.l].symbol} ${TRIGRAMS[hex.l].nome} — ${hex.py}</div>
+    <p class="judgment">${hex.t}</p>
+  `;
+}
+
+function renderMiniHexagram(lines){
+  // lines: array bottom->top of {yang}
+  const wrap = document.createElement('div');
+  wrap.className = 'hexcol';
+  wrap.style.width = '110px';
+  lines.forEach(l=>{
+    const row = document.createElement('div');
+    row.className = `line-row ${l.yang ? 'yang':'yin'}`;
+    const bar = document.createElement('div');
+    bar.className = 'line-bar';
+    if(l.yang){
+      const seg = document.createElement('div'); seg.className='bar-seg';
+      bar.appendChild(seg);
+    } else {
+      const s1=document.createElement('div'); s1.className='bar-seg';
+      const s2=document.createElement('div'); s2.className='bar-seg';
+      bar.appendChild(s1); bar.appendChild(s2);
+    }
+    row.appendChild(bar);
+    wrap.appendChild(row);
+  });
+  return wrap;
+}
+
+async function runCasting(){
+  castBtn.disabled = true;
+  hexcol.innerHTML = '';
+  afterCast.innerHTML = '';
+  primaryInfo.innerHTML = '';
+  stage.style.display = 'flex';
+  resetRow.style.display = 'none';
+
+  const results = [];
+  for(let i=0;i<6;i++){
+    const r = await castLine(i);
+    results.push(r);
+  }
+
+  const primaryBin = results.map(r=>r.yang?'1':'0').join('');
+  const primaryHex = getHexagram(primaryBin);
+
+  if(primaryHex){
+    renderInfo(primaryInfo, primaryHex, null, '');
+  } else {
+    primaryInfo.innerHTML = '<p class="placeholder">Não foi possível identificar o hexagrama.</p>';
+  }
+
+  const movingCount = results.filter(r=>r.moving).length;
+
+  if(movingCount > 0 && primaryHex){
+    const changedLines = results.map(r=>{
+      if(!r.moving) return {yang:r.yang};
+      return {yang: !r.yang}; // moving lines flip
+    });
+    const changedBin = changedLines.map(l=>l.yang?'1':'0').join('');
+    const changedHex = getHexagram(changedBin);
+
+    const block = document.createElement('div');
+    block.innerHTML = `<hr class="divider"><div class="num" style="color:var(--brass); text-transform:uppercase; letter-spacing:0.06em; font-size:13px; margin-bottom:10px;">Linhas em movimento (${movingCount}) — tendência futura</div>`;
+    const flexRow = document.createElement('div');
+    flexRow.style.display = 'flex';
+    flexRow.style.gap = '24px';
+    flexRow.appendChild(renderMiniHexagram(changedLines));
+    const futureInfo = document.createElement('div');
+    if(changedHex){
+      renderInfo(futureInfo, changedHex, 'Resultante', 'result-future');
+    } else {
+      futureInfo.innerHTML = '<p class="placeholder">Não foi possível identificar o hexagrama resultante.</p>';
+    }
+    flexRow.appendChild(futureInfo);
+    block.appendChild(flexRow);
+    afterCast.appendChild(block);
+  }
+
+  resetRow.style.display = 'block';
+  castBtn.disabled = false;
+}
+
+castBtn.addEventListener('click', runCasting);
+resetBtn.addEventListener('click', ()=>{
+  stage.style.display = 'none';
+  hexcol.innerHTML = '';
+  primaryInfo.innerHTML = '';
+  afterCast.innerHTML = '';
+  resetRow.style.display = 'none';
+  questionEl.value = '';
+  questionEl.focus();
+});
+</script>
+</body>
+</html>
