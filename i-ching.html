@@ -205,11 +205,11 @@
     border-radius: 50%;
     position: relative;
     background:
-      radial-gradient(circle at 32% 28%, #e2c583 0%, #c9a45f 28%, #a9803f 62%, #8a672f 100%);
+      radial-gradient(circle at 32% 26%, #9fae82 0%, #7d8f63 22%, #6a7a4f 48%, #566640 74%, #495638 100%);
     box-shadow:
       0 4px 10px rgba(0,0,0,0.35),
-      inset 0 2px 3px rgba(255,255,255,0.45),
-      inset 0 -3px 5px rgba(0,0,0,0.25);
+      inset 0 2px 3px rgba(255,255,255,0.25),
+      inset 0 -3px 5px rgba(0,0,0,0.35);
     display:flex;
     align-items:center;
     justify-content:center;
@@ -217,13 +217,17 @@
     transition: transform 0.15s ease;
   }
   .coin::before{
-    /* rim reeding texture */
+    /* rim reeding + faint engraved-character suggestion */
     content:"";
     position:absolute;
     inset: 4px;
     border-radius:50%;
-    border: 1px solid rgba(0,0,0,0.15);
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25);
+    border: 1px solid rgba(0,0,0,0.25);
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,0.15),
+      inset 0 0 10px rgba(0,0,0,0.15);
+    background:
+      repeating-conic-gradient(from 0deg, rgba(0,0,0,0.05) 0deg 2deg, transparent 2deg 22.5deg);
   }
   .coin .hole{
     width: 24px;
@@ -501,39 +505,56 @@ const castBtn = document.getElementById('castBtn');
 const resetRow = document.getElementById('resetRow');
 const resetBtn = document.getElementById('resetBtn');
 const questionEl = document.getElementById('question');
+const coinLabel = document.getElementById('coinLabel');
+const coinRow = document.getElementById('coinRow');
+const coinLabels = document.getElementById('coinLabels');
+const coinSum = document.getElementById('coinSum');
 
 function delay(ms){ return new Promise(r=>setTimeout(r, ms)); }
 
 function coinGlyph(v){ return v===3 ? '陽' : '陰'; }
 
-async function castLine(index){
-  const row = document.createElement('div');
-  row.className = 'line-row empty';
-  row.innerHTML = `
-    <div class="line-bar" id="bar-${index}"></div>
-    <div class="coins" id="coins-${index}">
-      <div class="toss">
-        <div class="coin">?</div><div class="coin">?</div><div class="coin">?</div>
-      </div>
-    </div>
-  `;
-  hexcol.appendChild(row);
+const LINE_NAMES = ['primeira','segunda','terceira','quarta','quinta','sexta'];
 
-  const coinEls = row.querySelectorAll('.coin');
-  coinEls.forEach(c=>c.classList.add('flip'));
-  await delay(450);
+async function castLine(index, totalLines){
+  const coinEls = Array.from(coinRow.querySelectorAll('.coin'));
+  const labelEls = Array.from(coinLabels.querySelectorAll('div'));
 
+  // reset to resting state
+  coinEls.forEach(c=>{ c.classList.remove('flip'); c.classList.add('resting'); });
+  labelEls.forEach(l=>{ l.textContent = ''; });
+  coinSum.innerHTML = '&nbsp;';
+
+  // concentration pause before the toss
+  coinLabel.textContent = `Linha ${index+1} de ${totalLines} — concentre-se na pergunta`;
+  coinLabel.classList.add('focusing');
+  await delay(950);
+  coinLabel.classList.remove('focusing');
+  coinLabel.textContent = `Lançando a ${LINE_NAMES[index]} linha...`;
+
+  // toss the three coins with a staggered flip
   const {coins, sum} = tossLine();
-  coinEls.forEach((c,i)=>{ c.textContent = coinGlyph(coins[i]); });
+  for(let i=0;i<3;i++){
+    coinEls[i].classList.remove('resting');
+    coinEls[i].classList.add('flip');
+    await delay(240);
+  }
+  await delay(500); // let the last coin's flip animation finish settling
+
+  coinEls.forEach((c,i)=>{ labelEls[i].textContent = coinGlyph(coins[i]); });
 
   const yang = lineIsYang(sum);
   const moving = lineIsMoving(sum);
+  coinSum.innerHTML = `soma <strong>${sum}</strong> — ${yang ? 'yang':'yin'}${moving ? ' (linha em movimento)' : ''}`;
 
-  row.classList.remove('empty');
-  row.classList.add(yang ? 'yang' : 'yin');
+  await delay(700); // time to read the result before it joins the hexagram
 
+  // build the line in the hexagram column
+  const row = document.createElement('div');
+  row.className = `line-row ${yang ? 'yang':'yin'}`;
+  row.innerHTML = `<div class="line-bar" id="bar-${index}"></div>`;
+  hexcol.appendChild(row);
   const bar = document.getElementById(`bar-${index}`);
-  bar.innerHTML = '';
   if(yang){
     const seg = document.createElement('div');
     seg.className = 'bar-seg';
@@ -549,13 +570,7 @@ async function castLine(index){
     bar.appendChild(mark);
   }
 
-  const coinsWrap = document.getElementById(`coins-${index}`);
-  const totalEl = document.createElement('div');
-  totalEl.className = 'total';
-  totalEl.textContent = `soma ${sum}${moving ? ' · em movimento' : ''}`;
-  coinsWrap.appendChild(totalEl);
-
-  await delay(150);
+  await delay(650); // contemplation pause before the next line begins
   return { yang, moving, sum };
 }
 
@@ -598,14 +613,16 @@ async function runCasting(){
   hexcol.innerHTML = '';
   afterCast.innerHTML = '';
   primaryInfo.innerHTML = '';
-  stage.style.display = 'flex';
+  stage.style.display = 'block';
   resetRow.style.display = 'none';
 
   const results = [];
   for(let i=0;i<6;i++){
-    const r = await castLine(i);
+    const r = await castLine(i, 6);
     results.push(r);
   }
+
+  coinLabel.textContent = 'Hexagrama formado';
 
   const primaryBin = results.map(r=>r.yang?'1':'0').join('');
   const primaryHex = getHexagram(primaryBin);
