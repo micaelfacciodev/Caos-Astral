@@ -76,16 +76,16 @@ header.site-header{
   background:rgba(10,9,8,0.86); backdrop-filter:blur(8px);
   border-bottom:1px solid var(--line);
 }
-nav.wrap{ display:flex; align-items:center; justify-content:space-between; height:72px; }
+nav.wrap{ display:flex; align-items:center; justify-content:space-between; height:auto; min-height:72px; flex-wrap:wrap; gap:10px 0; padding-top:10px; padding-bottom:10px; }
 .logo{
   display:flex; align-items:center; gap:10px;
   font-family:'IBM Plex Mono', monospace; font-size:0.95rem; letter-spacing:0.14em; text-transform:uppercase;
 }
 .logo .star{width:16px; height:16px; color:var(--accent-bright);}
-.nav-links{ display:flex; align-items:center; gap:28px; font-family:'IBM Plex Mono', monospace; font-size:0.78rem; color:var(--ink-dim); }
+.nav-links{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; font-family:'IBM Plex Mono', monospace; font-size:0.74rem; color:var(--ink-dim); }
 .nav-links a{ transition:color .2s ease; white-space:nowrap; }
 .nav-links a:hover, .nav-links a.active{ color:var(--ink); }
-@media (max-width:900px){ .nav-links{ display:none; } }
+@media (max-width:640px){ .nav-links{ font-size:0.7rem; gap:12px; } }
 
 /* ---------- PAGE HERO (páginas internas) ---------- */
 .page-hero{ padding:160px 0 70px; text-align:center; }
