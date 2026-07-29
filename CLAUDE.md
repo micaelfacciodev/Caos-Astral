@@ -211,6 +211,16 @@ navegador, nunca CLI como único caminho.
   combinação envolvendo planeta neutro, ou um benéfico + um maléfico →
   sem categoria forçada. **Interpretação minha, não decisão fechada do
   time** — revisar antes de considerar definitivo.
+- **Fuso horário da janela do dia (corrigido)**: `compute-daily-window`
+  agora calcula "hoje" deslocando o relógio pelo `utc_offset` salvo no
+  perfil (mesmo dado de nascimento), não pela data UTC crua do servidor.
+  Isso evita a janela virar de dia horas antes/depois do calendário local
+  de quem tem fuso diferente de UTC. Limitação conhecida: usa o fuso de
+  NASCIMENTO como proxy do fuso ATUAL — não perfeito se a pessoa se mudou
+  de fuso depois, mas é o melhor dado disponível sem pedir fuso separado.
+  O cálculo astronômico em si (posição real dos planetas) sempre usa o
+  instante exato (`agora`), só a *etiqueta do dia* (chave de idempotência
+  em `daily_readings.data`) usa o horário deslocado.
 - **Retorno (revolução solar)**: busca binária do instante exato em que
   o núcleo em trânsito volta ao grau natal exato (o Sol nunca retrograda,
   então a busca é segura — ~40 iterações a partir de uma janela de dias
@@ -263,8 +273,6 @@ navegador, nunca CLI como único caminho.
 - [ ] Migrar rótulos hardcoded de `compute-natal-chart` pra buscar do
       banco, se algo vier a depender de rótulo de planeta/aspecto ali
       (hoje só grava a chave do aspecto, não é urgente).
-- [ ] Fuso horário de `daily_readings`: usa data UTC do servidor — pode
-      gerar leitura "de ontem" ainda visível de manhã cedo em fusos negativos.
 - [ ] Confirmar/ajustar o algoritmo provisório de conjunção (seção 5) com o time.
 - [ ] Território de ofício, Marcos, Intento: specs técnicas pendentes, não codar ainda.
 - [ ] Confirmar entrada de "Deriva" no glossário oficial — ferramenta já
