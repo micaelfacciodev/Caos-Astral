@@ -1,5 +1,12 @@
 # Caos Astral — Glossário Oficial
 
+> ⚠️ **Este arquivo é um snapshot histórico**, gerado no início do projeto.
+> A partir da integração dos três agentes ao repositório, **`CLAUDE.md`
+> é a fonte viva de vocabulário** (seção de tabela de termos, próximo do
+> topo) — é ele que reflete decisões recentes (Cena do grau, Retorno, O
+> Terceiro, Deriva etc.). Consulte este arquivo só por curiosidade de
+> como o vocabulário evoluiu, não como referência de trabalho.
+
 Documento de referência única. Qualquer conta/agente trabalhando no projeto (front, ferramenta principal, agente de I Ching) deve usar exatamente estes termos — não sinônimos, não traduções livres. Se um termo não está aqui, ele não existe oficialmente ainda: debater antes de codar.
 
 **Status:** `fechado` = pode usar em produção · `pendente` = decisão em aberto, não codar ainda · `standby` = aguardando decisão de escopo maior
