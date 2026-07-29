@@ -65,6 +65,16 @@
   .lines-grid{ display:grid; gap:10px; }
   .line-field{ }
   .line-field .line-num{ font-family:'IBM Plex Mono', monospace; font-size:0.7rem; color:var(--accent-bright); margin-bottom:4px; display:block; }
+  .legge-quote{
+    background: var(--bg); border-left: 2px solid var(--line-bright);
+    padding: 8px 12px; margin-bottom: 8px; font-size: 0.86rem; line-height: 1.5;
+    color: var(--ink-faint); font-style: italic;
+  }
+  .legge-quote .tag{
+    display:block; font-family:'IBM Plex Mono', monospace; font-style:normal;
+    font-size: 0.66rem; text-transform:uppercase; letter-spacing:0.05em;
+    color: var(--ink-dim); margin-bottom: 3px;
+  }
   .plate-preview{ margin-top:10px; max-width:220px; border:1px solid var(--line); }
   .plate-preview img{ width:100%; display:block; }
   .editor-actions{ margin-top: 26px; display:flex; gap:12px; align-items:center; }
@@ -101,6 +111,7 @@
     <div class="legge-ref" id="edLegge"></div>
 
     <label for="edJudgment">Seu julgamento</label>
+    <div id="edJudgmentRef"></div>
     <textarea id="edJudgment" placeholder="Sua interpretação do julgamento deste hexagrama..."></textarea>
 
     <label>Suas linhas</label>
@@ -140,8 +151,19 @@ const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const LINE_COUNT = { 1: 7, 2: 7 }; // hexagramas 1 e 2 têm 7 linhas (todos-nove / todos-seis)
 
-let hexagrams = []; // cache local
+let hexagrams = []; // cache local (Supabase)
 let currentNumber = null;
+let leggeByNumber = {}; // referência de leitura, carregada do JSON estático
+
+async function loadLegge(){
+  try{
+    const res = await fetch('iching_legge_oracular_text.json');
+    const data = await res.json();
+    data.forEach(h=>{ leggeByNumber[h.number] = h; });
+  }catch(err){
+    console.error('Não foi possível carregar a referência do Legge:', err);
+  }
+}
 
 // ---- auth ----
 const loginBox = document.getElementById('loginBox');
@@ -231,21 +253,38 @@ function openEditor(number){
   document.getElementById('edStatus').value = h.plate_status || 'rascunho';
   document.getElementById('edNotes').value = h.notes || '';
 
+  const legge = leggeByNumber[number];
+  const judgmentRef = document.getElementById('edJudgmentRef');
+  judgmentRef.innerHTML = legge && legge.thwan
+    ? `<div class="legge-quote"><span class="tag">Legge — Thwan</span>${escapeHtml(legge.thwan)}</div>`
+    : '';
+
   updatePlatePreview(h.plate_image_url);
 
   const lineCount = LINE_COUNT[number] || 6;
   const lines = Array.isArray(h.your_lines) ? h.your_lines : [];
+  const leggeLines = (legge && Array.isArray(legge.lines)) ? legge.lines : [];
   const linesWrap = document.getElementById('edLines');
   linesWrap.innerHTML = '';
   for(let i=0;i<lineCount;i++){
     const field = document.createElement('div');
     field.className = 'line-field';
+    const refText = leggeLines[i]
+      ? `<div class="legge-quote"><span class="tag">Legge — linha ${i+1}</span>${escapeHtml(leggeLines[i])}</div>`
+      : '';
     field.innerHTML = `
       <span class="line-num">Linha ${i+1}${(number===1||number===2) && i===6 ? ' (todos-nove/todos-seis)' : ''}</span>
+      ${refText}
       <textarea data-line-index="${i}" placeholder="Sua interpretação da linha ${i+1}...">${lines[i] || ''}</textarea>
     `;
     linesWrap.appendChild(field);
   }
+}
+
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
 }
 
 document.getElementById('edPlateUrl').addEventListener('input', (e)=>{
@@ -302,6 +341,7 @@ document.getElementById('saveBtn').addEventListener('click', async ()=>{
 });
 
 checkSession();
+loadLegge();
 </script>
 </body>
 </html>
