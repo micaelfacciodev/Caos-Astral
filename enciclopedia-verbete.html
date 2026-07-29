@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="meta-title">Enciclopédia | Caos Astral</title>
+<meta id="meta-desc" name="description" content="Símbolo da Enciclopédia Caos Astral.">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  /* TODO: mesma observação das outras páginas — trocar pelos tokens reais do site. */
+  :root {
+    --bg: #14161a; --bg-card: #1e2126; --border: #2c3038;
+    --text: #e8e6e1; --text-dim: #9a978f; --accent: #c9a35f;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
+  .voltar { display: block; padding: 1.2rem 1.5rem 0; color: var(--text-dim); text-decoration: none; font-size: 0.85rem; }
+  article { max-width: 720px; margin: 0 auto; padding: 1.5rem; }
+  .cat { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); }
+  h1 { font-size: 2rem; margin: 0.3rem 0 0.2rem; }
+  .alt { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1.5rem; }
+  section { margin-bottom: 1.6rem; }
+  section h2 { font-size: 1.05rem; margin-bottom: 0.4rem; color: var(--accent); }
+  section p, section li { font-size: 0.95rem; line-height: 1.6; color: var(--text); }
+  .correspondencias { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem 1rem; }
+  .correspondencias li { font-size: 0.88rem; }
+  .correspondencias b { color: var(--text-dim); font-weight: 500; text-transform: capitalize; }
+  .biblio { font-size: 0.85rem; color: var(--text-dim); }
+  .biblio li { margin-bottom: 0.3rem; }
+  #carregando, #erro { text-align: center; padding: 4rem 1.5rem; color: var(--text-dim); }
+  .bloqueado {
+    text-align: center; padding: 3rem 1.5rem; background: var(--bg-card);
+    border: 1px solid var(--accent); border-radius: 10px; margin: 2rem 0;
+  }
+  .bloqueado a {
+    display: inline-block; margin-top: 1rem; background: var(--accent); color: #14161a;
+    padding: 0.6rem 1.4rem; border-radius: 6px; text-decoration: none; font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<a class="voltar" href="/enciclopedia">← voltar ao acervo</a>
+
+<div id="carregando">carregando verbete…</div>
+<div id="erro" style="display:none;">Verbete não encontrado.</div>
+
+<article id="conteudo" style="display:none;"></article>
+
+<script>
+  // TODO: mesmos valores das outras páginas.
+  const SUPABASE_URL = "https://pvgeramqsatltnvkkpvf.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_f5iH4AnwTt1jnwGMWg0qGw_-rd06eGm";
+
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // GitHub Pages não faz rewrite de servidor, então a URL é sempre
+  // /enciclopedia-verbete.html?slug=ouroboros (sem path bonito por enquanto —
+  // ver nota sobre pré-render estático se/quando isso virar prioridade de SEO).
+  function pegarSlug() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("slug");
+  }
+
+  function escapeHtml(str) {
+    const d = document.createElement("div");
+    d.textContent = str || "";
+    return d.innerHTML;
+  }
+
+  async function carregar() {
+    const slug = pegarSlug();
+    if (!slug) return mostrarErro();
+
+    // A RLS decide o que volta: se for tier='pago' e o usuário não tiver
+    // acesso, a linha simplesmente não vem — por isso tratamos "não veio nada"
+    // como possível bloqueio, não necessariamente slug inexistente.
+    const { data, error } = await sb
+      .from("enciclopedia_simbolos")
+      .select("*")
+      .eq("slug", slug)
+      .maybeSingle();
+
+    document.getElementById("carregando").style.display = "none";
+
+    if (error) return mostrarErro();
+    if (!data) return mostrarBloqueadoOuInexistente(slug);
+
+    renderVerbete(data);
+  }
+
+  function mostrarErro() {
+    document.getElementById("erro").style.display = "block";
+  }
+
+  async function mostrarBloqueadoOuInexistente(slug) {
+    // Sem acesso de leitura à linha (RLS bloqueou) — não dá pra saber se é
+    // porque não existe ou porque é pago. Como boa prática de UX, tratamos
+    // como "conteúdo pago" por padrão, já que slugs de verbetes inexistentes
+    // devem, na prática, vir de links quebrados internos (raro).
+    const conteudo = document.getElementById("conteudo");
+    conteudo.style.display = "block";
+    conteudo.innerHTML = `
+      <div class="bloqueado">
+        <p>Este verbete faz parte do acervo completo da Enciclopédia.</p>
+        <a href="/planos">Ver planos</a>
+      </div>
+    `;
+  }
+
+  function renderVerbete(e) {
+    document.getElementById("meta-title").textContent = `${e.nome} | Enciclopédia Caos Astral`;
+    document.getElementById("meta-desc").setAttribute(
+      "content",
+      (e.significado || "").slice(0, 155)
+    );
+
+    const correspondenciasHtml = e.correspondencias && Object.keys(e.correspondencias).length
+      ? `<section><h2>Correspondências</h2><ul class="correspondencias">${
+          Object.entries(e.correspondencias)
+            .map(([k, v]) => `<li><b>${escapeHtml(k)}:</b> ${escapeHtml(v)}</li>`)
+            .join("")
+        }</ul></section>`
+      : "";
+
+    const biblioHtml = e.bibliografia && e.bibliografia.length
+      ? `<section><h2>Bibliografia</h2><ul class="biblio">${
+          e.bibliografia.map(b => `<li>${escapeHtml(b)}</li>`).join("")
+        }</ul></section>`
+      : "";
+
+    const conteudo = document.getElementById("conteudo");
+    conteudo.style.display = "block";
+    conteudo.innerHTML = `
+      <div class="cat">${escapeHtml(e.categoria)}</div>
+      <h1>${escapeHtml(e.nome)}</h1>
+      ${e.nomes_alternativos && e.nomes_alternativos.length
+        ? `<div class="alt">também: ${e.nomes_alternativos.map(escapeHtml).join(", ")}</div>`
+        : ""}
+
+      ${e.origem ? `<section><h2>Origem</h2><p>${escapeHtml(e.origem)}</p></section>` : ""}
+      ${e.primeiros_registros ? `<section><h2>Primeiros registros</h2><p>${escapeHtml(e.primeiros_registros)}</p></section>` : ""}
+      ${e.significado ? `<section><h2>Significado</h2><p>${escapeHtml(e.significado)}</p></section>` : ""}
+      ${e.uso_historico ? `<section><h2>Uso histórico</h2><p>${escapeHtml(e.uso_historico)}</p></section>` : ""}
+      ${e.uso_moderno ? `<section><h2>Uso moderno</h2><p>${escapeHtml(e.uso_moderno)}</p></section>` : ""}
+      ${correspondenciasHtml}
+      ${biblioHtml}
+    `;
+  }
+
+  carregar();
+</script>
+
+</body>
+</html>

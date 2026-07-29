@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enciclopédia dos Símbolos | Caos Astral</title>
+<meta name="description" content="Acervo de símbolos da Magia do Caos, astrologia e tradições esotéricas: origem histórica, significado e correspondências.">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  /* TODO: substituir por assets/style.css real do projeto e pelos tokens de design do site. */
+  :root {
+    --bg: #14161a; --bg-card: #1e2126; --border: #2c3038;
+    --text: #e8e6e1; --text-dim: #9a978f; --accent: #c9a35f;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
+  header { padding: 3rem 1.5rem 2rem; text-align: center; }
+  header h1 { font-size: 1.8rem; margin: 0 0 0.5rem; }
+  header p { color: var(--text-dim); max-width: 560px; margin: 0 auto; font-size: 0.95rem; }
+  .filtros { display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; margin: 1.5rem 0; padding: 0 1rem; }
+  .filtros button {
+    background: var(--bg-card); border: 1px solid var(--border); color: var(--text-dim);
+    padding: 0.4rem 0.9rem; border-radius: 999px; font-size: 0.8rem; cursor: pointer;
+  }
+  .filtros button.ativo { border-color: var(--accent); color: var(--accent); }
+  .grid {
+    max-width: 960px; margin: 0 auto; padding: 0 1.5rem 4rem;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem;
+  }
+  .card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1.1rem; text-decoration: none; color: var(--text); display: block;
+    transition: border-color 0.15s;
+  }
+  .card:hover { border-color: var(--accent); }
+  .card .cat { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.04em; }
+  .card h3 { margin: 0.3rem 0 0.4rem; font-size: 1.05rem; }
+  .card p { margin: 0; font-size: 0.82rem; color: var(--text-dim); line-height: 1.4; }
+  .cadeado { float: right; font-size: 0.9rem; color: var(--accent); }
+  .card.bloqueado { opacity: 0.75; }
+  .cta-pago {
+    max-width: 640px; margin: 0 auto 3rem; padding: 1.2rem 1.5rem; text-align: center;
+    background: var(--bg-card); border: 1px solid var(--accent); border-radius: 10px;
+  }
+  .cta-pago a {
+    display: inline-block; margin-top: 0.6rem; background: var(--accent); color: #14161a;
+    padding: 0.5rem 1.2rem; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem;
+  }
+  #carregando { text-align: center; color: var(--text-dim); padding: 3rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Enciclopédia dos Símbolos</h1>
+  <p>Origem histórica, significado e correspondências de cada símbolo — separando o que é evidência documentada do que é interpretação moderna.</p>
+</header>
+
+<div class="cta-pago">
+  Parte do acervo é aberta gratuitamente. O acervo completo — alquimia, hermetismo, cabala, runas, wicca e mais — faz parte dos planos pagos.
+  <br>
+  <a href="/planos">Ver planos</a>
+</div>
+
+<div class="filtros" id="filtros"></div>
+
+<div id="carregando">carregando acervo…</div>
+<div class="grid" id="grid" style="display:none;"></div>
+
+<script>
+  // TODO: mesmos valores usados no admin — trocar pelos reais do projeto.
+  const SUPABASE_URL = "https://pvgeramqsatltnvkkpvf.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_f5iH4AnwTt1jnwGMWg0qGw_-rd06eGm";
+
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  let entradas = [];
+  let categoriaAtiva = "";
+
+  async function carregar() {
+    // Usa a view enciclopedia_indice_publico (ver 0004_...sql), que expõe
+    // metadados de TODOS os verbetes (inclusive pagos) sem vazar o conteúdo
+    // protegido — assim os cards pagos aparecem com cadeado em vez de sumir.
+    const { data, error } = await sb
+      .from("enciclopedia_indice_publico")
+      .select("slug, nome, categoria, tier, significado")
+      .order("categoria")
+      .order("nome");
+
+    document.getElementById("carregando").style.display = "none";
+
+    if (error) {
+      document.getElementById("grid").innerHTML = `<p>Erro ao carregar: ${error.message}</p>`;
+      document.getElementById("grid").style.display = "grid";
+      return;
+    }
+
+    entradas = data;
+    montarFiltros();
+    render();
+  }
+
+  function montarFiltros() {
+    const categorias = [...new Set(entradas.map(e => e.categoria))];
+    const container = document.getElementById("filtros");
+    container.innerHTML = `<button data-cat="" class="ativo">todas</button>` +
+      categorias.map(c => `<button data-cat="${c}">${c}</button>`).join("");
+
+    container.querySelectorAll("button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        categoriaAtiva = btn.dataset.cat;
+        container.querySelectorAll("button").forEach(b => b.classList.remove("ativo"));
+        btn.classList.add("ativo");
+        render();
+      });
+    });
+  }
+
+  function render() {
+    const grid = document.getElementById("grid");
+    grid.style.display = "grid";
+    const filtradas = categoriaAtiva
+      ? entradas.filter(e => e.categoria === categoriaAtiva)
+      : entradas;
+
+    grid.innerHTML = filtradas.map(e => `
+      <a class="card ${e.tier === 'pago' ? 'bloqueado' : ''}"
+         href="${e.tier === 'pago' ? '/planos' : '/enciclopedia-verbete.html?slug=' + e.slug}">
+        ${e.tier === 'pago' ? '<span class="cadeado">🔒</span>' : ''}
+        <div class="cat">${e.categoria}</div>
+        <h3>${e.nome}</h3>
+        <p>${(e.significado || "").slice(0, 90)}${e.significado && e.significado.length > 90 ? "…" : ""}</p>
+      </a>
+    `).join("");
+  }
+
+  carregar();
+</script>
+
+</body>
+</html>
