@@ -128,6 +128,7 @@
     <div class="lines-grid" id="edLines"></div>
 
     <label for="edSymbolism">Seu símbolo / imagem</label>
+    <div id="edSymbolismRef"></div>
     <textarea id="edSymbolism" placeholder="Sua leitura da imagem formada pelos dois trigramas..."></textarea>
 
     <label for="edPlateUrl">URL da prancha ilustrada</label>
@@ -269,22 +270,32 @@ function openEditor(number){
     ? `<div class="legge-quote"><span class="tag">Legge — Thwan</span>${escapeHtml(legge.thwan)}</div>`
     : '';
 
+  const symbolismRef = document.getElementById('edSymbolismRef');
+  symbolismRef.innerHTML = legge && legge.great_symbolism
+    ? `<div class="legge-quote"><span class="tag">Legge — Grande Simbolismo (Apêndice II)</span>${escapeHtml(legge.great_symbolism)}</div>`
+    : '';
+
   updatePlatePreview(h.plate_image_url);
 
   const lineCount = LINE_COUNT[number] || 6;
   const lines = Array.isArray(h.your_lines) ? h.your_lines : [];
   const leggeLines = (legge && Array.isArray(legge.lines)) ? legge.lines : [];
+  const leggeSmallSymbolism = (legge && Array.isArray(legge.small_symbolism)) ? legge.small_symbolism : [];
   const linesWrap = document.getElementById('edLines');
   linesWrap.innerHTML = '';
   for(let i=0;i<lineCount;i++){
     const field = document.createElement('div');
     field.className = 'line-field';
     const refText = leggeLines[i]
-      ? `<div class="legge-quote"><span class="tag">Legge — linha ${i+1}</span>${escapeHtml(leggeLines[i])}</div>`
+      ? `<div class="legge-quote"><span class="tag">Legge — linha ${i+1} (Texto)</span>${escapeHtml(leggeLines[i])}</div>`
+      : '';
+    const smallSymbolismText = leggeSmallSymbolism[i]
+      ? `<div class="legge-quote"><span class="tag">Legge — linha ${i+1} (Pequeno Simbolismo, Apêndice II)</span>${escapeHtml(leggeSmallSymbolism[i])}</div>`
       : '';
     field.innerHTML = `
       <span class="line-num">Linha ${i+1}${(number===1||number===2) && i===6 ? ' (todos-nove/todos-seis)' : ''}</span>
       ${refText}
+      ${smallSymbolismText}
       <textarea data-line-index="${i}" placeholder="Sua interpretação da linha ${i+1}...">${lines[i] || ''}</textarea>
     `;
     linesWrap.appendChild(field);
