@@ -43,6 +43,7 @@ passivamente que elas aconteçam.
 | Interpretação autoral por grau exato (1°–30°) | **cena do grau** — nunca "símbolo sabiano"/"sabian" | fechado, 360 escritos |
 | Sigilo / símbolo de intenção | **âncora de intenção** — nunca "sigilo" | fechado |
 | Marcos (trânsitos lentos: Saturno/Urano/Plutão) | **marcos** | pendente — sem spec técnica |
+| Deriva | (ferramenta própria, ver seção 9 — vocabulário/conceito ainda não descrito no glossário oficial) | pendente — confirmar entrada no glossário |
 
 Tom de voz: nunca "você vai" ou "isso significa que você é". Sempre
 **ferramenta + escolha em aberto**. Nenhuma conclusão moral fechada.
@@ -68,21 +69,31 @@ priorizado.
 | Agente | Responsabilidade | Não deve fazer |
 |---|---|---|
 | **Este agente (Claude — "a máquina")** | Schema Supabase, RLS, SQL, Edge Functions, motor de cálculo astrológico, dados de referência (cenas do grau) | Front-end, telas, I Ching |
-| **Agente de Front-end** | Site estático (HTML/CSS puro, sem build step), fluxo de onboarding (`ritual-de-entrada.html`), conectar telas às Edge Functions nos pontos `<!-- ENGINE: ... -->` | Schema do banco, cálculo astrológico |
-| **Agente de I Ching** | `iching_readings` (tabela própria), tradução de Legge (1882, domínio público), identidade visual própria (papel/tinta/cinábrio) | Alterar tabelas do Caos Astral diretamente, usar vocabulário do kit (núcleo/fricção/território etc.) |
+| **Agente de Front-end** | Site estático (HTML/CSS puro, sem build step), fluxo de onboarding (`ritual-de-entrada.html`), conectar telas às Edge Functions nos pontos `<!-- ENGINE: ... -->`, agora com **acesso de escrita ao repo** (commita direto — ver seção 9) | Schema do banco, cálculo astrológico |
+| **Agente de I Ching** | `iching_readings` (tabela própria), tradução de Legge (1882, domínio público) | Alterar tabelas do Caos Astral diretamente, usar vocabulário do kit (núcleo/fricção/território etc.) |
 
 ### Mapa do site (referência: `arquitetura-conteudo-caos-astral.md`)
 ```
 / (landing) · /manifesto · /intento · /raizes (+ 4 subpáginas de proveniência)
 /ritual-de-entrada (onboarding) · /kit · /retorno · /ressonancia · /ancora
-/oraculo (ou /i-ching — ver pendência de nome, seção 7) · /diario · /blog · /planos
+/deriva · /oraculo (tema escuro padrão) · /diario · /blog · /planos
 ```
+Menu canônico atual (12 itens): Kit, Retorno, O Terceiro, Âncora, Deriva,
+Oráculo, Diário, Raízes, Blog, Manifesto, Intento, Planos.
 
-### Pendência de UI aberta pro front (nova)
-`/retorno` precisa de um campo de **localização do ano** ("onde você vai
-passar esse ano") — não é a mesma coisa que a cidade de nascimento.
-Reaproveitar a mesma busca de cidade (Nominatim) já usada no onboarding.
-Sem isso preenchido, `compute-solar-return` recusa calcular (ver seção 5).
+### Pendências de UI abertas pro front
+- `/retorno` precisa de um campo de **localização do ano** ("onde você vai
+  passar esse ano") — não é a mesma coisa que a cidade de nascimento.
+  Reaproveitar a mesma busca de cidade (Nominatim) já usada no onboarding.
+  Sem isso preenchido, `compute-solar-return` recusa calcular (ver seção 5).
+- **Câmara de ressonância / O Terceiro**: `compute-synastry` já existe
+  (seção 5), mas só aceita dados manuais do parceiro por enquanto — tela
+  de `/ressonancia` precisa de formulário de nascimento do parceiro, não
+  de busca por usuário já cadastrado (ver pendência de consentimento,
+  seção 7).
+- **Âncora de Intenção**: o gerador de selo já está real no front (seção
+  9), mas ainda não persiste em `intent_anchors` — integração de
+  salvamento ainda não fechada com o agente da máquina.
 
 ---
 
@@ -118,6 +129,8 @@ supabase/
     0002_natal_charts_unique.sql               -- unique(user_id) em natal_charts
     0003_adendo_vocabulario_e_tabelas.sql       -- renomes + solar_returns + O Terceiro + temperamento
     0004_solar_return_localizacao.sql           -- latitude/longitude/cidade em solar_returns
+    0005_simbolos_astrologicos.sql              -- tabela + bucket pro admin hub de símbolos (spec do front, seção 9)
+    0006_simbolos_admin_restrito.sql             -- CORREÇÃO DE SEGURANÇA: restringe escrita ao admin (auth.uid()), não a qualquer autenticado
   seed/
     seed_0001_planets_houses_aspects.sql       -- 11 planetas, 12 casas, 5 aspectos
     seed_0002_graus_simbolicos.sql             -- 360 cenas de grau (nome do arquivo desatualizado,
@@ -126,16 +139,18 @@ supabase/
     compute-natal-chart/index.ts
     compute-daily-window/index.ts
     compute-solar-return/index.ts
+    compute-synastry/index.ts
 ```
 
-**Ordem de execução (SQL Editor do Supabase, sem terminal)** — já aplicada
-com sucesso uma vez neste projeto:
+**Ordem de execução (SQL Editor do Supabase, sem terminal)**:
 `0001_schema.sql` → `seed_0001_planets_houses_aspects.sql` →
 `seed_0002_graus_simbolicos.sql` → `0002_natal_charts_unique.sql` →
 `0003_adendo_vocabulario_e_tabelas.sql` → `0004_solar_return_localizacao.sql`
+→ `0005_simbolos_astrologicos.sql` → `0006_simbolos_admin_restrito.sql`
 
 Se precisar zerar tudo de novo por qualquer motivo: rodar `0000_reset.sql`
-primeiro, depois a sequência acima do início.
+primeiro (não apaga `simbolos_astrologicos`/bucket — só as tabelas do
+motor astrológico; se precisar zerar isso também, apagar manualmente).
 
 ### Tabelas — dicionário (RLS: leitura pública, escrita só service_role)
 - `planets` — chave, nome_astro, rotulo_caos, glifo, nunca_retrograda, ordem, `temperamento` (benefico/malefico/neutro — só usado pra decidir tom de conjunção, seção 5)
@@ -147,10 +162,16 @@ primeiro, depois a sequência acima do início.
 - `profiles` — 1:1 com `auth.users`, criado automaticamente via trigger no primeiro login Google.
 - `natal_charts` — uma linha por usuário (upsert). ascendente, meio_ceu, planetas (jsonb), aspectos (jsonb).
 - `daily_readings` — uma linha por usuário por dia. `iching_convite_aceito` pro handoff com I Ching (seção 6).
-- `synastry_readings` — sinastria (câmara de ressonância). `composite_chart` jsonb é onde O Terceiro vive. **Sem Edge Function ainda.**
-- `solar_returns` — retorno (revolução solar). `user_id`, `ano` (unique juntos), `data_exata`, **`latitude`/`longitude`/`cidade` do ano em questão** (não é a de nascimento — ver seção 5), `planetas`, `aspectos`. **Tem Edge Function: `compute-solar-return`.**
-- `intent_anchors` *(antiga `sigil_journal`, separada)* — a âncora de intenção em si (gerada por ferramenta externa ao Supabase).
+- `synastry_readings` — sinastria (câmara de ressonância). `composite_chart` jsonb é onde O Terceiro vive. **Tem Edge Function: `compute-synastry`** — só funciona com dados manuais do parceiro por enquanto (ver seção 5 e pendência de consentimento, seção 7).
+- `solar_returns` — retorno (revolução solar). `user_id`, `ano` (unique juntos), `data_exata`, `latitude`/`longitude`/`cidade` do ano em questão (não é a de nascimento). **Tem Edge Function: `compute-solar-return`.**
+- `intent_anchors` *(antiga `sigil_journal`, separada)* — a âncora de intenção em si. **Ainda não recebe gravação real do front** (gerador já existe, ver seção 9, mas não persiste ainda).
 - `diario_gnose` *(antiga `sigil_journal`, separada)* — registro livre de prática, com FK opcional pra `daily_readings` e pra `intent_anchors`.
+
+### Tabelas/recursos do admin hub de símbolos (novo, seção 9)
+- `simbolos_astrologicos` — galeria de arte pra decoração do site. `titulo`, `image_url`, `tags` (text[]), `decor` (boolean), `created_at`. RLS: **SELECT público** (consultado anonimamente por `flash-decor.js` em qualquer página); INSERT/UPDATE/DELETE só `auth.role() = 'authenticated'` — admin único, sem multi-tenant por enquanto.
+- Bucket de Storage `simbolos` — público pra leitura, upload restrito ao admin (ver correção de segurança abaixo). Mesma lógica de RLS aplicada em `storage.objects` filtrando por `bucket_id = 'simbolos'`.
+- **Correção de segurança (0006)**: a policy original (`auth.role() = 'authenticated'`) liberava escrita pra QUALQUER usuário cadastrado no site — não só o admin. Como o Caos Astral tem cadastro aberto (Google OAuth) pro produto principal, isso deixaria qualquer cliente comum apagar/subir símbolo na galeria. Corrigido pra `auth.uid() = '<uuid do admin>'::uuid`, tanto na tabela quanto no bucket. **Regra geral daqui pra frente: nunca usar `auth.role() = 'authenticated'` como controle de admin em nenhuma tabela nova — isso significa "qualquer usuário logado", não "o dono do site". Pra admin único, sempre `auth.uid() = <uuid fixo>`.**
+- Projeto Supabase: `https://pvgeramqsatltnvkkpvf.supabase.co`. A chave publicável (anon key) está hardcoded em `admin-simbolos.html` e `assets/flash-decor.js` — **isso é seguro**, é a chave protegida por RLS, não a `service_role`; não reabrir essa discussão sem motivo novo.
 
 ### Autenticação
 Login via Google OAuth nativo do Supabase Auth. Config manual no
@@ -183,13 +204,23 @@ navegador, nunca CLI como único caminho.
   "fricção"; trígono e sextil são ambas "corrente" — **não existem**
   "tensão de eixo" nem "corrente leve" como termos.
 - **Conjunção — algoritmo provisório, não fechado**: sem termo fixo por
-  decisão do glossário. Implementado em `compute-daily-window` e
-  `compute-solar-return` como: os dois planetas benéficos clássicos
-  (Vênus, Júpiter) → tom de corrente; os dois maléficos clássicos
-  (Marte, Saturno) → tom de fricção; qualquer combinação envolvendo
-  planeta neutro, ou um benéfico + um maléfico → sem categoria forçada.
-  **Interpretação minha, não decisão fechada do time** — revisar antes
-  de considerar definitivo.
+  decisão do glossário. Implementado em `compute-daily-window`,
+  `compute-solar-return` e `compute-synastry` como: os dois planetas
+  benéficos clássicos (Vênus, Júpiter) → tom de corrente; os dois
+  maléficos clássicos (Marte, Saturno) → tom de fricção; qualquer
+  combinação envolvendo planeta neutro, ou um benéfico + um maléfico →
+  sem categoria forçada. **Interpretação minha, não decisão fechada do
+  time** — revisar antes de considerar definitivo.
+- **Fuso horário da janela do dia (corrigido)**: `compute-daily-window`
+  agora calcula "hoje" deslocando o relógio pelo `utc_offset` salvo no
+  perfil (mesmo dado de nascimento), não pela data UTC crua do servidor.
+  Isso evita a janela virar de dia horas antes/depois do calendário local
+  de quem tem fuso diferente de UTC. Limitação conhecida: usa o fuso de
+  NASCIMENTO como proxy do fuso ATUAL — não perfeito se a pessoa se mudou
+  de fuso depois, mas é o melhor dado disponível sem pedir fuso separado.
+  O cálculo astronômico em si (posição real dos planetas) sempre usa o
+  instante exato (`agora`), só a *etiqueta do dia* (chave de idempotência
+  em `daily_readings.data`) usa o horário deslocado.
 - **Retorno (revolução solar)**: busca binária do instante exato em que
   o núcleo em trânsito volta ao grau natal exato (o Sol nunca retrograda,
   então a busca é segura — ~40 iterações a partir de uma janela de dias
@@ -197,14 +228,20 @@ navegador, nunca CLI como único caminho.
   ascendente/casas do mapa de retorno é a de ONDE A PESSOA VAI PASSAR
   aquele ano — não a de nascimento.** `compute-solar-return` exige
   `latitude`/`longitude` no corpo da requisição e recusa calcular sem
-  isso (erro 400 explícito, sem aproximação silenciosa). Se `ano` não
-  for informado, calcula o retorno mais recente já ocorrido (o que rege
-  o período atual).
+  isso. Se `ano` não for informado, calcula o retorno mais recente já
+  ocorrido (o que rege o período atual).
+- **Sinastria e O Terceiro**: `compute-synastry` calcula o mapa do
+  parceiro na hora a partir de dados manuais (não lê `natal_charts` de
+  outro usuário — ver pendência na seção 7), cruza aspectos entre os dois
+  mapas completos (câmara de ressonância), e monta O Terceiro por ponto
+  médio de cada planeta (arco mais curto) + ascendente composto = ponto
+  médio dos dois ascendentes natais. O composto tem aspectos internos
+  próprios, calculados do mesmo jeito que um mapa natal.
 - **Rótulos vêm do banco** (`planets.rotulo_caos`, `aspects.rotulo_caos`),
-  não hardcoded — editável sem redeploy. `compute-daily-window` e
-  `compute-solar-return` já seguem isso; `compute-natal-chart` só grava
-  a chave do aspecto (`square`, `trine` etc.), o rótulo é decidido por
-  quem lê depois via `aspects`.
+  não hardcoded — editável sem redeploy. `compute-daily-window`,
+  `compute-solar-return` e `compute-synastry` já seguem isso;
+  `compute-natal-chart` só grava a chave do aspecto (`square`, `trine`
+  etc.), o rótulo é decidido por quem lê depois via `aspects`.
 
 ---
 
@@ -219,28 +256,35 @@ navegador, nunca CLI como único caminho.
   `update daily_readings set iching_convite_aceito = true where id = ...`
   (já coberto pela RLS existente).
 - I Ching **nunca** usa vocabulário do kit (núcleo, fricção, território
-  etc.) — tradição deliberadamente separada, identidade visual própria.
+  etc.) — tradição deliberadamente separada. **Identidade visual**: já
+  convertida pro tema escuro padrão do site (ver seção 9) — não é mais
+  visualmente separada, só o vocabulário continua sendo.
 - Nenhum agente altera schema do outro diretamente.
 
 ---
 
 ## 7. Pendências conhecidas
 
-- [ ] Edge Function de sinastria (`synastry_readings` + `composite_chart` existem, function não).
-- [ ] Edge Function de O Terceiro (mapa composto por pontos médios).
-- [ ] Migrar rótulos hardcoded de `compute-natal-chart` pra buscar do banco, se algo vier a depender de rótulo de planeta/aspecto ali (hoje só grava a chave do aspecto, então não é urgente).
-- [ ] Fuso horário de `daily_readings`: usa data UTC do servidor — pode
-      gerar leitura "de ontem" ainda visível de manhã cedo em fusos negativos.
+- [ ] **Sinastria entre duas contas registradas**: hoje `compute-synastry`
+      só aceita dados manuais do parceiro — RLS de `natal_charts` bloqueia
+      ler o mapa de outro usuário. Precisa de mecanismo de consentimento
+      (ex: tabela de convites aceitos + policy adicional) antes de
+      suportar `partner_user_id` de verdade.
+- [ ] Migrar rótulos hardcoded de `compute-natal-chart` pra buscar do
+      banco, se algo vier a depender de rótulo de planeta/aspecto ali
+      (hoje só grava a chave do aspecto, não é urgente).
 - [ ] Confirmar/ajustar o algoritmo provisório de conjunção (seção 5) com o time.
 - [ ] Território de ofício, Marcos, Intento: specs técnicas pendentes, não codar ainda.
-- [ ] UI do front: campo de "localização do ano" em `/retorno`, obrigatório
-      pra `compute-solar-return` funcionar (ver seção 2).
-- [ ] **Itens de arquivo do front (fora do meu escopo, não tenho acesso de
-      escrita ao repo)**: apagar `origens-do-iching.html` (substituído por
-      `raizes-i-ching.html`), decidir destino de `oraculo.html` (redirecionar
-      pra `i-ching.html` ou remover), apagar `caos-astral-landing.html`.
-- [ ] Front-end está desorganizado no momento — testes de ponta a ponta
-      (natal, janela do dia) ainda não rodados de verdade por causa disso.
+- [ ] Confirmar entrada de "Deriva" no glossário oficial — ferramenta já
+      existe no front (seção 9), mas não está descrita no
+      `glossario-caos-astral.md` ainda.
+- [ ] UI do front: campo de "localização do ano" em `/retorno`, formulário
+      de nascimento do parceiro em `/ressonancia`, persistência real da
+      Âncora de Intenção (ver seção 2).
+- [ ] **Itens de arquivo do front**: `caos-astral-landing.html` e
+      `raizes-simbolos-sabianos.html` já foram removidos (ver seção 9).
+      Ainda em aberto: destino de `oraculo.html` caso tenha ficado
+      duplicado após a fusão de identidade visual — conferir.
 - [ ] Monetização (paywall, preview parcial, assinatura) — desenho não
       iniciado, ver seção 1.
 
@@ -258,13 +302,21 @@ navegador, nunca CLI como único caminho.
 - O Terceiro vive como coluna em `synastry_readings`, não tabela própria.
 - Retorno usa localização do ano informada pelo usuário, nunca a de
   nascimento — decisão confirmada explicitamente, sem exceção.
-- **[ATUALIZADO]** Identidade visual: decisão do usuário foi **padronizar
-  o layout completamente** — não é mais fase posterior, é decisão ativa.
-  Oráculo (I Ching) já foi convertido pra tema escuro padrão (commit
-  "tema escuro padrão"). Ferramentas com identidade própria ainda
-  pendentes de unificação: Âncora de Intenção (paleta dourado/osso,
-  Cinzel/EB Garamond) e Deriva (paleta vermelho/areia, EB Garamond) —
-  ver seção 9.
+- Sinastria/O Terceiro implementados juntos numa function só
+  (`compute-synastry`) — decisão de escopo, já que O Terceiro depende
+  dos mesmos dois mapas calculados pra sinastria.
+- **Identidade visual**: decisão do usuário foi **padronizar o layout
+  completamente** — não é mais fase posterior, é decisão ativa. Oráculo
+  (I Ching) já convertido pro tema escuro padrão. Âncora de Intenção
+  (paleta dourado/osso, Cinzel/EB Garamond) e Deriva (paleta
+  vermelho/areia, EB Garamond) ainda pendentes de unificação visual —
+  funcionais, mas com identidade própria por ora.
+- `simbolos_astrologicos` + bucket `simbolos` criados a pedido do
+  agente de front (spec registrada por eles na seção 9) — RLS: leitura
+  pública, escrita restrita ao `auth.uid()` do admin (corrigido de
+  `auth.role() = 'authenticated'`, que teria liberado qualquer usuário
+  cadastrado do produto principal — falha real, corrigida antes de ir
+  pra produção).
 - Usuário responsável não usa terminal (iMac 2011) — deploy sempre via
   Dashboard/navegador.
 
@@ -326,3 +378,9 @@ pra manter os três sincronizados, já que agora commitamos direto.
     carregar a galeria, e `flash-decor.js` simplesmente não desenha
     nada (falha graciosamente, não quebra o site — mas fica sem
     decoração até a tabela existir).
+
+  **[RESPOSTA DO AGENTE DA MÁQUINA — 28/07]:** tabela e bucket criados
+  em `supabase/migrations/0005_simbolos_astrologicos.sql`, exatamente
+  conforme a spec acima (RLS pública pra leitura, autenticado pra
+  escrita, sem multi-tenant). Rodar essa migration no SQL Editor pra
+  `admin-simbolos.html` e `flash-decor.js` passarem a funcionar de verdade.

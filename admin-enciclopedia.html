@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Enciclopédia | Caos Astral</title>
+<!--
+  Admin hub da Enciclopédia. Página estática, sem build step — igual ao resto
+  do repo. Depende de:
+    1. RLS criada em 0003_enciclopedia_simbolos.sql (leitura/escrita por is_admin)
+    2. profiles.is_admin = true pro seu próprio usuário (rodar manualmente
+       no SQL Editor: update public.profiles set is_admin = true where id = '<seu-uuid>';)
+    3. Trocar SUPABASE_URL e SUPABASE_ANON_KEY abaixo pelos valores reais do projeto.
+
+  TODO de estilo: importar assets/style.css do repo e trocar as variáveis CSS
+  abaixo pelos tokens reais do design system. Aqui estão valores neutros de
+  placeholder só pra função ficar testável.
+-->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root {
+    --bg: #14161a;
+    --bg-card: #1e2126;
+    --border: #2c3038;
+    --text: #e8e6e1;
+    --text-dim: #9a978f;
+    --accent: #c9a35f;
+    --danger: #c1594a;
+    --ok: #6f9e6a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  header {
+    padding: 1.25rem 2rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  header h1 { font-size: 1.1rem; margin: 0; font-weight: 600; }
+  header .status { font-size: 0.85rem; color: var(--text-dim); }
+  main { display: grid; grid-template-columns: 320px 1fr; gap: 0; min-height: calc(100vh - 64px); }
+  #gate { padding: 3rem; text-align: center; color: var(--text-dim); }
+  #gate button {
+    margin-top: 1rem; padding: 0.6rem 1.2rem; border-radius: 6px; border: none;
+    background: var(--accent); color: #14161a; font-weight: 600; cursor: pointer;
+  }
+  aside {
+    border-right: 1px solid var(--border);
+    padding: 1rem;
+    overflow-y: auto;
+  }
+  aside .filters { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; }
+  aside select, aside input {
+    background: var(--bg-card); border: 1px solid var(--border); color: var(--text);
+    padding: 0.4rem; border-radius: 4px; font-size: 0.8rem; width: 100%;
+  }
+  #lista { list-style: none; margin: 0; padding: 0; }
+  #lista li {
+    padding: 0.6rem 0.5rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem;
+    display: flex; justify-content: space-between; gap: 0.5rem;
+  }
+  #lista li:hover { background: var(--bg-card); }
+  #lista li.ativo { background: var(--bg-card); border: 1px solid var(--accent); }
+  #lista .tag {
+    font-size: 0.65rem; padding: 0.1rem 0.4rem; border-radius: 3px;
+    background: var(--border); color: var(--text-dim); white-space: nowrap;
+  }
+  #lista .tag.pago { color: var(--accent); border: 1px solid var(--accent); background: transparent; }
+  #novo-btn {
+    width: 100%; margin-bottom: 0.75rem; padding: 0.5rem; border-radius: 6px;
+    border: 1px dashed var(--border); background: transparent; color: var(--text);
+    cursor: pointer; font-size: 0.85rem;
+  }
+  section#editor { padding: 1.5rem 2rem; overflow-y: auto; }
+  .campo { margin-bottom: 1rem; }
+  .campo label { display: block; font-size: 0.75rem; color: var(--text-dim); margin-bottom: 0.3rem; }
+  .campo input, .campo textarea, .campo select {
+    width: 100%; background: var(--bg-card); border: 1px solid var(--border);
+    color: var(--text); padding: 0.55rem; border-radius: 6px; font-size: 0.9rem;
+    font-family: inherit;
+  }
+  .campo textarea { min-height: 80px; resize: vertical; }
+  .linha { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .acoes { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+  .acoes button {
+    padding: 0.6rem 1.3rem; border-radius: 6px; border: none; font-weight: 600;
+    cursor: pointer; font-size: 0.85rem;
+  }
+  #salvar { background: var(--ok); color: #14161a; }
+  #excluir { background: transparent; color: var(--danger); border: 1px solid var(--danger) !important; }
+  #vazio { color: var(--text-dim); padding: 3rem; text-align: center; }
+  .msg { font-size: 0.8rem; margin-top: 0.5rem; }
+  .msg.erro { color: var(--danger); }
+  .msg.ok { color: var(--ok); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Enciclopédia — Admin</h1>
+  <div class="status" id="status">verificando acesso…</div>
+</header>
+
+<div id="gate" style="display:none;">
+  <p>Você precisa estar logado como admin pra editar a Enciclopédia.</p>
+  <button id="login-btn">Entrar com Google</button>
+</div>
+
+<main id="app" style="display:none;">
+  <aside>
+    <button id="novo-btn">+ novo verbete</button>
+    <div class="filters">
+      <select id="filtro-categoria"><option value="">todas categorias</option></select>
+      <select id="filtro-tier">
+        <option value="">todos os tiers</option>
+        <option value="gratis">grátis</option>
+        <option value="pago">pago</option>
+      </select>
+    </div>
+    <ul id="lista"></ul>
+  </aside>
+
+  <section id="editor">
+    <div id="vazio">Selecione um verbete à esquerda, ou crie um novo.</div>
+    <form id="form" style="display:none;">
+      <input type="hidden" id="f-id">
+
+      <div class="linha">
+        <div class="campo">
+          <label>Nome</label>
+          <input id="f-nome" required>
+        </div>
+        <div class="campo">
+          <label>Slug</label>
+          <input id="f-slug" required pattern="[a-z0-9\-]+">
+        </div>
+      </div>
+
+      <div class="linha">
+        <div class="campo">
+          <label>Categoria</label>
+          <input id="f-categoria" required list="categorias-existentes">
+          <datalist id="categorias-existentes"></datalist>
+        </div>
+        <div class="campo">
+          <label>Tier</label>
+          <select id="f-tier">
+            <option value="gratis">grátis</option>
+            <option value="pago">pago</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="campo">
+        <label>Nomes alternativos (separados por vírgula)</label>
+        <input id="f-nomes-alt">
+      </div>
+
+      <div class="campo">
+        <label>Tradições (separadas por vírgula)</label>
+        <input id="f-tradicoes">
+      </div>
+
+      <div class="campo">
+        <label>Origem</label>
+        <textarea id="f-origem"></textarea>
+      </div>
+
+      <div class="campo">
+        <label>Primeiros registros</label>
+        <textarea id="f-primeiros-registros"></textarea>
+      </div>
+
+      <div class="campo">
+        <label>Significado</label>
+        <textarea id="f-significado"></textarea>
+      </div>
+
+      <div class="campo">
+        <label>Uso histórico</label>
+        <textarea id="f-uso-historico"></textarea>
+      </div>
+
+      <div class="campo">
+        <label>Uso moderno</label>
+        <textarea id="f-uso-moderno"></textarea>
+      </div>
+
+      <div class="campo">
+        <label>Correspondências (JSON)</label>
+        <textarea id="f-correspondencias" placeholder='{"elemento": "fogo", "planeta": "Marte"}'></textarea>
+      </div>
+
+      <div class="campo">
+        <label>Bibliografia (uma por linha)</label>
+        <textarea id="f-bibliografia"></textarea>
+      </div>
+
+      <div class="campo">
+        <label>Caminho do SVG (opcional)</label>
+        <input id="f-svg-path">
+      </div>
+
+      <div id="msg" class="msg"></div>
+
+      <div class="acoes">
+        <button type="submit" id="salvar">Salvar</button>
+        <button type="button" id="excluir" style="display:none;">Excluir</button>
+      </div>
+    </form>
+  </section>
+</main>
+
+<script>
+  // --- CONFIGURAÇÃO: trocar pelos valores reais do projeto Supabase ---
+  const SUPABASE_URL = "https://SEU-PROJETO.supabase.co";
+  const SUPABASE_ANON_KEY = "SUA_ANON_KEY_AQUI";
+  // ---------------------------------------------------------------------
+
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  let entries = [];
+  let entryAtual = null;
+
+  const $ = (id) => document.getElementById(id);
+
+  async function init() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) return mostrarGate();
+
+    const { data: perfil, error } = await sb
+      .from("profiles")
+      .select("is_admin")
+      .eq("id", session.user.id)
+      .single();
+
+    if (error || !perfil?.is_admin) {
+      $("status").textContent = "logado, mas sem permissão de admin";
+      return mostrarGate();
+    }
+
+    $("status").textContent = `admin: ${session.user.email}`;
+    $("gate").style.display = "none";
+    $("app").style.display = "grid";
+    await carregarLista();
+  }
+
+  function mostrarGate() {
+    $("gate").style.display = "block";
+    $("app").style.display = "none";
+  }
+
+  $("login-btn").addEventListener("click", async () => {
+    await sb.auth.signInWithOAuth({ provider: "google" });
+  });
+
+  async function carregarLista() {
+    const { data, error } = await sb
+      .from("enciclopedia_simbolos")
+      .select("id, slug, nome, categoria, tier")
+      .order("categoria")
+      .order("nome");
+
+    if (error) {
+      $("lista").innerHTML = `<li>Erro ao carregar: ${error.message}</li>`;
+      return;
+    }
+    entries = data;
+    popularFiltroCategorias();
+    renderLista();
+  }
+
+  function popularFiltroCategorias() {
+    const categorias = [...new Set(entries.map(e => e.categoria))].sort();
+    const sel = $("filtro-categoria");
+    const dl = $("categorias-existentes");
+    sel.innerHTML = '<option value="">todas categorias</option>';
+    dl.innerHTML = "";
+    categorias.forEach(c => {
+      sel.insertAdjacentHTML("beforeend", `<option value="${c}">${c}</option>`);
+      dl.insertAdjacentHTML("beforeend", `<option value="${c}">`);
+    });
+  }
+
+  function renderLista() {
+    const catFiltro = $("filtro-categoria").value;
+    const tierFiltro = $("filtro-tier").value;
+    const filtradas = entries.filter(e =>
+      (!catFiltro || e.categoria === catFiltro) &&
+      (!tierFiltro || e.tier === tierFiltro)
+    );
+
+    $("lista").innerHTML = filtradas.map(e => `
+      <li data-id="${e.id}" class="${entryAtual?.id === e.id ? 'ativo' : ''}">
+        <span>${e.nome}</span>
+        <span class="tag ${e.tier === 'pago' ? 'pago' : ''}">${e.tier}</span>
+      </li>
+    `).join("") || "<li>Nenhum verbete encontrado.</li>";
+
+    document.querySelectorAll("#lista li[data-id]").forEach(li => {
+      li.addEventListener("click", () => abrirEntry(li.dataset.id));
+    });
+  }
+
+  $("filtro-categoria").addEventListener("change", renderLista);
+  $("filtro-tier").addEventListener("change", renderLista);
+
+  async function abrirEntry(id) {
+    const { data, error } = await sb
+      .from("enciclopedia_simbolos")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) return alert(error.message);
+    entryAtual = data;
+    preencherForm(data);
+    renderLista();
+  }
+
+  function preencherForm(e) {
+    $("vazio").style.display = "none";
+    $("form").style.display = "block";
+    $("f-id").value = e.id || "";
+    $("f-nome").value = e.nome || "";
+    $("f-slug").value = e.slug || "";
+    $("f-categoria").value = e.categoria || "";
+    $("f-tier").value = e.tier || "gratis";
+    $("f-nomes-alt").value = (e.nomes_alternativos || []).join(", ");
+    $("f-tradicoes").value = (e.tradicoes || []).join(", ");
+    $("f-origem").value = e.origem || "";
+    $("f-primeiros-registros").value = e.primeiros_registros || "";
+    $("f-significado").value = e.significado || "";
+    $("f-uso-historico").value = e.uso_historico || "";
+    $("f-uso-moderno").value = e.uso_moderno || "";
+    $("f-correspondencias").value = e.correspondencias ? JSON.stringify(e.correspondencias, null, 2) : "";
+    $("f-bibliografia").value = (e.bibliografia || []).join("\n");
+    $("f-svg-path").value = e.svg_path || "";
+    $("excluir").style.display = e.id ? "inline-block" : "none";
+    $("msg").textContent = "";
+  }
+
+  $("novo-btn").addEventListener("click", () => {
+    entryAtual = null;
+    preencherForm({});
+    renderLista();
+  });
+
+  $("form").addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    const msg = $("msg");
+    msg.className = "msg";
+    msg.textContent = "salvando…";
+
+    let correspondencias = {};
+    try {
+      correspondencias = $("f-correspondencias").value.trim()
+        ? JSON.parse($("f-correspondencias").value)
+        : {};
+    } catch (e) {
+      msg.className = "msg erro";
+      msg.textContent = "Correspondências: JSON inválido.";
+      return;
+    }
+
+    const payload = {
+      nome: $("f-nome").value.trim(),
+      slug: $("f-slug").value.trim(),
+      categoria: $("f-categoria").value.trim(),
+      tier: $("f-tier").value,
+      nomes_alternativos: $("f-nomes-alt").value.split(",").map(s => s.trim()).filter(Boolean),
+      tradicoes: $("f-tradicoes").value.split(",").map(s => s.trim()).filter(Boolean),
+      origem: $("f-origem").value.trim() || null,
+      primeiros_registros: $("f-primeiros-registros").value.trim() || null,
+      significado: $("f-significado").value.trim() || null,
+      uso_historico: $("f-uso-historico").value.trim() || null,
+      uso_moderno: $("f-uso-moderno").value.trim() || null,
+      correspondencias,
+      bibliografia: $("f-bibliografia").value.split("\n").map(s => s.trim()).filter(Boolean),
+      svg_path: $("f-svg-path").value.trim() || null,
+    };
+
+    const id = $("f-id").value;
+    let error;
+    if (id) {
+      ({ error } = await sb.from("enciclopedia_simbolos").update(payload).eq("id", id));
+    } else {
+      ({ error } = await sb.from("enciclopedia_simbolos").insert(payload));
+    }
+
+    if (error) {
+      msg.className = "msg erro";
+      msg.textContent = `Erro: ${error.message}`;
+      return;
+    }
+
+    msg.className = "msg ok";
+    msg.textContent = "Salvo.";
+    await carregarLista();
+  });
+
+  $("excluir").addEventListener("click", async () => {
+    if (!entryAtual?.id) return;
+    if (!confirm(`Excluir "${entryAtual.nome}"? Não tem como desfazer.`)) return;
+
+    const { error } = await sb.from("enciclopedia_simbolos").delete().eq("id", entryAtual.id);
+    if (error) return alert(error.message);
+
+    entryAtual = null;
+    $("form").style.display = "none";
+    $("vazio").style.display = "block";
+    await carregarLista();
+  });
+
+  init();
+</script>
+
+</body>
+</html>

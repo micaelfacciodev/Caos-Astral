@@ -119,6 +119,7 @@
   <div id="editor">
     <h2 id="edTitle"></h2>
     <div class="legge-ref" id="edLegge"></div>
+    <div id="edZaGua"></div>
 
     <label for="edJudgment">Seu julgamento</label>
     <div id="edJudgmentRef"></div>
@@ -128,6 +129,7 @@
     <div class="lines-grid" id="edLines"></div>
 
     <label for="edSymbolism">Seu símbolo / imagem</label>
+    <div id="edSymbolismRef"></div>
     <textarea id="edSymbolism" placeholder="Sua leitura da imagem formada pelos dois trigramas..."></textarea>
 
     <label for="edPlateUrl">URL da prancha ilustrada</label>
@@ -257,6 +259,12 @@ function openEditor(number){
 
   document.getElementById('edTitle').textContent = `Hexagrama ${h.number}`;
   document.getElementById('edLegge').textContent = `Referência (Legge): ${h.legge_name || '—'}`;
+
+  const legge0 = leggeByNumber[number];
+  const zaGuaEl = document.getElementById('edZaGua');
+  zaGuaEl.innerHTML = (legge0 && legge0.za_gua)
+    ? `<div class="legge-quote"><span class="tag">Legge — hexagramas contrastados (Apêndice VII)${legge0.za_gua.paired_with && legge0.za_gua.paired_with.length ? ' · com o ' + legge0.za_gua.paired_with.join(', ') : ''}</span>${escapeHtml(legge0.za_gua.text)}</div>`
+    : '';
   document.getElementById('edJudgment').value = h.your_judgment || '';
   document.getElementById('edSymbolism').value = h.your_symbolism || '';
   document.getElementById('edPlateUrl').value = h.plate_image_url || '';
@@ -265,8 +273,24 @@ function openEditor(number){
 
   const legge = leggeByNumber[number];
   const judgmentRef = document.getElementById('edJudgmentRef');
-  judgmentRef.innerHTML = legge && legge.thwan
+  let judgmentRefHtml = legge && legge.thwan
     ? `<div class="legge-quote"><span class="tag">Legge — Thwan</span>${escapeHtml(legge.thwan)}</div>`
+    : '';
+  if(legge && Array.isArray(legge.thwan_commentary) && legge.thwan_commentary.length){
+    judgmentRefHtml += legge.thwan_commentary.map((p,i)=>
+      `<div class="legge-quote"><span class="tag">Legge — comentário ao Thwan ${i+1} (Apêndice I)</span>${escapeHtml(p)}</div>`
+    ).join('');
+  }
+  if(legge && Array.isArray(legge.wen_yen) && legge.wen_yen.length){
+    judgmentRefHtml += legge.wen_yen.map((p,i)=>
+      `<div class="legge-quote"><span class="tag">Legge — Wen Yen ${i+1} (Apêndice IV, só hex. 1 e 2)</span>${escapeHtml(p)}</div>`
+    ).join('');
+  }
+  judgmentRef.innerHTML = judgmentRefHtml;
+
+  const symbolismRef = document.getElementById('edSymbolismRef');
+  symbolismRef.innerHTML = legge && legge.great_symbolism
+    ? `<div class="legge-quote"><span class="tag">Legge — Grande Simbolismo (Apêndice II)</span>${escapeHtml(legge.great_symbolism)}</div>`
     : '';
 
   updatePlatePreview(h.plate_image_url);
@@ -274,17 +298,22 @@ function openEditor(number){
   const lineCount = LINE_COUNT[number] || 6;
   const lines = Array.isArray(h.your_lines) ? h.your_lines : [];
   const leggeLines = (legge && Array.isArray(legge.lines)) ? legge.lines : [];
+  const leggeSmallSymbolism = (legge && Array.isArray(legge.small_symbolism)) ? legge.small_symbolism : [];
   const linesWrap = document.getElementById('edLines');
   linesWrap.innerHTML = '';
   for(let i=0;i<lineCount;i++){
     const field = document.createElement('div');
     field.className = 'line-field';
     const refText = leggeLines[i]
-      ? `<div class="legge-quote"><span class="tag">Legge — linha ${i+1}</span>${escapeHtml(leggeLines[i])}</div>`
+      ? `<div class="legge-quote"><span class="tag">Legge — linha ${i+1} (Texto)</span>${escapeHtml(leggeLines[i])}</div>`
+      : '';
+    const smallSymbolismText = leggeSmallSymbolism[i]
+      ? `<div class="legge-quote"><span class="tag">Legge — linha ${i+1} (Pequeno Simbolismo, Apêndice II)</span>${escapeHtml(leggeSmallSymbolism[i])}</div>`
       : '';
     field.innerHTML = `
       <span class="line-num">Linha ${i+1}${(number===1||number===2) && i===6 ? ' (todos-nove/todos-seis)' : ''}</span>
       ${refText}
+      ${smallSymbolismText}
       <textarea data-line-index="${i}" placeholder="Sua interpretação da linha ${i+1}...">${lines[i] || ''}</textarea>
     `;
     linesWrap.appendChild(field);

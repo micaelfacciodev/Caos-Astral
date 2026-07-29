@@ -1,0 +1,58 @@
+{
+  "qian": {
+    "attribute": "Força (Khien é o símbolo da força).",
+    "animal": "Cavalo",
+    "body_part": "Cabeça",
+    "family_role": "Pai",
+    "associations": "Céu; um círculo; um governante; um pai; jade; metal; frio; gelo; vermelho profundo; um bom cavalo; um cavalo velho; um cavalo magro; um cavalo malhado; e o fruto das árvores."
+  },
+  "kun": {
+    "attribute": "Docilidade (Khwăn é o símbolo da docilidade).",
+    "animal": "Boi",
+    "body_part": "Ventre",
+    "family_role": "Mãe",
+    "associations": "Terra; uma mãe; pano; um caldeirão; parcimônia; um torno; uma novilha jovem; uma grande carroça; o que é matizado; uma multidão; um cabo e suporte. Entre os solos, o que é preto."
+  },
+  "zhen": {
+    "attribute": "Estímulo ao movimento.",
+    "animal": "Dragão",
+    "body_part": "Pés",
+    "family_role": "Filho mais velho",
+    "associations": "Trovão; o dragão; a união do azul e do amarelo; desenvolvimento; uma grande estrada; o filho mais velho; decisão e veemência; bambus jovens e brilhantes; juncos e canaviais; entre os cavalos, o que relincha bem, o que tem a perna traseira branca, o que empina, o que tem uma estrela branca na testa. Entre as produções da agricultura, o que retorna à vida depois de desaparecer sob a superfície, o que no fim se torna o mais forte, e o mais exuberante."
+  },
+  "xun": {
+    "attribute": "Penetração.",
+    "animal": "Galinha",
+    "body_part": "Coxas",
+    "family_role": "Filha mais velha",
+    "associations": "Madeira; vento; a filha mais velha; um fio de prumo; um esquadro de carpinteiro; ser branco; ser longo; ser elevado; avançar e recuar; falta de decisão; odores fortes. No corpo humano, escassez de pelos, testa larga, grande parte branca do olho. Entre as tendências, a busca obstinada de lucro, a ponto de fazer 300% no mercado. No fim, pode se tornar o trigrama da decisão."
+  },
+  "kan": {
+    "attribute": "O que é precipitado e perigoso.",
+    "animal": "Porco",
+    "body_part": "Ouvidos",
+    "family_role": "Filho do meio",
+    "associations": "Água; canais e valas (de drenagem e irrigação); estar oculto e escondido; ser ora reto, ora curvo; um arco; uma roda. No homem, aumento de ansiedade, angústia de espírito, dor nos ouvidos; é o trigrama do sangue; sugere o vermelho. Nos cavalos: espinha elegante, espírito alto, cabeça caída, casco fino, passo cambaleante. Nas carruagens, uma que enfrenta muitos riscos. Sugere o que atravessa direto; a lua; um ladrão. Nas árvores, o que é forte e de coração firme."
+  },
+  "li": {
+    "attribute": "O que é brilhante e o que se agarra.",
+    "animal": "Faisão",
+    "body_part": "Olhos",
+    "family_role": "Filha do meio",
+    "associations": "Fogo; o sol; o relâmpago; a filha do meio; couraça e capacete; lança e espada. Nos homens, o ventre grande. É o trigrama da secura. Sugere a tartaruga; o caranguejo; um caracol espiral; o mexilhão; a tartaruga. Nas árvores, uma que é oca e podre por cima."
+  },
+  "gen": {
+    "attribute": "Parada ou obstrução.",
+    "animal": "Cão",
+    "body_part": "Mãos",
+    "family_role": "Filho mais novo",
+    "associations": "Montanha; um atalho; uma pequena rocha; um portão; os frutos de árvores e trepadeiras; um porteiro ou eunuco; o dedo anelar; o cão; o rato; aves de bico poderoso; entre as árvores, as que são fortes, com muitos nós."
+  },
+  "dui": {
+    "attribute": "Prazer e satisfação.",
+    "animal": "Ovelha",
+    "body_part": "Boca",
+    "family_role": "Filha mais nova",
+    "associations": "Uma coleção de águas baixas (lago ou charco); a filha mais nova; uma feiticeira; a boca e a língua; o declínio e a colheita das coisas; a remoção de frutos pendentes de ramos; entre os solos, o que é forte e salgado; uma concubina; e uma ovelha."
+  }
+}
