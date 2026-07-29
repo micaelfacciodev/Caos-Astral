@@ -12,7 +12,7 @@ Feito pra ser fácil de qualquer agente de código plugar dado dinâmico.
 - `ritual-de-entrada.html` — onboarding, antes do Kit
 - `kit.html`, `retorno.html`, `ressonancia.html`, `ancora.html` — produto astrológico (motor principal)
 - `deriva.html` — diário/laboratório fenomenológico
-- `aura_flow.html` — página adicional de identidade visual (conferir escopo/uso atual antes de linkar no menu principal)
+- `aura_flow.html` — componente visual (canvas de partículas/vórtice), carregado em overlay de dentro de `deriva.html` via `?layer=`. Não é página de navegação — não tem e não deve ter menu.
 - `oraculo.html` — I Ching; vocabulário isolado do kit por decisão de projeto, identidade visual já unificada com o resto do site (ver glossário)
 - `raizes.html` + `raizes-magia-do-caos.html`, `raizes-astrologia.html`, `raizes-i-ching.html`, `raizes-cena-do-grau.html`, `raizes-berilo-faccio.html` — história/proveniência
 - `blog.html` + `blog-eco.html` (exemplo) — conteúdo

@@ -358,6 +358,15 @@ production" ligado, branch de produção `main`, working directory `.`.
   `/intento` e `/raizes/berilo-faccio`. Não reabrir essa discussão sem
   motivo novo; essas duas páginas estão liberadas pra edição normal de
   conteúdo biográfico.
+- **Terminologia (29/07): "Mapa Natal" venceu "Mapa Astral".** Aplicado
+  nas 3 ocorrências existentes (`manifesto.html` x2, `raizes-berilo-
+  faccio.html` x1) — não havia uso em título, UI ou no formulário de
+  `ritual-de-entrada.html`, então não foi rename sistêmico. Usar "Mapa
+  Natal" em qualquer copy nova daqui pra frente.
+- **Astrologia como porta de entrada: mantida, sem mudança.** `index.html`
+  já lidera título/H1 com marca + filosofia ("o mapa não é destino"), e
+  nomeia "astrologia" logo no primeiro parágrafo como contraponto, não
+  como rótulo genérico de categoria. Confirmado como padrão a manter.
 
 ---
 
