@@ -298,10 +298,31 @@ pra manter os três sincronizados, já que agora commitamos direto.
   páginas do site (12 itens agora: Kit, Retorno, O Terceiro, Âncora,
   Deriva, Oráculo, Diário, Raízes, Blog, Manifesto, Intento, Planos).
 - **Pendência em aberto:** admin hub pra upload de arte de símbolos
-  astrológicos (efeito "flash decor" trazido do site de tatuagem) — em
-  planejamento, não implementado ainda. Vai precisar de credenciais
-  Supabase **próprias do projeto Caos Astral** (o admin original usa
-  projeto Supabase do site de tatuagem, hardcoded — não reaproveitar).
-  Se o agente da máquina já tiver `SUPABASE_URL`/`anon key` do projeto
-  Caos Astral documentados em algum lugar, adicionar aqui pra front
-  não precisar pedir de novo.
+  astrológicos (efeito "flash decor" trazido do site de tatuagem) —
+  **implementado** em `admin-simbolos.html` + `assets/flash-decor.js`,
+  mas depende de schema que o agente da máquina ainda precisa criar (ver
+  spec abaixo). Credenciais Supabase do projeto Caos Astral já recebidas
+  do usuário e hardcoded nos dois arquivos (URL:
+  `https://pvgeramqsatltnvkkpvf.supabase.co`, chave publicável — é
+  seguro deixar no código-fonte, é a chave pública protegida por RLS,
+  não a `service_role`).
+
+  **Spec pro agente da máquina — tabela e bucket ainda não existem:**
+  - Bucket de Storage: `simbolos` — público pra leitura, upload
+    restrito a usuário autenticado (é admin único, sem multi-tenant
+    por enquanto — `auth.role() = 'authenticated'` já basta como
+    política de INSERT no bucket).
+  - Tabela `simbolos_astrologicos`:
+    - `id` uuid pk default `gen_random_uuid()`
+    - `titulo` text
+    - `image_url` text (URL pública do Storage)
+    - `tags` text[] default `'{}'`
+    - `decor` boolean default `true` (aparece na decoração aleatória do site)
+    - `created_at` timestamptz default `now()`
+    - RLS: **SELECT público** (sem restrição — é o que
+      `flash-decor.js` consulta anonimamente em toda página do site);
+      INSERT/UPDATE/DELETE só `auth.role() = 'authenticated'`.
+  - Sem isso criado, `admin-simbolos.html` mostra erro ao tentar
+    carregar a galeria, e `flash-decor.js` simplesmente não desenha
+    nada (falha graciosamente, não quebra o site — mas fica sem
+    decoração até a tabela existir).
