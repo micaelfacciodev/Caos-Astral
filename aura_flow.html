@@ -14,7 +14,7 @@
     position:fixed; top:16px; left:16px; z-index:10;
     font-family:'JetBrains Mono', monospace;
     font-size:11px; letter-spacing:1.5px; text-transform:uppercase;
-    background:rgba(10,9,8,0.72); border:1px solid rgba(179,18,23,0.4);
+    background:rgba(10,9,8,0.72); border:1px solid rgba(193,74,60,0.4);
     color:#d8b7a1; padding:10px 16px; cursor:pointer;
     text-decoration:none; display:none;
   }
@@ -246,7 +246,7 @@
 
         for (const [x, y] of centers) {
           const alpha = 0.22 + 0.12 * Math.sin(t * 0.6 + x * 0.01 + y * 0.01);
-          ctx.strokeStyle = `rgba(216,183,161,${alpha})`;
+          ctx.strokeStyle = `rgba(176,166,150,${alpha})`;
           ctx.beginPath();
           ctx.arc(x, y, R * pulse, 0, Math.PI * 2);
           ctx.stroke();
@@ -283,7 +283,7 @@
         }
 
         const thresh = Math.min(w, h) * 0.16;
-        ctx.strokeStyle = 'rgba(179,18,23,0.35)';
+        ctx.strokeStyle = 'rgba(193,74,60,0.35)';
         ctx.lineWidth = 0.8;
         for (let i = 0; i < N; i++) {
           for (let j = i + 1; j < N; j++) {
@@ -303,7 +303,7 @@
 
         for (const p of pts) {
           const s = 1 + Math.sin(p.tw) * 0.6;
-          ctx.fillStyle = 'rgba(216,183,161,0.85)';
+          ctx.fillStyle = 'rgba(176,166,150,0.85)';
           ctx.beginPath();
           ctx.arc(p.x * w, p.y * h, 1.6 * s, 0, Math.PI * 2);
           ctx.fill();
@@ -333,7 +333,7 @@
         ctx.fill();
 
         const grad = ctx.createRadialGradient(cx, cy, pupilR, cx, cy, irisR);
-        grad.addColorStop(0, 'rgba(179,18,23,0.55)');
+        grad.addColorStop(0, 'rgba(193,74,60,0.55)');
         grad.addColorStop(0.6, 'rgba(140,125,111,0.5)');
         grad.addColorStop(1, 'rgba(10,9,8,0.9)');
         ctx.fillStyle = grad;
@@ -344,7 +344,7 @@
         ctx.save();
         ctx.translate(cx, cy);
         ctx.rotate(t * 0.015);
-        ctx.strokeStyle = 'rgba(216,183,161,0.22)';
+        ctx.strokeStyle = 'rgba(176,166,150,0.22)';
         ctx.lineWidth = 1.2;
         const striae = 40;
         for (let i = 0; i < striae; i++) {
@@ -394,7 +394,7 @@
         const maxPts = Math.max(40, Math.round(w / 1.4));
         while (history.length > maxPts) history.shift();
 
-        ctx.strokeStyle = 'rgba(216,183,161,0.9)';
+        ctx.strokeStyle = 'rgba(176,166,150,0.9)';
         ctx.lineWidth = 1.8;
         ctx.beginPath();
         const midY = h * 0.5;
@@ -408,7 +408,7 @@
         if (history.length) {
           const lastX = ((history.length - 1) / (maxPts - 1)) * w;
           const lastY = midY - history[history.length - 1] * h * 0.24;
-          ctx.fillStyle = 'rgba(179,18,23,0.9)';
+          ctx.fillStyle = 'rgba(193,74,60,0.9)';
           ctx.beginPath();
           ctx.arc(lastX, lastY, 4, 0, Math.PI * 2);
           ctx.fill();
@@ -699,7 +699,7 @@
     window.addEventListener('resize', buildBlobs);
 
     // filtro CSS no canvas inteiro, igual ao rorschach_flow.html original
-    canvas.style.filter = 'blur(13px) contrast(30) brightness(95%) drop-shadow(0 0 18px rgba(179,18,23,0.85)) drop-shadow(4px 6px 5px rgba(0,0,0,0.8))';
+    canvas.style.filter = 'blur(13px) contrast(30) brightness(95%) drop-shadow(0 0 18px rgba(193,74,60,0.85)) drop-shadow(4px 6px 5px rgba(0,0,0,0.8))';
 
     function shapePath(r, shape){
       if (shape === 'diamond'){
