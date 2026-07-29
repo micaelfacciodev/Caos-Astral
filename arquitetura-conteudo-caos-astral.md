@@ -50,11 +50,10 @@ O manifesto responde "o que é Caos Astral, filosoficamente". Falta uma página 
 
 Se algum dia houver entrevista, citação, viralização — essa é a página que resolve "quem é a pessoa por trás disso".
 
-> **Pendente (29/07):** grau de exposição de identidade ainda em decisão —
-> nome/cara reais, história mantida sem nome/cidade, ou pseudônimo fixo.
-> Não editar `/intento` nem `/raizes/berilo-faccio` assumindo nenhuma das
-> três até o autor confirmar. Ver conversa de alinhamento no `CLAUDE.md`
-> se precisar de contexto.
+> **Decidido (29/07): sem anonimato.** Nome e cara reais, herança do pai
+> citada abertamente (nome completo, "Estudos Astrológicos"). `/intento` e
+> `/raizes/berilo-faccio` liberadas pra edição normal — não é mais preciso
+> checar com o autor antes de mexer em conteúdo biográfico nessas páginas.
 
 ---
 

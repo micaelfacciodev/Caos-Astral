@@ -353,6 +353,11 @@ production" ligado, branch de produção `main`, working directory `.`.
   vocabulário, `oraculo.html`, remoção de `caos-astral-landing.html`) —
   virou arquivo morto duplicando este `CLAUDE.md`. Não recriar; se surgir
   necessidade de novo adendo, editar direto este arquivo.
+- **Identidade do autor (29/07): sem anonimato.** Decisão confirmada —
+  nome e cara reais, herança do pai (astrologia) citada abertamente em
+  `/intento` e `/raizes/berilo-faccio`. Não reabrir essa discussão sem
+  motivo novo; essas duas páginas estão liberadas pra edição normal de
+  conteúdo biográfico.
 
 ---
 
