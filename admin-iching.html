@@ -266,9 +266,15 @@ function openEditor(number){
 
   const legge = leggeByNumber[number];
   const judgmentRef = document.getElementById('edJudgmentRef');
-  judgmentRef.innerHTML = legge && legge.thwan
+  let judgmentRefHtml = legge && legge.thwan
     ? `<div class="legge-quote"><span class="tag">Legge — Thwan</span>${escapeHtml(legge.thwan)}</div>`
     : '';
+  if(legge && Array.isArray(legge.thwan_commentary) && legge.thwan_commentary.length){
+    judgmentRefHtml += legge.thwan_commentary.map((p,i)=>
+      `<div class="legge-quote"><span class="tag">Legge — comentário ao Thwan ${i+1} (Apêndice I)</span>${escapeHtml(p)}</div>`
+    ).join('');
+  }
+  judgmentRef.innerHTML = judgmentRefHtml;
 
   const symbolismRef = document.getElementById('edSymbolismRef');
   symbolismRef.innerHTML = legge && legge.great_symbolism
