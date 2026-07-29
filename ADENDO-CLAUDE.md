@@ -133,7 +133,34 @@ qual é o real.
 
 ---
 
-## Resumo de ações (checklist pra quem for aplicar)
+## Correção 7 — Login com Google já está configurado (Supabase Auth)
+
+**Google OAuth está habilitado e funcionando no nível do projeto Supabase**
+(Authentication → Providers → Google, com Client ID/Secret reais gerados
+no Google Cloud Console, projeto "Caos Astral"). Isso não é mais um
+placeholder — qualquer página do site pode chamar
+`supabase.auth.signInWithOAuth({ provider: 'google' })` e o login
+funciona de verdade, sem precisar configurar mais nada no lado do
+Google/Supabase.
+
+Implementação de referência: `oraculo.html` já usa isso — tem barra de
+login/logout própria (`assets/iching-engine.js` expõe um hook
+`window.onIChingCastComplete` chamado ao final de cada consulta, que
+`oraculo.html` usa pra salvar em `iching_readings` quando há sessão
+ativa). Quem for implementar o login em outras páginas (ex:
+`ritual-de-entrada.html`, que ainda tem só o comentário placeholder) pode
+seguir o mesmo padrão de `oraculo.html`: mesmo `SUPABASE_URL` e
+`SUPABASE_ANON_KEY`, mesma chamada de `signInWithOAuth`.
+
+Callback URL registrada no Google Cloud (não mexer nela sem atualizar
+também no Supabase): `https://pvgeramqsatltnvkkpvf.supabase.co/auth/v1/callback`.
+
+Tabela de histórico do Oráculo (`iching_readings`, migration 0006) —
+rodar a migration no SQL Editor se ainda não tiver sido rodada; sem ela,
+o login funciona mas o salvamento da consulta falha silenciosamente
+(mostra "não foi possível salvar" na tela, sem quebrar a consulta em si).
+
+---
 
 - [ ] Substituir tabela de vocabulário na seção 1 do CLAUDE.md
 - [ ] Renomear `sigil_journal` → `intent_anchors` (+ migration)
@@ -146,5 +173,8 @@ qual é o real.
 - [x] Decidir destino de `oraculo.html` (resolvido: `oraculo.html` é a
       ferramenta funcional definitiva; `i-ching.html` foi apagado)
 - [ ] Apagar `caos-astral-landing.html`
+- [ ] Confirmar se a migration `0006_iching_readings.sql` já foi
+      rodada no Supabase (login com Google já funciona; falta só isso
+      pro histórico do Oráculo salvar de verdade)
 - [ ] Adicionar Edge Functions pendentes (sinastria já estava
       pendente; agora também Retorno e O Terceiro) à seção 7
