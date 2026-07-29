@@ -258,7 +258,50 @@ navegador, nunca CLI como único caminho.
 - O Terceiro vive como coluna em `synastry_readings`, não tabela própria.
 - Retorno usa localização do ano informada pelo usuário, nunca a de
   nascimento — decisão confirmada explicitamente, sem exceção.
-- Identidade visual do Oráculo (I Ching) é deliberadamente separada do
-  resto do site — não unificar agora, é fase posterior.
+- **[ATUALIZADO]** Identidade visual: decisão do usuário foi **padronizar
+  o layout completamente** — não é mais fase posterior, é decisão ativa.
+  Oráculo (I Ching) já foi convertido pra tema escuro padrão (commit
+  "tema escuro padrão"). Ferramentas com identidade própria ainda
+  pendentes de unificação: Âncora de Intenção (paleta dourado/osso,
+  Cinzel/EB Garamond) e Deriva (paleta vermelho/areia, EB Garamond) —
+  ver seção 9.
 - Usuário responsável não usa terminal (iMac 2011) — deploy sempre via
   Dashboard/navegador.
+
+---
+
+## 9. Front-end — changelog (agente de front, com acesso de escrita ao repo)
+
+Diferente do resto deste documento (que é território do agente da
+máquina), esta seção é mantida pelo agente de front — registrando aqui
+pra manter os três sincronizados, já que agora commitamos direto.
+
+**Sessão de 28/07:**
+- Removidos `caos-astral-landing.html` (landing single-file antiga) e
+  `raizes-simbolos-sabianos.html` (duplicata de `raizes-cena-do-grau.html`).
+- **Deriva** (`deriva.html` + `aura_flow.html`) trazida do site pessoal de
+  tatuagem do usuário. Consertado bug real: 5 dos 12 portais visuais
+  (rorschach, stars, wormhole, plasma, mandala) estavam quebrados —
+  existiam como arquivos soltos (`hyperspace_flow.html`,
+  `rorschach_flow.html`) nunca integrados ao sistema de camadas de
+  `aura_flow.html`. Portados pra dentro do `RUNNERS` map; os dois
+  arquivos soltos não entraram no repo. Nav trocada do site antigo de
+  tatuagem pro menu padrão do Caos Astral (mesma lista, paleta própria
+  da Deriva).
+- **Âncora de Intenção** (`ancora.html`) deixou de ser placeholder — agora
+  é o Gerador de Selos real, também trazido do site de tatuagem, com
+  branding trocado pra Caos Astral. Motor de geração de símbolo é só
+  frontend (JS puro, sem dependência de backend) — não precisa de Edge
+  Function pra funcionar, mas ainda não persiste nada em `intent_anchors`
+  (isso seria trabalho futuro de integração, não feito ainda).
+- Menu: "Deriva" adicionado à lista canônica de navegação em todas as
+  páginas do site (12 itens agora: Kit, Retorno, O Terceiro, Âncora,
+  Deriva, Oráculo, Diário, Raízes, Blog, Manifesto, Intento, Planos).
+- **Pendência em aberto:** admin hub pra upload de arte de símbolos
+  astrológicos (efeito "flash decor" trazido do site de tatuagem) — em
+  planejamento, não implementado ainda. Vai precisar de credenciais
+  Supabase **próprias do projeto Caos Astral** (o admin original usa
+  projeto Supabase do site de tatuagem, hardcoded — não reaproveitar).
+  Se o agente da máquina já tiver `SUPABASE_URL`/`anon key` do projeto
+  Caos Astral documentados em algum lugar, adicionar aqui pra front
+  não precisar pedir de novo.
