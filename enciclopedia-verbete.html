@@ -36,6 +36,7 @@
     display: inline-block; margin-top: 1rem; background: var(--accent); color: #14161a;
     padding: 0.6rem 1.4rem; border-radius: 6px; text-decoration: none; font-weight: 600;
   }
+  #conteudo img.simbolo { width: 120px; height: 120px; margin: 0.5rem 0; filter: invert(1); }
 </style>
 </head>
 <body>
@@ -133,6 +134,7 @@
     conteudo.style.display = "block";
     conteudo.innerHTML = `
       <div class="cat">${escapeHtml(e.categoria)}</div>
+      ${e.svg_path ? `<img class="simbolo" src="${escapeHtml(e.svg_path)}" alt="Símbolo: ${escapeHtml(e.nome)}">` : ""}
       <h1>${escapeHtml(e.nome)}</h1>
       ${e.nomes_alternativos && e.nomes_alternativos.length
         ? `<div class="alt">também: ${e.nomes_alternativos.map(escapeHtml).join(", ")}</div>`
