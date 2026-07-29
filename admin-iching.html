@@ -119,6 +119,7 @@
   <div id="editor">
     <h2 id="edTitle"></h2>
     <div class="legge-ref" id="edLegge"></div>
+    <div id="edZaGua"></div>
 
     <label for="edJudgment">Seu julgamento</label>
     <div id="edJudgmentRef"></div>
@@ -258,6 +259,12 @@ function openEditor(number){
 
   document.getElementById('edTitle').textContent = `Hexagrama ${h.number}`;
   document.getElementById('edLegge').textContent = `Referência (Legge): ${h.legge_name || '—'}`;
+
+  const legge0 = leggeByNumber[number];
+  const zaGuaEl = document.getElementById('edZaGua');
+  zaGuaEl.innerHTML = (legge0 && legge0.za_gua)
+    ? `<div class="legge-quote"><span class="tag">Legge — hexagramas contrastados (Apêndice VII)${legge0.za_gua.paired_with && legge0.za_gua.paired_with.length ? ' · com o ' + legge0.za_gua.paired_with.join(', ') : ''}</span>${escapeHtml(legge0.za_gua.text)}</div>`
+    : '';
   document.getElementById('edJudgment').value = h.your_judgment || '';
   document.getElementById('edSymbolism').value = h.your_symbolism || '';
   document.getElementById('edPlateUrl').value = h.plate_image_url || '';
@@ -272,6 +279,11 @@ function openEditor(number){
   if(legge && Array.isArray(legge.thwan_commentary) && legge.thwan_commentary.length){
     judgmentRefHtml += legge.thwan_commentary.map((p,i)=>
       `<div class="legge-quote"><span class="tag">Legge — comentário ao Thwan ${i+1} (Apêndice I)</span>${escapeHtml(p)}</div>`
+    ).join('');
+  }
+  if(legge && Array.isArray(legge.wen_yen) && legge.wen_yen.length){
+    judgmentRefHtml += legge.wen_yen.map((p,i)=>
+      `<div class="legge-quote"><span class="tag">Legge — Wen Yen ${i+1} (Apêndice IV, só hex. 1 e 2)</span>${escapeHtml(p)}</div>`
     ).join('');
   }
   judgmentRef.innerHTML = judgmentRefHtml;
