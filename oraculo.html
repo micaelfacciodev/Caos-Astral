@@ -27,6 +27,18 @@
     font-family:'IBM Plex Mono', monospace; font-size:0.8rem;
   }
   .auth-status{ color:var(--ink-dim); }
+
+  .history-panel{ margin-top: 30px; }
+  .history-title{ font-size:1.1rem; margin:0 0 16px; color:var(--ink); }
+  .history-item{
+    display:flex; justify-content:space-between; gap:16px; align-items:baseline;
+    padding:12px 0; border-bottom:1px solid var(--line);
+  }
+  .history-item .h-main{ flex:1; min-width:0; }
+  .history-item .h-hex{ color:var(--ink); font-size:0.95rem; }
+  .history-item .h-question{ color:var(--ink-dim); font-size:0.85rem; margin-top:2px; font-style:italic; }
+  .history-item .h-date{ color:var(--ink-faint); font-family:'IBM Plex Mono', monospace; font-size:0.75rem; white-space:nowrap; }
+  .history-empty{ color:var(--ink-faint); font-style:italic; font-size:0.9rem; }
   .oracle-panel label{
     display:block; font-family:'IBM Plex Mono', monospace; font-size:0.75rem;
     color:var(--ink-dim); margin-bottom:8px; letter-spacing:0.05em; text-transform:uppercase;
@@ -205,6 +217,11 @@
       </div>
 
       <p class="oracle-footnote">Três moedas são lançadas seis vezes, de baixo para cima, formando o hexagrama. Linhas 6 e 9 são linhas em movimento — elas se transformam e revelam um segundo hexagrama, a tendência do desdobramento da situação.</p>
+
+      <div class="history-panel" id="historyPanel" style="display:none;">
+        <h2 class="history-title">Seu histórico</h2>
+        <div id="historyList"></div>
+      </div>
     </div>
   </section>
 
@@ -225,7 +242,63 @@
 
   const authStatus = document.getElementById('authStatus');
   const authAction = document.getElementById('authAction');
+  const historyPanel = document.getElementById('historyPanel');
+  const historyList = document.getElementById('historyList');
   let currentUser = null;
+  let hexNamesByNumber = {};
+
+  fetch('iching_legge_oracular_text.json')
+    .then(r => r.json())
+    .then(data => { data.forEach(h => { hexNamesByNumber[h.number] = h.legge_name; }); })
+    .catch(err => console.error('Não foi possível carregar nomes dos hexagramas:', err));
+
+  function formatDate(iso){
+    const d = new Date(iso);
+    return d.toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric' }) +
+      ' ' + d.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+  }
+
+  function hexLabel(n){
+    if(!n) return '';
+    const name = hexNamesByNumber[n];
+    return `Hexagrama ${n}${name ? ' — ' + name : ''}`;
+  }
+
+  async function loadHistory(){
+    if(!currentUser){
+      historyPanel.style.display = 'none';
+      return;
+    }
+    const { data, error } = await supa
+      .from('iching_readings')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    historyPanel.style.display = 'block';
+    if(error){
+      historyList.innerHTML = `<p class="history-empty">Não foi possível carregar seu histórico: ${error.message}</p>`;
+      return;
+    }
+    if(!data || data.length === 0){
+      historyList.innerHTML = '<p class="history-empty">Suas consultas aparecerão aqui.</p>';
+      return;
+    }
+    historyList.innerHTML = data.map(r => `
+      <div class="history-item">
+        <div class="h-main">
+          <div class="h-hex">${hexLabel(r.primary_hexagram)}${r.resulting_hexagram ? ' → ' + hexLabel(r.resulting_hexagram) : ''}</div>
+          ${r.question ? `<div class="h-question">"${escapeAttr(r.question)}"</div>` : ''}
+        </div>
+        <div class="h-date">${formatDate(r.created_at)}</div>
+      </div>
+    `).join('');
+  }
+
+  function escapeAttr(str){
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
 
   async function refreshAuthBar(){
     const { data: { session } } = await supa.auth.getSession();
@@ -242,6 +315,7 @@
         await supa.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.href } });
       };
     }
+    await loadHistory();
   }
   refreshAuthBar();
 
@@ -260,6 +334,7 @@
       authStatus.textContent = 'Consulta feita, mas não foi possível salvar no histórico.';
     } else {
       authStatus.textContent = `Consulta salva no seu histórico, ${currentUser.email}`;
+      await loadHistory();
     }
   };
 </script>
