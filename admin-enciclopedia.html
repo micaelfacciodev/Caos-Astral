@@ -204,7 +204,11 @@
 
       <div class="campo">
         <label>Caminho do SVG (opcional)</label>
-        <input id="f-svg-path">
+        <input id="f-svg-path" placeholder="/assets/enciclopedia/nome.svg">
+        <div id="svg-preview-wrap" style="display:none; margin-top:0.6rem; padding:0.8rem; background:var(--bg); border:1px solid var(--border); border-radius:6px;">
+          <img id="svg-preview" style="width:80px; height:80px; filter:invert(1);" alt="preview">
+          <div id="svg-preview-erro" class="msg erro" style="display:none;">Não consegui carregar essa imagem — confira o caminho.</div>
+        </div>
       </div>
 
       <div id="msg" class="msg"></div>
@@ -342,9 +346,38 @@
     $("f-correspondencias").value = e.correspondencias ? JSON.stringify(e.correspondencias, null, 2) : "";
     $("f-bibliografia").value = (e.bibliografia || []).join("\n");
     $("f-svg-path").value = e.svg_path || "";
+    atualizarPreviewSvg();
     $("excluir").style.display = e.id ? "inline-block" : "none";
     $("msg").textContent = "";
   }
+
+  function atualizarPreviewSvg() {
+    const caminho = $("f-svg-path").value.trim();
+    const wrap = $("svg-preview-wrap");
+    const img = $("svg-preview");
+    const erro = $("svg-preview-erro");
+
+    if (!caminho) {
+      wrap.style.display = "none";
+      return;
+    }
+
+    wrap.style.display = "block";
+    erro.style.display = "none";
+    img.style.display = "block";
+    img.onerror = () => {
+      img.style.display = "none";
+      erro.style.display = "block";
+    };
+    img.onload = () => {
+      img.style.display = "block";
+      erro.style.display = "none";
+    };
+    // cache-bust simples pra não segurar erro/onload de tentativa anterior
+    img.src = caminho + (caminho.includes("?") ? "&" : "?") + "_=" + Date.now();
+  }
+
+  $("f-svg-path").addEventListener("input", atualizarPreviewSvg);
 
   $("novo-btn").addEventListener("click", () => {
     entryAtual = null;
