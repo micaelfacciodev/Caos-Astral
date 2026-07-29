@@ -1,0 +1,14 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- corpo: anel grosso representando a serpente -->
+  <path fill-rule="evenodd" fill="#000"
+        d="M 100 20
+           A 80 80 0 1 1 99 20
+           A 80 80 0 1 1 100 20 Z
+           M 100 46
+           A 54 54 0 1 0 100.5 46
+           A 54 54 0 1 0 100 46 Z"/>
+  <!-- cabeça (triângulo) mordendo a cauda no topo -->
+  <path fill="#000" d="M 78 48 L 100 18 L 122 48 Z"/>
+  <!-- olho -->
+  <circle cx="100" cy="42" r="4" fill="#fff"/>
+</svg>
