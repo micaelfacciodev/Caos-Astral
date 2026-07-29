@@ -130,6 +130,7 @@ supabase/
     0003_adendo_vocabulario_e_tabelas.sql       -- renomes + solar_returns + O Terceiro + temperamento
     0004_solar_return_localizacao.sql           -- latitude/longitude/cidade em solar_returns
     0005_simbolos_astrologicos.sql              -- tabela + bucket pro admin hub de símbolos (spec do front, seção 9)
+    0006_simbolos_admin_restrito.sql             -- CORREÇÃO DE SEGURANÇA: restringe escrita ao admin (auth.uid()), não a qualquer autenticado
   seed/
     seed_0001_planets_houses_aspects.sql       -- 11 planetas, 12 casas, 5 aspectos
     seed_0002_graus_simbolicos.sql             -- 360 cenas de grau (nome do arquivo desatualizado,
@@ -145,7 +146,7 @@ supabase/
 `0001_schema.sql` → `seed_0001_planets_houses_aspects.sql` →
 `seed_0002_graus_simbolicos.sql` → `0002_natal_charts_unique.sql` →
 `0003_adendo_vocabulario_e_tabelas.sql` → `0004_solar_return_localizacao.sql`
-→ `0005_simbolos_astrologicos.sql`
+→ `0005_simbolos_astrologicos.sql` → `0006_simbolos_admin_restrito.sql`
 
 Se precisar zerar tudo de novo por qualquer motivo: rodar `0000_reset.sql`
 primeiro (não apaga `simbolos_astrologicos`/bucket — só as tabelas do
@@ -168,7 +169,8 @@ motor astrológico; se precisar zerar isso também, apagar manualmente).
 
 ### Tabelas/recursos do admin hub de símbolos (novo, seção 9)
 - `simbolos_astrologicos` — galeria de arte pra decoração do site. `titulo`, `image_url`, `tags` (text[]), `decor` (boolean), `created_at`. RLS: **SELECT público** (consultado anonimamente por `flash-decor.js` em qualquer página); INSERT/UPDATE/DELETE só `auth.role() = 'authenticated'` — admin único, sem multi-tenant por enquanto.
-- Bucket de Storage `simbolos` — público pra leitura, upload só autenticado. Mesma lógica de RLS aplicada em `storage.objects` filtrando por `bucket_id = 'simbolos'`.
+- Bucket de Storage `simbolos` — público pra leitura, upload restrito ao admin (ver correção de segurança abaixo). Mesma lógica de RLS aplicada em `storage.objects` filtrando por `bucket_id = 'simbolos'`.
+- **Correção de segurança (0006)**: a policy original (`auth.role() = 'authenticated'`) liberava escrita pra QUALQUER usuário cadastrado no site — não só o admin. Como o Caos Astral tem cadastro aberto (Google OAuth) pro produto principal, isso deixaria qualquer cliente comum apagar/subir símbolo na galeria. Corrigido pra `auth.uid() = '<uuid do admin>'::uuid`, tanto na tabela quanto no bucket. **Regra geral daqui pra frente: nunca usar `auth.role() = 'authenticated'` como controle de admin em nenhuma tabela nova — isso significa "qualquer usuário logado", não "o dono do site". Pra admin único, sempre `auth.uid() = <uuid fixo>`.**
 - Projeto Supabase: `https://pvgeramqsatltnvkkpvf.supabase.co`. A chave publicável (anon key) está hardcoded em `admin-simbolos.html` e `assets/flash-decor.js` — **isso é seguro**, é a chave protegida por RLS, não a `service_role`; não reabrir essa discussão sem motivo novo.
 
 ### Autenticação
@@ -303,7 +305,10 @@ navegador, nunca CLI como único caminho.
   funcionais, mas com identidade própria por ora.
 - `simbolos_astrologicos` + bucket `simbolos` criados a pedido do
   agente de front (spec registrada por eles na seção 9) — RLS: leitura
-  pública, escrita só autenticado, sem multi-tenant (admin único).
+  pública, escrita restrita ao `auth.uid()` do admin (corrigido de
+  `auth.role() = 'authenticated'`, que teria liberado qualquer usuário
+  cadastrado do produto principal — falha real, corrigida antes de ir
+  pra produção).
 - Usuário responsável não usa terminal (iMac 2011) — deploy sempre via
   Dashboard/navegador.
 
