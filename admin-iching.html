@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin — I Ching — Caos Astral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  body{ background: var(--bg); }
+  .admin-wrap{ max-width: 980px; margin: 0 auto; padding: 40px 20px 80px; }
+  .admin-header{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom: 28px; flex-wrap:wrap; gap:12px; }
+  .admin-header h1{ font-size: 1.5rem; margin:0; }
+  .admin-header .who{ font-family:'IBM Plex Mono', monospace; font-size:0.78rem; color:var(--ink-dim); }
+
+  /* login */
+  #loginBox{
+    max-width: 380px; margin: 80px auto; background: var(--bg-panel);
+    border: 1px solid var(--line); padding: 34px 30px;
+  }
+  #loginBox h2{ font-size: 1.2rem; margin: 0 0 20px; }
+  #loginBox label{ display:block; font-family:'IBM Plex Mono', monospace; font-size:0.72rem; color:var(--ink-dim); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em; }
+  #loginBox input{
+    width:100%; background:var(--bg-panel-2); border:1px solid var(--line-bright); color:var(--ink);
+    padding:11px 14px; font-family:'IBM Plex Sans', sans-serif; font-size:0.95rem; margin-bottom:16px;
+  }
+  #loginBox input:focus{ outline:none; border-color:var(--accent-bright); }
+  #loginError{ color:var(--accent-bright); font-size:0.82rem; margin-top:10px; min-height:18px; }
+
+  /* grid */
+  .hex-grid{
+    display:grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap:8px; margin-bottom: 34px;
+  }
+  .hex-tile{
+    background: var(--bg-panel); border: 1px solid var(--line); padding: 10px 6px;
+    text-align:center; cursor:pointer; font-family:'IBM Plex Mono', monospace; font-size:0.78rem;
+    color: var(--ink-dim); position:relative; transition: border-color .15s ease;
+  }
+  .hex-tile:hover{ border-color: var(--accent-bright); }
+  .hex-tile.active{ border-color: var(--accent-bright); color: var(--ink); }
+  .hex-tile .n{ font-size:1rem; color:var(--ink); }
+  .hex-tile .dot{
+    width:6px; height:6px; border-radius:50%; margin: 4px auto 0; background: var(--line-bright);
+  }
+  .hex-tile.status-revisao .dot{ background: #c9a227; }
+  .hex-tile.status-publicado .dot{ background: #3f9d5c; }
+
+  /* editor */
+  #editor{ display:none; background: var(--bg-panel); border: 1px solid var(--line); padding: 30px 28px; }
+  #editor.open{ display:block; }
+  #editor h2{ margin: 0 0 4px; font-size:1.3rem; }
+  #editor .legge-ref{ font-family:'IBM Plex Mono', monospace; font-size:0.78rem; color:var(--ink-faint); margin-bottom:24px; }
+  #editor label{ display:block; font-family:'IBM Plex Mono', monospace; font-size:0.72rem; color:var(--ink-dim); margin: 18px 0 6px; text-transform:uppercase; letter-spacing:0.05em; }
+  #editor label:first-of-type{ margin-top:0; }
+  #editor textarea, #editor input[type=text], #editor input[type=url], #editor select{
+    width:100%; background:var(--bg-panel-2); border:1px solid var(--line-bright); color:var(--ink);
+    padding:11px 14px; font-family:'IBM Plex Sans', sans-serif; font-size:0.94rem;
+  }
+  #editor textarea{ min-height: 70px; resize: vertical; }
+  #editor textarea:focus, #editor input:focus, #editor select:focus{ outline:none; border-color:var(--accent-bright); }
+  .lines-grid{ display:grid; gap:10px; }
+  .line-field{ }
+  .line-field .line-num{ font-family:'IBM Plex Mono', monospace; font-size:0.7rem; color:var(--accent-bright); margin-bottom:4px; display:block; }
+  .legge-quote{
+    background: var(--bg); border-left: 2px solid var(--line-bright);
+    padding: 8px 12px; margin-bottom: 8px; font-size: 0.86rem; line-height: 1.5;
+    color: var(--ink-faint); font-style: italic;
+  }
+  .legge-quote .tag{
+    display:block; font-family:'IBM Plex Mono', monospace; font-style:normal;
+    font-size: 0.66rem; text-transform:uppercase; letter-spacing:0.05em;
+    color: var(--ink-dim); margin-bottom: 3px;
+  }
+  .plate-preview{ margin-top:10px; max-width:220px; border:1px solid var(--line); }
+  .plate-preview img{ width:100%; display:block; }
+  .editor-actions{ margin-top: 26px; display:flex; gap:12px; align-items:center; }
+  #saveStatus{ font-family:'IBM Plex Mono', monospace; font-size:0.8rem; color:var(--ink-dim); }
+  .notes-field textarea{ min-height:50px; }
+
+  .empty-state{ color: var(--ink-faint); font-style:italic; padding: 40px 0; text-align:center; }
+</style>
+</head>
+<body>
+
+<div id="loginBox">
+  <h2>Admin — I Ching</h2>
+  <label for="email">E-mail</label>
+  <input type="email" id="email" autocomplete="username">
+  <label for="password">Senha</label>
+  <input type="password" id="password" autocomplete="current-password">
+  <button class="btn btn-solid mono" id="loginBtn" style="width:100%;">Entrar</button>
+  <div id="loginError"></div>
+</div>
+
+<div class="admin-wrap" id="adminArea" style="display:none;">
+  <div class="admin-header">
+    <h1>Seus 64 hexagramas</h1>
+    <div class="who">
+      <span id="whoEmail"></span> · <a href="#" id="logoutLink" class="link-out mono" style="border:none; color:var(--ink-dim);">sair</a>
+    </div>
+  </div>
+
+  <div class="hex-grid" id="hexGrid"></div>
+
+  <div id="editor">
+    <h2 id="edTitle"></h2>
+    <div class="legge-ref" id="edLegge"></div>
+
+    <label for="edJudgment">Seu julgamento</label>
+    <div id="edJudgmentRef"></div>
+    <textarea id="edJudgment" placeholder="Sua interpretação do julgamento deste hexagrama..."></textarea>
+
+    <label>Suas linhas</label>
+    <div class="lines-grid" id="edLines"></div>
+
+    <label for="edSymbolism">Seu símbolo / imagem</label>
+    <textarea id="edSymbolism" placeholder="Sua leitura da imagem formada pelos dois trigramas..."></textarea>
+
+    <label for="edPlateUrl">URL da prancha ilustrada</label>
+    <input type="url" id="edPlateUrl" placeholder="https://...">
+    <div class="plate-preview" id="platePreview" style="display:none;"><img id="plateImg" alt=""></div>
+
+    <label for="edStatus">Status</label>
+    <select id="edStatus">
+      <option value="rascunho">Rascunho</option>
+      <option value="revisao">Em revisão</option>
+      <option value="publicado">Publicado</option>
+    </select>
+
+    <label for="edNotes">Notas privadas (não aparece no site)</label>
+    <div class="notes-field"><textarea id="edNotes" placeholder="Anotações de trabalho..."></textarea></div>
+
+    <div class="editor-actions">
+      <button class="btn btn-solid mono" id="saveBtn">Salvar</button>
+      <span id="saveStatus"></span>
+    </div>
+  </div>
+
+  <div class="empty-state" id="emptyState">Selecione um hexagrama acima para editar.</div>
+</div>
+
+<script>
+// ---- config ----
+const SUPABASE_URL = 'https://pvgeramqsatltnvkkpvf.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_f5iH4AnwTt1jnwGMWg0qGw_-rd06eGm';
+const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const LINE_COUNT = { 1: 7, 2: 7 }; // hexagramas 1 e 2 têm 7 linhas (todos-nove / todos-seis)
+
+let hexagrams = []; // cache local (Supabase)
+let currentNumber = null;
+let leggeByNumber = {}; // referência de leitura, carregada do JSON estático
+
+async function loadLegge(){
+  try{
+    const res = await fetch('iching_legge_oracular_text.json');
+    const data = await res.json();
+    data.forEach(h=>{ leggeByNumber[h.number] = h; });
+  }catch(err){
+    console.error('Não foi possível carregar a referência do Legge:', err);
+  }
+}
+
+// ---- auth ----
+const loginBox = document.getElementById('loginBox');
+const adminArea = document.getElementById('adminArea');
+const loginError = document.getElementById('loginError');
+
+async function checkSession(){
+  const { data: { session } } = await supa.auth.getSession();
+  if(session){
+    showAdmin(session.user.email);
+  } else {
+    loginBox.style.display = 'block';
+    adminArea.style.display = 'none';
+  }
+}
+
+document.getElementById('loginBtn').addEventListener('click', async ()=>{
+  loginError.textContent = '';
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const { data, error } = await supa.auth.signInWithPassword({ email, password });
+  if(error){
+    loginError.textContent = 'Não foi possível entrar: ' + error.message;
+    return;
+  }
+  showAdmin(data.user.email);
+});
+
+document.getElementById('logoutLink').addEventListener('click', async (e)=>{
+  e.preventDefault();
+  await supa.auth.signOut();
+  location.reload();
+});
+
+async function showAdmin(email){
+  loginBox.style.display = 'none';
+  adminArea.style.display = 'block';
+  document.getElementById('whoEmail').textContent = email;
+  await loadHexagrams();
+}
+
+// ---- data ----
+async function loadHexagrams(){
+  const { data, error } = await supa
+    .from('iching_hexagrams')
+    .select('*')
+    .order('number', { ascending: true });
+  if(error){
+    document.getElementById('emptyState').textContent = 'Erro ao carregar: ' + error.message;
+    return;
+  }
+  hexagrams = data || [];
+  renderGrid();
+}
+
+function renderGrid(){
+  const grid = document.getElementById('hexGrid');
+  grid.innerHTML = '';
+  hexagrams.forEach(h=>{
+    const tile = document.createElement('div');
+    tile.className = `hex-tile status-${h.plate_status || 'rascunho'}`;
+    tile.dataset.number = h.number;
+    tile.innerHTML = `<div class="n">${h.number}</div><div class="dot"></div>`;
+    tile.addEventListener('click', ()=>openEditor(h.number));
+    grid.appendChild(tile);
+  });
+}
+
+function openEditor(number){
+  currentNumber = number;
+  const h = hexagrams.find(x=>x.number === number);
+  if(!h) return;
+
+  document.querySelectorAll('.hex-tile').forEach(t=>{
+    t.classList.toggle('active', Number(t.dataset.number) === number);
+  });
+
+  document.getElementById('emptyState').style.display = 'none';
+  const editor = document.getElementById('editor');
+  editor.classList.add('open');
+
+  document.getElementById('edTitle').textContent = `Hexagrama ${h.number}`;
+  document.getElementById('edLegge').textContent = `Referência (Legge): ${h.legge_name || '—'}`;
+  document.getElementById('edJudgment').value = h.your_judgment || '';
+  document.getElementById('edSymbolism').value = h.your_symbolism || '';
+  document.getElementById('edPlateUrl').value = h.plate_image_url || '';
+  document.getElementById('edStatus').value = h.plate_status || 'rascunho';
+  document.getElementById('edNotes').value = h.notes || '';
+
+  const legge = leggeByNumber[number];
+  const judgmentRef = document.getElementById('edJudgmentRef');
+  judgmentRef.innerHTML = legge && legge.thwan
+    ? `<div class="legge-quote"><span class="tag">Legge — Thwan</span>${escapeHtml(legge.thwan)}</div>`
+    : '';
+
+  updatePlatePreview(h.plate_image_url);
+
+  const lineCount = LINE_COUNT[number] || 6;
+  const lines = Array.isArray(h.your_lines) ? h.your_lines : [];
+  const leggeLines = (legge && Array.isArray(legge.lines)) ? legge.lines : [];
+  const linesWrap = document.getElementById('edLines');
+  linesWrap.innerHTML = '';
+  for(let i=0;i<lineCount;i++){
+    const field = document.createElement('div');
+    field.className = 'line-field';
+    const refText = leggeLines[i]
+      ? `<div class="legge-quote"><span class="tag">Legge — linha ${i+1}</span>${escapeHtml(leggeLines[i])}</div>`
+      : '';
+    field.innerHTML = `
+      <span class="line-num">Linha ${i+1}${(number===1||number===2) && i===6 ? ' (todos-nove/todos-seis)' : ''}</span>
+      ${refText}
+      <textarea data-line-index="${i}" placeholder="Sua interpretação da linha ${i+1}...">${lines[i] || ''}</textarea>
+    `;
+    linesWrap.appendChild(field);
+  }
+}
+
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+document.getElementById('edPlateUrl').addEventListener('input', (e)=>{
+  updatePlatePreview(e.target.value);
+});
+function updatePlatePreview(url){
+  const wrap = document.getElementById('platePreview');
+  const img = document.getElementById('plateImg');
+  if(url){
+    img.src = url;
+    wrap.style.display = 'block';
+  } else {
+    wrap.style.display = 'none';
+  }
+}
+
+document.getElementById('saveBtn').addEventListener('click', async ()=>{
+  if(currentNumber === null) return;
+  const saveStatus = document.getElementById('saveStatus');
+  saveStatus.textContent = 'Salvando...';
+
+  const lineCount = LINE_COUNT[currentNumber] || 6;
+  const lines = [];
+  document.querySelectorAll('#edLines textarea').forEach(t=>{
+    lines[Number(t.dataset.lineIndex)] = t.value;
+  });
+
+  const payload = {
+    your_judgment: document.getElementById('edJudgment').value,
+    your_lines: lines,
+    your_symbolism: document.getElementById('edSymbolism').value,
+    plate_image_url: document.getElementById('edPlateUrl').value || null,
+    plate_status: document.getElementById('edStatus').value,
+    notes: document.getElementById('edNotes').value,
+  };
+
+  const { error } = await supa
+    .from('iching_hexagrams')
+    .update(payload)
+    .eq('number', currentNumber);
+
+  if(error){
+    saveStatus.textContent = 'Erro: ' + error.message;
+    return;
+  }
+
+  // update local cache + grid dot without a full reload
+  const idx = hexagrams.findIndex(h=>h.number === currentNumber);
+  if(idx > -1) hexagrams[idx] = { ...hexagrams[idx], ...payload };
+  renderGrid();
+  document.querySelector(`.hex-tile[data-number="${currentNumber}"]`)?.classList.add('active');
+  saveStatus.textContent = 'Salvo ✓';
+  setTimeout(()=>{ saveStatus.textContent = ''; }, 2000);
+});
+
+checkSession();
+loadLegge();
+</script>
+</body>
+</html>
