@@ -21,6 +21,12 @@
     border: 1px solid var(--line);
     padding: 34px 30px;
   }
+  .auth-bar{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:22px; padding-bottom:16px; border-bottom:1px dashed var(--line-bright);
+    font-family:'IBM Plex Mono', monospace; font-size:0.8rem;
+  }
+  .auth-status{ color:var(--ink-dim); }
   .oracle-panel label{
     display:block; font-family:'IBM Plex Mono', monospace; font-size:0.75rem;
     color:var(--ink-dim); margin-bottom:8px; letter-spacing:0.05em; text-transform:uppercase;
@@ -150,6 +156,10 @@
   <section class="tight bg-panel">
     <div class="wrap-narrow">
       <div class="oracle-panel">
+        <div class="auth-bar" id="authBar">
+          <span id="authStatus" class="auth-status">Verificando sessão...</span>
+          <a href="#" id="authAction" class="link-out mono" style="border:none;"></a>
+        </div>
         <label for="question">Sua pergunta (opcional)</label>
         <textarea id="question" placeholder="Sobre o que você deseja consultar o oráculo?"></textarea>
         <button class="btn btn-solid mono cast-btn" id="castBtn">Lançar as moedas</button>
@@ -207,6 +217,52 @@
   <div class="footer-bottom"><span>© Caos Astral</span><div class="footer-links"><a href="manifesto.html">Manifesto</a><a href="intento.html">Intento</a><a href="raizes.html">Raízes</a><a href="diario.html">Diário</a><a href="planos.html">Planos</a></div></div>
 </div></footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://pvgeramqsatltnvkkpvf.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_f5iH4AnwTt1jnwGMWg0qGw_-rd06eGm';
+  const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const authStatus = document.getElementById('authStatus');
+  const authAction = document.getElementById('authAction');
+  let currentUser = null;
+
+  async function refreshAuthBar(){
+    const { data: { session } } = await supa.auth.getSession();
+    currentUser = session ? session.user : null;
+    if(currentUser){
+      authStatus.textContent = `Logado como ${currentUser.email} — suas consultas ficam salvas`;
+      authAction.textContent = 'sair';
+      authAction.onclick = async (e)=>{ e.preventDefault(); await supa.auth.signOut(); refreshAuthBar(); };
+    } else {
+      authStatus.textContent = 'Faça login para salvar seu histórico de consultas (opcional)';
+      authAction.textContent = 'entrar com Google';
+      authAction.onclick = async (e)=>{
+        e.preventDefault();
+        await supa.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.href } });
+      };
+    }
+  }
+  refreshAuthBar();
+
+  // chamado pelo engine (assets/iching-engine.js) quando uma consulta termina
+  window.onIChingCastComplete = async function(reading){
+    if(!currentUser){ return; } // sem login, não salva (a consulta em si funciona igual)
+    const { error } = await supa.from('iching_readings').insert({
+      user_id: currentUser.id,
+      question: reading.question,
+      primary_hexagram: reading.primaryHexagram,
+      moving_lines: reading.movingLines,
+      resulting_hexagram: reading.resultingHexagram,
+    });
+    if(error){
+      console.error('Não foi possível salvar a consulta:', error);
+      authStatus.textContent = 'Consulta feita, mas não foi possível salvar no histórico.';
+    } else {
+      authStatus.textContent = `Consulta salva no seu histórico, ${currentUser.email}`;
+    }
+  };
+</script>
 <script src="assets/iching-engine.js"></script>
 <script src="assets/flash-decor.js" defer></script>
 </body>

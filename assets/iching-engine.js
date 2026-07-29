@@ -248,6 +248,7 @@ async function runCasting(){
   }
 
   const movingCount = results.filter(r=>r.moving).length;
+  let changedHex = null;
 
   if(movingCount > 0 && primaryHex){
     const changedLines = results.map(r=>{
@@ -255,7 +256,7 @@ async function runCasting(){
       return {yang: !r.yang}; // moving lines flip
     });
     const changedBin = changedLines.map(l=>l.yang?'1':'0').join('');
-    const changedHex = getHexagram(changedBin);
+    changedHex = getHexagram(changedBin);
 
     const block = document.createElement('div');
     block.innerHTML = `<hr class="divider"><div class="num" style="color:var(--brass); text-transform:uppercase; letter-spacing:0.06em; font-size:13px; margin-bottom:10px;">Linhas em movimento (${movingCount}) — tendência futura</div>`;
@@ -276,6 +277,18 @@ async function runCasting(){
 
   resetRow.style.display = 'block';
   castBtn.disabled = false;
+
+  if(typeof window.onIChingCastComplete === 'function'){
+    const movingLinePositions = results
+      .map((r,i)=> r.moving ? i+1 : null)
+      .filter(v=>v!==null);
+    window.onIChingCastComplete({
+      question: questionEl.value.trim() || null,
+      primaryHexagram: primaryHex ? primaryHex.n : null,
+      movingLines: movingLinePositions,
+      resultingHexagram: changedHex ? changedHex.n : null
+    });
+  }
 }
 
 castBtn.addEventListener('click', runCasting);
