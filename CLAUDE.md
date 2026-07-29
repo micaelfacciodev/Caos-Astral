@@ -43,7 +43,7 @@ passivamente que elas aconteçam.
 | Interpretação autoral por grau exato (1°–30°) | **cena do grau** — nunca "símbolo sabiano"/"sabian" | fechado, 360 escritos |
 | Sigilo / símbolo de intenção | **âncora de intenção** — nunca "sigilo" | fechado |
 | Marcos (trânsitos lentos: Saturno/Urano/Plutão) | **marcos** | pendente — sem spec técnica |
-| Deriva | espaço de contemplação visual/sonora — 12 camadas generativas + frequências binaurais por estado de onda cerebral. Não é jogo nem meditação guiada; é ferramenta de estado alterado sem narrador — o que se faz com o estado é decisão de quem usa, igual a tudo mais aqui | fechado |
+| Deriva | (ferramenta própria, ver seção 9 — vocabulário/conceito ainda não descrito no glossário oficial) | pendente — confirmar entrada no glossário |
 
 Tom de voz: nunca "você vai" ou "isso significa que você é". Sempre
 **ferramenta + escolha em aberto**. Nenhuma conclusão moral fechada.
@@ -182,6 +182,35 @@ SQL Editor pra migrations/seeds; Edge Functions → Deploy a new function
 → **Via Editor** (colar o `index.ts` inteiro) → Deploy. Usuário responsável
 não usa terminal (iMac 2011) — todo caminho de deploy deve assumir
 navegador, nunca CLI como único caminho.
+
+### Integração GitHub ↔ Supabase (deploy automático de migrations)
+
+Ativado em Project Settings → Integrations → GitHub, com "Deploy to
+production" ligado, branch de produção `main`, working directory `.`.
+
+**Regra a partir de agora: todo schema muda primeiro no repo.**
+- Qualquer alteração de tabela/coluna/RLS/policy nasce como um arquivo
+  `.sql` novo em `supabase/migrations/`, seguindo a numeração sequencial já
+  usada (`0007_...`, `0008_...`).
+- O arquivo vai pro GitHub via commit na branch `main`. O Supabase aplica
+  sozinho no banco de produção quando o commit chega lá — não precisa mais
+  colar SQL manualmente no SQL Editor pra rodar migration nova.
+- O commit em si passa a ser o log: quem mudou o quê e quando fica no
+  histórico do GitHub, não só na cabeça de quem rodou.
+- **SQL Editor do painel Supabase vira só leitura/depuração** (`SELECT`,
+  checar dado, testar query pontual) — não é mais onde uma mudança de
+  schema é decidida e aplicada sem deixar rastro em lugar nenhum.
+
+**Limitações a ter em mente (plano Free, sem terminal):**
+- Não existe branch de preview/staging aqui — sem plano Pro, qualquer
+  migration que chegar na `main` vai direto pra produção, sem ambiente
+  intermediário de teste. Revisar o `.sql` com cuidado antes do commit
+  importa mais ainda por causa disso.
+- Isso não é retroativo: só cobre migrations novas a partir de agora.
+  Mudança feita direto no painel (Table Editor ou SQL Editor, sem virar
+  arquivo) continua sem registro em lugar nenhum — e recuperar isso depois
+  exigiria `supabase db diff` via CLI, que não é o fluxo padrão deste
+  projeto (ver "Deploy sem terminal" acima).
 
 ---
 
