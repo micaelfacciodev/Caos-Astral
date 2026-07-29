@@ -348,6 +348,11 @@ production" ligado, branch de produção `main`, working directory `.`.
   pra produção).
 - Usuário responsável não usa terminal (iMac 2011) — deploy sempre via
   Dashboard/navegador.
+- **`ADENDO-CLAUDE.md` foi incorporado a este documento e removido do
+  repo (29/07).** Todo o conteúdo dele já estava aplicado (renomes,
+  vocabulário, `oraculo.html`, remoção de `caos-astral-landing.html`) —
+  virou arquivo morto duplicando este `CLAUDE.md`. Não recriar; se surgir
+  necessidade de novo adendo, editar direto este arquivo.
 
 ---
 

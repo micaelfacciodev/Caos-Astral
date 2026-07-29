@@ -5,14 +5,22 @@ Feito pra ser fácil de qualquer agente de código plugar dado dinâmico.
 
 ## Estrutura
 - `assets/style.css` — design system único, compartilhado por todas as páginas. Não duplicar tokens inline.
+- `assets/flash-decor.js` — puxa arte decorativa de `simbolos_astrologicos` (Supabase) em qualquer página
+- `assets/iching-engine.js` — motor do Oráculo
 - `index.html` — landing
 - `manifesto.html`, `intento.html` — filosofia
+- `ritual-de-entrada.html` — onboarding, antes do Kit
 - `kit.html`, `retorno.html`, `ressonancia.html`, `ancora.html` — produto astrológico (motor principal)
-- `oraculo.html` — I Ching, propositalmente isolado do vocabulário do kit (ver glossário)
-- `raizes.html` + `raizes-*.html` — história/proveniência
+- `deriva.html` — diário/laboratório fenomenológico
+- `aura_flow.html` — página adicional de identidade visual (conferir escopo/uso atual antes de linkar no menu principal)
+- `oraculo.html` — I Ching; vocabulário isolado do kit por decisão de projeto, identidade visual já unificada com o resto do site (ver glossário)
+- `raizes.html` + `raizes-magia-do-caos.html`, `raizes-astrologia.html`, `raizes-i-ching.html`, `raizes-cena-do-grau.html`, `raizes-berilo-faccio.html` — história/proveniência
 - `blog.html` + `blog-eco.html` (exemplo) — conteúdo
 - `diario.html` — área privada (requer auth)
 - `planos.html` — pricing
+- `admin-simbolos.html`, `admin-iching.html` — hub de admin, uso interno (não faz parte do fluxo de usuário)
+- `graus-caos-astral/` — dados brutos (JSON) das 360 cenas de grau, por signo
+- `supabase/migrations/` — schema do banco, ver `CLAUDE.md` seção 4 pra ordem de execução e regra de deploy via GitHub
 
 ## Onde plugar o engine
 Toda página de produto tem um comentário `<!-- ENGINE: ... -->` marcando exatamente
