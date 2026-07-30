@@ -689,3 +689,74 @@ pra manter os três sincronizados, já que agora commitamos direto.
   que `daily_readings` tem `id uuid` como chave primária — não
   verificado contra o schema real de produção (essa tabela também não
   está versionada ainda), conferir antes de rodar `0008` se não bater.
+
+- **Fundo espacial aplicado no site inteiro (30/07).** Nebulosa azul-violeta
+  + estrelas atrás de todo o conteúdo, em 37 das 38 páginas do repo.
+  Registrando aqui porque mexe em arquivo compartilhado (`assets/style.css`)
+  e afeta as três frentes que outros agentes estão tocando agora
+  (reconstrução da Deriva, dashboard de cliente, versão mobile) — ler antes
+  de mexer em qualquer uma dessas três pra não colidir ou duplicar.
+
+  **Arquivos novos/alterados:**
+  - `assets/space-bg.js` (novo) — gera as estrelas (estáticas em CSS +
+    poucas cintilantes em canvas, ~24fps, pausa com aba em background,
+    respeita `prefers-reduced-motion`). Custo propositalmente baixo.
+  - `assets/style.css` — nova seção `FUNDO ESPACIAL` no final do arquivo
+    (nebulosa via `radial-gradient`, sem imagem, sem dependência externa).
+    Também mudou: `html{background:#06070d}` / `body{background:transparent}`
+    (tem que ser separado — colocar cor sólida nos dois ao mesmo tempo faz
+    o fundo do body pintar por cima do z-index negativo da nebulosa, isso
+    já quebrou uma vez). E `.bg-panel` deixou de ser sólido
+    (`var(--bg-panel)`) e virou translúcido (`rgba(19,18,16,0.6)`) —
+    era a causa das "faixas pretas" que sobravam nas seções de painel;
+    se algum agente reintroduzir uma versão sólida de `.bg-panel`, a
+    nebulosa some atrás dela de novo.
+
+  **Contrato de markup** (pra qualquer página nova/reconstruída que
+  queira o efeito): logo depois de `<body>`, colar exatamente
+  ```html
+  <div id="space-bg" aria-hidden="true">
+    <div class="nebula"></div>
+    <div class="stars-static" id="stars-static"></div>
+    <canvas id="space-canvas"></canvas>
+  </div>
+  ```
+  e antes de `</body>`: `<script src="assets/space-bg.js" defer></script>`.
+  Só funciona de graça em páginas que já linkam `assets/style.css`.
+
+  **Exceções e pendências pra quem está mexendo nas 3 frentes:**
+  - **`aura_flow.html` foi deixado de fora de propósito.** É o motor de
+    canvas full-screen dos "portais" da Deriva (vórtice, constelação,
+    plasma etc.) — ele já pinta um fundo opaco a cada frame, então a
+    nebulosa ficaria 100% escondida atrás, zero efeito visível. Como o
+    usuário confirmou que esse arquivo é órfão (outro agente está
+    reconstruindo a Deriva do zero), não faz sentido mexer nele agora.
+    **Pro agente reconstruindo a Deriva:** se a nova versão tiver telas
+    de conteúdo normais (não só canvas full-screen), vale aplicar o
+    mesmo contrato de markup acima nelas.
+  - **`deriva.html` recebeu uma versão embutida** (não linkada em
+    `assets/style.css` — a página tem `:root` e paleta própria,
+    oxblood/paper, diferente do resto do site). O mesmo CSS da nebulosa
+    foi duplicado direto no `<style>` da própria página, com os mesmos
+    IDs/classes (`#space-bg`, `.nebula`, `.stars-static`,
+    `#space-canvas`) e o mesmo `assets/space-bg.js` linkado no final.
+    **Se o agente da Deriva reescrever este arquivo do zero**, ou reusa
+    esse bloco (procurar `/* ===== Fundo espacial` no `<style>` atual
+    antes de sobrescrever) ou aplica o contrato de markup padrão acima.
+  - **`dashboard.html` já está com o fundo aplicado** (via
+    `assets/style.css`, igual às outras páginas do design system — não
+    precisou de versão embutida). **Pro agente do dashboard de cliente:**
+    se for reconstruir esse arquivo, manter o `<div id="space-bg">` logo
+    após `<body>` e o `<script src="assets/space-bg.js">` antes de
+    `</body>`, ou reaplicar o contrato de markup acima se recriar do zero.
+  - **Mobile:** este efeito é só CSS/JS de browser (`position:fixed`,
+    `<canvas>`, `matchMedia`) — não foi pensado pra WebView/nativo.
+    **Pro agente de mobile:** decidir caso a caso se replica (mesma
+    lógica funciona em WebView normalmente) ou ignora; não assumir que
+    existe suporte nativo equivalente sem testar.
+  - **`enciclopedia-verbete.html`** também recebeu versão embutida (é
+    página WIP com paleta própria, `--bg:#14161a`, ainda marcada como
+    "TODO trocar pelos tokens reais do site" no próprio arquivo — quando
+    isso for migrado pro design system padrão, dá pra trocar a versão
+    embutida da nebulosa pelo contrato de markup padrão e remover a
+    duplicata).
