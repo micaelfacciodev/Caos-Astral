@@ -103,6 +103,7 @@
       <a href="oraculo">Oráculo</a>
       <a href="diario">Diário</a>
       <a href="raizes">Raízes</a>
+      <a href="enciclopedia">Enciclopédia</a>
       <a href="blog">Blog</a>
       <a href="manifesto">Manifesto</a>
       <a href="intento">Intento</a>
@@ -127,9 +128,9 @@
     <div class="preview-fields" id="previewFields">
       <div class="pf-row" data-field="nome"><span class="pf-label">Nome</span><span class="pf-value pending">—</span></div>
       <div class="pf-row" data-field="nucleo"><span class="pf-label">☉ Núcleo</span><span class="pf-value pending">—</span></div>
-      <div class="pf-row" data-field="territorio"><span class="pf-label">⌂ Território de abertura</span><span class="pf-value pending">—</span></div>
-      <div class="pf-row" data-field="fome"><span class="pf-label">☽ Fome</span><span class="pf-value pending">—</span></div>
       <div class="pf-row" data-field="mascara"><span class="pf-label">▲ Máscara</span><span class="pf-value pending">—</span></div>
+      <div class="pf-row" data-field="fome"><span class="pf-label">☽ Fome</span><span class="pf-value pending">—</span></div>
+      <div class="pf-row" data-field="territorio"><span class="pf-label">⌂ Território de abertura</span><span class="pf-value pending">—</span></div>
     </div>
   </div>
 
@@ -148,8 +149,8 @@
       <div class="step active" data-step="0">
         <h2 style="margin-bottom:10px;">Qual é o seu nome?</h2>
         <p class="step-hint">✦ nome completo, como no registro — ajuda a evitar ambiguidade de cálculo em nomes muito comuns</p>
-        <div class="field"><label>Nome completo</label><input type="text" id="inpNome" placeholder="Seu nome"></div>
-        <div class="field"><label>Data de nascimento</label><input type="date" id="inpData"></div>
+        <div class="field"><label>Nome completo</label><input type="text" id="inpNome" placeholder="Seu nome" autocomplete="name"></div>
+        <div class="field"><label>Data de nascimento</label><input type="date" id="inpData" autocomplete="bday"></div>
         <div class="step-nav">
           <button class="step-back" disabled>← voltar</button>
           <button class="btn btn-solid mono" id="btnStep0">Continuar</button>
@@ -160,7 +161,7 @@
       <div class="step" data-step="1">
         <h2 style="margin-bottom:10px;">Onde você nasceu?</h2>
         <p class="step-hint">✦ isso define o território de abertura do seu kit e a leitura de fricção/corrente com precisão geográfica real</p>
-        <div class="field"><label>Cidade de nascimento</label><input type="text" id="inpLocal" placeholder="Cidade, estado, país"></div>
+        <div class="field"><label>Cidade de nascimento</label><input type="text" id="inpLocal" placeholder="Cidade, estado, país" autocomplete="off"></div>
         <div class="step-nav">
           <button class="step-back">← voltar</button>
           <button class="btn btn-solid mono" id="btnStep1">Continuar</button>
@@ -171,7 +172,7 @@
       <div class="step" data-step="2">
         <h2 style="margin-bottom:10px;">Que horas você nasceu?</h2>
         <p class="step-hint">✦ isso define máscara e territórios com exatidão. Se não souber a hora exata, dá pra ajustar depois — mas o kit fica incompleto até lá</p>
-        <div class="field"><label>Hora de nascimento</label><input type="time" id="inpHora"></div>
+        <div class="field"><label>Hora de nascimento</label><input type="time" id="inpHora" autocomplete="off"></div>
         <div class="step-nav">
           <button class="step-back">← voltar</button>
           <button class="btn btn-solid mono" id="btnStep2">Continuar</button>
@@ -188,8 +189,8 @@
           Continuar com Google
         </button>
         <div class="divider-or">ou com e-mail</div>
-        <div class="field"><label>E-mail</label><input type="email" id="inpEmail" placeholder="voce@email.com"></div>
-        <div class="field"><label>Crie sua senha</label><input type="password" id="inpSenha" placeholder="mínimo 8 caracteres"></div>
+        <div class="field"><label>E-mail</label><input type="email" id="inpEmail" placeholder="voce@email.com" autocomplete="email"></div>
+        <div class="field"><label>Crie sua senha</label><input type="password" id="inpSenha" placeholder="mínimo 8 caracteres" autocomplete="new-password"></div>
         <div class="terms-row">
           <input type="checkbox" id="inpTermos">
           <label for="inpTermos">Li e concordo com os <a href="#">termos de uso</a> e a <a href="#">privacidade</a> do Caos Astral.</label>
@@ -265,33 +266,52 @@
     if(accent) val.classList.add('accent');
   }
 
-  // placeholders determinísticos só para dar vida à prévia — trocar por dado real do engine
-  const FAKE_NUCLEO = ['Áries','Touro','Gêmeos','Câncer','Leão','Virgem','Libra','Escorpião','Sagitário','Capricórnio','Aquário','Peixes'];
-  const FAKE_TERRITORIOS = ['dos vínculos','do ofício','da fala','da casa','do prazer','do corpo'];
+  // Núcleo: cálculo real por data de corte de signo solar (não depende de
+  // hora/local — só precisa da data, então dá pra ser 100% correto aqui
+  // mesmo sem chamar o motor completo no backend).
+  function sunSignFromDate(isoDateStr){
+    const [, m, day] = isoDateStr.split('-').map(Number);
+    const cutoffs = [
+      [1,19,'Capricórnio'],[2,18,'Aquário'],[3,20,'Peixes'],[4,19,'Áries'],
+      [5,20,'Touro'],[6,20,'Gêmeos'],[7,22,'Câncer'],[8,22,'Leão'],
+      [9,22,'Virgem'],[10,22,'Libra'],[11,21,'Escorpião'],[12,21,'Sagitário'],
+    ];
+    for(const [cm, cd, sign] of cutoffs){
+      if(m < cm || (m === cm && day <= cd)) return sign;
+    }
+    return 'Capricórnio'; // 22–31 de dezembro
+  }
 
   document.getElementById('btnStep0').addEventListener('click', () => {
     const nome = document.getElementById('inpNome').value.trim();
     const data = document.getElementById('inpData').value;
     if(!nome || !data){ return; }
     revealField('nome', nome);
-    const idx = new Date(data).getMonth();
-    revealField('nucleo', FAKE_NUCLEO[idx % 12], true);
+    revealField('nucleo', sunSignFromDate(data), true);
     goTo(1);
   });
 
   document.getElementById('btnStep1').addEventListener('click', () => {
     const local = document.getElementById('inpLocal').value.trim();
     if(!local){ return; }
-    revealField('territorio', FAKE_TERRITORIOS[local.length % FAKE_TERRITORIOS.length]);
+    // Território real depende do mapa completo (ascendente + casas) — não
+    // dá pra saber só com o nome da cidade. Reveal honesto, sem fingir
+    // um valor específico que provavelmente estaria errado.
+    revealField('territorio', 'no seu Kit ✦');
     goTo(2);
   });
 
   document.getElementById('btnStep2').addEventListener('click', () => {
     const hora = document.getElementById('inpHora').value;
     if(!hora){ return; }
-    const h = parseInt(hora.split(':')[0], 10);
-    revealField('fome', FAKE_NUCLEO[(h+3) % 12]);
-    revealField('mascara', FAKE_NUCLEO[(h+7) % 12], true);
+    // Fome (Lua) muda de signo a cada ~2,5 dias e precisa do horário em
+    // UTC preciso; Máscara (Ascendente) precisa de latitude/longitude
+    // reais. Nenhum dos dois dá pra calcular direito só com hora local
+    // e nome de cidade em texto — por isso reveal honesto aqui também,
+    // em vez de mostrar um signo que pode estar errado (foi exatamente
+    // isso que aconteceu com Núcleo antes dessa correção).
+    revealField('fome', 'no seu Kit ✦');
+    revealField('mascara', 'no seu Kit ✦', true);
     goTo(3);
   });
 

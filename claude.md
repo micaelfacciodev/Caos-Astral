@@ -422,3 +422,26 @@ pra manter os três sincronizados, já que agora commitamos direto.
     chave/SLA — se ficarem instáveis em produção, considerar mover pra
     uma Edge Function própria com cache, em vez de chamar direto do
     browser.
+**Sessão de 30/07 — URLs limpas (sem `.html`):**
+- Removida a extensão `.html` de todos os links internos (`href`) em todas
+  as páginas do site — nav, footers, botões, links dinâmicos em JS
+  (template literals de `enciclopedia-index.html`/`enciclopedia-verbete.html`).
+  Funciona sem nenhuma config de servidor porque o GitHub Pages já resolve
+  `/pagina` pra `pagina.html` nativamente (path exato → path+`.html` →
+  path+`/index.html`, nessa ordem) — comportamento documentado, sem Jekyll.
+- **Bug real corrigido de passagem**: `enciclopedia-index.html` e
+  `enciclopedia-verbete.html` já usavam `href="/planos"` e
+  `href="/enciclopedia"` (absolutos, sem `.html`) antes desta sessão — isso
+  está **quebrado hoje** porque o site está publicado em
+  `usuario.github.io/Caos-Astral/` (subpasta), não na raiz do domínio.
+  Convertidos pra relativos (`href="planos"`, `href="enciclopedia"`), que
+  funcionam tanto na subpasta atual quanto depois de mover pra domínio
+  próprio (usuário confirmou que a compra do domínio é planejada, ainda
+  sem data — todas as páginas estão no mesmo nível/raiz do repo, então link
+  relativo sem `./` nem `/` inicial é seguro nos dois cenários).
+- Assets (`assets/style.css`, `.js`, fontes do Google, imagens) mantêm
+  extensão normalmente — a limpeza foi só em links de página pra página.
+  `href="#"` (placeholders de termos/privacidade) não tocado.
+- **Não coberto ainda**: se novas páginas forem adicionadas ao site, os
+  links internas devem nascer sem `.html` desde já, seguindo esse padrão —
+  não reintroduzir a extensão em código novo.

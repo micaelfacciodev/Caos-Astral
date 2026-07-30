@@ -59,7 +59,7 @@
 <div class="cta-pago">
   Parte do acervo é aberta gratuitamente. O acervo completo — alquimia, hermetismo, cabala, runas, wicca e mais — faz parte dos planos pagos.
   <br>
-  <a href="/planos">Ver planos</a>
+  <a href="planos">Ver planos</a>
 </div>
 
 <div class="filtros" id="filtros"></div>
@@ -124,7 +124,7 @@
 
     grid.innerHTML = filtradas.map(e => `
       <a class="card ${e.tier === 'pago' ? 'bloqueado' : ''}"
-         href="${e.tier === 'pago' ? '/planos' : '/enciclopedia-verbete.html?slug=' + e.slug}">
+         href="${e.tier === 'pago' ? 'planos' : 'enciclopedia-verbete?slug=' + e.slug}">
         ${e.tier === 'pago' ? '<span class="cadeado">🔒</span>' : ''}
         <div class="cat">${e.categoria}</div>
         <h3>${e.nome}</h3>
