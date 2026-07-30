@@ -1,12 +1,5 @@
 # Caos Astral — Glossário Oficial
 
-> ⚠️ **Este arquivo é um snapshot histórico**, gerado no início do projeto.
-> A partir da integração dos três agentes ao repositório, **`CLAUDE.md`
-> é a fonte viva de vocabulário** (seção de tabela de termos, próximo do
-> topo) — é ele que reflete decisões recentes (Cena do grau, Retorno, O
-> Terceiro, Deriva etc.). Consulte este arquivo só por curiosidade de
-> como o vocabulário evoluiu, não como referência de trabalho.
-
 Documento de referência única. Qualquer conta/agente trabalhando no projeto (front, ferramenta principal, agente de I Ching) deve usar exatamente estes termos — não sinônimos, não traduções livres. Se um termo não está aqui, ele não existe oficialmente ainda: debater antes de codar.
 
 **Status:** `fechado` = pode usar em produção · `pendente` = decisão em aberto, não codar ainda · `standby` = aguardando decisão de escopo maior
@@ -18,9 +11,10 @@ Documento de referência única. Qualquer conta/agente trabalhando no projeto (f
 | Termo | Substitui | Definição | Status |
 |---|---|---|---|
 | **Núcleo** | Signo solar | O motor que não se negocia | fechado |
-| **Fome** | Signo lunar | O apetite cru que pede satisfação | fechado |
 | **Máscara** | Ascendente | A interface que o mundo vê primeiro | fechado |
+| **Fome** | Signo lunar | O apetite cru que pede satisfação | fechado |
 | **Território** | Casa astrológica | Área de operação (território 7 = vínculos, etc.) | fechado |
+| *(sem nome ainda)* | Lilith Negra (verdadeira/oscilante) | Decidido incluir (29/07); falta nome no vocabulário Caos Astral e implementação do cálculo (ver `CLAUDE.md` seção 5) | pendente |
 | **Fricção** | Aspecto tenso (quadratura, oposição) | Atrito que exige decisão consciente — **não é** sinônimo genérico de "energia do trânsito" | fechado |
 | **Corrente** | Aspecto harmônico (trígono, sextil) | Fluxo que já existe, fácil de mais até | fechado |
 | **Janela** | Trânsito do dia | Abertura temporária, tática, renovada todo dia | fechado |

@@ -26,10 +26,16 @@ passivamente que elas aconteçam.
 | Termo tradicional | Termo Caos Astral | Status |
 |---|---|---|
 | Signo solar | **núcleo** | fechado |
-| Signo lunar | **fome** | fechado |
 | Ascendente | **máscara** | fechado |
+| Signo lunar | **fome** | fechado |
 | Casa astrológica | **território** | fechado |
 | Recorte vocacional (casa 6/10) | **território de ofício** | pendente |
+
+> **Ordem de apresentação canônica (29/07): Núcleo, Máscara, Fome,
+> Território.** Vale em qualquer lugar que liste as peças em sequência —
+> `kit.html` (tabela e cards), `ritual-de-entrada.html` (painel de
+> resumo), glossário. Não é ordem alfabética nem de "importância", é a
+> ordem decidida pelo autor; manter consistente em conteúdo novo.
 | Aspecto tenso (quadratura **e** oposição) | **fricção** | fechado |
 | Aspecto harmônico (trígono **e** sextil) | **corrente** | fechado |
 | Conjunção | **sem termo fixo** — decidida caso a caso (ver seção 5) | fechado conceitualmente, algoritmo provisório |
@@ -221,6 +227,19 @@ production" ligado, branch de produção `main`, working directory `.`.
 - **Quíron**: fora da astronomy-engine. Kepleriana de dois corpos
   (elementos JPL SBDB, época 2021-Jul-01). Sem correção de perturbação —
   aceitável pra uso pessoal.
+- **Lilith (decidido incluir, 29/07) — Lilith Negra verdadeira/oscilante,
+  não a média, não o asteroide 1181.** Ainda não implementada — registro
+  de decisão, não de código pronto. Mesma categoria de problema que
+  Quíron: não sai do `astronomy-engine` puro. É o apogeu real (não
+  médio) da órbita lunar — precisa da posição osculadora da Lua com
+  perturbação solar incluída, mais sensível a erro que a versão média
+  (que seria só progressão linear simples). Antes de implementar:
+  (1) decidir fonte de efeméride/elementos orbitais confiável pra órbita
+  lunar perturbada, (2) validar contra um valor de referência conhecido
+  (efeméride publicada) antes de considerar correto — erro aqui é fácil
+  de não perceber visualmente, diferente de um bug de casa/grau. (3)
+  falta nome de vocabulário Caos Astral (ver glossário, entrada
+  pendente) antes de expor na UI.
 - **Ascendente/Meio-do-Céu**: GMST + obliquidade + latitude, cálculo real,
   exige hora de nascimento exata.
 - **Casas**: signo inteiro (decisão deliberada).
@@ -316,6 +335,9 @@ production" ligado, branch de produção `main`, working directory `.`.
       duplicado após a fusão de identidade visual — conferir.
 - [ ] Monetização (paywall, preview parcial, assinatura) — desenho não
       iniciado, ver seção 1.
+- [ ] **Implementar Lilith Negra verdadeira** (decidido 29/07, ver seção
+      5) — cálculo real ainda não existe, e falta nome de vocabulário
+      Caos Astral (ver glossário, entrada pendente).
 
 ---
 
