@@ -367,6 +367,17 @@ production" ligado, branch de produção `main`, working directory `.`.
   já lidera título/H1 com marca + filosofia ("o mapa não é destino"), e
   nomeia "astrologia" logo no primeiro parágrafo como contraponto, não
   como rótulo genérico de categoria. Confirmado como padrão a manter.
+- **Enciclopédia (29/07): criada, prioridade alta, já no menu.** Página
+  índice `enciclopedia.html` + 8 verbetes-stub (`enciclopedia-simbolo.html`,
+  `-mapa`, `-previsao`, `-arquetipo`, `-pratica`, `-crenca`, `-consciencia`,
+  `-interpretacao`), organizados por pergunta fundamental, não por
+  tradição — ver seção 15 do documento filosófico consolidado. Link
+  inserido no menu principal e no rodapé de **todas** as páginas do site
+  (entre "Raízes" e "Blog"). Verbetes marcados explicitamente como "em
+  construção" — cada um tem framing de 2 parágrafos, não é conteúdo
+  final. Não apagar esse aviso ao expandir o conteúdo real de cada
+  verbete, e sim substituí-lo quando o verbete de fato estiver
+  completo.
 
 ---
 

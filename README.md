@@ -15,6 +15,7 @@ Feito pra ser fácil de qualquer agente de código plugar dado dinâmico.
 - `aura_flow.html` — componente visual (canvas de partículas/vórtice), carregado em overlay de dentro de `deriva.html` via `?layer=`. Não é página de navegação — não tem e não deve ter menu.
 - `oraculo.html` — I Ching; vocabulário isolado do kit por decisão de projeto, identidade visual já unificada com o resto do site (ver glossário)
 - `raizes.html` + `raizes-magia-do-caos.html`, `raizes-astrologia.html`, `raizes-i-ching.html`, `raizes-cena-do-grau.html`, `raizes-berilo-faccio.html` — história/proveniência
+- `enciclopedia.html` + `enciclopedia-simbolo.html`, `-mapa`, `-previsao`, `-arquetipo`, `-pratica`, `-crenca`, `-consciencia`, `-interpretacao` — verbetes por pergunta fundamental, não por tradição (stub, alta prioridade de aprofundamento)
 - `blog.html` + `blog-eco.html` (exemplo) — conteúdo
 - `diario.html` — área privada (requer auth)
 - `planos.html` — pricing

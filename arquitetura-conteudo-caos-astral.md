@@ -24,6 +24,7 @@ Caos Astral
 │   ├── /raizes/i-ching
 │   ├── /raizes/cena-do-grau       (antiga /raizes/simbolos-sabianos, ver nota abaixo)
 │   └── /raizes/berilo-faccio      → biografia do pai, proveniência real (ver seção 1)
+├── /enciclopedia                 → verbetes por pergunta fundamental, não por tradição (nova, alta prioridade)
 ├── /diario                       → diário privado do usuário (logado)
 ├── /blog                         → textos, ensaios, artigos
 ├── /planos                       → pricing
@@ -89,7 +90,36 @@ Cumpre duas funções: **honestidade intelectual** (nada foi inventado do zero f
 
 ---
 
-## 3. `/blog`
+## 3. `/enciclopedia` — verbetes por pergunta fundamental
+
+Diferente de `/raizes` (organizada por tradição/proveniência histórica),
+a Enciclopédia é organizada por **pergunta filosófica**: o que é um
+símbolo, um mapa, uma previsão, um arquétipo, uma prática, uma crença,
+consciência, interpretação. Tradições diferentes (astrologia, I Ching,
+cena do grau, Deriva) entram como respostas diferentes pra mesma
+pergunta, não como categorias separadas.
+
+**Estado atual:** página índice + 8 verbetes criados como stub — cada um
+com framing de 2 parágrafos e aviso explícito de "em construção". Alta
+prioridade de aprofundamento (ver `CLAUDE.md`).
+
+**Verbetes:**
+1. `enciclopedia-simbolo.html`
+2. `enciclopedia-mapa.html`
+3. `enciclopedia-previsao.html`
+4. `enciclopedia-arquetipo.html`
+5. `enciclopedia-pratica.html`
+6. `enciclopedia-crenca.html`
+7. `enciclopedia-consciencia.html`
+8. `enciclopedia-interpretacao.html`
+
+Cada verbete novo deve manter o padrão: pergunta no `<h1>`, framing curto
+de 1-2 frases no `.sub`, e corpo em `.prose` que cruza tradições sem
+tratar nenhuma como dona da resposta certa.
+
+---
+
+## 4. `/blog`
 
 Posts organizados por tag ligada ao vocabulário fechado (#fricção, #eco, #cicatriz, #retorno), não categorias genéricas. Reforça vocabulário a cada navegação e cria trilha de SEO em termos que só o produto usa.
 
@@ -101,7 +131,7 @@ Posts organizados por tag ligada ao vocabulário fechado (#fricção, #eco, #cic
 
 ---
 
-## 4. `/diario` — diário do usuário (privado, logado)
+## 5. `/diario` — diário do usuário (privado, logado)
 
 Já está no escopo técnico ("diário de gnose"). Decisões de produto a fechar antes do código avançar:
 
@@ -116,7 +146,8 @@ Já está no escopo técnico ("diário de gnose"). Decisões de produto a fechar
 | Página | Urgência | Por quê |
 |---|---|---|
 | `/manifesto` | já existe | — |
-| `/intento` | alta | Fecha lacuna de credibilidade pessoal; barato de escrever, alto valor de confiança |
-| `/raizes/*` | média-alta | Diferencial de marketing + proteção ética/legal de proveniência; texto-pesado, sem lógica de produto |
+| `/intento` | já existe | Identidade resolvida (sem anonimato, 29/07) — só falta revisão de texto se necessário |
+| `/raizes/*` | já existe | Inclui `/raizes/berilo-faccio` e `/raizes/cena-do-grau` (renomeado) |
+| `/enciclopedia` | **alta** | 8 verbetes criados como stub (29/07) — prioridade é aprofundar conteúdo real, não estrutura |
 | `/blog` | média | Motor de SEO de longo prazo; não bloqueia MVP |
 | `/diario` | alta (depende do resto do produto) | Já está no escopo técnico; decisão de UX vale fechar antes do agente de código avançar |
