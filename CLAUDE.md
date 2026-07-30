@@ -29,6 +29,7 @@ passivamente que elas aconteçam.
 | Ascendente | **máscara** | fechado |
 | Signo lunar | **fome** | fechado |
 | Casa astrológica | **território** | fechado |
+| Lilith Negra (verdadeira/oscilante) | **exílio** | fechado — nome; cálculo em `lilith.ts`, falta integrar |
 | Recorte vocacional (casa 6/10) | **território de ofício** | pendente |
 
 > **Ordem de apresentação canônica (29/07): Núcleo, Máscara, Fome,
@@ -36,6 +37,9 @@ passivamente que elas aconteçam.
 > `kit.html` (tabela e cards), `ritual-de-entrada.html` (painel de
 > resumo), glossário. Não é ordem alfabética nem de "importância", é a
 > ordem decidida pelo autor; manter consistente em conteúdo novo.
+> Cicatriz (Quíron) e Exílio (Lilith) são peças complementares, fora
+> dessa sequência principal — entram depois, não substituem a ordem
+> das quatro centrais.
 | Aspecto tenso (quadratura **e** oposição) | **fricção** | fechado |
 | Aspecto harmônico (trígono **e** sextil) | **corrente** | fechado |
 | Conjunção | **sem termo fixo** — decidida caso a caso (ver seção 5) | fechado conceitualmente, algoritmo provisório |
@@ -142,11 +146,26 @@ supabase/
     seed_0002_graus_simbolicos.sql             -- 360 cenas de grau (nome do arquivo desatualizado,
                                                 --   tabela final é cenas_grau após o rename da 0003)
   functions/
+    _shared/
+      lilith.ts                                 -- Exílio (Lilith verdadeira) — criado 29/07, ver seção 5
     compute-natal-chart/index.ts
     compute-daily-window/index.ts
     compute-solar-return/index.ts
     compute-synastry/index.ts
 ```
+
+> **Nota importante sobre esse diagrama (29/07):** até hoje, essa pasta
+> `functions/` era só descrição — não existia de verdade no repo, porque
+> o código das Edge Functions sempre foi colado direto no editor do
+> painel Supabase (ver "Deploy sem terminal" abaixo), nunca versionado.
+> `_shared/lilith.ts` é o primeiro arquivo real dessa pasta. **A
+> integração GitHub configurada na seção acima aplica só migrations —
+> não faz deploy automático de Edge Function.** Deploy de function
+> automático via GitHub exigiria GitHub Actions + `SUPABASE_ACCESS_TOKEN`
+> + CLI, o que contradiz a restrição de "sem terminal" (usuário no iMac
+> 2011). Ou seja: colocar o `.ts` aqui garante histórico/rastreio no
+> Git, mas **não substitui** copiar o conteúdo pro editor do painel — sem
+> isso, o código fica no repo mas não está no ar.
 
 **Ordem de execução (SQL Editor do Supabase, sem terminal)**:
 `0001_schema.sql` → `seed_0001_planets_houses_aspects.sql` →
@@ -227,19 +246,22 @@ production" ligado, branch de produção `main`, working directory `.`.
 - **Quíron**: fora da astronomy-engine. Kepleriana de dois corpos
   (elementos JPL SBDB, época 2021-Jul-01). Sem correção de perturbação —
   aceitável pra uso pessoal.
-- **Lilith (decidido incluir, 29/07) — Lilith Negra verdadeira/oscilante,
-  não a média, não o asteroide 1181.** Ainda não implementada — registro
-  de decisão, não de código pronto. Mesma categoria de problema que
-  Quíron: não sai do `astronomy-engine` puro. É o apogeu real (não
-  médio) da órbita lunar — precisa da posição osculadora da Lua com
-  perturbação solar incluída, mais sensível a erro que a versão média
-  (que seria só progressão linear simples). Antes de implementar:
-  (1) decidir fonte de efeméride/elementos orbitais confiável pra órbita
-  lunar perturbada, (2) validar contra um valor de referência conhecido
-  (efeméride publicada) antes de considerar correto — erro aqui é fácil
-  de não perceber visualmente, diferente de um bug de casa/grau. (3)
-  falta nome de vocabulário Caos Astral (ver glossário, entrada
-  pendente) antes de expor na UI.
+- **Lilith → "Exílio" (29/07): implementada, ainda não integrada nem
+  deployada.** Nome de vocabulário fechado. Código em
+  `supabase/functions/_shared/lilith.ts` (agora versionado no repo) —
+  falta copiar/importar dentro de `compute-natal-chart` e onde mais
+  precisar, **e colar no editor do painel Supabase pra ir ao ar** (estar
+  no repo não deploya sozinho, ver nota na seção 4). Método: apogeu
+  osculador via vetores de estado da Lua
+  (`GeoMoonState`, rotacionado pra eclíptica) + GM combinado Terra+Lua
+  (`MassProduct(Body.EMB)`) — é o mesmo conceito da "True Lilith" (h21) da
+  Swiss Ephemeris, não a versão média. **Validado**: método bate com a
+  definição padrão; excentricidade calculada fica na faixa física real
+  (~0.026–0.077); movimento retrógrado mensal confirmado em teste de 60
+  dias. **Não validado**: comparação grau-a-grau contra efeméride de
+  referência publicada (ex: astro.com, código h21) pra uma data
+  específica — fazer isso antes de considerar pronto pra produção, erro
+  esperado de poucos minutos de arco, erro de vários graus = bug.
 - **Ascendente/Meio-do-Céu**: GMST + obliquidade + latitude, cálculo real,
   exige hora de nascimento exata.
 - **Casas**: signo inteiro (decisão deliberada).
@@ -335,9 +357,12 @@ production" ligado, branch de produção `main`, working directory `.`.
       duplicado após a fusão de identidade visual — conferir.
 - [ ] Monetização (paywall, preview parcial, assinatura) — desenho não
       iniciado, ver seção 1.
-- [ ] **Implementar Lilith Negra verdadeira** (decidido 29/07, ver seção
-      5) — cálculo real ainda não existe, e falta nome de vocabulário
-      Caos Astral (ver glossário, entrada pendente).
+- [ ] **Integrar "Exílio" (Lilith)** — código pronto em
+      `supabase/functions/_shared/lilith.ts` (já no repo, ver seção 5),
+      falta importar dentro de
+      `compute-natal-chart`/`compute-solar-return`/`compute-synastry`,
+      colar no editor do painel Supabase pra ir ao ar, e validar
+      grau-a-grau contra efeméride de referência antes de expor na UI.
 
 ---
 

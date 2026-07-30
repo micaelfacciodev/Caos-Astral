@@ -14,7 +14,7 @@ Documento de referência única. Qualquer conta/agente trabalhando no projeto (f
 | **Máscara** | Ascendente | A interface que o mundo vê primeiro | fechado |
 | **Fome** | Signo lunar | O apetite cru que pede satisfação | fechado |
 | **Território** | Casa astrológica | Área de operação (território 7 = vínculos, etc.) | fechado |
-| *(sem nome ainda)* | Lilith Negra (verdadeira/oscilante) | Decidido incluir (29/07); falta nome no vocabulário Caos Astral e implementação do cálculo (ver `CLAUDE.md` seção 5) | pendente |
+| **Exílio** | Lilith Negra (verdadeira/oscilante) | O ponto mais distante — o que foi expulso antes de virar cicatriz | fechado — implementação em `supabase/functions/_shared/lilith.ts`, falta integrar na Edge Function, deployar, e validar contra efeméride de referência (ver `CLAUDE.md` seção 5) |
 | **Fricção** | Aspecto tenso (quadratura, oposição) | Atrito que exige decisão consciente — **não é** sinônimo genérico de "energia do trânsito" | fechado |
 | **Corrente** | Aspecto harmônico (trígono, sextil) | Fluxo que já existe, fácil de mais até | fechado |
 | **Janela** | Trânsito do dia | Abertura temporária, tática, renovada todo dia | fechado |
