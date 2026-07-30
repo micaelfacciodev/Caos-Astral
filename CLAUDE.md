@@ -165,6 +165,7 @@ supabase/
       _shared/
         lilith.ts
     compute-synastry/index.ts                    -- Exílio AINDA NÃO integrado aqui
+    delete-account/index.ts                       -- auto-exclusão de conta (30/07), exceção controlada de service_role, ver seção 8
 ```
 
 > **Nota importante sobre esse diagrama (29/07):** até hoje, essa pasta
@@ -410,11 +411,13 @@ production" ligado, branch de produção `main`, working directory `.`.
       jurídica de verdade recomendada antes de lançar, principalmente a
       isenção de responsabilidade sobre conteúdo relacionado a
       substâncias/saúde (seção 2 dos termos).
-- [ ] **Exclusão de conta/dados (LGPD art. 18, VI)**: a política de
-      privacidade promete exclusão mediante solicitação, mas ainda não
-      existe fluxo nem Edge Function pra apagar de fato conta + linhas
-      relacionadas (`natal_charts`, `diario_gnose`, `intent_anchors`,
-      `iching_readings` etc.) — hoje seria manual, via painel Supabase.
+- [x] **Exclusão de conta/dados (LGPD art. 18, VI)**: implementada em
+      30/07 — `supabase/functions/delete-account/index.ts` + botão em
+      `dashboard.html`. **Ainda em aberto**: confirmar se `profiles`,
+      `natal_charts`, `daily_readings`, `synastry_readings` e
+      `solar_returns` têm FK "on delete cascade" pra `auth.users` (não
+      versionadas no repo pra conferir) — sem isso, a exclusão pode
+      deixar dado órfão ou falhar.
 - [ ] Rodapé com links pra `/termos` e `/privacidade` só foi adicionado
       nas duas páginas novas — as outras 31 páginas do site ainda têm o
       rodapé antigo sem esses links (mesma pendência de propagação já
@@ -555,6 +558,28 @@ production" ligado, branch de produção `main`, working directory `.`.
   campo de tipo/tag de experiência livre, além do que já existe. Esse
   rename/ajuste de schema ainda não foi implementado pelo agente da
   máquina — registrar como pendência na seção 7 antes de fechar.
+- **Exclusão de conta implementada (30/07)**, atendendo LGPD art. 18, VI.
+  Nova Edge Function `supabase/functions/delete-account/index.ts` e
+  seção "Encerrar minha conta" no `dashboard.html` (exige digitar
+  "APAGAR MINHA CONTA" antes de habilitar o botão). **Exceção deliberada
+  e estritamente controlada à regra "Edge Functions de usuário nunca
+  usam service_role"** (regra geral continua valendo pra qualquer outra
+  function): apagar `auth.users` só é possível via Admin API, que exige
+  service_role. A function nunca aceita um `user_id` vindo do corpo da
+  requisição — resolve o id sempre a partir do JWT de quem chama
+  (`auth.getUser()` com a anon key primeiro), e só then usa o
+  service_role pra apagar exatamente esse id. Não abrir essa exceção
+  como precedente pra outras functions sem o mesmo cuidado de nunca
+  aceitar id externo.
+  **Pendência que ficou de propósito sem resolver**: `deleteUser` só
+  limpa automaticamente tabelas com FK "on delete cascade" — confirmado
+  em `iching_readings`, `intent_anchors`, `diario_gnose`. As tabelas mais
+  antigas (`profiles`, `natal_charts`, `daily_readings`,
+  `synastry_readings`, `solar_returns`) não têm migration versionada no
+  repo pra conferir se também têm cascade — **precisa confirmar isso no
+  schema real do Supabase antes de considerar essa function suficiente
+  sozinha em produção**; se alguma não tiver cascade, ou sobra dado
+  órfão ou o `deleteUser` falha por violação de FK.
 
 ---
 
