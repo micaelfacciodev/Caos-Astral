@@ -13,8 +13,8 @@
   :root{
     --bg:#0a0908;
     --red:#c14a3c;
-    --red-dim:rgba(193,74,60,0.35);
-    --sand:#b0a696;
+    --red-dim:rgba(127,42,36,0.35);
+    --sand:#e9e4d8;
     --stone:#978f80;
     --paper:#e9e4d8;
     --ghost:#2b2822;
@@ -75,11 +75,11 @@
   }
   header .brand a{ color:var(--stone); text-decoration:none; }
   header h1{
-    font-family:'Unbounded',sans-serif;
+    font-family:'Unbounded', sans-serif;
     font-size:clamp(36px, 6vw, 64px);
     font-weight:700;
     margin:6px 0 0;
-    letter-spacing:1px;
+    letter-spacing:-0.01em;
     color:var(--sand);
   }
   header h1 em{
@@ -356,7 +356,7 @@
     letter-spacing:1.5px; margin-bottom:3px;
   }
   .preset-btn .name{
-    display:block; font-family:'IBM Plex Sans', serif; font-size:14px;
+    display:block; font-family:'IBM Plex Sans', sans-serif; font-size:14px;
     color:var(--paper); font-style:italic;
   }
   .audio-controls{
@@ -419,7 +419,7 @@
 <body>
 
 <nav>
-  <a href="index.html" class="nav-logo">Caos Astral</a>
+  <a href="index.html" class="nav-logo"><svg class="star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px;"><path d="M12 1 L13.6 9.5 L22 8 L15.2 13.2 L20 21 L12 16.4 L4 21 L8.8 13.2 L2 8 L10.4 9.5 Z"/></svg>Caos Astral</a>
   <ul class="nav-links">
     <li><a href="kit.html">O Kit</a></li>
     <li><a href="retorno.html">Retorno</a></li>
@@ -429,6 +429,7 @@
     <li><a href="oraculo.html">Oráculo</a></li>
     <li><a href="diario.html">Diário</a></li>
     <li><a href="raizes.html">Raízes</a></li>
+    <li><a href="enciclopedia.html">Enciclopédia</a></li>
     <li><a href="blog.html">Blog</a></li>
     <li><a href="manifesto.html">Manifesto</a></li>
     <li><a href="intento.html">Intento</a></li>

@@ -336,10 +336,21 @@ production" ligado, branch de produção `main`, working directory `.`.
   dos mesmos dois mapas calculados pra sinastria.
 - **Identidade visual**: decisão do usuário foi **padronizar o layout
   completamente** — não é mais fase posterior, é decisão ativa. Oráculo
-  (I Ching) já convertido pro tema escuro padrão. Âncora de Intenção
-  (paleta dourado/osso, Cinzel/EB Garamond) e Deriva (paleta
-  vermelho/areia, EB Garamond) ainda pendentes de unificação visual —
-  funcionais, mas com identidade própria por ora.
+  (I Ching) já convertido pro tema escuro padrão. **Deriva unificada
+  (29/07)**: paleta de cores realinhada aos tokens reais do
+  `assets/style.css` (`--red`→`--accent-bright` #c14a3c, `--sand`/
+  `--paper`→`--ink` #e9e4d8, `--stone`→`--ink-dim` #978f80, `--ghost`→
+  `--line` #2b2822; `--bg` já era idêntico), fontes trocadas de EB
+  Garamond/JetBrains Mono pra Unbounded/IBM Plex Sans/IBM Plex Mono, `h1`
+  ganhou `font-family:Unbounded` explícito, logo do menu ganhou o ícone
+  de estrela em SVG igual às outras páginas. **Feito editando só o
+  `:root` do `<style>` inline** (arquivo continua self-contained, não
+  passou a linkar `assets/style.css`) — todo o resto do CSS (2200+
+  linhas) usa `var(--red)` etc., então a realinhagem de paleta se
+  propagou sem precisar tocar em cada regra. Cores do canvas de
+  `aura_flow.html`/camadas visuais não foram tocadas — são conteúdo
+  artístico, não chrome do site. **Âncora de Intenção** (paleta
+  dourado/osso, Cinzel/EB Garamond) segue pendente de unificação.
 - `simbolos_astrologicos` + bucket `simbolos` criados a pedido do
   agente de front (spec registrada por eles na seção 9) — RLS: leitura
   pública, escrita restrita ao `auth.uid()` do admin (corrigido de
