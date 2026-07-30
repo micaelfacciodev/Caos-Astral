@@ -153,7 +153,10 @@ supabase/
       _shared/
         lilith.ts                               -- cópia própria (dashboard isola functions, não compartilha pasta)
     compute-daily-window/index.ts
-    compute-solar-return/index.ts                -- Exílio AINDA NÃO integrado aqui
+    compute-solar-return/
+      index.ts                                  -- reescrito do zero (29/07) — não existia handler de verdade
+      _shared/
+        lilith.ts
     compute-synastry/index.ts                    -- Exílio AINDA NÃO integrado aqui
 ```
 
@@ -300,15 +303,30 @@ production" ligado, branch de produção `main`, working directory `.`.
   O cálculo astronômico em si (posição real dos planetas) sempre usa o
   instante exato (`agora`), só a *etiqueta do dia* (chave de idempotência
   em `daily_readings.data`) usa o horário deslocado.
-- **Retorno (revolução solar)**: busca binária do instante exato em que
-  o núcleo em trânsito volta ao grau natal exato (o Sol nunca retrograda,
-  então a busca é segura — ~40 iterações a partir de uma janela de dias
-  ao redor do aniversário calendário). **A localização usada pro
-  ascendente/casas do mapa de retorno é a de ONDE A PESSOA VAI PASSAR
-  aquele ano — não a de nascimento.** `compute-solar-return` exige
-  `latitude`/`longitude` no corpo da requisição e recusa calcular sem
-  isso. Se `ano` não for informado, calcula o retorno mais recente já
-  ocorrido (o que rege o período atual).
+- **Retorno (revolução solar) — reescrito do zero (29/07).** O
+  `compute-solar-return` que estava no ar **não existia de fato**: o
+  `index.ts` continha só o snippet de exemplo de invocação do
+  front-end (`supabase.functions.invoke(...)`), sem handler nenhum —
+  nunca tinha sido implementado, só documentado aqui. Reescrito
+  reaproveitando o motor do `compute-natal-chart` (mesmos planetas,
+  Quíron, Exílio, casas, aspectos, cenas_grau). Usa
+  `Astronomy.SearchSunLongitude` (função pronta da lib, testada — bate
+  no grau do Sol até a 4ª casa decimal) em vez de busca binária
+  artesanal. **Schema real de `solar_returns` confirmado via
+  `information_schema.columns`**: `id, user_id, ano, data_exata,
+  planetas, aspectos, computado_em, latitude, longitude, cidade` — **não
+  existem colunas `ascendente`/`meio_ceu`** aqui (diferente de
+  `natal_charts`); esses dois valores continuam calculados e voltam na
+  resposta da function, só não são persistidos como coluna própria.
+  **Simplificação assumida, não implementada ainda**: `ano` é
+  obrigatório no body (erro claro se faltar) — o comportamento de
+  "se `ano` não vier, calcula o retorno mais recente já ocorrido",
+  descrito abaixo como comportamento esperado, **não está codado**;
+  quem pedir isso vai receber erro 400, não o retorno mais recente.
+  A localização usada pro ascendente/casas do mapa de retorno é a de
+  ONDE A PESSOA VAI PASSAR aquele ano — não a de nascimento;
+  `compute-solar-return` exige `latitude`/`longitude` no corpo da
+  requisição e recusa calcular sem isso.
 - **Sinastria e O Terceiro**: `compute-synastry` calcula o mapa do
   parceiro na hora a partir de dados manuais (não lê `natal_charts` de
   outro usuário — ver pendência na seção 7), cruza aspectos entre os dois
@@ -366,13 +384,19 @@ production" ligado, branch de produção `main`, working directory `.`.
       duplicado após a fusão de identidade visual — conferir.
 - [ ] Monetização (paywall, preview parcial, assinatura) — desenho não
       iniciado, ver seção 1.
-- [ ] **Integrar "Exílio" (Lilith) nas functions restantes** —
-      `compute-natal-chart/index.ts` já integrado e no repo (29/07,
-      código real do usuário). Falta repetir o mesmo em
-      `compute-solar-return` e `compute-synastry` (mandar o `index.ts`
-      real de cada uma, mesmo processo), colar no editor do painel
-      Supabase pra ir ao ar, e validar grau-a-grau contra efeméride de
-      referência antes de expor na UI.
+- [ ] **Integrar "Exílio" (Lilith) na function restante** —
+      `compute-natal-chart` e `compute-solar-return` já integrados e no
+      repo (29/07). Falta `compute-synastry` — **e antes de mexer nela,
+      checar primeiro se o `index.ts` dela é código de verdade ou é o
+      mesmo tipo de placeholder que `compute-solar-return` era** (mandar
+      o conteúdo real pra eu ver, não assumir que existe só porque está
+      documentado aqui).
+- [ ] Implementar o fallback de `ano` opcional em `compute-solar-return`
+      (calcular o retorno mais recente já ocorrido se `ano` não vier) —
+      hoje dá erro 400, comportamento documentado nunca foi codado.
+- [ ] Deployar o `compute-solar-return` reescrito e testar com uma data
+      de nascimento real antes de considerar essa function confiável —
+      nunca rodou de verdade em produção até 29/07.
 
 ---
 
@@ -432,6 +456,26 @@ production" ligado, branch de produção `main`, working directory `.`.
   aplicável), `email` (e-mail), `new-password` (senha — esse é o mais
   importante, sinaliza que é cadastro novo, não login, o que evita o
   Chrome tratar o formulário inteiro como tela de sign-in).
+- **Bug corrigido (29/07): `ritual-de-entrada.html` mostrando signo
+  ERRADO pro usuário.** O painel de resumo usava dados propositalmente
+  falsos (o próprio código dizia isso: `FAKE_NUCLEO`, comentário "trocar
+  por dado real do engine" — nunca foi trocado). Núcleo vinha de
+  `new Date(data).getMonth()` indexando direto no array de signos — não
+  é assim que signo funciona (os cortes de data não alinham com início
+  de mês), então dava errado sistematicamente pra quem nasce depois do
+  dia de corte do mês (foi assim que apareceu "Leão" pra alguém de
+  Gêmeos). Fome/Máscara vinham de `hora+3`/`hora+7` no mesmo array, e
+  Território do **tamanho do texto digitado no nome da cidade** — nenhum
+  dos três tinha qualquer relação com astrologia real.
+  **Corrigido**: Núcleo agora usa tabela de datas de corte real (só
+  precisa da data, é 100% preciso, não depende de hora/local). Território/
+  Fome/Máscara **não dão mais pra calcular direito só com o que esse
+  formulário coleta** (Território precisa do mapa completo; Fome precisa
+  de horário UTC preciso; Máscara precisa de lat/long reais, que exigiriam
+  geocodificação da cidade em texto — não implementada) — em vez de
+  continuar chutando um signo específico e arriscando errar nesses três
+  também, o reveal agora mostra "no seu Kit ✦" (honesto, sem fingir
+  precisão que não existe nessa etapa).
 - `simbolos_astrologicos` + bucket `simbolos` criados a pedido do
   agente de front (spec registrada por eles na seção 9) — RLS: leitura
   pública, escrita restrita ao `auth.uid()` do admin (corrigido de
