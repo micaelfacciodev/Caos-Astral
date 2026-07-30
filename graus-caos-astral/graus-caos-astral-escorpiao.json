@@ -7,7 +7,7 @@
       "decanato": 1,
       "tempero": "marte",
       "imagem": "Um escorpião ergue a cauda antes mesmo de ser tocado.",
-      "leitura": "Defesa que se prepara antes da ameaça se confirmar — intensidade que não espera pra reagir."
+      "leitura": "Defesa que se prepara antes da ameaça se confirmar, intensidade que não espera pra reagir."
     },
     {
       "grau": 2,
@@ -56,7 +56,7 @@
       "decanato": 1,
       "tempero": "marte",
       "imagem": "Um predador espera imóvel, horas, até o momento exato de atacar.",
-      "leitura": "Paciência que serve à intensidade — o ataque só vale a pena no timing certo."
+      "leitura": "Paciência que serve à intensidade, o ataque só vale a pena no timing certo."
     },
     {
       "grau": 9,
@@ -70,7 +70,7 @@
       "decanato": 1,
       "tempero": "marte",
       "imagem": "Uma fechadura é trocada depois de alguém descobrir que tinha cópia da chave.",
-      "leitura": "Reagir com força total à sensação de traição — fim do decanato: a linha entre confiança e controle."
+      "leitura": "Reagir com força total à sensação de traição, fim do decanato: a linha entre confiança e controle."
     },
     {
       "grau": 11,
@@ -119,7 +119,7 @@
       "decanato": 2,
       "tempero": "júpiter",
       "imagem": "Um oráculo entrega uma resposta que ninguém pediu, mas todos precisavam ouvir.",
-      "leitura": "Verdade que emerge sem ser convocada — poder que vem de fora do controle racional."
+      "leitura": "Verdade que emerge sem ser convocada, poder que vem de fora do controle racional."
     },
     {
       "grau": 18,
@@ -133,14 +133,14 @@
       "decanato": 2,
       "tempero": "júpiter",
       "imagem": "Alguém reza sozinho numa igreja vazia, sem esperar resposta nenhuma.",
-      "leitura": "Fé que não exige prova — entrega completa a algo que não se pode controlar nem ver."
+      "leitura": "Fé que não exige prova, entrega completa a algo que não se pode controlar nem ver."
     },
     {
       "grau": 20,
       "decanato": 2,
       "tempero": "júpiter",
       "imagem": "Uma pessoa aceita finalmente que não vai entender certos lutos, só atravessá-los.",
-      "leitura": "Render-se ao mistério da dor — fim do decanato: intensidade que aceita não ter controle total."
+      "leitura": "Render-se ao mistério da dor, fim do decanato: intensidade que aceita não ter controle total."
     },
     {
       "grau": 21,
@@ -210,7 +210,7 @@
       "decanato": 3,
       "tempero": "lua",
       "imagem": "Uma concha antiga é encontrada, ainda guardando dentro dela o eco baixinho do mar.",
-      "leitura": "O que passou continua ecoando por dentro — grau anarético: intensidade que virou memória guardada, não mais ferida aberta."
+      "leitura": "O que passou continua ecoando por dentro, grau anarético: intensidade que virou memória guardada, não mais ferida aberta."
     }
   ]
 }

@@ -1,17 +1,17 @@
 /**
- * flash-decor.js — Caos Astral
+ * flash-decor.js, Caos Astral
  * Portado do site pessoal de tatuagem do fundador (mesma técnica de
  * "fractal de flash": múltiplas passagens decrescentes preenchem cada
  * buraco deixado pela passagem anterior), com três ajustes:
  *   1. Símbolos astrológicos autorais no lugar de flash de tatuagem.
  *   2. Tingimento na paleta do site (bone/oxblood) em vez de invert(1) puro.
  *   3. Fonte de dado é o Supabase (tabela `simbolos_astrologicos`), não
- *      um manifest.json commitado no GitHub — mais simples de manter,
+ *      um manifest.json commitado no GitHub, mais simples de manter,
  *      sem precisar de Worker/proxy nenhum.
  *
  * Pra adicionar novos desenhos: usar o admin-simbolos.html.
  * Enquanto a tabela estiver vazia (ou não existir ainda), este script
- * não faz nada — sem quebrar nada, sem símbolo nenhum aparecendo.
+ * não faz nada, sem quebrar nada, sem símbolo nenhum aparecendo.
  */
 (function () {
   'use strict';
@@ -27,7 +27,7 @@
     if (cached) return JSON.parse(cached);
     try {
       // ENGINE: espera tabela `simbolos_astrologicos` (colunas: image_url text, decor boolean)
-      // com RLS de leitura pública (select livre) — ver spec no CLAUDE.md.
+      // com RLS de leitura pública (select livre), ver spec no CLAUDE.md.
       const url = `${SUPABASE_URL}/rest/v1/simbolos_astrologicos?select=image_url&decor=eq.true`;
       const r = await fetch(url, {
         headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
@@ -41,7 +41,7 @@
       sessionStorage.setItem(CACHE_KEY, JSON.stringify(pool));
       return pool;
     } catch {
-      // Sem tabela/dado ainda — decoração fica desligada, sem quebrar nada.
+      // Sem tabela/dado ainda, decoração fica desligada, sem quebrar nada.
       return [];
     }
   }
@@ -59,7 +59,7 @@
 
   // ── Passagens fractais ───────────────────────────────────────
   // Cada passagem: [raio de colisão px, largura CSS, faixa de opacidade, quantidade base]
-  // Mais discreto que o original — decoração de fundo, não o assunto da tela.
+  // Mais discreto que o original, decoração de fundo, não o assunto da tela.
   const OVERLAP = 1.4;
 
   const PASSES = [
@@ -149,7 +149,7 @@
     }
   }
 
-  // ── Guard rects — evita cobrir imagem real, formulário ou botão ──
+  // ── Guard rects, evita cobrir imagem real, formulário ou botão ──
   function getGuardRects() {
     const guards = [];
     document.querySelectorAll(
@@ -171,7 +171,7 @@
   // ── Init ────────────────────────────────────────────────────
   async function init() {
     const pool = await getPool();
-    if (!pool.length) return; // sem símbolo cadastrado ainda — não faz nada
+    if (!pool.length) return; // sem símbolo cadastrado ainda, não faz nada
 
     await new Promise(r => setTimeout(r, 400));
     const guards = getGuardRects();

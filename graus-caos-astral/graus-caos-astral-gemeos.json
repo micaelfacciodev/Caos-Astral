@@ -7,7 +7,7 @@
       "decanato": 1,
       "tempero": "mercúrio",
       "imagem": "Duas crianças trocam segredos sussurrando ao mesmo tempo, sem esperar a vez uma da outra.",
-      "leitura": "Trocar informação rápido demais pra processar tudo — o impulso de falar chega antes do de ouvir."
+      "leitura": "Trocar informação rápido demais pra processar tudo, o impulso de falar chega antes do de ouvir."
     },
     {
       "grau": 2,
@@ -28,7 +28,7 @@
       "decanato": 1,
       "tempero": "mercúrio",
       "imagem": "Um papagaio repete uma frase que ouviu sem entender o que ela significa.",
-      "leitura": "Repetir informação antes de digerir seu sentido — comunicação que ainda não virou compreensão."
+      "leitura": "Repetir informação antes de digerir seu sentido, comunicação que ainda não virou compreensão."
     },
     {
       "grau": 5,
@@ -70,14 +70,14 @@
       "decanato": 1,
       "tempero": "mercúrio",
       "imagem": "Um bilhete é passado de mão em mão numa sala de aula até chegar torto ao destino.",
-      "leitura": "A mensagem muda de forma a cada mão que a repassa — fim do decanato: a informação já não é mais a original."
+      "leitura": "A mensagem muda de forma a cada mão que a repassa, fim do decanato: a informação já não é mais a original."
     },
     {
       "grau": 11,
       "decanato": 2,
       "tempero": "vênus",
       "imagem": "Duas pessoas conversam à mesa de um café, cada uma esperando a vez certa de falar.",
-      "leitura": "Diálogo que aprende timing — trocar já não é só falar rápido, é escutar também."
+      "leitura": "Diálogo que aprende timing, trocar já não é só falar rápido, é escutar também."
     },
     {
       "grau": 12,
@@ -91,7 +91,7 @@
       "decanato": 2,
       "tempero": "vênus",
       "imagem": "Dois comerciantes fecham negócio com um aperto de mão, sem contrato assinado.",
-      "leitura": "Confiar na palavra dada — troca que aposta na relação, não só no documento."
+      "leitura": "Confiar na palavra dada, troca que aposta na relação, não só no documento."
     },
     {
       "grau": 14,
@@ -112,7 +112,7 @@
       "decanato": 2,
       "tempero": "vênus",
       "imagem": "Um mediador senta entre duas partes brigando, sem tomar lado nenhum.",
-      "leitura": "Equilíbrio que exige não escolher — a solução vem do meio, não de um dos extremos."
+      "leitura": "Equilíbrio que exige não escolher, a solução vem do meio, não de um dos extremos."
     },
     {
       "grau": 17,
@@ -133,35 +133,35 @@
       "decanato": 2,
       "tempero": "vênus",
       "imagem": "Uma balança de comerciante equilibra perfeitamente dois pesos diferentes.",
-      "leitura": "Equilíbrio real, não fingido — as duas partes pesam o que dizem pesar."
+      "leitura": "Equilíbrio real, não fingido, as duas partes pesam o que dizem pesar."
     },
     {
       "grau": 20,
       "decanato": 2,
       "tempero": "vênus",
       "imagem": "Um par de luvas é costurado de forma idêntica, mão esquerda e direita.",
-      "leitura": "Simetria que serve pros dois lados igualmente — fim do decanato: a troca virou parceria."
+      "leitura": "Simetria que serve pros dois lados igualmente, fim do decanato: a troca virou parceria."
     },
     {
       "grau": 21,
       "decanato": 3,
       "tempero": "saturno",
       "imagem": "Um telégrafo transmite código através de fios que cruzam um continente inteiro.",
-      "leitura": "A mensagem virou sistema — não depende mais de quem fala, só do código combinado."
+      "leitura": "A mensagem virou sistema, não depende mais de quem fala, só do código combinado."
     },
     {
       "grau": 22,
       "decanato": 3,
       "tempero": "saturno",
       "imagem": "Um arquivista organiza milhares de cartas por data, sem ler o conteúdo de nenhuma.",
-      "leitura": "Informação tratada como estrutura, não como sentimento — frieza que serve pra não se perder no meio de tanto dado."
+      "leitura": "Informação tratada como estrutura, não como sentimento, frieza que serve pra não se perder no meio de tanto dado."
     },
     {
       "grau": 23,
       "decanato": 3,
       "tempero": "saturno",
       "imagem": "Uma rede de sinais de fumaça conecta postos de vigia distantes um do outro.",
-      "leitura": "Comunicação que já não depende de proximidade — só do sistema estar de pé."
+      "leitura": "Comunicação que já não depende de proximidade, só do sistema estar de pé."
     },
     {
       "grau": 24,
@@ -175,7 +175,7 @@
       "decanato": 3,
       "tempero": "saturno",
       "imagem": "Um grupo de estranhos se organiza em silêncio, cada um sabendo exatamente sua função.",
-      "leitura": "Coordenação que dispensa conversa — o sistema já foi combinado antes, agora só se executa."
+      "leitura": "Coordenação que dispensa conversa, o sistema já foi combinado antes, agora só se executa."
     },
     {
       "grau": 26,
@@ -196,7 +196,7 @@
       "decanato": 3,
       "tempero": "saturno",
       "imagem": "Uma rede de estradas conecta cidades que nunca se falaram diretamente.",
-      "leitura": "Conexão que existe mesmo sem contato direto — infraestrutura no lugar de intimidade."
+      "leitura": "Conexão que existe mesmo sem contato direto, infraestrutura no lugar de intimidade."
     },
     {
       "grau": 29,
@@ -210,7 +210,7 @@
       "decanato": 3,
       "tempero": "saturno",
       "imagem": "Um código é traduzido automaticamente pra cem idiomas diferentes ao mesmo tempo.",
-      "leitura": "Comunicação que se multiplica até perder o rosto de quem falou primeiro — grau anarético: fim de um jeito de trocar, início de outro totalmente impessoal."
+      "leitura": "Comunicação que se multiplica até perder o rosto de quem falou primeiro, grau anarético: fim de um jeito de trocar, início de outro totalmente impessoal."
     }
   ]
 }

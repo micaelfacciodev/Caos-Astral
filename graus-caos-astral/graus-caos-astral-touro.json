@@ -42,7 +42,7 @@
       "decanato": 1,
       "tempero": "vênus",
       "imagem": "Uma vaca pasta devagar num campo enorme, sem pressa de terminar.",
-      "leitura": "Ritmo que não se apressa por ninguém — o tempo dela é a única métrica que importa."
+      "leitura": "Ritmo que não se apressa por ninguém, o tempo dela é a única métrica que importa."
     },
     {
       "grau": 7,
@@ -70,7 +70,7 @@
       "decanato": 1,
       "tempero": "vênus",
       "imagem": "Uma âncora é lançada e prende no fundo do mar.",
-      "leitura": "Parar de vez, fincar posição — fim do decanato: não se mover mais até que valha a pena."
+      "leitura": "Parar de vez, fincar posição, fim do decanato: não se mover mais até que valha a pena."
     },
     {
       "grau": 11,
@@ -84,7 +84,7 @@
       "decanato": 2,
       "tempero": "mercúrio",
       "imagem": "Uma balança comercial pesa grãos, um punhado de cada vez.",
-      "leitura": "Medir com cuidado o que se troca — prazer sem cálculo vira prejuízo."
+      "leitura": "Medir com cuidado o que se troca, prazer sem cálculo vira prejuízo."
     },
     {
       "grau": 13,
@@ -98,7 +98,7 @@
       "decanato": 2,
       "tempero": "mercúrio",
       "imagem": "Uma receita antiga é seguida à risca, colher por colher.",
-      "leitura": "Repetir o que já funcionou, sem improviso — segurança que vem da fórmula testada."
+      "leitura": "Repetir o que já funcionou, sem improviso, segurança que vem da fórmula testada."
     },
     {
       "grau": 15,
@@ -133,7 +133,7 @@
       "decanato": 2,
       "tempero": "mercúrio",
       "imagem": "Um comerciante organiza sua mercadoria em fileiras exatas.",
-      "leitura": "Ordem que facilita o próximo passo — o que está arrumado já está meio resolvido."
+      "leitura": "Ordem que facilita o próximo passo, o que está arrumado já está meio resolvido."
     },
     {
       "grau": 20,
@@ -154,14 +154,14 @@
       "decanato": 3,
       "tempero": "saturno",
       "imagem": "Um carvalho antigo não se move nem com vento forte.",
-      "leitura": "Raiz funda que recusa ceder — força que não precisa provar nada, só permanece."
+      "leitura": "Raiz funda que recusa ceder, força que não precisa provar nada, só permanece."
     },
     {
       "grau": 23,
       "decanato": 3,
       "tempero": "saturno",
       "imagem": "Um cofre de banco é fechado com três chaves diferentes, cada uma com um guardião.",
-      "leitura": "Proteção que distribui responsabilidade — o valor grande demais pra confiar numa mão só."
+      "leitura": "Proteção que distribui responsabilidade, o valor grande demais pra confiar numa mão só."
     },
     {
       "grau": 24,
@@ -175,28 +175,28 @@
       "decanato": 3,
       "tempero": "saturno",
       "imagem": "Uma estátua de pedra resiste séculos ao tempo, sem trocar de expressão.",
-      "leitura": "Permanência que não pede aprovação de ninguém — só dura."
+      "leitura": "Permanência que não pede aprovação de ninguém, só dura."
     },
     {
       "grau": 26,
       "decanato": 3,
       "tempero": "saturno",
       "imagem": "Um cofre-forte é escondido atrás de uma parede comum, sem nenhuma marca visível.",
-      "leitura": "Guardar valor sem ostentar — proteção que aposta na discrição, não na exibição."
+      "leitura": "Guardar valor sem ostentar, proteção que aposta na discrição, não na exibição."
     },
     {
       "grau": 27,
       "decanato": 3,
       "tempero": "saturno",
       "imagem": "Um velho agricultor ainda planta árvores que só darão fruto depois que ele morrer.",
-      "leitura": "Investir em algo que não vai colher — construir legado maior que a própria vida."
+      "leitura": "Investir em algo que não vai colher, construir legado maior que a própria vida."
     },
     {
       "grau": 28,
       "decanato": 3,
       "tempero": "saturno",
       "imagem": "Uma montanha de sal se acumula lentamente numa salina, grão por grão.",
-      "leitura": "Acúmulo que não tem pressa nenhuma — o resultado só aparece depois de muito tempo repetindo o mesmo gesto."
+      "leitura": "Acúmulo que não tem pressa nenhuma, o resultado só aparece depois de muito tempo repetindo o mesmo gesto."
     },
     {
       "grau": 29,
@@ -210,7 +210,7 @@
       "decanato": 3,
       "tempero": "saturno",
       "imagem": "Uma pedra fundamental é assentada, e sobre ela toda a construção seguinte vai se apoiar.",
-      "leitura": "O que se decide agora sustenta tudo que vem depois — grau anarético que fecha o ciclo virando alicerce."
+      "leitura": "O que se decide agora sustenta tudo que vem depois, grau anarético que fecha o ciclo virando alicerce."
     }
   ]
 }

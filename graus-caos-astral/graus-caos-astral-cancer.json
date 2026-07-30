@@ -7,7 +7,7 @@
       "decanato": 1,
       "tempero": "lua",
       "imagem": "Um recém-nascido procura o calor do peito da mãe antes de abrir os olhos.",
-      "leitura": "Instinto que age antes da consciência — buscar proteção nem precisa ser aprendido."
+      "leitura": "Instinto que age antes da consciência, buscar proteção nem precisa ser aprendido."
     },
     {
       "grau": 2,
@@ -56,7 +56,7 @@
       "decanato": 1,
       "tempero": "lua",
       "imagem": "Um ninho é forrado de penas macias antes do primeiro ovo ser posto.",
-      "leitura": "Preparar o abrigo antes mesmo de precisar dele — cuidado que antecipa a necessidade."
+      "leitura": "Preparar o abrigo antes mesmo de precisar dele, cuidado que antecipa a necessidade."
     },
     {
       "grau": 9,
@@ -84,7 +84,7 @@
       "decanato": 2,
       "tempero": "marte",
       "imagem": "Um portão de ferro é trancado com três fechaduras diferentes.",
-      "leitura": "Defesa redundante — quando o medo é grande, uma trava só nunca parece suficiente."
+      "leitura": "Defesa redundante, quando o medo é grande, uma trava só nunca parece suficiente."
     },
     {
       "grau": 13,
@@ -98,7 +98,7 @@
       "decanato": 2,
       "tempero": "marte",
       "imagem": "Uma família esconde o que é mais precioso embaixo do próprio chão da casa.",
-      "leitura": "Proteger o que importa escondendo, não expondo — segurança que aposta no segredo."
+      "leitura": "Proteger o que importa escondendo, não expondo, segurança que aposta no segredo."
     },
     {
       "grau": 15,
@@ -112,14 +112,14 @@
       "decanato": 2,
       "tempero": "marte",
       "imagem": "Uma fortaleza é construída com um único portão estreito, fácil de defender.",
-      "leitura": "Reduzir os pontos fracos ao mínimo possível — proteção que pensa como ataque."
+      "leitura": "Reduzir os pontos fracos ao mínimo possível, proteção que pensa como ataque."
     },
     {
       "grau": 17,
       "decanato": 2,
       "tempero": "marte",
       "imagem": "Uma mulher esconde uma faca sob o travesseiro antes de dormir sozinha.",
-      "leitura": "Preparar defesa mesmo sem ameaça confirmada — instinto que não relaxa fácil."
+      "leitura": "Preparar defesa mesmo sem ameaça confirmada, instinto que não relaxa fácil."
     },
     {
       "grau": 18,
@@ -140,7 +140,7 @@
       "decanato": 2,
       "tempero": "marte",
       "imagem": "Uma casa é cercada por um muro alto, com cacos de vidro no topo.",
-      "leitura": "Defesa que vira também isolamento — proteger tanto que ninguém mais entra, nem quem devia."
+      "leitura": "Defesa que vira também isolamento, proteger tanto que ninguém mais entra, nem quem devia."
     },
     {
       "grau": 21,
@@ -182,7 +182,7 @@
       "decanato": 3,
       "tempero": "júpiter",
       "imagem": "Uma casa de portas sempre abertas nunca sabe quantos vão dormir lá à noite.",
-      "leitura": "Hospitalidade sem controle nem cálculo — o abrigo vira oferta incondicional."
+      "leitura": "Hospitalidade sem controle nem cálculo, o abrigo vira oferta incondicional."
     },
     {
       "grau": 27,
@@ -210,7 +210,7 @@
       "decanato": 3,
       "tempero": "júpiter",
       "imagem": "As águas de todos os rios do mundo finalmente se encontram no mesmo oceano.",
-      "leitura": "Todo abrigo individual desemboca, no fim, num pertencimento maior que ninguém possui sozinho — grau anarético."
+      "leitura": "Todo abrigo individual desemboca, no fim, num pertencimento maior que ninguém possui sozinho, grau anarético."
     }
   ]
 }

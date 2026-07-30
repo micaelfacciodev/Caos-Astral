@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>Admin Símbolos — Caos Astral</title>
+<title>Admin Símbolos, Caos Astral</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -114,7 +114,7 @@
     </div>
     <button class="btn btn-solid mono" id="btnBulk" style="margin-top:14px;">Enviar todos</button>
     <div class="alert" id="bulkAlert"></div>
-    <p class="mono" style="font-size:0.72rem; color:var(--ink-faint); margin-top:12px;">Título é gerado a partir do nome do arquivo. Todos entram marcados "aparece na decoração" — ajuste depois na lista abaixo se algum não deve.</p>
+    <p class="mono" style="font-size:0.72rem; color:var(--ink-faint); margin-top:12px;">Título é gerado a partir do nome do arquivo. Todos entram marcados "aparece na decoração", ajuste depois na lista abaixo se algum não deve.</p>
   </div>
 
   <!-- Upload individual -->
@@ -122,7 +122,7 @@
     <h2>Upload individual (com tags)</h2>
     <div class="preview-box"><img id="previewImage"><span class="preview-placeholder" id="previewPlaceholder">Selecione uma imagem</span></div>
     <div class="field"><label>Arquivo</label><input type="file" id="imageFile" accept=".webp,.png,.svg"></div>
-    <div class="field"><label>Título</label><input type="text" id="imageTitle" placeholder="ex: Cena do grau — 14° Touro"></div>
+    <div class="field"><label>Título</label><input type="text" id="imageTitle" placeholder="ex: Cena do grau, 14° Touro"></div>
     <div class="field"><label>Tags</label>
       <div class="tags-row" id="tagsContainer"></div>
     </div>
@@ -163,7 +163,7 @@
   const { createClient } = supabase;
   const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // ENGINE: nomes esperados — ver spec completa no CLAUDE.md, seção "Admin de Símbolos".
+  // ENGINE: nomes esperados, ver spec completa no CLAUDE.md, seção "Admin de Símbolos".
   const TABLE = 'simbolos_astrologicos';
   const BUCKET = 'simbolos';
   const DEFAULT_TAGS = ['Núcleo', 'Fome', 'Máscara', 'Território', 'Fricção', 'Corrente', 'Cicatriz', 'Retorno'];

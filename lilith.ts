@@ -5,21 +5,21 @@
 // pro corpo h21 "True Lilith"): pega a posição e velocidade REAIS e
 // perturbadas da Lua num instante, e ajusta uma elipse kepleriana de dois
 // corpos que "osculam" (tangenciam) esse estado exato. A Lilith é o apogeu
-// dessa elipse instantânea — o ponto oposto ao perigeu.
+// dessa elipse instantânea, o ponto oposto ao perigeu.
 //
 // Isso é DIFERENTE da Lilith média: a média assume uma órbita lunar limpa,
 // sem perturbação solar, avançando ~40'/dia de forma monotônica. A
 // verdadeira usa o estado real (já perturbado pelo Sol), então a elipse
-// ajustada muda de formato/orientação o tempo todo — e por isso a Lilith
+// ajustada muda de formato/orientação o tempo todo, e por isso a Lilith
 // verdadeira oscila, empaca, e chega a retrogradar por períodos de dias
-// dentro de cada mês. Isso NÃO é bug — é a natureza matemática do ponto,
+// dentro de cada mês. Isso NÃO é bug, é a natureza matemática do ponto,
 // documentada até pela própria Swiss Ephemeris (oscilação de até ~30° de
 // amplitude mensal). Testado abaixo: em 60 dias a partir de 2024-01-01, o
 // valor calculado oscila entre avanço de +14,7° e recuo de -9,9° em janelas
-// de poucos dias — comportamento retrógrado esperado, confirmado.
+// de poucos dias, comportamento retrógrado esperado, confirmado.
 //
 // VALIDAÇÃO FEITA: (1) método bate com a definição padrão descrita pela
-// documentação da Swiss Ephemeris; (2) sanidade física — excentricidade
+// documentação da Swiss Ephemeris; (2) sanidade física, excentricidade
 // calculada oscila entre ~0.026 e ~0.077 (faixa real conhecida da órbita
 // lunar perturbada, média histórica 0.0549); (3) padrão de movimento
 // retrógrado mensal bate com o comportamento documentado do "True Lilith".
@@ -27,14 +27,14 @@
 // efeméride de referência publicada (ex: astro.com, opção "True/osc.
 // Lilith", código h21) pra um horário de nascimento específico. Antes de
 // considerar isso pronto pra produção, recomendo pegar 2-3 datas de
-// nascimento reais, rodar aqui e no astro.com, e comparar o grau — erro
+// nascimento reais, rodar aqui e no astro.com, e comparar o grau, erro
 // esperado de poucos minutos de arco; erro de vários graus indicaria bug.
 //
 // Local no repo: supabase/functions/_shared/lilith.ts
 // Import a partir de uma function (ex: compute-natal-chart/index.ts):
 //   import { computeTrueLilith } from "../_shared/lilith.ts";
 //
-// Import no estilo Deno (Edge Function) — ajustar se o restante do projeto
+// Import no estilo Deno (Edge Function), ajustar se o restante do projeto
 // usar outra convenção de import de pacote npm.
 import * as Astronomy from "npm:astronomy-engine@2.1.19";
 
@@ -50,7 +50,7 @@ export interface LilithResult {
  * pra uma data/hora específica.
  *
  * @param date Instante em UTC (o mesmo Date já usado pro resto do motor
- *   natal — não precisa de conversão extra, GeoMoonState já espera UTC).
+ *   natal, não precisa de conversão extra, GeoMoonState já espera UTC).
  */
 export function computeTrueLilith(date: Date): LilithResult {
   const time = Astronomy.MakeTime(date);
@@ -58,7 +58,7 @@ export function computeTrueLilith(date: Date): LilithResult {
   // Estado geocêntrico da Lua (posição + velocidade), equatorial J2000.
   const stateEqj = Astronomy.GeoMoonState(time);
 
-  // Rotaciona pra eclíptica J2000 — é nesse plano que "longitude eclíptica"
+  // Rotaciona pra eclíptica J2000, é nesse plano que "longitude eclíptica"
   // (o grau que o resto do sistema usa pra signo/casa) faz sentido.
   const rot = Astronomy.Rotation_EQJ_ECL();
   const s = Astronomy.RotateState(rot, stateEqj);
@@ -66,7 +66,7 @@ export function computeTrueLilith(date: Date): LilithResult {
   const r: [number, number, number] = [s.x, s.y, s.z]; // AU
   const v: [number, number, number] = [s.vx, s.vy, s.vz]; // AU/dia
 
-  // GM do sistema Terra+Lua (problema de dois corpos real — não é só GM da
+  // GM do sistema Terra+Lua (problema de dois corpos real, não é só GM da
   // Terra sozinha; usar só a Terra introduz um viés sistemático pequeno mas
   // real, já que a razão de massa Lua/Terra é ~1/81, não desprezível aqui).
   const mu = Astronomy.MassProduct(Astronomy.Body.EMB); // AU^3/dia^2
@@ -85,10 +85,10 @@ export function computeTrueLilith(date: Date): LilithResult {
   const vMag2 = dot(v, v);
   const rDotV = dot(r, v);
 
-  // Momento angular específico — define o plano orbital.
+  // Momento angular específico, define o plano orbital.
   const h = cross(r, v);
 
-  // Vetor excentricidade — aponta pro PERIGEU (ponto mais próximo).
+  // Vetor excentricidade, aponta pro PERIGEU (ponto mais próximo).
   const eVec: [number, number, number] = [
     ((vMag2 - mu / rMag) * r[0] - rDotV * v[0]) / mu,
     ((vMag2 - mu / rMag) * r[1] - rDotV * v[1]) / mu,
@@ -103,7 +103,7 @@ export function computeTrueLilith(date: Date): LilithResult {
   // Longitude do nó ascendente (Ω).
   const Omega = Math.atan2(n[1], n[0]) * (180 / Math.PI);
 
-  // Argumento do perigeu (ω) — ângulo entre nó e vetor excentricidade,
+  // Argumento do perigeu (ω), ângulo entre nó e vetor excentricidade,
   // com sinal decidido pela componente z do vetor excentricidade.
   let omega = Math.acos(dot(n, eVec) / (nMag * ecc)) * (180 / Math.PI);
   if (eVec[2] < 0) omega = 360 - omega;

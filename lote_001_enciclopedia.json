@@ -7,7 +7,7 @@
       "categoria": "magia-do-caos",
       "nome": "Caosphere",
       "nomes_alternativos": ["Esfera do Caos", "Símbolo dos Oito Raios"],
-      "origem": "Criado no contexto da Magia do Caos moderna, ligado à Illuminates of Thanateros (fundada por Peter J. Carroll e Ray Sherwin em 1978). Não possui raiz antiga — é um símbolo do século XX.",
+      "origem": "Criado no contexto da Magia do Caos moderna, ligado à Illuminates of Thanateros (fundada por Peter J. Carroll e Ray Sherwin em 1978). Não possui raiz antiga, é um símbolo do século XX.",
       "primeiros_registros": "Final da década de 1970 / início dos anos 1980, em publicações da tradição da Magia do Caos.",
       "significado": "Uma esfera da qual partem oito setas em direções equidistantes, representando a totalidade das possibilidades de ação e crença antes de qualquer escolha específica. Cada raio pode ser lido como um elemento, uma direção ou uma linha de força potencial; a esfera central representa o vazio ou o potencial não-manifesto do qual tudo emerge.",
       "tradicoes": ["magia-do-caos"],
@@ -15,8 +15,8 @@
         "elemento": "todos (símbolo pré-elemental)",
         "conceito_chave": "potencial não comprometido, crença como ferramenta descartável"
       },
-      "uso_historico": "Adotado como símbolo de identidade visual da própria Magia do Caos, funcionando de forma análoga a como o pentagrama representa a bruxaria ou o hexagrama representa o judaísmo — um emblema de escola de pensamento, não um artefato ritual herdado de tradições antigas.",
-      "uso_moderno": "Usado como marca de pertencimento à tradição, em sigilos pessoais, capas de livros e como ponto de partida visual para práticas de foco de vontade. Não carrega corpo de correspondências planetárias ou elementais fixas — cada praticante ou grupo pode atribuir significado próprio, o que é coerente com o princípio de que a crença é instrumental.",
+      "uso_historico": "Adotado como símbolo de identidade visual da própria Magia do Caos, funcionando de forma análoga a como o pentagrama representa a bruxaria ou o hexagrama representa o judaísmo, um emblema de escola de pensamento, não um artefato ritual herdado de tradições antigas.",
+      "uso_moderno": "Usado como marca de pertencimento à tradição, em sigilos pessoais, capas de livros e como ponto de partida visual para práticas de foco de vontade. Não carrega corpo de correspondências planetárias ou elementais fixas, cada praticante ou grupo pode atribuir significado próprio, o que é coerente com o princípio de que a crença é instrumental.",
       "bibliografia": ["Peter J. Carroll, Liber Null & Psychonaut (1987)", "Phil Hine, Condensed Chaos (1995)"],
       "svg_path": null
     },
@@ -53,7 +53,7 @@
         "conceito_chave": "ciclo, autossuficiência, retorno"
       },
       "uso_historico": "Circulou por textos gnósticos (como referência à totalidade cósmica) e por manuscritos alquímicos medievais e renascentistas, onde aparece frequentemente com a inscrição grega 'hen to pan' (o um, o todo).",
-      "uso_moderno": "Carl Jung o adotou como imagem do processo de individuação psíquica. Na Magia do Caos contemporânea, é por vezes usado como metáfora do ciclo de crença-descrença que caracteriza o uso instrumental de sistemas mágicos — vestir e depois deliberadamente descartar uma crença, sem se prender a ela como verdade permanente.",
+      "uso_moderno": "Carl Jung o adotou como imagem do processo de individuação psíquica. Na Magia do Caos contemporânea, é por vezes usado como metáfora do ciclo de crença-descrença que caracteriza o uso instrumental de sistemas mágicos, vestir e depois deliberadamente descartar uma crença, sem se prender a ela como verdade permanente.",
       "bibliografia": ["Carl Jung, Psychology and Alchemy (1944)", "Peter J. Carroll, Liber Null & Psychonaut (1987)"],
       "svg_path": null
     },
@@ -64,14 +64,14 @@
       "nomes_alternativos": [],
       "origem": "Observação astronômica documentada desde a Mesopotâmia; sistematizado como corpo astrológico na tradição helenística.",
       "primeiros_registros": "Associações solares com divindades (Utu/Shamash na Mesopotâmia, Rá no Egito) antecedem em muito a astrologia horoscópica greco-romana, que consolidou o Sol como um dos sete corpos clássicos por volta do século II a.C. em diante.",
-      "significado": "Na astrologia tradicional, representa identidade central, vitalidade e propósito consciente — o eixo em torno do qual a personalidade se organiza. No Caos Astral, esse corpo corresponde ao termo interno 'núcleo'.",
+      "significado": "Na astrologia tradicional, representa identidade central, vitalidade e propósito consciente, o eixo em torno do qual a personalidade se organiza. No Caos Astral, esse corpo corresponde ao termo interno 'núcleo'.",
       "tradicoes": ["astrologia"],
       "correspondencias": {
         "elemento": "fogo (associação tradicional, não universal entre sistemas)",
         "metal": "ouro (correspondência alquímica clássica)",
         "conceito_chave": "identidade central, vitalidade"
       },
-      "uso_historico": "Shamash, na Mesopotâmia, era concebido como juiz divino e guardião da ordem — o Sol como fonte de verdade e revelação, não apenas luz física. Essa camada de significado (Sol = clareza/verdade) atravessa boa parte das tradições solares posteriores.",
+      "uso_historico": "Shamash, na Mesopotâmia, era concebido como juiz divino e guardião da ordem, o Sol como fonte de verdade e revelação, não apenas luz física. Essa camada de significado (Sol = clareza/verdade) atravessa boa parte das tradições solares posteriores.",
       "uso_moderno": "Na astrologia psicológica do século XX (Dane Rudhyar entre outros), o Sol passou a ser lido como processo de individuação, não posição fixa de caráter. No produto Caos Astral, essa leitura processual é a base do termo 'núcleo': ferramenta de organização de energia, não destino fechado.",
       "bibliografia": ["Robert Hand, Planets in Transit (1976)", "Dane Rudhyar, The Astrology of Personality (1936)"],
       "svg_path": null
@@ -83,14 +83,14 @@
       "nomes_alternativos": [],
       "origem": "Um dos corpos celestes mais antigos observados sistematicamente por qualquer cultura, com calendários lunares documentados na Mesopotâmia e em diversas civilizações antigas de forma independente.",
       "primeiros_registros": "Referências à Lua como divindade ou força astrológica aparecem em tabuinhas mesopotâmicas associadas ao deus Nanna/Sin, anteriores à própria sistematização horoscópica.",
-      "significado": "Representa tradicionalmente o emocional, o instintivo e o hábito — a camada de resposta automática que antecede a reflexão consciente. No Caos Astral, esse corpo corresponde ao termo interno 'fome': o que a pessoa busca por impulso, antes de qualquer decisão deliberada.",
+      "significado": "Representa tradicionalmente o emocional, o instintivo e o hábito, a camada de resposta automática que antecede a reflexão consciente. No Caos Astral, esse corpo corresponde ao termo interno 'fome': o que a pessoa busca por impulso, antes de qualquer decisão deliberada.",
       "tradicoes": ["astrologia"],
       "correspondencias": {
         "elemento": "água (associação tradicional)",
         "conceito_chave": "instinto, hábito, resposta automática"
       },
       "uso_historico": "Em praticamente todas as tradições astrológicas antigas, a Lua está ligada a ciclos (mensal, de marés, agrícola) e por isso frequentemente associada a mudança e reação, em contraste com a constância solar.",
-      "uso_moderno": "A astrologia psicológica trata a posição lunar como o padrão emocional que opera fora da consciência plena — o que a pessoa faz 'no piloto automático'. O termo Caos Astral 'fome' foi escolhido deliberadamente para evitar a leitura passiva comum ('você é assim') e enquadrar o dado como um impulso identificável e, portanto, administrável.",
+      "uso_moderno": "A astrologia psicológica trata a posição lunar como o padrão emocional que opera fora da consciência plena, o que a pessoa faz 'no piloto automático'. O termo Caos Astral 'fome' foi escolhido deliberadamente para evitar a leitura passiva comum ('você é assim') e enquadrar o dado como um impulso identificável e, portanto, administrável.",
       "bibliografia": ["Liz Greene, Relating (1977)", "Howard Sasportas, The Twelve Houses (1985)"],
       "svg_path": null
     }

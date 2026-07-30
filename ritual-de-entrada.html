@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ritual de Entrada — Caos Astral</title>
+<title>Ritual de Entrada, Caos Astral</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -115,7 +115,7 @@
 
 <div class="ritual-wrap">
 
-  <!-- ===== PAINEL ESQUERDO — prévia viva ===== -->
+  <!-- ===== PAINEL ESQUERDO, prévia viva ===== -->
   <div class="preview-panel">
     <svg class="preview-wheel" viewBox="0 0 400 400">
       <circle cx="200" cy="200" r="182" fill="none" stroke="var(--ink-dim)" stroke-width="1"/>
@@ -126,15 +126,15 @@
     <p class="eyebrow preview-eyebrow"><span class="glyph">✦</span> ritual de entrada</p>
     <h1 class="preview-title">Cada resposta abre uma peça do seu kit.</h1>
     <div class="preview-fields" id="previewFields">
-      <div class="pf-row" data-field="nome"><span class="pf-label">Nome</span><span class="pf-value pending">—</span></div>
-      <div class="pf-row" data-field="nucleo"><span class="pf-label">☉ Núcleo</span><span class="pf-value pending">—</span></div>
-      <div class="pf-row" data-field="mascara"><span class="pf-label">▲ Máscara</span><span class="pf-value pending">—</span></div>
-      <div class="pf-row" data-field="fome"><span class="pf-label">☽ Fome</span><span class="pf-value pending">—</span></div>
-      <div class="pf-row" data-field="territorio"><span class="pf-label">⌂ Território de abertura</span><span class="pf-value pending">—</span></div>
+      <div class="pf-row" data-field="nome"><span class="pf-label">Nome</span><span class="pf-value pending">-</span></div>
+      <div class="pf-row" data-field="nucleo"><span class="pf-label">☉ Núcleo</span><span class="pf-value pending">-</span></div>
+      <div class="pf-row" data-field="mascara"><span class="pf-label">▲ Máscara</span><span class="pf-value pending">-</span></div>
+      <div class="pf-row" data-field="fome"><span class="pf-label">☽ Fome</span><span class="pf-value pending">-</span></div>
+      <div class="pf-row" data-field="territorio"><span class="pf-label">⌂ Território de abertura</span><span class="pf-value pending">-</span></div>
     </div>
   </div>
 
-  <!-- ===== PAINEL DIREITO — formulário por etapas ===== -->
+  <!-- ===== PAINEL DIREITO, formulário por etapas ===== -->
   <div class="form-panel">
     <div class="form-inner">
       <div class="steps-track" id="stepsTrack">
@@ -145,10 +145,10 @@
         <div class="dot" data-step="4"></div>
       </div>
 
-      <!-- STEP 0 — nome + data de nascimento -->
+      <!-- STEP 0, nome + data de nascimento -->
       <div class="step active" data-step="0">
         <h2 style="margin-bottom:10px;">Qual é o seu nome?</h2>
-        <p class="step-hint">✦ nome completo, como no registro — ajuda a evitar ambiguidade de cálculo em nomes muito comuns</p>
+        <p class="step-hint">✦ nome completo, como no registro, ajuda a evitar ambiguidade de cálculo em nomes muito comuns</p>
         <div class="field"><label>Nome completo</label><input type="text" id="inpNome" placeholder="Seu nome" autocomplete="name"></div>
         <div class="field"><label>Data de nascimento</label><input type="date" id="inpData" autocomplete="bday"></div>
         <div class="step-nav">
@@ -157,7 +157,7 @@
         </div>
       </div>
 
-      <!-- STEP 1 — local de nascimento -->
+      <!-- STEP 1, local de nascimento -->
       <div class="step" data-step="1">
         <h2 style="margin-bottom:10px;">Onde você nasceu?</h2>
         <p class="step-hint">✦ isso define o território de abertura do seu kit e a leitura de fricção/corrente com precisão geográfica real</p>
@@ -168,10 +168,10 @@
         </div>
       </div>
 
-      <!-- STEP 2 — hora de nascimento -->
+      <!-- STEP 2, hora de nascimento -->
       <div class="step" data-step="2">
         <h2 style="margin-bottom:10px;">Que horas você nasceu?</h2>
-        <p class="step-hint">✦ isso define máscara e territórios com exatidão. Se não souber a hora exata, dá pra ajustar depois — mas o kit fica incompleto até lá</p>
+        <p class="step-hint">✦ isso define máscara e territórios com exatidão. Se não souber a hora exata, dá pra ajustar depois, mas o kit fica incompleto até lá</p>
         <div class="field"><label>Hora de nascimento</label><input type="time" id="inpHora" autocomplete="off"></div>
         <div class="step-nav">
           <button class="step-back">← voltar</button>
@@ -179,10 +179,10 @@
         </div>
       </div>
 
-      <!-- STEP 3 — autenticação -->
+      <!-- STEP 3, autenticação -->
       <div class="step" data-step="3">
         <h2 style="margin-bottom:10px;">Como você quer voltar aqui depois?</h2>
-        <p class="step-hint">✦ seus dados de nascimento e diário ficam privados — só você acessa (RLS ativo, auth.uid())</p>
+        <p class="step-hint">✦ seus dados de nascimento e diário ficam privados, só você acessa (RLS ativo, auth.uid())</p>
         <!-- ENGINE: botão abaixo dispara o fluxo Google OAuth nativo do Supabase Auth -->
         <button class="oauth-btn" id="btnGoogle">
           <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.67 9c0-.59.1-1.17.28-1.7V4.97H.96A9 9 0 0 0 0 9c0 1.45.35 2.83.96 4.03l2.99-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.97l2.99 2.33C4.66 5.17 6.65 3.58 9 3.58z"/></svg>
@@ -201,7 +201,7 @@
         </div>
       </div>
 
-      <!-- STEP 4 — confirmação / preferências de janela -->
+      <!-- STEP 4, confirmação / preferências de janela -->
       <div class="step" data-step="4">
         <svg class="success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>
         <h2 style="margin-bottom:10px;" id="successName">Seu kit foi aberto.</h2>
@@ -267,7 +267,7 @@
   }
 
   // Núcleo: cálculo real por data de corte de signo solar (não depende de
-  // hora/local — só precisa da data, então dá pra ser 100% correto aqui
+  // hora/local, só precisa da data, então dá pra ser 100% correto aqui
   // mesmo sem chamar o motor completo no backend).
   function sunSignFromDate(isoDateStr){
     const [, m, day] = isoDateStr.split('-').map(Number);
@@ -279,7 +279,7 @@
     for(const [cm, cd, sign] of cutoffs){
       if(m < cm || (m === cm && day <= cd)) return sign;
     }
-    return 'Capricórnio'; // 22–31 de dezembro
+    return 'Capricórnio'; // 22-31 de dezembro
   }
 
   document.getElementById('btnStep0').addEventListener('click', () => {
@@ -294,7 +294,7 @@
   document.getElementById('btnStep1').addEventListener('click', () => {
     const local = document.getElementById('inpLocal').value.trim();
     if(!local){ return; }
-    // Território real depende do mapa completo (ascendente + casas) — não
+    // Território real depende do mapa completo (ascendente + casas), não
     // dá pra saber só com o nome da cidade. Reveal honesto, sem fingir
     // um valor específico que provavelmente estaria errado.
     revealField('territorio', 'no seu Kit ✦');
@@ -307,7 +307,7 @@
     // Fome (Lua) muda de signo a cada ~2,5 dias e precisa do horário em
     // UTC preciso; Máscara (Ascendente) precisa de latitude/longitude
     // reais. Nenhum dos dois dá pra calcular direito só com hora local
-    // e nome de cidade em texto — por isso reveal honesto aqui também,
+    // e nome de cidade em texto, por isso reveal honesto aqui também,
     // em vez de mostrar um signo que pode estar errado (foi exatamente
     // isso que aconteceu com Núcleo antes dessa correção).
     revealField('fome', 'no seu Kit ✦');

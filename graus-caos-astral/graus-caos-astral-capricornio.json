@@ -14,7 +14,7 @@
       "decanato": 1,
       "tempero": "saturno",
       "imagem": "Um operário chega ao trabalho antes do sol nascer, todos os dias, sem exceção.",
-      "leitura": "Disciplina que não depende de vontade — virou rotina inegociável."
+      "leitura": "Disciplina que não depende de vontade, virou rotina inegociável."
     },
     {
       "grau": 3,
@@ -70,14 +70,14 @@
       "decanato": 1,
       "tempero": "saturno",
       "imagem": "Uma escada de pedra sobe uma montanha inteira, degrau que foi entalhado há séculos.",
-      "leitura": "Esforço acumulado que só existe porque muita gente aceitou construir devagar — fim do decanato."
+      "leitura": "Esforço acumulado que só existe porque muita gente aceitou construir devagar, fim do decanato."
     },
     {
       "grau": 11,
       "decanato": 2,
       "tempero": "vênus",
       "imagem": "Um agricultor colhe, finalmente, o pomar que plantou anos atrás.",
-      "leitura": "O prazer que só chega depois de muito tempo de espera — recompensa que não veio de graça."
+      "leitura": "O prazer que só chega depois de muito tempo de espera, recompensa que não veio de graça."
     },
     {
       "grau": 12,
@@ -140,7 +140,7 @@
       "decanato": 2,
       "tempero": "vênus",
       "imagem": "Um mestre artesão finalmente aceita um encomendante pagar o preço justo pelo que ele sabe fazer.",
-      "leitura": "Reconhecer o próprio valor depois de anos aceitando menos do que merecia — fim do decanato."
+      "leitura": "Reconhecer o próprio valor depois de anos aceitando menos do que merecia, fim do decanato."
     },
     {
       "grau": 21,
@@ -168,14 +168,14 @@
       "decanato": 3,
       "tempero": "mercúrio",
       "imagem": "Um CEO organiza a sucessão da empresa com anos de antecedência, treinando o substituto certo.",
-      "leitura": "Poder que pensa além da própria permanência — construir o que continua depois de você."
+      "leitura": "Poder que pensa além da própria permanência, construir o que continua depois de você."
     },
     {
       "grau": 25,
       "decanato": 3,
       "tempero": "mercúrio",
       "imagem": "Um general revisa o mapa da batalha uma última vez antes de dar a ordem de avanço.",
-      "leitura": "Ambição que não age sem plano — o controle nasce da preparação exaustiva."
+      "leitura": "Ambição que não age sem plano, o controle nasce da preparação exaustiva."
     },
     {
       "grau": 26,
@@ -189,7 +189,7 @@
       "decanato": 3,
       "tempero": "mercúrio",
       "imagem": "Um mestre de obras entrega o prédio um dia antes do prazo, sem nenhum erro estrutural.",
-      "leitura": "Excelência que combina ambição com exatidão — chegar longe sem deixar rachadura pra trás."
+      "leitura": "Excelência que combina ambição com exatidão, chegar longe sem deixar rachadura pra trás."
     },
     {
       "grau": 28,
@@ -203,14 +203,14 @@
       "decanato": 3,
       "tempero": "mercúrio",
       "imagem": "Um professor de ofício entrega, com precisão total, tudo o que sabe pro aprendiz mais dedicado.",
-      "leitura": "Legado transmitido com exatidão — o que foi construído com rigor merece continuar com o mesmo padrão."
+      "leitura": "Legado transmitido com exatidão, o que foi construído com rigor merece continuar com o mesmo padrão."
     },
     {
       "grau": 30,
       "decanato": 3,
       "tempero": "mercúrio",
       "imagem": "Uma pirâmide inteira é finalmente concluída, cada pedra encaixada no lugar exato planejado séculos atrás.",
-      "leitura": "Ambição que atravessa gerações e se cumpre exatamente como foi arquitetada — grau anarético: estrutura permanente."
+      "leitura": "Ambição que atravessa gerações e se cumpre exatamente como foi arquitetada, grau anarético: estrutura permanente."
     }
   ]
 }

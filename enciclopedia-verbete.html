@@ -7,7 +7,7 @@
 <meta id="meta-desc" name="description" content="Símbolo da Enciclopédia Caos Astral.">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-  /* TODO: mesma observação das outras páginas — trocar pelos tokens reais do site. */
+  /* TODO: mesma observação das outras páginas, trocar pelos tokens reais do site. */
   :root {
     --bg: #14161a; --bg-card: #1e2126; --border: #2c3038;
     --text: #e8e6e1; --text-dim: #9a978f; --accent: #c9a35f;
@@ -56,7 +56,7 @@
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   // GitHub Pages não faz rewrite de servidor, então a URL é sempre
-  // /enciclopedia-verbete.html?slug=ouroboros (sem path bonito por enquanto —
+  // /enciclopedia-verbete.html?slug=ouroboros (sem path bonito por enquanto,
   // ver nota sobre pré-render estático se/quando isso virar prioridade de SEO).
   function pegarSlug() {
     const params = new URLSearchParams(window.location.search);
@@ -74,7 +74,7 @@
     if (!slug) return mostrarErro();
 
     // A RLS decide o que volta: se for tier='pago' e o usuário não tiver
-    // acesso, a linha simplesmente não vem — por isso tratamos "não veio nada"
+    // acesso, a linha simplesmente não vem, por isso tratamos "não veio nada"
     // como possível bloqueio, não necessariamente slug inexistente.
     const { data, error } = await sb
       .from("enciclopedia_simbolos")
@@ -95,7 +95,7 @@
   }
 
   async function mostrarBloqueadoOuInexistente(slug) {
-    // Sem acesso de leitura à linha (RLS bloqueou) — não dá pra saber se é
+    // Sem acesso de leitura à linha (RLS bloqueou), não dá pra saber se é
     // porque não existe ou porque é pago. Como boa prática de UX, tratamos
     // como "conteúdo pago" por padrão, já que slugs de verbetes inexistentes
     // devem, na prática, vir de links quebrados internos (raro).

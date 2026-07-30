@@ -21,35 +21,35 @@
       "decanato": 1,
       "tempero": "mercúrio",
       "imagem": "Uma criança organiza os lápis de cor em ordem exata do arco-íris.",
-      "leitura": "Precisar de ordem pra sentir que o mundo está certo — não é frescura, é necessidade real."
+      "leitura": "Precisar de ordem pra sentir que o mundo está certo, não é frescura, é necessidade real."
     },
     {
       "grau": 4,
       "decanato": 1,
       "tempero": "mercúrio",
       "imagem": "Um copista revisa o mesmo texto três vezes procurando erros de grafia.",
-      "leitura": "Cuidado que se repete até ter certeza — a versão final só sai depois de exaustão."
+      "leitura": "Cuidado que se repete até ter certeza, a versão final só sai depois de exaustão."
     },
     {
       "grau": 5,
       "decanato": 1,
       "tempero": "mercúrio",
       "imagem": "Um médico examina cada sintoma separadamente antes de arriscar um diagnóstico.",
-      "leitura": "Recusar conclusão apressada — o cuidado real exige olhar peça por peça."
+      "leitura": "Recusar conclusão apressada, o cuidado real exige olhar peça por peça."
     },
     {
       "grau": 6,
       "decanato": 1,
       "tempero": "mercúrio",
       "imagem": "Uma abelha operária inspeciona cada célula do favo antes de aceitar como pronta.",
-      "leitura": "Trabalho que não aceita \"quase certo\" — cada parte precisa estar exatamente no lugar."
+      "leitura": "Trabalho que não aceita \"quase certo\", cada parte precisa estar exatamente no lugar."
     },
     {
       "grau": 7,
       "decanato": 1,
       "tempero": "mercúrio",
       "imagem": "Um contador confere a mesma soma duas vezes antes de fechar o balanço.",
-      "leitura": "Desconfiar até da própria conta — checagem dupla como forma de cuidado, não de insegurança."
+      "leitura": "Desconfiar até da própria conta, checagem dupla como forma de cuidado, não de insegurança."
     },
     {
       "grau": 8,
@@ -63,21 +63,21 @@
       "decanato": 1,
       "tempero": "mercúrio",
       "imagem": "Um crítico aponta o único verso fraco num poema inteiro bem escrito.",
-      "leitura": "Enxergar a falha específica mesmo dentro de algo que já é bom — o cuidado que exige mais."
+      "leitura": "Enxergar a falha específica mesmo dentro de algo que já é bom, o cuidado que exige mais."
     },
     {
       "grau": 10,
       "decanato": 1,
       "tempero": "mercúrio",
       "imagem": "Um artesão lixa a mesma dobradiça até ela parar de ranger.",
-      "leitura": "Insistir no pequeno detalhe até ele parar de incomodar — fim do decanato: nada escapa da checagem."
+      "leitura": "Insistir no pequeno detalhe até ele parar de incomodar, fim do decanato: nada escapa da checagem."
     },
     {
       "grau": 11,
       "decanato": 2,
       "tempero": "saturno",
       "imagem": "Um monge segue a mesma rotina exata há quarenta anos, sem falhar um dia.",
-      "leitura": "Disciplina que virou identidade — o rigor não é imposição, é estrutura de vida."
+      "leitura": "Disciplina que virou identidade, o rigor não é imposição, é estrutura de vida."
     },
     {
       "grau": 12,
@@ -98,7 +98,7 @@
       "decanato": 2,
       "tempero": "saturno",
       "imagem": "Um funcionário público carimba cada documento seguindo o mesmo protocolo, sem exceção.",
-      "leitura": "Seguir a regra à risca mesmo quando parece burocracia excessiva — o sistema depende disso."
+      "leitura": "Seguir a regra à risca mesmo quando parece burocracia excessiva, o sistema depende disso."
     },
     {
       "grau": 15,
@@ -140,21 +140,21 @@
       "decanato": 2,
       "tempero": "saturno",
       "imagem": "Um artesão entrega a peça só quando ela atinge o próprio padrão, não o do cliente.",
-      "leitura": "Rigor interno que não negocia mesmo sob pressão externa — fim do decanato: a régua é sua, não emprestada."
+      "leitura": "Rigor interno que não negocia mesmo sob pressão externa, fim do decanato: a régua é sua, não emprestada."
     },
     {
       "grau": 21,
       "decanato": 3,
       "tempero": "vênus",
       "imagem": "Um chef prova o prato sete vezes ajustando o tempero, grão de sal por grão de sal.",
-      "leitura": "Precisão que serve o prazer, não o substitui — o rigor aqui existe pra deixar algo gostoso de verdade."
+      "leitura": "Precisão que serve o prazer, não o substitui, o rigor aqui existe pra deixar algo gostoso de verdade."
     },
     {
       "grau": 22,
       "decanato": 3,
       "tempero": "vênus",
       "imagem": "Um perfumista mistura óleos numa proporção exata até o aroma ficar perfeito.",
-      "leitura": "Refinamento que exige tanto cálculo quanto sensibilidade — arte que também é ciência."
+      "leitura": "Refinamento que exige tanto cálculo quanto sensibilidade, arte que também é ciência."
     },
     {
       "grau": 23,
@@ -168,7 +168,7 @@
       "decanato": 3,
       "tempero": "vênus",
       "imagem": "Uma costureira borda um único fio de ouro numa peça de seda simples.",
-      "leitura": "Detalhe mínimo que eleva o todo — o cuidado pequeno que faz toda a diferença visível."
+      "leitura": "Detalhe mínimo que eleva o todo, o cuidado pequeno que faz toda a diferença visível."
     },
     {
       "grau": 25,
@@ -203,14 +203,14 @@
       "decanato": 3,
       "tempero": "vênus",
       "imagem": "Um mestre chocolateiro tempera o chocolate na temperatura exata, grau a grau.",
-      "leitura": "Prazer que só existe por causa do rigor técnico por trás — nada é acidente aqui."
+      "leitura": "Prazer que só existe por causa do rigor técnico por trás, nada é acidente aqui."
     },
     {
       "grau": 30,
       "decanato": 3,
       "tempero": "vênus",
       "imagem": "Uma última pincelada de verniz seca lenta, protegendo todo o trabalho feito antes dela.",
-      "leitura": "O cuidado final que preserva tudo o que foi construído com precisão — grau anarético: o rigor vira proteção duradoura."
+      "leitura": "O cuidado final que preserva tudo o que foi construído com precisão, grau anarético: o rigor vira proteção duradoura."
     }
   ]
 }

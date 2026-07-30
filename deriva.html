@@ -29,7 +29,7 @@
 
   .mono{ font-family:'IBM Plex Mono', monospace; }
 
-  /* ---------- nav — mesmo menu do site, na paleta da Deriva ---------- */
+  /* ---------- nav, mesmo menu do site, na paleta da Deriva ---------- */
   nav{
     position:sticky; top:0; z-index:110;
     background:rgba(10,9,8,0.94);
@@ -186,7 +186,7 @@
     color:var(--stone); margin-top:4px; display:block;
   }
 
-  /* em touch/tablet o :hover não dispara de forma confiável — deixa o
+  /* em touch/tablet o :hover não dispara de forma confiável, deixa o
      label sempre legível, só um pouco mais discreto que o estado hover */
   @media (hover:none){
     .portal .label{ opacity:0.85; transform:translateY(0); }
@@ -251,7 +251,7 @@
     z-index:50; pointer-events:none;
   }
 
-  /* ---------- barra de áudio — fixa, fina, embaixo ---------- */
+  /* ---------- barra de áudio, fixa, fina, embaixo ---------- */
   body{ padding-bottom:54px; }
 
   .audio-bar{
@@ -319,7 +319,7 @@
     display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px;
   }
 
-  /* ---------- overlay do portal — visual em tela cheia, sem sair da página ---------- */
+  /* ---------- overlay do portal, visual em tela cheia, sem sair da página ---------- */
   .portal-overlay{
     position:fixed; inset:0; z-index:120;
     background:#000; display:none;
@@ -572,7 +572,7 @@
   <div class="audio-bar-row">
     <button class="audio-power" id="audioPower" data-on="0">ligar som</button>
     <div class="audio-bar-status mono">
-      <b id="abBand">Theta</b> · <b id="abName">Fantasia</b> — <span id="abFreqs">180 Hz / 6.0 Hz</span>
+      <b id="abBand">Theta</b> · <b id="abName">Fantasia</b>-<span id="abFreqs">180 Hz / 6.0 Hz</span>
     </div>
     <button class="audio-toggle-panel" id="audioToggle" aria-expanded="false">ajustar ▾</button>
   </div>
@@ -670,7 +670,7 @@
     <div class="a-row" style="grid-column:1 / -1;">
       <div class="pulse-on-row">
         <div class="mini-toggle" id="icaroToggle" data-on="0">desligado</div>
-        <span class="mono" style="font-size:10.5px; color:var(--stone);">um canto sintetizado por trás, tipo ícaro — sem palavras, só a vogal</span>
+        <span class="mono" style="font-size:10.5px; color:var(--stone);">um canto sintetizado por trás, tipo ícaro, sem palavras, só a vogal</span>
       </div>
     </div>
     <div class="a-row">
@@ -714,7 +714,7 @@
     <div class="a-row" style="grid-column:1 / -1;">
       <div class="pulse-on-row">
         <div class="mini-toggle" id="aumToggle" data-on="0">desligado</div>
-        <span class="mono" style="font-size:10.5px; color:var(--stone);">ciclo Aum automático — desliza sozinho entre "ah" → "um" → "mm"</span>
+        <span class="mono" style="font-size:10.5px; color:var(--stone);">ciclo Aum automático, desliza sozinho entre "ah" → "um" → "mm"</span>
       </div>
     </div>
     <div class="a-row" style="grid-column:1 / -1;">
@@ -779,7 +779,7 @@ function makeRetinaCanvas(id){
 
 const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita concorrer com o portal em tela cheia)
 
-// ---------- prévia: Rorschach — metaballs (mancha de tinta sólida, com furos e pingos) ----------
+// ---------- prévia: Rorschach, metaballs (mancha de tinta sólida, com furos e pingos) ----------
 (function(){
   let active = true;
   const { ctx, dim } = makeRetinaCanvas('c-rorschach');
@@ -796,7 +796,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   resizeOff();
   window.addEventListener('resize', resizeOff);
 
-  // massa principal — só o lado direito é definido, o campo é somado espelhado (x e -x)
+  // massa principal, só o lado direito é definido, o campo é somado espelhado (x e -x)
   const core = Array.from({length: 6}, (_, i) => ({
     bx: 0.08 + Math.random() * 0.24,
     by: -0.34 + i * (0.5 / 5) + (Math.random() - 0.5) * 0.06,
@@ -805,7 +805,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
     speed: 0.35 + Math.random() * 0.25
   }));
 
-  // pingos — correntes de bolhas decrescentes descendo, somadas ao mesmo campo
+  // pingos, correntes de bolhas decrescentes descendo, somadas ao mesmo campo
   const drips = [];
   for (let c = 0; c < 2; c++) {
     const dripBx = 0.06 + c * 0.11 + Math.random() * 0.05;
@@ -824,7 +824,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   }
   const balls = core.concat(drips);
 
-  // furos internos — vãos escuros dentro da mancha
+  // furos internos, vãos escuros dentro da mancha
   const holes = Array.from({length: 3}, () => ({
     bx: 0.05 + Math.random() * 0.2,
     by: -0.08 + Math.random() * 0.38,
@@ -891,7 +891,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   previewControls.push({ pause(){ active = false; }, resume(){ if (!active) { active = true; requestAnimationFrame(frame); } } });
 })();
 
-// ---------- prévia: Estrelas — starfield warp ----------
+// ---------- prévia: Estrelas, starfield warp ----------
 (function(){
   let active = true;
   const { ctx, dim } = makeRetinaCanvas('c-stars');
@@ -938,7 +938,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   previewControls.push({ pause(){ active = false; }, resume(){ if (!active) { active = true; requestAnimationFrame(frame); } } });
 })();
 
-// ---------- prévia: Wormhole — anéis concêntricos com wobble ----------
+// ---------- prévia: Wormhole, anéis concêntricos com wobble ----------
 // mesma lógica de ringPath() do hyperspace_flow.html, simplificada
 (function(){
   let active = true;
@@ -1006,7 +1006,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   previewControls.push({ pause(){ active = false; }, resume(){ if (!active) { active = true; requestAnimationFrame(frame); } } });
 })();
 
-// ---------- prévia: Plasma — turbulência em baixa resolução, ampliada ----------
+// ---------- prévia: Plasma, turbulência em baixa resolução, ampliada ----------
 // mesma técnica do motor real: computa num canvas pequeno e escala com drawImage
 (function(){
   let active = true;
@@ -1060,7 +1060,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   previewControls.push({ pause(){ active = false; }, resume(){ if (!active) { active = true; requestAnimationFrame(frame); } } });
 })();
 
-// ---------- prévia: Mandala — pétalas girando ----------
+// ---------- prévia: Mandala, pétalas girando ----------
 (function(){
   let active = true;
   const { ctx, dim } = makeRetinaCanvas('c-mandala');
@@ -1124,7 +1124,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   previewControls.push({ pause(){ active = false; }, resume(){ if (!active) { active = true; requestAnimationFrame(frame); } } });
 })();
 
-// ---------- prévia: Vórtice — tinta em espiral sendo sugada pro centro ----------
+// ---------- prévia: Vórtice, tinta em espiral sendo sugada pro centro ----------
 (function(){
   let active = true;
   const { ctx, dim } = makeRetinaCanvas('c-vortice');
@@ -1201,7 +1201,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   previewControls.push({ pause(){ active = false; }, resume(){ if (!active) { active = true; requestAnimationFrame(frame); } } });
 })();
 
-// ---------- prévia: Cimática — padrões de nó estacionário (tipo Chladni) ----------
+// ---------- prévia: Cimática, padrões de nó estacionário (tipo Chladni) ----------
 (function(){
   let active = true;
   const { ctx, dim } = makeRetinaCanvas('c-cimatica');
@@ -1225,7 +1225,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
     const data = img.data;
     let idx = 0;
 
-    // "n" e "m" variam bem devagar — como se a frequência estivesse mudando
+    // "n" e "m" variam bem devagar, como se a frequência estivesse mudando
     const n = 3 + Math.sin(t * 0.11) * 2;
     const m = 5 + Math.cos(t * 0.08) * 2.5;
 
@@ -1255,7 +1255,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   previewControls.push({ pause(){ active = false; }, resume(){ if (!active) { active = true; requestAnimationFrame(frame); } } });
 })();
 
-// ---------- prévia: Fumaça — camadas de ruído subindo devagar ----------
+// ---------- prévia: Fumaça, camadas de ruído subindo devagar ----------
 (function(){
   let active = true;
   const { ctx, dim } = makeRetinaCanvas('c-fumaca');
@@ -1313,7 +1313,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   previewControls.push({ pause(){ active = false; }, resume(){ if (!active) { active = true; requestAnimationFrame(frame); } } });
 })();
 
-// ---------- prévia: Geometria sagrada — círculos entrelaçados girando ----------
+// ---------- prévia: Geometria sagrada, círculos entrelaçados girando ----------
 (function(){
   let active = true;
   const { ctx, dim } = makeRetinaCanvas('c-geometria');
@@ -1363,7 +1363,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   previewControls.push({ pause(){ active = false; }, resume(){ if (!active) { active = true; requestAnimationFrame(frame); } } });
 })();
 
-// ---------- prévia: Constelação — pontos que se conectam e se soltam ----------
+// ---------- prévia: Constelação, pontos que se conectam e se soltam ----------
 (function(){
   let active = true;
   const { ctx, dim } = makeRetinaCanvas('c-constelacao');
@@ -1421,7 +1421,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   previewControls.push({ pause(){ active = false; }, resume(){ if (!active) { active = true; requestAnimationFrame(frame); } } });
 })();
 
-// ---------- prévia: Olho — íris dilatando devagar ----------
+// ---------- prévia: Olho, íris dilatando devagar ----------
 (function(){
   let active = true;
   const { ctx, dim } = makeRetinaCanvas('c-olho');
@@ -1481,7 +1481,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   previewControls.push({ pause(){ active = false; }, resume(){ if (!active) { active = true; requestAnimationFrame(frame); } } });
 })();
 
-// ---------- prévia: Batimento — linha tipo ECG rolando ----------
+// ---------- prévia: Batimento, linha tipo ECG rolando ----------
 (function(){
   let active = true;
   const { ctx, dim } = makeRetinaCanvas('c-batimento');
@@ -1551,13 +1551,13 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   let aumCycleTimers = [null, null, null];
   let running = false;
 
-  // formantes aproximados de cada vogal (F1/F2/F3 em Hz, ganho relativo) — dá o timbre de "ah/oh/um/eh" ao sintetizar
+  // formantes aproximados de cada vogal (F1/F2/F3 em Hz, ganho relativo), dá o timbre de "ah/oh/um/eh" ao sintetizar
   const VOWELS = {
     a: { f: [800, 1150, 2900], g: [1, 0.6, 0.25] },
     o: { f: [500, 900,  2600], g: [1, 0.5, 0.2]  },
     u: { f: [350, 700,  2400], g: [1, 0.4, 0.15] },
     e: { f: [500, 1750, 2600], g: [1, 0.55, 0.22] },
-    m: { f: [260, 900,  1500], g: [1, 0.15, 0.05] } // boca fechada, som abafado e nasal — o "m" do Aum
+    m: { f: [260, 900,  1500], g: [1, 0.15, 0.05] } // boca fechada, som abafado e nasal, o "m" do Aum
   };
 
   // cada voz é um intervalo relativo ao tom base (1 = uníssono, 1.5 = quinta acima, 0.5 = oitava abaixo) e um nível de mixagem próprio
@@ -1718,7 +1718,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
       mix.gain.value = 0.5;
       osc1.connect(mix); osc2.connect(mix);
 
-      // três filtros de formante em paralelo, cada um com seu próprio ganho — dá o timbre de vogal
+      // três filtros de formante em paralelo, cada um com seu próprio ganho, dá o timbre de vogal
       const formants = [0, 1, 2].map(() => {
         const filt = ctx.createBiquadFilter();
         filt.type = 'bandpass';
@@ -1735,7 +1735,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
       return { osc1, osc2, formants, voiceGain, ratio: def.ratio, mix: def.mix, driftTimer: null };
     });
 
-    // pulso próprio da vocalização — respiração rítmica opcional, independente do pulso binaural
+    // pulso próprio da vocalização, respiração rítmica opcional, independente do pulso binaural
     icaroPulseLFO = ctx.createOscillator();
     icaroPulseLFO.type = state.icaroPulseShape;
     icaroPulseLFO.frequency.value = state.icaroPulseRate;
@@ -1797,12 +1797,12 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   function applyIcaroPulseOn(on){
     state.icaroPulseOn = on;
     if (!icaroPulseOffset || !icaroPulseGain) return;
-    const depth = 0.7; // profundidade fixa — o suficiente pra sentir a respiração sem cortar demais
+    const depth = 0.7; // profundidade fixa, o suficiente pra sentir a respiração sem cortar demais
     icaroPulseOffset.gain.setTargetAtTime(on ? depth / 2 : 0, ctx.currentTime, 0.4);
     icaroPulseGain.gain.setTargetAtTime(on ? (1 - depth / 2) : 1, ctx.currentTime, 0.4);
   }
 
-  // move a "melodia" de cada voz bem devagar entre alguns graus próximos ao seu tom — como um canto que nunca fica 100% parado.
+  // move a "melodia" de cada voz bem devagar entre alguns graus próximos ao seu tom, como um canto que nunca fica 100% parado.
   // cada voz tem seu próprio temporizador, com atraso aleatório, pra não se moverem todas juntas.
   function scheduleVoiceDrift(voice){
     if (voice.driftTimer) clearTimeout(voice.driftTimer);
@@ -1822,7 +1822,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   }
 
   // ciclo Aum: desliza devagar entre "ah" → "um" → "mm" (hum nasal) e repete, como o mantra tradicional.
-  // cada voz roda o mesmo ciclo, mas começando numa defasagem diferente — tipo um cânone, reforça a ideia de vozes distintas juntas.
+  // cada voz roda o mesmo ciclo, mas começando numa defasagem diferente, tipo um cânone, reforça a ideia de vozes distintas juntas.
   const AUM_SEQUENCE = [
     { vowel: 'a', hold: 4200 },
     { vowel: 'u', hold: 3200 },

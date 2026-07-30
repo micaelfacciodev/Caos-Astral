@@ -70,7 +70,7 @@
       "decanato": 1,
       "tempero": "saturno",
       "imagem": "Uma engrenagem nova, de formato estranho, é encaixada numa máquina antiga e ela volta a funcionar.",
-      "leitura": "Inovação que parece errada até provar que resolve o que o sistema antigo não resolvia mais — fim do decanato."
+      "leitura": "Inovação que parece errada até provar que resolve o que o sistema antigo não resolvia mais, fim do decanato."
     },
     {
       "grau": 11,
@@ -119,7 +119,7 @@
       "decanato": 2,
       "tempero": "mercúrio",
       "imagem": "Uma orquestra improvisada se forma com músicos que nunca tinham se visto antes.",
-      "leitura": "Colaboração instantânea que dispensa ensaio prévio — a rede se organiza sozinha."
+      "leitura": "Colaboração instantânea que dispensa ensaio prévio, a rede se organiza sozinha."
     },
     {
       "grau": 18,
@@ -140,7 +140,7 @@
       "decanato": 2,
       "tempero": "mercúrio",
       "imagem": "Um grupo de vizinhos desconhecidos organiza a reconstrução da praça pública sem esperar o governo agir.",
-      "leitura": "Rede que resolve o que a estrutura oficial ainda não resolveu — fim do decanato."
+      "leitura": "Rede que resolve o que a estrutura oficial ainda não resolveu, fim do decanato."
     },
     {
       "grau": 21,
@@ -210,7 +210,7 @@
       "decanato": 3,
       "tempero": "vênus",
       "imagem": "Uma constelação de satélites conecta até a aldeia mais isolada do planeta à mesma rede.",
-      "leitura": "O ideal de conexão igualitária alcançando até quem estava mais longe — grau anarético: rede que virou alcance universal."
+      "leitura": "O ideal de conexão igualitária alcançando até quem estava mais longe, grau anarético: rede que virou alcance universal."
     }
   ]
 }

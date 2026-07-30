@@ -49,7 +49,7 @@
   resize();
   window.addEventListener('resize', resize);
 
-  // pausa quando a aba não está visível — mesma lógica de economia da página principal
+  // pausa quando a aba não está visível, mesma lógica de economia da página principal
   let visible = true;
   document.addEventListener('visibilitychange', () => { visible = !document.hidden; });
 

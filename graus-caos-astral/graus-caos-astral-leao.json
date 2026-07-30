@@ -7,7 +7,7 @@
       "decanato": 1,
       "tempero": "sol",
       "imagem": "Um recém-nascido sol nasce no horizonte e ilumina tudo ao redor sem pedir licença.",
-      "leitura": "Existir e brilhar são o mesmo gesto aqui — não precisa justificar a própria luz."
+      "leitura": "Existir e brilhar são o mesmo gesto aqui, não precisa justificar a própria luz."
     },
     {
       "grau": 2,
@@ -28,7 +28,7 @@
       "decanato": 1,
       "tempero": "sol",
       "imagem": "Uma criança grita \"olha pra mim\" antes de pular na piscina.",
-      "leitura": "Precisar de testemunha pro próprio feito — a alegria cresce quando é vista."
+      "leitura": "Precisar de testemunha pro próprio feito, a alegria cresce quando é vista."
     },
     {
       "grau": 5,
@@ -63,21 +63,21 @@
       "decanato": 1,
       "tempero": "sol",
       "imagem": "Uma criança desenha um sol enorme no centro de qualquer folha de papel.",
-      "leitura": "Colocar a própria luz no centro da cena — instinto que nem precisa de motivo."
+      "leitura": "Colocar a própria luz no centro da cena, instinto que nem precisa de motivo."
     },
     {
       "grau": 10,
       "decanato": 1,
       "tempero": "sol",
       "imagem": "Um coração recém-formado bate pela primeira vez, sozinho, sem plateia.",
-      "leitura": "Vitalidade que existe antes de qualquer aplauso — fim do decanato: o pulso é a primeira prova de vida."
+      "leitura": "Vitalidade que existe antes de qualquer aplauso, fim do decanato: o pulso é a primeira prova de vida."
     },
     {
       "grau": 11,
       "decanato": 2,
       "tempero": "júpiter",
       "imagem": "Um rei distribui ouro pra toda a cidade no dia da própria coroação.",
-      "leitura": "Generosidade que nasce do excesso — dar tanto quanto se tem, sem calcular o resto."
+      "leitura": "Generosidade que nasce do excesso, dar tanto quanto se tem, sem calcular o resto."
     },
     {
       "grau": 12,
@@ -98,7 +98,7 @@
       "decanato": 2,
       "tempero": "júpiter",
       "imagem": "Um professor generoso ensina de graça pra quem não pode pagar.",
-      "leitura": "Compartilhar o próprio brilho sem cobrar por isso — a luz que ilumina sem se apagar."
+      "leitura": "Compartilhar o próprio brilho sem cobrar por isso, a luz que ilumina sem se apagar."
     },
     {
       "grau": 15,
@@ -126,7 +126,7 @@
       "decanato": 2,
       "tempero": "júpiter",
       "imagem": "Uma criança dá de presente o brinquedo favorito pro amigo que está triste.",
-      "leitura": "Generosidade que dói um pouco — dar o que é mais precioso, não só o que sobra."
+      "leitura": "Generosidade que dói um pouco, dar o que é mais precioso, não só o que sobra."
     },
     {
       "grau": 19,
@@ -140,14 +140,14 @@
       "decanato": 2,
       "tempero": "júpiter",
       "imagem": "Um circo monta a maior tenda da cidade pra caber todo mundo que quiser ver o espetáculo.",
-      "leitura": "O desejo de incluir todo mundo na própria celebração — quanto maior a alegria, maior o convite."
+      "leitura": "O desejo de incluir todo mundo na própria celebração, quanto maior a alegria, maior o convite."
     },
     {
       "grau": 21,
       "decanato": 3,
       "tempero": "marte",
       "imagem": "Um campeão ergue o troféu no alto, sozinho, no centro do estádio.",
-      "leitura": "Orgulho conquistado com esforço — o brilho aqui foi ganho, não só dado."
+      "leitura": "Orgulho conquistado com esforço, o brilho aqui foi ganho, não só dado."
     },
     {
       "grau": 22,
@@ -161,21 +161,21 @@
       "decanato": 3,
       "tempero": "marte",
       "imagem": "Um general condecorado exibe as medalhas no peito, uma a uma.",
-      "leitura": "Cada conquista exposta com orgulho — a prova visível do que já foi enfrentado."
+      "leitura": "Cada conquista exposta com orgulho, a prova visível do que já foi enfrentado."
     },
     {
       "grau": 24,
       "decanato": 3,
       "tempero": "marte",
       "imagem": "Uma dançarina desafia a companhia inteira até conseguir o solo principal.",
-      "leitura": "Brilhar aqui exige disputa — o centro do palco não sobra pra quem não luta por ele."
+      "leitura": "Brilhar aqui exige disputa, o centro do palco não sobra pra quem não luta por ele."
     },
     {
       "grau": 25,
       "decanato": 3,
       "tempero": "marte",
       "imagem": "Um boxeador ergue os braços antes mesmo do juiz anunciar o vencedor.",
-      "leitura": "Confiança que já comemora antes da confirmação — orgulho que aposta em si mesmo primeiro."
+      "leitura": "Confiança que já comemora antes da confirmação, orgulho que aposta em si mesmo primeiro."
     },
     {
       "grau": 26,
@@ -210,7 +210,7 @@
       "decanato": 3,
       "tempero": "marte",
       "imagem": "Uma última vela de aniversário se apaga sozinha, e a plateia inteira aplaude de pé.",
-      "leitura": "O brilho que se encerra, mas deixa reconhecimento atrás de si — grau anarético: fim de ciclo celebrado, não escondido."
+      "leitura": "O brilho que se encerra, mas deixa reconhecimento atrás de si, grau anarético: fim de ciclo celebrado, não escondido."
     }
   ]
 }

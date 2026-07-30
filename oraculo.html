@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Oráculo — I Ching — Caos Astral</title>
+<title>Oráculo, I Ching, Caos Astral</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -142,18 +142,18 @@
 <main>
   <section class="page-hero">
     <div class="wrap-narrow">
-      <p class="eyebrow center"><span class="glyph">☰</span> oráculo — tradição separada</p>
+      <p class="eyebrow center"><span class="glyph">☰</span> oráculo, tradição separada</p>
       <h1>I Ching: uma consulta, não uma extensão do seu kit</h1>
-      <p class="sub">Diferente do resto do produto, o Oráculo não usa o vocabulário Caos Astral. É outra tradição — chinesa, com milênios de história própria — apresentada aqui com o mesmo respeito de proveniência que damos a tudo o mais.</p>
+      <p class="sub">Diferente do resto do produto, o Oráculo não usa o vocabulário Caos Astral. É outra tradição, chinesa, com milênios de história própria, apresentada aqui com o mesmo respeito de proveniência que damos a tudo o mais.</p>
     </div>
   </section>
 
   <section class="tight">
     <div class="prose">
       <div class="provenance-flag"><span style="color:var(--accent-bright);">⚠</span> tradição independente, não traduzida para o vocabulário do kit</div>
-      <p>O I Ching (Livro das Mutações) é um sistema de consulta chinês com milhares de anos, organizado em 64 hexagramas — figuras de seis linhas, cheias ou partidas, que respondem a uma pergunta lançada por moedas ou varas de milefólio. Tem cosmologia própria: o Tao, o par yin/yang, a ideia de mutação constante como princípio do real.</p>
-      <p>Usamos aqui a tradução pioneira de <strong>James Legge (1882/1899)</strong>, hoje em domínio público mundial. O texto original dos hexagramas e suas linhas é apresentado como Legge o traduziu — não adaptamos hexagrama pra "núcleo" nem linha mutante pra "fricção". Misturar vocabulários seria exatamente o tipo de bricolagem sem rigor que o resto deste produto se recusa a fazer.</p>
-      <p>Sua consulta fica salva no seu histórico privado, e pode — se você quiser — ser lida ao lado da sua Janela do dia. Não como se fossem o mesmo sistema, mas como duas leituras independentes que, juntas, podem te dar mais contexto.</p>
+      <p>O I Ching (Livro das Mutações) é um sistema de consulta chinês com milhares de anos, organizado em 64 hexagramas, figuras de seis linhas, cheias ou partidas, que respondem a uma pergunta lançada por moedas ou varas de milefólio. Tem cosmologia própria: o Tao, o par yin/yang, a ideia de mutação constante como princípio do real.</p>
+      <p>Usamos aqui a tradução pioneira de <strong>James Legge (1882/1899)</strong>, hoje em domínio público mundial. O texto original dos hexagramas e suas linhas é apresentado como Legge o traduziu, não adaptamos hexagrama pra "núcleo" nem linha mutante pra "fricção". Misturar vocabulários seria exatamente o tipo de bricolagem sem rigor que o resto deste produto se recusa a fazer.</p>
+      <p>Sua consulta fica salva no seu histórico privado, e pode, se você quiser, ser lida ao lado da sua Janela do dia. Não como se fossem o mesmo sistema, mas como duas leituras independentes que, juntas, podem te dar mais contexto.</p>
     </div>
   </section>
 
@@ -216,7 +216,7 @@
         </div>
       </div>
 
-      <p class="oracle-footnote">Três moedas são lançadas seis vezes, de baixo para cima, formando o hexagrama. Linhas 6 e 9 são linhas em movimento — elas se transformam e revelam um segundo hexagrama, a tendência do desdobramento da situação.</p>
+      <p class="oracle-footnote">Três moedas são lançadas seis vezes, de baixo para cima, formando o hexagrama. Linhas 6 e 9 são linhas em movimento, elas se transformam e revelam um segundo hexagrama, a tendência do desdobramento da situação.</p>
 
       <div class="history-panel" id="historyPanel" style="display:none;">
         <h2 class="history-title">Seu histórico</h2>
@@ -225,12 +225,12 @@
     </div>
   </section>
 
-  <div class="wrap"><div class="gate-note">Motor do Oráculo desenvolvido em módulo separado. Ver <a href="raizes-i-ching" class="link-out mono" style="border:none;">Raízes — I Ching</a> para contexto histórico completo.</div></div>
+  <div class="wrap"><div class="gate-note">Motor do Oráculo desenvolvido em módulo separado. Ver <a href="raizes-i-ching" class="link-out mono" style="border:none;">Raízes, I Ching</a> para contexto histórico completo.</div></div>
 </main>
 
 <footer class="site-footer"><div class="wrap">
   <h2>Ninguém vai carregar seu destino no colo. Mas você pode aprender a ler o terreno.</h2>
-  <a href="ritual-de-entrada" class="btn btn-solid mono">Abrir meu kit — grátis</a>
+  <a href="ritual-de-entrada" class="btn btn-solid mono">Abrir meu kit, grátis</a>
   <div class="footer-bottom"><span>© Caos Astral</span><div class="footer-links"><a href="manifesto">Manifesto</a><a href="intento">Intento</a><a href="raizes">Raízes</a><a href="diario">Diário</a><a href="planos">Planos</a></div></div>
 </div></footer>
 
@@ -261,7 +261,7 @@
   function hexLabel(n){
     if(!n) return '';
     const name = hexNamesByNumber[n];
-    return `Hexagrama ${n}${name ? ' — ' + name : ''}`;
+    return `Hexagrama ${n}${name ? ', ' + name : ''}`;
   }
 
   async function loadHistory(){
@@ -304,7 +304,7 @@
     const { data: { session } } = await supa.auth.getSession();
     currentUser = session ? session.user : null;
     if(currentUser){
-      authStatus.textContent = `Logado como ${currentUser.email} — suas consultas ficam salvas`;
+      authStatus.textContent = `Logado como ${currentUser.email}, suas consultas ficam salvas`;
       authAction.textContent = 'sair';
       authAction.onclick = async (e)=>{ e.preventDefault(); await supa.auth.signOut(); refreshAuthBar(); };
     } else {

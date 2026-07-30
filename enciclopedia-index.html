@@ -53,11 +53,11 @@
 
 <header>
   <h1>Enciclopédia dos Símbolos</h1>
-  <p>Origem histórica, significado e correspondências de cada símbolo — separando o que é evidência documentada do que é interpretação moderna.</p>
+  <p>Origem histórica, significado e correspondências de cada símbolo, separando o que é evidência documentada do que é interpretação moderna.</p>
 </header>
 
 <div class="cta-pago">
-  Parte do acervo é aberta gratuitamente. O acervo completo — alquimia, hermetismo, cabala, runas, wicca e mais — faz parte dos planos pagos.
+  Parte do acervo é aberta gratuitamente. O acervo completo, alquimia, hermetismo, cabala, runas, wicca e mais, faz parte dos planos pagos.
   <br>
   <a href="planos">Ver planos</a>
 </div>
@@ -68,7 +68,7 @@
 <div class="grid" id="grid" style="display:none;"></div>
 
 <script>
-  // TODO: mesmos valores usados no admin — trocar pelos reais do projeto.
+  // TODO: mesmos valores usados no admin, trocar pelos reais do projeto.
   const SUPABASE_URL = "https://pvgeramqsatltnvkkpvf.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_f5iH4AnwTt1jnwGMWg0qGw_-rd06eGm";
 
@@ -79,7 +79,7 @@
   async function carregar() {
     // Usa a view enciclopedia_indice_publico (ver 0004_...sql), que expõe
     // metadados de TODOS os verbetes (inclusive pagos) sem vazar o conteúdo
-    // protegido — assim os cards pagos aparecem com cadeado em vez de sumir.
+    // protegido, assim os cards pagos aparecem com cadeado em vez de sumir.
     const { data, error } = await sb
       .from("enciclopedia_indice_publico")
       .select("slug, nome, categoria, tier, significado")
