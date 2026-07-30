@@ -224,21 +224,155 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
   // ===================================================================
-  // ENGINE: este script controla só a NAVEGAÇÃO entre etapas e a prévia
-  // visual local (dados fake, sem cálculo real). O agente do engine deve:
-  // 1. Substituir a autenticação do botão Google por chamada real ao
-  //    Supabase Auth (signInWithOAuth, provider: 'google').
-  // 2. No submit do step 3, criar/atualizar a linha em `profiles` com
-  //    nome, data_nascimento, hora_nascimento, cidade_nascimento.
-  // 3. Disparar `compute-natal-chart` e usar o retorno real (núcleo,
-  //    fome, máscara, território de abertura) no lugar dos valores
-  //    fake do preview abaixo, atualizando os campos ANTES de avançar
-  //    pro step de confirmação.
-  // 4. No step 4, gravar as preferências de notificação em `daily_readings`
-  //    ou tabela de preferências do usuário.
+  // INTEGRAÇÃO REAL — 29/07, sessão de correção do bug "kit vazio".
+  //
+  // O que este script faz de verdade agora:
+  // 1. Auth real via Supabase (Google OAuth + e-mail/senha).
+  // 2. Geocoding real da cidade de nascimento via Nominatim (OSM) —
+  //    o campo de texto livre do step 1 não dava lat/long nenhuma,
+  //    e compute-natal-chart EXIGE latitude/longitude/utc_offset.
+  // 3. Lookup de fuso horário via timeapi.io a partir das coordenadas,
+  //    e cálculo do offset UTC específico daquela data de nascimento
+  //    (respeitando horário de verão histórico) via Intl.DateTimeFormat.
+  // 4. Upsert em `profiles` + invoke real de `compute-natal-chart`.
+  // 5. Preview populado com o retorno REAL da function, não mais
+  //    FAKE_NUCLEO/FAKE_TERRITORIOS.
+  //
+  // ASSUNÇÕES / PENDÊNCIAS que ficam registradas aqui de propósito:
+  // - "Território de abertura" não tem definição fechada no glossário
+  //   (só "território de ofício" existe, e está pendente). Mapeei
+  //   provisoriamente pra território/casa do Núcleo (Sol). Precisa de
+  //   decisão formal — não é ciência exata, é chute educado.
+  // - Assume que a confirmação de e-mail pode estar ligada no Supabase
+  //   Auth (Dashboard → Authentication → Providers → Email). Se estiver
+  //   ligada, sign-up não retorna sessão ativa — trato esse caso abaixo
+  //   avisando o usuário e retomando o fluxo depois que ele confirmar
+  //   e voltar (dados ficam em sessionStorage).
+  // - Geocoding/timezone usam APIs públicas sem chave (Nominatim,
+  //   timeapi.io). Nenhuma das duas tem SLA garantido — se cair, o
+  //   usuário vê erro claro em vez de um "Leão" fake.
   // ===================================================================
+
+  const SUPABASE_URL = 'https://pvgeramqsatltnvkkpvf.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_f5iH4AnwTt1jnwGMWg0qGw_-rd06eGm';
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const SIGN_NAMES = ['áries','touro','gêmeos','câncer','leão','virgem','libra','escorpião','sagitário','capricórnio','aquário','peixes'];
+  function capitalize(s){ return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+
+  const STORAGE_KEY = 'caosastral_onboarding_pending';
+  const onboardingState = {
+    nome: '', data_nascimento: '', hora_nascimento: '',
+    cidade_nascimento: '', latitude: null, longitude: null, utc_offset: null,
+  };
+
+  function setBusy(btn, busy, busyLabel){
+    if(!btn) return;
+    if(busy){ btn.dataset.origLabel = btn.textContent; btn.textContent = busyLabel || 'Um instante…'; btn.disabled = true; }
+    else { btn.textContent = btn.dataset.origLabel || btn.textContent; btn.disabled = false; }
+  }
+
+  function showStepError(stepEl, msg){
+    let el = stepEl.querySelector('.step-error');
+    if(!el){
+      el = document.createElement('p');
+      el.className = 'step-error';
+      el.style.cssText = 'color:var(--accent-bright);font-family:IBM Plex Mono,monospace;font-size:0.8rem;margin-top:-8px;margin-bottom:16px;';
+      stepEl.querySelector('.step-nav').before(el);
+    }
+    el.textContent = msg || '';
+  }
+
+  // --- geocoding: cidade de nascimento -> lat/long reais (Nominatim) ---
+  async function geocodeCity(query){
+    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`;
+    const res = await fetch(url);
+    if(!res.ok) throw new Error('geocoding indisponível no momento');
+    const results = await res.json();
+    if(!results.length) throw new Error('não encontramos essa cidade — tenta ser mais específico (ex: "Cidade, Estado, País")');
+    return { lat: parseFloat(results[0].lat), lon: parseFloat(results[0].lon), display_name: results[0].display_name };
+  }
+
+  // --- timezone: lat/long -> nome IANA (timeapi.io) ---
+  async function lookupIanaZone(lat, lon){
+    const url = `https://timeapi.io/api/timezone/coordinate?latitude=${lat}&longitude=${lon}`;
+    const res = await fetch(url);
+    if(!res.ok) throw new Error('lookup de fuso horário indisponível no momento');
+    const data = await res.json();
+    if(!data.timeZone) throw new Error('não conseguimos determinar o fuso horário dessa localização');
+    return data.timeZone;
+  }
+
+  // offset UTC (em horas, com fração) pro instante de nascimento específico,
+  // respeitando DST histórico da zona via Intl. Aproximação conhecida: usamos
+  // a data/hora como se fossem UTC só pra escolher o ponto certo do calendário
+  // dentro da zona (mesmo espírito da aproximação já documentada no motor
+  // pra fuso da janela do dia) — suficiente pra uso pessoal, não é 100% exato
+  // em casos extremos de fuso de meia-hora/quarto-de-hora cruzando meia-noite.
+  function utcOffsetForDate(ianaZone, y, mo, d, hh, mm){
+    const approxInstant = new Date(Date.UTC(y, mo - 1, d, hh, mm));
+    const dtf = new Intl.DateTimeFormat('en-US', { timeZone: ianaZone, timeZoneName: 'longOffset', hour: '2-digit' });
+    const parts = dtf.formatToParts(approxInstant);
+    const offsetPart = parts.find(p => p.type === 'timeZoneName')?.value || 'GMT+00:00';
+    const m = offsetPart.match(/GMT([+-])(\d{2}):(\d{2})/);
+    if(!m) return 0;
+    const sign = m[1] === '-' ? -1 : 1;
+    return sign * (parseInt(m[2], 10) + parseInt(m[3], 10) / 60);
+  }
+
+  // --- finaliza onboarding: upsert profile + invoke compute-natal-chart ---
+  async function finishOnboarding(){
+    const { data: { user }, error: userErr } = await sb.auth.getUser();
+    if(userErr || !user){ throw new Error('sessão não encontrada — tenta entrar de novo'); }
+
+    const { error: upsertErr } = await sb.from('profiles').upsert({
+      id: user.id,
+      nome: onboardingState.nome,
+      data_nascimento: onboardingState.data_nascimento,
+      hora_nascimento: onboardingState.hora_nascimento,
+      cidade_nascimento: onboardingState.cidade_nascimento,
+      latitude: onboardingState.latitude,
+      longitude: onboardingState.longitude,
+      utc_offset: onboardingState.utc_offset,
+    });
+    if(upsertErr) throw new Error('falha ao salvar seu perfil: ' + upsertErr.message);
+
+    const { data: fnData, error: fnErr } = await sb.functions.invoke('compute-natal-chart');
+    if(fnErr) throw new Error('falha ao calcular o mapa: ' + fnErr.message);
+
+    const planetas = fnData.mapa.planetas;
+    const sun = planetas.find(p => p.chave === 'sun');
+    const moon = planetas.find(p => p.chave === 'moon');
+
+    revealField('nome', onboardingState.nome || user.email);
+    revealField('nucleo', capitalize(sun.signo), true);
+    revealField('fome', capitalize(moon.signo));
+    revealField('mascara', capitalize(fnData.ascendente_signo), true);
+    revealField('territorio', `território ${sun.casa}`); // ver nota de assunção no topo do script
+
+    sessionStorage.removeItem(STORAGE_KEY);
+    const primeiroNome = (onboardingState.nome || '').trim().split(' ')[0];
+    document.getElementById('successName').textContent = primeiroNome ? `${primeiroNome}, seu kit foi aberto.` : 'Seu kit foi aberto.';
+    goTo(4);
+  }
+
+  // --- retomada após redirect de OAuth (ou depois de confirmar e-mail) ---
+  window.addEventListener('DOMContentLoaded', async () => {
+    const pending = sessionStorage.getItem(STORAGE_KEY);
+    if(!pending) return;
+    const { data: { session } } = await sb.auth.getSession();
+    if(!session) return; // ainda não confirmou/voltou logado — não faz nada
+    Object.assign(onboardingState, JSON.parse(pending));
+    revealField('nome', onboardingState.nome);
+    try{
+      await finishOnboarding();
+    }catch(e){
+      alert('Não deu pra fechar o kit automaticamente: ' + e.message + '. Tenta de novo na tela do kit.');
+    }
+  });
 
   let current = 0;
   const steps = document.querySelectorAll('.step');
@@ -265,47 +399,109 @@
     if(accent) val.classList.add('accent');
   }
 
-  // placeholders determinísticos só para dar vida à prévia — trocar por dado real do engine
-  const FAKE_NUCLEO = ['Áries','Touro','Gêmeos','Câncer','Leão','Virgem','Libra','Escorpião','Sagitário','Capricórnio','Aquário','Peixes'];
-  const FAKE_TERRITORIOS = ['dos vínculos','do ofício','da fala','da casa','do prazer','do corpo'];
-
+  // step 0: nome + data — sem cálculo nenhum aqui, só coleta. O núcleo real
+  // só aparece depois que a hora E a cidade completarem os dados necessários
+  // pra compute-natal-chart (precisa de todos os 5 campos + geocoding).
   document.getElementById('btnStep0').addEventListener('click', () => {
     const nome = document.getElementById('inpNome').value.trim();
     const data = document.getElementById('inpData').value;
-    if(!nome || !data){ return; }
+    if(!nome || !data){ showStepError(document.querySelector('.step[data-step="0"]'), 'preencha nome e data de nascimento'); return; }
+    showStepError(document.querySelector('.step[data-step="0"]'), '');
+    onboardingState.nome = nome;
+    onboardingState.data_nascimento = data;
     revealField('nome', nome);
-    const idx = new Date(data).getMonth();
-    revealField('nucleo', FAKE_NUCLEO[idx % 12], true);
     goTo(1);
   });
 
-  document.getElementById('btnStep1').addEventListener('click', () => {
+  // step 1: cidade de nascimento -> geocoding real (Nominatim) pra lat/long
+  document.getElementById('btnStep1').addEventListener('click', async () => {
+    const stepEl = document.querySelector('.step[data-step="1"]');
     const local = document.getElementById('inpLocal').value.trim();
-    if(!local){ return; }
-    revealField('territorio', FAKE_TERRITORIOS[local.length % FAKE_TERRITORIOS.length]);
-    goTo(2);
+    const btn = document.getElementById('btnStep1');
+    if(!local){ showStepError(stepEl, 'preencha a cidade de nascimento'); return; }
+    showStepError(stepEl, '');
+    setBusy(btn, true, 'Localizando…');
+    try{
+      const geo = await geocodeCity(local);
+      onboardingState.cidade_nascimento = local;
+      onboardingState.latitude = geo.lat;
+      onboardingState.longitude = geo.lon;
+      goTo(2);
+    }catch(e){
+      showStepError(stepEl, e.message);
+    }finally{
+      setBusy(btn, false);
+    }
   });
 
-  document.getElementById('btnStep2').addEventListener('click', () => {
+  // step 2: hora de nascimento -> resolve fuso (timeapi.io) e completa o
+  // profile em memória. Ainda não chama compute-natal-chart aqui — isso só
+  // acontece depois que a conta existir (step 3), porque a function exige
+  // usuário autenticado.
+  document.getElementById('btnStep2').addEventListener('click', async () => {
+    const stepEl = document.querySelector('.step[data-step="2"]');
     const hora = document.getElementById('inpHora').value;
-    if(!hora){ return; }
-    const h = parseInt(hora.split(':')[0], 10);
-    revealField('fome', FAKE_NUCLEO[(h+3) % 12]);
-    revealField('mascara', FAKE_NUCLEO[(h+7) % 12], true);
-    goTo(3);
+    const btn = document.getElementById('btnStep2');
+    if(!hora){ showStepError(stepEl, 'preencha a hora de nascimento'); return; }
+    showStepError(stepEl, '');
+    setBusy(btn, true, 'Calculando fuso…');
+    try{
+      const [hh, mm] = hora.split(':').map(n => parseInt(n, 10));
+      const [Y, Mo, D] = onboardingState.data_nascimento.split('-').map(n => parseInt(n, 10));
+      const iana = await lookupIanaZone(onboardingState.latitude, onboardingState.longitude);
+      onboardingState.hora_nascimento = hora;
+      onboardingState.utc_offset = utcOffsetForDate(iana, Y, Mo, D, hh, mm);
+      goTo(3);
+    }catch(e){
+      showStepError(stepEl, e.message);
+    }finally{
+      setBusy(btn, false);
+    }
   });
 
-  document.getElementById('btnStep3').addEventListener('click', () => {
+  // step 3: cria a conta (e-mail/senha) e, se já vier com sessão ativa,
+  // fecha o onboarding na hora (upsert profile + invoke compute-natal-chart).
+  document.getElementById('btnStep3').addEventListener('click', async () => {
+    const stepEl = document.querySelector('.step[data-step="3"]');
     const termos = document.getElementById('inpTermos').checked;
-    if(!termos){ return; }
-    const nome = document.getElementById('inpNome').value.trim().split(' ')[0] || '';
-    document.getElementById('successName').textContent = nome ? `${nome}, seu kit foi aberto.` : 'Seu kit foi aberto.';
-    goTo(4);
+    const email = document.getElementById('inpEmail').value.trim();
+    const senha = document.getElementById('inpSenha').value;
+    const btn = document.getElementById('btnStep3');
+    if(!termos){ showStepError(stepEl, 'você precisa aceitar os termos pra continuar'); return; }
+    if(!email || senha.length < 8){ showStepError(stepEl, 'preencha e-mail e uma senha de pelo menos 8 caracteres'); return; }
+    showStepError(stepEl, '');
+    setBusy(btn, true, 'Abrindo…');
+    try{
+      const { data: signData, error: signErr } = await sb.auth.signUp({ email, password: senha });
+      if(signErr) throw new Error(signErr.message);
+
+      if(!signData.session){
+        // confirmação de e-mail está ligada nesse projeto — sem sessão ainda.
+        // Guarda os dados coletados e retoma sozinho quando o usuário voltar logado.
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(onboardingState));
+        showStepError(stepEl, 'Quase lá — confirma sua conta pelo link que mandamos pro seu e-mail. Quando voltar aqui logado, seu kit termina de abrir sozinho.');
+        return;
+      }
+      await finishOnboarding();
+    }catch(e){
+      showStepError(stepEl, e.message);
+    }finally{
+      setBusy(btn, false);
+    }
   });
 
-  document.getElementById('btnGoogle').addEventListener('click', () => {
-    // ENGINE: substituir por supabase.auth.signInWithOAuth({ provider: 'google' })
-    goTo(4);
+  document.getElementById('btnGoogle').addEventListener('click', async () => {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(onboardingState));
+    const { error } = await sb.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.href }
+    });
+    if(error){
+      sessionStorage.removeItem(STORAGE_KEY);
+      showStepError(document.querySelector('.step[data-step="3"]'), 'não deu pra conectar com Google: ' + error.message);
+    }
+    // se não deu erro, o browser é redirecionado — o resto acontece no
+    // handler de DOMContentLoaded quando a página recarregar logada.
   });
 
   document.querySelectorAll('.step-back').forEach(btn => {

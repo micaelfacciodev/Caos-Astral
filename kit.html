@@ -138,6 +138,86 @@
     </div>
   </div>
 </footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+  // ===================================================================
+  // INTEGRAÇÃO REAL — 29/07, sessão de correção do bug "kit vazio".
+  // Antes: tabela e SVG eram 100% estáticos, sem nenhuma leitura de
+  // `natal_charts`. Agora busca o mapa do usuário logado via Supabase
+  // e popula a tabela real. O SVG da roda continua estático por ora —
+  // deixar as posições reais (rotação por longitude) fica de fora do
+  // escopo deste fix, é trabalho separado, mas fica registrado aqui
+  // como próximo passo natural.
+  // ===================================================================
+
+  const SUPABASE_URL = 'https://pvgeramqsatltnvkkpvf.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_f5iH4AnwTt1jnwGMWg0qGw_-rd06eGm';
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const SIGN_NAMES = ['áries','touro','gêmeos','câncer','leão','virgem','libra','escorpião','sagitário','capricórnio','aquário','peixes'];
+  function capitalize(s){ return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+
+  function tbody(){ return document.getElementById('kit-data-body'); }
+
+  function renderEmptyState(msg, ctaHref, ctaLabel){
+    tbody().innerHTML = `<tr><td colspan="4" style="text-align:center; padding:28px 14px;">${msg}${ctaHref ? ` <a href="${ctaHref}" class="link-out mono">${ctaLabel}</a>` : ''}</td></tr>`;
+  }
+
+  function addRow(label, signo, territorio, grau){
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="strong">${label}</td><td>${capitalize(signo) || '—'}</td><td>${territorio}</td><td>${grau != null ? grau + '°' : '—'}</td>`;
+    tbody().appendChild(tr);
+  }
+
+  function renderKit(chart){
+    tbody().innerHTML = '';
+    const planetas = chart.planetas || [];
+    const byKey = (k) => planetas.find(p => p.chave === k);
+    const sun = byKey('sun'), moon = byKey('moon'), chiron = byKey('chiron');
+
+    if(sun) addRow('Núcleo', sun.signo, `território ${sun.casa}`, sun.grau_no_signo);
+    if(moon) addRow('Fome', moon.signo, `território ${moon.casa}`, moon.grau_no_signo);
+
+    if(chart.ascendente != null){
+      const ascSignIdx = Math.floor(chart.ascendente / 30);
+      const grauAsc = Math.floor(chart.ascendente - ascSignIdx * 30) + 1;
+      addRow('Máscara', SIGN_NAMES[ascSignIdx], 'território 1', grauAsc);
+    }
+    if(chiron) addRow('Cicatriz (Quíron)', chiron.signo, `território ${chiron.casa}`, chiron.grau_no_signo);
+
+    if(!tbody().children.length){
+      renderEmptyState('Seu kit ainda não tem dados suficientes.');
+    }
+  }
+
+  async function loadKit(){
+    renderEmptyState('Carregando seu kit…');
+
+    const { data: { user }, error: userErr } = await sb.auth.getUser();
+    if(userErr || !user){
+      renderEmptyState('Você ainda não abriu seu kit.', 'ritual-de-entrada.html', 'Abrir meu kit →');
+      return;
+    }
+
+    const { data: chart, error: chartErr } = await sb
+      .from('natal_charts')
+      .select('ascendente, meio_ceu, planetas, aspectos')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if(chartErr){
+      renderEmptyState('Não deu pra carregar seu kit agora. Tenta recarregar a página.');
+      return;
+    }
+    if(!chart){
+      renderEmptyState('Seu mapa ainda não foi calculado.', 'ritual-de-entrada.html', 'Completar meu kit →');
+      return;
+    }
+    renderKit(chart);
+  }
+
+  document.addEventListener('DOMContentLoaded', loadKit);
+</script>
 <script src="assets/flash-decor.js" defer></script>
 </body>
 </html>
