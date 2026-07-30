@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Política de Privacidade, Caos Astral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="wrap">
+    <a href="index" class="logo"><svg class="star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 1 L13.6 9.5 L22 8 L15.2 13.2 L20 21 L12 16.4 L4 21 L8.8 13.2 L2 8 L10.4 9.5 Z"/></svg>Caos Astral</a>
+    <div class="nav-links">
+      <a href="kit">O Kit</a>
+      <a href="retorno">Retorno</a>
+      <a href="ressonancia">O Terceiro</a>
+      <a href="ancora">Âncora</a>
+      <a href="deriva">Deriva</a>
+      <a href="oraculo">Oráculo</a>
+      <a href="diario">Diário</a>
+      <a href="raizes">Raízes</a>
+      <a href="blog">Blog</a>
+      <a href="manifesto">Manifesto</a>
+      <a href="intento">Intento</a>
+      <a href="planos">Planos</a>
+    </div>
+    <a href="ritual-de-entrada" class="btn btn-ghost mono">Abrir meu kit</a>
+  </nav>
+</header>
+
+<main>
+  <section class="page-hero">
+    <div class="wrap-narrow">
+      <p class="eyebrow center"><span class="glyph">✦</span> privacidade</p>
+      <h1>Política de Privacidade</h1>
+      <p class="sub">Última atualização: 30/07/2026. Este documento explica o que coletamos, por quê, e como você controla isso.</p>
+    </div>
+  </section>
+
+  <section class="tight">
+    <div class="prose">
+
+      <h2>1. Quem trata os seus dados</h2>
+      <p>O Caos Astral é operado por [RAZÃO SOCIAL / NOME COMPLETO DO RESPONSÁVEL, CNPJ OU CPF], controlador dos dados pessoais tratados nesta plataforma, nos termos da Lei nº 13.709/2018 (LGPD). Dúvidas ou pedidos relacionados aos seus dados: [E-MAIL DE CONTATO/ENCARREGADO].</p>
+
+      <h2>2. Dados que coletamos</h2>
+      <p><strong>Dados de cadastro</strong>: nome completo, e-mail, data de nascimento, hora de nascimento, cidade de nascimento — coletados no Ritual de Entrada, necessários pra calcular seu Kit (mapa individual).</p>
+      <p><strong>Dados de autenticação</strong>: login via Google OAuth ou e-mail/senha, através do Supabase Auth. Não temos acesso à sua senha em texto puro.</p>
+      <p><strong>Dados de uso do produto</strong>: entradas do Diário, selos da Âncora de Intenção, consultas do Oráculo (I Ching), preferências de notificação.</p>
+
+      <h2>3. Dado sensível: atenção especial ao Diário</h2>
+      <p>O Diário existe pra registrar qualquer experiência que você queira anotar — não só uso da Âncora, não só experiência entéogênica. Justamente por ser aberto, o que <strong>você mesmo</strong> escreve ali pode se enquadrar como <strong>dado pessoal sensível</strong> (art. 5º, II da LGPD): convicção religiosa ou filosófica, dado referente à saúde, ou à vida sexual, por exemplo.</p>
+      <p>Por isso, o tratamento desses dados depende do seu <strong>consentimento específico e destacado</strong>, coletado separadamente do restante do cadastro no Ritual de Entrada — não vem embutido num "li e concordo" genérico. Você pode revogar esse consentimento a qualquer momento apagando as entradas correspondentes ou encerrando sua conta (seção 7).</p>
+      <p>Nunca lemos, analisamos ou usamos o conteúdo do seu Diário pra qualquer finalidade além de exibi-lo de volta pra você. Não usamos esse conteúdo pra treinar modelos, publicidade, ou qualquer finalidade secundária.</p>
+
+      <h2>4. Por que tratamos cada dado (base legal)</h2>
+      <p><strong>Execução de contrato</strong> (art. 7º, V): dados de nascimento e cadastro, necessários pra calcular e entregar o Kit, a Janela do dia, o Retorno.</p>
+      <p><strong>Consentimento</strong> (art. 7º, I e art. 11, I): qualquer dado sensível que você inserir voluntariamente no Diário ou associado a uma Âncora.</p>
+      <p><strong>Legítimo interesse</strong> (art. 7º, IX): segurança da plataforma, prevenção de fraude, logs técnicos mínimos.</p>
+
+      <h2>5. Com quem compartilhamos</h2>
+      <p>Não vendemos, alugamos, nem compartilhamos seus dados com terceiros pra fins de publicidade. Usamos os seguintes operadores de dados (subcontratados), estritamente pra operar a plataforma:</p>
+      <p><strong>Supabase</strong> — banco de dados, autenticação e armazenamento. Acesso aos seus dados privados é restrito por Row Level Security (RLS): tecnicamente, só a sua própria sessão autenticada (<code class="mono">auth.uid()</code>) consegue ler suas linhas nas tabelas privadas, nem a própria equipe do Caos Astral acessa isso pelo uso normal do produto.</p>
+      <p><strong>Google</strong> — apenas se você optar por login via Google OAuth.</p>
+
+      <h2>6. Transferência internacional</h2>
+      <p>A infraestrutura (Supabase) pode armazenar dados em servidores fora do Brasil. Quando isso ocorrer, a transferência segue as hipóteses do art. 33 da LGPD (ex: cláusulas contratuais padrão do operador, ou seu consentimento específico, conforme aplicável ao fornecedor de infraestrutura no momento).</p>
+
+      <h2>7. Seus direitos</h2>
+      <p>Nos termos do art. 18 da LGPD, você pode a qualquer momento: confirmar a existência de tratamento, acessar seus dados, corrigir dados incompletos/desatualizados, solicitar anonimização ou eliminação de dados desnecessários, solicitar portabilidade, ser informado sobre compartilhamento, e revogar consentimento.</p>
+      <p>Na prática: dados de cadastro e Kit são editáveis dentro do próprio produto; exclusão de conta e de todos os dados associados pode ser solicitada em [E-MAIL DE CONTATO] ou pelo próprio Dashboard, quando essa função estiver disponível. Entradas individuais do Diário podem ser apagadas uma a uma, a qualquer momento, por você mesmo.</p>
+
+      <h2>8. Retenção</h2>
+      <p>Mantemos seus dados enquanto sua conta estiver ativa. Ao solicitar exclusão de conta, os dados são apagados das nossas tabelas, ressalvado o que a lei exigir manter por período determinado (ex: obrigações fiscais sobre pagamentos, se aplicável).</p>
+
+      <h2>9. Menores de idade</h2>
+      <p>O Caos Astral não é destinado a menores de 18 anos. Não coletamos intencionalmente dados de crianças ou adolescentes. Se você é responsável legal por um menor que se cadastrou, entre em contato pra solicitarmos a exclusão dos dados.</p>
+
+      <h2>10. Segurança</h2>
+      <p>Usamos HTTPS em todo o tráfego, autenticação via Supabase Auth, e Row Level Security em todas as tabelas de dado privado — cada usuário só acessa as próprias linhas, por regra do próprio banco de dados, não só da aplicação.</p>
+
+      <h2>11. Alterações desta política</h2>
+      <p>Podemos atualizar este documento. Mudanças relevantes serão comunicadas dentro do produto ou por e-mail.</p>
+
+      <h2>12. Contato / Encarregado (DPO)</h2>
+      <p>[NOME DO ENCARREGADO], [E-MAIL DE CONTATO]. Use esse canal pra qualquer solicitação relacionada aos seus dados pessoais.</p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer"><div class="wrap">
+  <h2>Ninguém vai carregar seu destino no colo. Mas você pode aprender a ler o terreno.</h2>
+  <a href="ritual-de-entrada" class="btn btn-solid mono">Abrir meu kit, grátis</a>
+  <div class="footer-bottom"><span>© Caos Astral</span><div class="footer-links"><a href="manifesto">Manifesto</a><a href="intento">Intento</a><a href="raizes">Raízes</a><a href="diario">Diário</a><a href="termos">Termos</a><a href="privacidade">Privacidade</a><a href="planos">Planos</a></div></div>
+</div></footer>
+<script src="assets/flash-decor.js" defer></script>
+</body>
+</html>

@@ -193,7 +193,11 @@
         <div class="field"><label>Crie sua senha</label><input type="password" id="inpSenha" placeholder="mínimo 8 caracteres" autocomplete="new-password"></div>
         <div class="terms-row">
           <input type="checkbox" id="inpTermos">
-          <label for="inpTermos">Li e concordo com os <a href="#">termos de uso</a> e a <a href="#">privacidade</a> do Caos Astral.</label>
+          <label for="inpTermos">Li e concordo com os <a href="termos" target="_blank">termos de uso</a> e a <a href="privacidade" target="_blank">política de privacidade</a> do Caos Astral.</label>
+        </div>
+        <div class="terms-row">
+          <input type="checkbox" id="inpConsentimentoSensivel">
+          <label for="inpConsentimentoSensivel">Entendo que o que eu escrever no <strong>Diário</strong> ou associar a uma <strong>Âncora</strong> pode revelar dado sensível meu (convicção religiosa/filosófica, saúde, vida sexual), e <strong>autorizo, de forma específica</strong>, o tratamento desses dados exclusivamente pra operar o produto pra mim. Posso revogar isso a qualquer momento apagando o conteúdo ou minha conta.</label>
         </div>
         <div class="step-nav">
           <button class="step-back">← voltar</button>
@@ -317,7 +321,12 @@
 
   document.getElementById('btnStep3').addEventListener('click', () => {
     const termos = document.getElementById('inpTermos').checked;
-    if(!termos){ return; }
+    const consentimentoSensivel = document.getElementById('inpConsentimentoSensivel').checked;
+    if(!termos || !consentimentoSensivel){ return; }
+    // ENGINE: gravar em `profiles` (ou tabela de consentimentos própria) o timestamp
+    // e a versão do documento aceita pra cada um dos dois consentimentos —
+    // termos/privacidade (geral) e consentimento específico de dado sensível
+    // (art. 11 LGPD), não basta um booleano só, guardar quando e qual versão.
     const nome = document.getElementById('inpNome').value.trim().split(' ')[0] || '';
     document.getElementById('successName').textContent = nome ? `${nome}, seu kit foi aberto.` : 'Seu kit foi aberto.';
     goTo(4);

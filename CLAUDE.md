@@ -404,6 +404,21 @@ production" ligado, branch de produção `main`, working directory `.`.
 - [ ] Deployar o `compute-solar-return` reescrito e testar com uma data
       de nascimento real antes de considerar essa function confiável —
       nunca rodou de verdade em produção até 29/07.
+- [ ] **LGPD (30/07)**: `termos.html` e `privacidade.html` criadas com
+      placeholders que só o fundador preenche: razão social/CNPJ ou CPF,
+      e-mail do encarregado (DPO), cidade/comarca de foro. Revisão
+      jurídica de verdade recomendada antes de lançar, principalmente a
+      isenção de responsabilidade sobre conteúdo relacionado a
+      substâncias/saúde (seção 2 dos termos).
+- [ ] **Exclusão de conta/dados (LGPD art. 18, VI)**: a política de
+      privacidade promete exclusão mediante solicitação, mas ainda não
+      existe fluxo nem Edge Function pra apagar de fato conta + linhas
+      relacionadas (`natal_charts`, `diario_gnose`, `intent_anchors`,
+      `iching_readings` etc.) — hoje seria manual, via painel Supabase.
+- [ ] Rodapé com links pra `/termos` e `/privacidade` só foi adicionado
+      nas duas páginas novas — as outras 31 páginas do site ainda têm o
+      rodapé antigo sem esses links (mesma pendência de propagação já
+      registrada pro link de Dashboard, ver seção 9).
 
 ---
 
