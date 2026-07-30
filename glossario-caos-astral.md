@@ -31,7 +31,8 @@ Documento de referência única. Qualquer conta/agente trabalhando no projeto (f
 | Termo | Substitui | Definição | Status |
 |---|---|---|---|
 | **Âncora de intenção** | Sigilo | Símbolo que fixa uma decisão já tomada, plugado nos dados do kit, sem invocar nada externo | fechado, **atenção:** documentos técnicos antigos ainda podem citar "sigilo"; corrigir em qualquer schema/código existente |
-| **Diário de gnose** |, | Registro privado do usuário, ligado a práticas de foco/estado alterado no uso da âncora | fechado |
+| **Dashboard** | — | O ecossistema do usuário logado. Não é uma tela a mais no menu, é o espaço central pra onde o `ritual-de-entrada` (join/register) leva depois de aberto o Kit. Reúne todos os produtos (Kit, Retorno, Ressonância, Âncora, Deriva, Oráculo) e o Diário como camada que atravessa todos eles | fechado (decisão do fundador, 30/07) |
+| **Diário** | Diário de gnose | Registro privado do usuário, de **qualquer experiência** (não só entéogênica, não mais restrito a uso da Âncora). Pode ou não estar ligado a um produto específico (Âncora, Deriva, Oráculo) via `produto_relacionado` opcional | **redefinido (30/07)**, substitui a definição anterior "ligado a práticas de foco/estado alterado no uso da âncora" — decisão do fundador de abrir o escopo pra qualquer experiência dentro do ecossistema do Dashboard |
 
 ## Vocabulário relacional
 

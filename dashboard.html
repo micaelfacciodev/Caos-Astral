@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard, Caos Astral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  /* ---- Janela do dia, destaque no topo ---- */
+  .window-panel{
+    background:var(--bg-panel); border:1px solid var(--line-bright);
+    padding:34px 36px; display:flex; justify-content:space-between; align-items:center;
+    gap:28px; flex-wrap:wrap;
+  }
+  .window-panel .wp-text{ max-width:560px; }
+  .window-panel h2{ font-size:1.3rem; margin-bottom:8px; }
+  .window-panel p{ color:var(--ink-dim); font-size:0.95rem; }
+  .window-panel .wp-date{ font-family:'IBM Plex Mono', monospace; font-size:0.72rem; color:var(--ink-faint); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:10px; display:block; }
+
+  /* ---- grid de produtos ---- */
+  .product-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line);
+  }
+  @media (max-width:820px){ .product-grid{ grid-template-columns:repeat(2, 1fr); } }
+  @media (max-width:560px){ .product-grid{ grid-template-columns:1fr; } }
+  .product-card{
+    background:var(--bg); padding:30px 26px; transition:background .2s ease;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .product-card:hover{ background:var(--bg-panel); }
+  .product-card .glyph{ font-family:'IBM Plex Mono', monospace; color:var(--accent-bright); font-size:1.3rem; }
+  .product-card h3{ font-size:1.05rem; }
+  .product-card p{ font-size:0.88rem; color:var(--ink-dim); flex:1; }
+  .product-card .go{ font-family:'IBM Plex Mono', monospace; font-size:0.75rem; color:var(--ink-faint); }
+  .product-card:hover .go{ color:var(--accent-bright); }
+
+  /* ---- diário, camada separada, não é "mais um card" ---- */
+  .journal-panel{
+    border:1px solid var(--line-bright); padding:36px;
+  }
+  .journal-panel .jp-head{
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:14px;
+  }
+  .journal-preview{ display:flex; flex-direction:column; }
+  .journal-preview .jp-row{
+    border-top:1px solid var(--line); padding:16px 0;
+  }
+  .journal-preview .jp-row:first-child{ border-top:none; }
+  .jp-row .jp-date{ font-family:'IBM Plex Mono', monospace; font-size:0.72rem; color:var(--ink-faint); text-transform:uppercase; letter-spacing:0.05em; }
+  .jp-row .jp-tag{ display:inline-block; margin-left:10px; color:var(--accent-bright); font-family:'IBM Plex Mono', monospace; font-size:0.72rem; }
+  .jp-row p{ margin-top:6px; color:var(--ink-dim); font-size:0.92rem; }
+  .journal-empty{ color:var(--ink-faint); font-style:italic; font-size:0.92rem; }
+</style>
+</head>
+<body>
+<header class="site-header"><nav class="wrap">
+  <a href="index" class="logo"><svg class="star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 1 L13.6 9.5 L22 8 L15.2 13.2 L20 21 L12 16.4 L4 21 L8.8 13.2 L2 8 L10.4 9.5 Z"/></svg>Caos Astral</a>
+  <div class="nav-links">
+    <a href="kit">O Kit</a>
+    <a href="retorno">Retorno</a>
+    <a href="ressonancia">O Terceiro</a>
+    <a href="ancora">Âncora</a>
+    <a href="deriva">Deriva</a>
+    <a href="oraculo">Oráculo</a>
+    <a href="diario">Diário</a>
+    <a href="raizes">Raízes</a>
+    <a href="blog">Blog</a>
+    <a href="manifesto">Manifesto</a>
+    <a href="intento">Intento</a>
+    <a href="planos">Planos</a>
+  </div>
+  <a href="diario" class="btn btn-ghost mono">Registrar experiência</a>
+</nav></header>
+
+<main>
+  <section class="page-hero" style="padding:120px 0 50px;">
+    <div class="wrap-narrow">
+      <p class="eyebrow center"><span class="glyph">✦</span> dashboard</p>
+      <h1>Seu ecossistema. Use como quiser.</h1>
+      <p class="sub">Nenhum produto aqui exige o outro. O que conecta tudo é o que você escreve no Diário.</p>
+    </div>
+  </section>
+
+  <!-- ENGINE: painel abaixo puxa a Janela do dia calculada pra este usuário (tabela
+       daily_readings, Edge Function compute-daily-window). Substituir o texto estático
+       pelo resumo real (fricção/corrente do dia) assim que a function estiver plugada
+       aqui, do mesmo jeito que já está planejado em diario.html. -->
+  <section class="tight">
+    <div class="wrap">
+      <div class="window-panel">
+        <div class="wp-text">
+          <span class="wp-date">Janela de hoje</span>
+          <h2>Sua leitura tática do dia ainda não foi calculada aqui.</h2>
+          <p>Assim que a Edge Function <code class="mono">compute-daily-window</code> estiver conectada, este espaço mostra fricção/corrente do dia, puxado direto do seu Kit.</p>
+        </div>
+        <a href="kit" class="btn btn-ghost mono">Ver meu Kit →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENGINE: grid abaixo é estático, sem lógica de bloqueio por plano ainda.
+       Se algum produto exigir assinatura (ver planos.html), marcar o card
+       correspondente com class="card locked" (padrão já usado em outras páginas). -->
+  <section class="tight">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow"><span class="glyph">◈</span> seus produtos</p>
+      </div>
+      <div class="product-grid">
+        <a class="product-card" href="kit">
+          <span class="glyph">☉</span>
+          <h3>O Kit</h3>
+          <p>Seu mapa individual. Núcleo, Máscara, Fome, Territórios, Cicatriz.</p>
+          <span class="go mono">Abrir →</span>
+        </a>
+        <a class="product-card" href="retorno">
+          <span class="glyph">↻</span>
+          <h3>Retorno</h3>
+          <p>O mapa do seu ano, o ciclo que fecha no seu aniversário.</p>
+          <span class="go mono">Abrir →</span>
+        </a>
+        <a class="product-card" href="ressonancia">
+          <span class="glyph">◇</span>
+          <h3>O Terceiro</h3>
+          <p>Câmara de ressonância: dois kits, um encontro, uma leitura própria.</p>
+          <span class="go mono">Abrir →</span>
+        </a>
+        <a class="product-card" href="ancora">
+          <span class="glyph">⚓</span>
+          <h3>Âncora</h3>
+          <p>Fixe uma decisão já tomada num selo, plugado nos dados do seu kit.</p>
+          <span class="go mono">Abrir →</span>
+        </a>
+        <a class="product-card" href="deriva">
+          <span class="glyph">≈</span>
+          <h3>Deriva</h3>
+          <p>Laboratório fenomenológico. Nenhuma tela aqui quer nada de você.</p>
+          <span class="go mono">Abrir →</span>
+        </a>
+        <a class="product-card" href="oraculo">
+          <span class="glyph">☰</span>
+          <h3>Oráculo</h3>
+          <p>I Ching, tradição separada, mesma casa.</p>
+          <span class="go mono">Abrir →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- ENGINE: bloco abaixo lista as últimas linhas de `diario_gnose` do usuário logado
+       (ver supabase/migrations/0008_diario.sql), mais recentes primeiro, limitado a
+       poucas entradas (ex: 3-5). Sem entradas ainda: mostrar o estado vazio abaixo. -->
+  <section class="tight">
+    <div class="wrap-narrow">
+      <div class="journal-panel">
+        <div class="jp-head">
+          <div>
+            <p class="eyebrow"><span class="glyph">✦</span> diário</p>
+            <h2 style="font-size:1.3rem; margin-top:6px;">Qualquer experiência. Não só Âncora, não só entéogênico.</h2>
+          </div>
+          <a href="diario" class="btn btn-solid mono">Registrar experiência</a>
+        </div>
+
+        <div class="journal-preview" id="journalPreview">
+          <p class="journal-empty">Nenhuma entrada ainda. A primeira experiência que você registrar aparece aqui.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer"><div class="wrap">
+  <h2>Ninguém vai carregar seu destino no colo. Mas você pode aprender a ler o terreno.</h2>
+  <a href="diario" class="btn btn-solid mono">Registrar minha primeira experiência</a>
+  <div class="footer-bottom"><span>© Caos Astral</span><div class="footer-links"><a href="manifesto">Manifesto</a><a href="intento">Intento</a><a href="raizes">Raízes</a><a href="diario">Diário</a><a href="planos">Planos</a></div></div>
+</div></footer>
+<script src="assets/flash-decor.js" defer></script>
+</body>
+</html>

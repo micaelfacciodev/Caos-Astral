@@ -104,6 +104,11 @@ Oráculo, Diário, Raízes, Blog, Manifesto, Intento, Planos.
 - **Âncora de Intenção**: o gerador de selo já está real no front (seção
   9), mas ainda não persiste em `intent_anchors` — integração de
   salvamento ainda não fechada com o agente da máquina.
+- **Dashboard (novo, 30/07)**: página ainda não existe. `ritual-de-
+  entrada.html` step 4 hoje aponta pra `kit` direto (botão "Ver meu
+  kit →") — precisa passar a apontar pro Dashboard novo, que vira o hub
+  central (cards de produto + Janela do dia + prévia do Diário). Ver
+  glossário e seção 8 pra definição completa.
 
 ---
 
@@ -141,6 +146,8 @@ supabase/
     0004_solar_return_localizacao.sql           -- latitude/longitude/cidade em solar_returns
     0005_simbolos_astrologicos.sql              -- tabela + bucket pro admin hub de símbolos (spec do front, seção 9)
     0006_simbolos_admin_restrito.sql             -- CORREÇÃO DE SEGURANÇA: restringe escrita ao admin (auth.uid()), não a qualquer autenticado
+    0007_intent_anchors.sql                      -- Âncora de Intenção, criada do zero (30/07), só era descrita em prosa até aqui
+    0008_diario.sql                              -- Diário (diario_gnose), criada do zero (30/07), escopo já ampliado pra qualquer experiência
   seed/
     seed_0001_planets_houses_aspects.sql       -- 11 planetas, 12 casas, 5 aspectos
     seed_0002_graus_simbolicos.sql             -- 360 cenas de grau (nome do arquivo desatualizado,
@@ -201,8 +208,8 @@ motor astrológico; se precisar zerar isso também, apagar manualmente).
 - `daily_readings` — uma linha por usuário por dia. `iching_convite_aceito` pro handoff com I Ching (seção 6).
 - `synastry_readings` — sinastria (câmara de ressonância). `composite_chart` jsonb é onde O Terceiro vive. **Tem Edge Function: `compute-synastry`** — só funciona com dados manuais do parceiro por enquanto (ver seção 5 e pendência de consentimento, seção 7).
 - `solar_returns` — retorno (revolução solar). `user_id`, `ano` (unique juntos), `data_exata`, `latitude`/`longitude`/`cidade` do ano em questão (não é a de nascimento). **Tem Edge Function: `compute-solar-return`.**
-- `intent_anchors` *(antiga `sigil_journal`, separada)* — a âncora de intenção em si. **Ainda não recebe gravação real do front** (gerador já existe, ver seção 9, mas não persiste ainda).
-- `diario_gnose` *(antiga `sigil_journal`, separada)* — registro livre de prática, com FK opcional pra `daily_readings` e pra `intent_anchors`.
+- `intent_anchors` *(antiga `sigil_journal`, separada)* — a âncora de intenção em si. **Tabela criada em `0007_intent_anchors.sql` (30/07)** — existe agora como migration real, mas o gerador de selo no front (`ancora.html`) ainda não foi conectado pra gravar nela (integração de salvamento ainda pendente, ver seção 2).
+- `diario_gnose` *(antiga `sigil_journal`, separada)* — registro livre de prática, com FK opcional pra `daily_readings` e pra `intent_anchors`. **Tabela criada em `0008_diario.sql` (30/07)**, já com o escopo ampliado (qualquer experiência, `produto_relacionado` nullable, `tipo_experiencia` livre) — ver decisão do fundador na seção 8.
 
 ### Tabelas/recursos do admin hub de símbolos (novo, seção 9)
 - `simbolos_astrologicos` — galeria de arte pra decoração do site. `titulo`, `image_url`, `tags` (text[]), `decor` (boolean), `created_at`. RLS: **SELECT público** (consultado anonimamente por `flash-decor.js` em qualquer página); INSERT/UPDATE/DELETE só `auth.role() = 'authenticated'` — admin único, sem multi-tenant por enquanto.
@@ -514,6 +521,25 @@ production" ligado, branch de produção `main`, working directory `.`.
   final. Não apagar esse aviso ao expandir o conteúdo real de cada
   verbete, e sim substituí-lo quando o verbete de fato estiver
   completo.
+- **Dashboard como ecossistema (30/07), decisão do fundador.**
+  `ritual-de-entrada.html` é join/register, feito uma vez só — depois
+  disso o usuário cai num **Dashboard** novo (página ainda não existe no
+  repo), que passa a ser o destino padrão pós-onboarding no lugar do
+  link direto pra `kit`. O Dashboard reúne todos os produtos (Kit,
+  Retorno, Ressonância, Âncora, Deriva, Oráculo) como cards, com a Janela
+  do dia em destaque e o Diário como camada separada que atravessa todos
+  eles, não é só mais um card. Ver glossário, termo **Dashboard**
+  (novo) e **Diário** (redefinido).
+- **Diário desatrelado da Âncora (30/07), decisão do fundador.** A
+  definição antiga ("Diário de gnose", ligado só a "práticas de foco/
+  estado alterado no uso da âncora") foi **substituída** — o Diário
+  agora registra qualquer experiência dentro do ecossistema (não só
+  entéogênica), no espírito Field Trip/iDoser. Implicação de schema:
+  `diario_gnose` (seção 4/8) precisa de um campo tipo
+  `produto_relacionado` (nullable: âncora, deriva, oráculo, nenhum) e um
+  campo de tipo/tag de experiência livre, além do que já existe. Esse
+  rename/ajuste de schema ainda não foi implementado pelo agente da
+  máquina — registrar como pendência na seção 7 antes de fechar.
 
 ---
 
@@ -579,3 +605,28 @@ pra manter os três sincronizados, já que agora commitamos direto.
   conforme a spec acima (RLS pública pra leitura, autenticado pra
   escrita, sem multi-tenant). Rodar essa migration no SQL Editor pra
   `admin-simbolos.html` e `flash-decor.js` passarem a funcionar de verdade.
+
+- **Dashboard implementado (30/07)**, atendendo decisão do fundador
+  (seção 8): `dashboard.html` criada, mesmo design system (`assets/
+  style.css`, mesma nav/rodapé). Contém: painel de Janela do dia (com
+  comentário `<!-- ENGINE -->` marcando onde plugar `daily_readings`/
+  `compute-daily-window`), grid de 6 produtos (Kit, Retorno, O Terceiro,
+  Âncora, Deriva, Oráculo) e painel de Diário separado (preview das
+  últimas entradas + CTA "Registrar experiência"), com comentário
+  `ENGINE` marcando onde puxar as últimas linhas de `diario_gnose`.
+  `ritual-de-entrada.html` step 4 atualizado: CTA final agora aponta pra
+  `dashboard` em vez de `kit` direto.
+  **Pendência que ficou de fora de propósito**: o link "Dashboard" ainda
+  não foi adicionado ao menu canônico das outras 31 páginas do site (só
+  existe como destino, não como item de nav) — decidir se entra no menu
+  ou fica só acessível via pós-onboarding antes de propagar em todas as
+  páginas.
+- **Schema do Diário e da Âncora criado (30/07)**: `intent_anchors`
+  (`0007_intent_anchors.sql`) e `diario_gnose` (`0008_diario.sql`)
+  existiam só descritas em prosa neste documento até agora — nenhuma das
+  duas tinha migration versionada no repo. Ambas criadas do zero, já
+  com o escopo ampliado do Diário (ver seção 8). **Atenção antes de
+  aplicar em produção**: a FK de `diario_gnose.daily_reading_id` assume
+  que `daily_readings` tem `id uuid` como chave primária — não
+  verificado contra o schema real de produção (essa tabela também não
+  está versionada ainda), conferir antes de rodar `0008` se não bater.
