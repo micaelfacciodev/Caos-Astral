@@ -760,3 +760,35 @@ pra manter os três sincronizados, já que agora commitamos direto.
     isso for migrado pro design system padrão, dá pra trocar a versão
     embutida da nebulosa pelo contrato de markup padrão e remover a
     duplicata).
+
+- **Menu hamburguer mobile implementado (30/07)**, nas 33 páginas que
+  usam o header padrão (`class="site-header"` + `assets/style.css`).
+  Antes disso, os 12 itens de nav simplesmente quebravam linha dentro
+  do header em telas estreitas (funcional, mas poluído).
+
+  **Arquivos novos/alterados:**
+  - `assets/nav-menu.js` (novo) — toggle do menu, fecha ao clicar fora,
+    Esc, clicar num link, ou a tela crescer além do breakpoint.
+  - `assets/style.css` — nova seção `NAV MOBILE (hamburguer)`: breakpoint
+    em 860px, `.nav-links` vira dropdown `position:absolute` abaixo do
+    header nesse ponto; acima disso, layout desktop inalterado.
+
+  **Contrato de markup**, pra qualquer header novo/reconstruído que
+  queira o menu: dentro de `<nav class="wrap">`, logo após o `<a
+  class="logo">`, colar o botão com `class="nav-toggle"` +
+  `aria-controls="nav-links"` (ver qualquer página já migrada pra
+  copiar o SVG exato); e o `<div class="nav-links">` precisa ganhar
+  `id="nav-links"`. O botão CTA no fim do nav não muda.
+
+  **Fora do escopo, de propósito:**
+  - **`deriva.html`** ficou de fora. O nav dela já é diferente (lista
+    `<ul class="nav-links">` com scroll horizontal em vez de quebra de
+    linha — já "funciona" no mobile, só não é o mesmo padrão visual) e,
+    como o agente reconstruindo a Deriva pode reescrever esse arquivo
+    do zero, não fazia sentido gastar esforço num nav que pode ser
+    substituído. **Se a reconstrução mantiver o header no formato
+    atual**, vale considerar migrar pro mesmo contrato de hamburguer
+    acima, por consistência com o resto do site.
+  - **`admin-enciclopedia.html`, `enciclopedia-index.html`,
+    `enciclopedia-verbete.html` e `aura_flow.html`** não têm o nav
+    padrão (ou não têm nav nenhum) — nada pra migrar aí.
