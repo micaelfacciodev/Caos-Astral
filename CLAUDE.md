@@ -349,8 +349,21 @@ production" ligado, branch de produção `main`, working directory `.`.
   linhas) usa `var(--red)` etc., então a realinhagem de paleta se
   propagou sem precisar tocar em cada regra. Cores do canvas de
   `aura_flow.html`/camadas visuais não foram tocadas — são conteúdo
-  artístico, não chrome do site. **Âncora de Intenção** (paleta
-  dourado/osso, Cinzel/EB Garamond) segue pendente de unificação.
+  artístico, não chrome do site. **Âncora de Intenção unificada (29/07)**:
+  já linkava `assets/style.css` e já usava o nav padrão (só faltava a
+  paleta/tipografia inline). Trocado Cinzel/EB Garamond por
+  Unbounded/IBM Plex Sans/IBM Plex Mono; paleta dourado/osso realinhada
+  aos tokens reais (`--gold`→`--accent-bright` #c14a3c, `--bone`→`--ink`
+  #e9e4d8, `--muted`→`--ink-dim` #978f80, `--panel`/`--panel-2`/`--hair`→
+  tokens equivalentes). **Não mexido de propósito**: os gradientes do
+  `.stage`/`.stage.paper` (fundo onde o selo é desenhado, incluindo o
+  tom de pergaminho) — são o "papel" onde a arte acontece, tratados como
+  conteúdo, não chrome, mesma lógica aplicada ao canvas da Deriva.
+  **Ponto em aberto que só dá pra confirmar olhando renderizado**:
+  `letter-spacing` de `.eyebrow`/`label`/`.btn`/`summary` foi calibrado
+  pra Cinzel (serifada, mais estreita) e pode ficar largo demais agora
+  com IBM Plex Mono — conferir visualmente antes de considerar
+  fechado.
 - `simbolos_astrologicos` + bucket `simbolos` criados a pedido do
   agente de front (spec registrada por eles na seção 9) — RLS: leitura
   pública, escrita restrita ao `auth.uid()` do admin (corrigido de
