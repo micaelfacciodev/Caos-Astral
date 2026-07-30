@@ -364,6 +364,17 @@ production" ligado, branch de produção `main`, working directory `.`.
   pra Cinzel (serifada, mais estreita) e pode ficar largo demais agora
   com IBM Plex Mono — conferir visualmente antes de considerar
   fechado.
+- **Bug corrigido (29/07): autofill do Chrome preenchendo campo errado
+  no `ritual-de-entrada.html`.** Nenhum input tinha `autocomplete`
+  definido e não havia `<form>` envolvendo o fluxo — o Chrome detectava
+  o campo de senha do passo 3 (auth) como cadastro de conta e
+  autopreenchia o campo de nome (passo 0, `input type="text"` sem pista
+  nenhuma) com o e-mail salvo no gerenciador de senha. Corrigido
+  adicionando `autocomplete` correto em todos os campos: `name` (nome),
+  `bday` (data de nascimento), `off` (cidade e hora, sem token padrão
+  aplicável), `email` (e-mail), `new-password` (senha — esse é o mais
+  importante, sinaliza que é cadastro novo, não login, o que evita o
+  Chrome tratar o formulário inteiro como tela de sign-in).
 - `simbolos_astrologicos` + bucket `simbolos` criados a pedido do
   agente de front (spec registrada por eles na seção 9) — RLS: leitura
   pública, escrita restrita ao `auth.uid()` do admin (corrigido de
