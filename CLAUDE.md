@@ -148,46 +148,41 @@ supabase/
     0006_simbolos_admin_restrito.sql             -- CORREÇÃO DE SEGURANÇA: restringe escrita ao admin (auth.uid()), não a qualquer autenticado
     0007_intent_anchors.sql                      -- Âncora de Intenção, criada do zero (30/07), só era descrita em prosa até aqui
     0008_diario.sql                              -- Diário (diario_gnose), criada do zero (30/07), escopo já ampliado pra qualquer experiência
+    0009_exilio_planeta.sql                      -- Exílio (Lilith) em `planets` — renomeada de 0007 pra 0009 (30/07) por colisão de numeração, ver seção 8
   seed/
     seed_0001_planets_houses_aspects.sql       -- 11 planetas, 12 casas, 5 aspectos
     seed_0002_graus_simbolicos.sql             -- 360 cenas de grau (nome do arquivo desatualizado,
                                                 --   tabela final é cenas_grau após o rename da 0003)
   functions/
-    _shared/
-      lilith.ts                                 -- cópia-mestra de referência, ver nota abaixo
-    compute-natal-chart/
-      index.ts                                  -- código REAL (29/07), Exílio já integrado
-      _shared/
-        lilith.ts                               -- cópia própria (dashboard isola functions, não compartilha pasta)
-    compute-daily-window/index.ts
-    compute-solar-return/
-      index.ts                                  -- reescrito do zero (29/07) — não existia handler de verdade
-      _shared/
-        lilith.ts
-    compute-synastry/index.ts                    -- Exílio AINDA NÃO integrado aqui
+    compute-natal-chart/index.ts                  -- Exílio e Quíron EMBUTIDOS direto no arquivo (30/07) — sem `_shared/`, ver nota abaixo
+    compute-daily-window/index.ts                 -- idem, embutido
+    compute-solar-return/index.ts                 -- reescrito do zero (30/07) — Exílio e Quíron embutidos desde o início
+    compute-synastry/index.ts                     -- Exílio integrado (30/07), embutido
     delete-account/index.ts                       -- auto-exclusão de conta (30/07), exceção controlada de service_role, ver seção 8
 ```
 
-> **Nota importante sobre esse diagrama (29/07):** até hoje, essa pasta
-> `functions/` era só descrição — não existia de verdade no repo, porque
-> o código das Edge Functions sempre foi colado direto no editor do
-> painel Supabase (ver "Deploy sem terminal" abaixo), nunca versionado.
-> `compute-natal-chart/index.ts` é o primeiro código real dessa pasta —
-> veio do próprio usuário, não foi eu que inventei o conteúdo. **A
-> integração GitHub configurada na seção acima aplica só migrations —
-> não faz deploy automático de Edge Function.** Deploy de function
-> automático via GitHub exigiria GitHub Actions + `SUPABASE_ACCESS_TOKEN`
-> + CLI, o que contradiz a restrição de "sem terminal" (usuário no iMac
-> 2011). Ou seja: colocar o `.ts` aqui garante histórico/rastreio no
-> Git, mas **não substitui** copiar o conteúdo pro editor do painel — sem
-> isso, o código fica no repo mas não está no ar. **Cada function é
-> isolada no painel** — por isso `lilith.ts` existe duplicado: uma cópia
-> de referência em `functions/_shared/`, e uma cópia real dentro de cada
-> function que precisa dele (só `compute-natal-chart` por enquanto —
-> `compute-solar-return` e `compute-synastry` ainda faltam receber a
-> mesma integração, mesmo padrão de import `./_shared/lilith.ts`).
+> **Nota importante sobre esse diagrama (30/07) — CORREÇÃO de uma
+> suposição errada registrada aqui antes:** uma versão anterior deste
+> documento descrevia `_shared/lilith.ts` como arquivo separado dentro
+> de cada function, com `compute-natal-chart` supostamente já
+> funcionando assim. **Isso nunca foi confirmado no ar e, na prática,
+> não funciona**: tentativa real de deploy com `_shared/lilith.ts`
+> quebrou com erro `"Module not found"` no editor do Dashboard do
+> Supabase, em duas functions diferentes (`compute-daily-window` e
+> `compute-synastry`), no mesmo dia. **Causa**: o editor de Edge
+> Function usado aqui (colar direto, sem terminal) não resolve import
+> de arquivo extra dentro da mesma function. **Correção aplicada**: as
+> quatro functions foram revisadas pra ter Quíron e Exílio **embutidos
+> diretamente em cada `index.ts`**, sem nenhum import de arquivo
+> próprio — mesmo que isso duplique a mesma lógica (`computeTrueLilith`,
+> `chironGeocentricEclipticLongitude`) nas quatro. **Regra daqui pra
+> frente, sem exceção**: nenhuma Edge Function deste projeto usa
+> arquivo `_shared/` — todo código auxiliar fica embutido no único
+> `index.ts` que é de fato colado no editor do painel.
 
-**Ordem de execução (SQL Editor do Supabase, sem terminal)**:
+**Ordem de execução manual (só relevante se a integração GitHub↔Supabase
+estiver fora do ar por algum motivo — normalmente 0007 em diante aplica
+sozinha via commit em `main`, ver "Integração GitHub ↔ Supabase" abaixo)**:
 `0001_schema.sql` → `seed_0001_planets_houses_aspects.sql` →
 `seed_0002_graus_simbolicos.sql` → `0002_natal_charts_unique.sql` →
 `0003_adendo_vocabulario_e_tabelas.sql` → `0004_solar_return_localizacao.sql`
@@ -266,13 +261,15 @@ production" ligado, branch de produção `main`, working directory `.`.
 - **Quíron**: fora da astronomy-engine. Kepleriana de dois corpos
   (elementos JPL SBDB, época 2021-Jul-01). Sem correção de perturbação —
   aceitável pra uso pessoal.
-- **Lilith → "Exílio" (29/07): implementada, ainda não integrada nem
-  deployada.** Nome de vocabulário fechado. Código em
-  `supabase/functions/_shared/lilith.ts` (agora versionado no repo) —
-  falta copiar/importar dentro de `compute-natal-chart` e onde mais
-  precisar, **e colar no editor do painel Supabase pra ir ao ar** (estar
-  no repo não deploya sozinho, ver nota na seção 4). Método: apogeu
-  osculador via vetores de estado da Lua
+- **Lilith → "Exílio" (30/07): integrado nas quatro Edge Functions,
+  embutido em cada uma.** Nome de vocabulário fechado. Código
+  (`computeTrueLilith`) embutido direto em cada `index.ts`
+  (`compute-natal-chart`, `compute-daily-window`, `compute-solar-return`,
+  `compute-synastry`) — **nenhum import de `_shared/lilith.ts`** (ver
+  correção na seção 4: esse padrão de arquivo separado quebrava o
+  deploy). Requer a migration `0009_exilio_planeta.sql` (linha `exilio`
+  em `planets`, temperamento `neutro`) — sem ela, rótulos ficam
+  `undefined`. Método: apogeu osculador via vetores de estado da Lua
   (`GeoMoonState`, rotacionado pra eclíptica) + GM combinado Terra+Lua
   (`MassProduct(Body.EMB)`) — é o mesmo conceito da "True Lilith" (h21) da
   Swiss Ephemeris, não a versão média. **Validado**: método bate com a
@@ -326,11 +323,13 @@ production" ligado, branch de produção `main`, working directory `.`.
   existem colunas `ascendente`/`meio_ceu`** aqui (diferente de
   `natal_charts`); esses dois valores continuam calculados e voltam na
   resposta da function, só não são persistidos como coluna própria.
-  **Simplificação assumida, não implementada ainda**: `ano` é
-  obrigatório no body (erro claro se faltar) — o comportamento de
-  "se `ano` não vier, calcula o retorno mais recente já ocorrido",
-  descrito abaixo como comportamento esperado, **não está codado**;
-  quem pedir isso vai receber erro 400, não o retorno mais recente.
+  **Simplificação assumida numa versão anterior, agora implementada
+  (30/07)**: `ano` é opcional no body — se não vier, calcula o retorno
+  mais recente já ocorrido (compara a longitude atual do Sol com a
+  natal; se o retorno deste ano civil ainda não ocorreu, usa o do ano
+  anterior). Busca do instante exato via busca binária (~40 iterações,
+  Sol nunca retrograda) sobre `GeoVector`+`Ecliptic`, mesmas primitivas
+  já usadas no resto do motor.
   A localização usada pro ascendente/casas do mapa de retorno é a de
   ONDE A PESSOA VAI PASSAR aquele ano — não a de nascimento;
   `compute-solar-return` exige `latitude`/`longitude` no corpo da
@@ -392,19 +391,20 @@ production" ligado, branch de produção `main`, working directory `.`.
       duplicado após a fusão de identidade visual — conferir.
 - [ ] Monetização (paywall, preview parcial, assinatura) — desenho não
       iniciado, ver seção 1.
-- [ ] **Integrar "Exílio" (Lilith) na function restante** —
-      `compute-natal-chart` e `compute-solar-return` já integrados e no
-      repo (29/07). Falta `compute-synastry` — **e antes de mexer nela,
-      checar primeiro se o `index.ts` dela é código de verdade ou é o
-      mesmo tipo de placeholder que `compute-solar-return` era** (mandar
-      o conteúdo real pra eu ver, não assumir que existe só porque está
-      documentado aqui).
-- [ ] Implementar o fallback de `ano` opcional em `compute-solar-return`
-      (calcular o retorno mais recente já ocorrido se `ano` não vier) —
-      hoje dá erro 400, comportamento documentado nunca foi codado.
-- [ ] Deployar o `compute-solar-return` reescrito e testar com uma data
-      de nascimento real antes de considerar essa function confiável —
-      nunca rodou de verdade em produção até 29/07.
+- [x] **Integrar "Exílio" (Lilith) na function restante** — feito
+      (30/07). As quatro functions (`compute-natal-chart`,
+      `compute-daily-window`, `compute-solar-return`, `compute-synastry`)
+      têm Exílio e Quíron embutidos diretamente no `index.ts`, sem
+      arquivo `_shared/` (ver correção na seção 4).
+- [x] Implementar o fallback de `ano` opcional em `compute-solar-return`
+      — feito (30/07), calcula o retorno mais recente já ocorrido se
+      `ano` não vier.
+- [ ] **Deployar as quatro Edge Functions revisadas em 30/07** e testar
+      com uma data de nascimento real antes de considerar confiável —
+      inclui colar o `compute-solar-return` novo (ainda pode não ter
+      sido deployado até o momento desta edição) e confirmar que os
+      outros três (`compute-natal-chart`, `compute-daily-window`,
+      `compute-synastry`) foram atualizados pra versão sem `_shared/`.
 - [ ] **LGPD (30/07)**: `termos.html` e `privacidade.html` criadas com
       placeholders que só o fundador preenche: razão social/CNPJ ou CPF,
       e-mail do encarregado (DPO), cidade/comarca de foro. Revisão
@@ -507,8 +507,27 @@ production" ligado, branch de produção `main`, working directory `.`.
   `auth.role() = 'authenticated'`, que teria liberado qualquer usuário
   cadastrado do produto principal — falha real, corrigida antes de ir
   pra produção).
-- Usuário responsável não usa terminal (iMac 2011) — deploy sempre via
-  Dashboard/navegador.
+- **Correção de registro + renumeração de migration (30/07).** Uma
+  sessão anterior registrou `_shared/lilith.ts` como arquivo separado
+  já funcionando dentro de `compute-natal-chart` — **isso nunca foi
+  confirmado no ar**. Deploy real desse padrão quebrou com "Module not
+  found" em duas outras functions no mesmo dia. Corrigido: as quatro
+  Edge Functions (`compute-natal-chart`, `compute-daily-window`,
+  `compute-solar-return`, `compute-synastry`) foram revisadas com
+  Quíron e Exílio **embutidos direto em cada `index.ts`**, sem nenhum
+  arquivo `_shared/` — regra sem exceção daqui pra frente. Também
+  corrigida colisão de numeração: a migration do Exílio tinha sido
+  criada como `0007_exilio_planeta.sql`, mas `0007`/`0008` já estavam
+  ocupados por `intent_anchors`/`diario` (criados no mesmo dia, sessão
+  diferente) — renomeada pra `0009_exilio_planeta.sql`.
+- **`compute-solar-return` corrigida contra o schema real (30/07).**
+  Uma versão anterior do upsert tentava gravar `ascendente`/`meio_ceu`
+  como colunas de `solar_returns` — essas colunas não existem
+  (confirmado via `information_schema.columns`: só
+  `id, user_id, ano, data_exata, planetas, aspectos, computado_em,
+  latitude, longitude, cidade`). Corrigido pra não gravar esses dois
+  campos como coluna — eles continuam calculados e voltam na resposta
+  da function.
 - **`ADENDO-CLAUDE.md` foi incorporado a este documento e removido do
   repo (29/07).** Todo o conteúdo dele já estava aplicado (renomes,
   vocabulário, `oraculo.html`, remoção de `caos-astral-landing.html`) —
