@@ -147,25 +147,34 @@ supabase/
                                                 --   tabela final é cenas_grau após o rename da 0003)
   functions/
     _shared/
-      lilith.ts                                 -- Exílio (Lilith verdadeira) — criado 29/07, ver seção 5
-    compute-natal-chart/index.ts
+      lilith.ts                                 -- cópia-mestra de referência, ver nota abaixo
+    compute-natal-chart/
+      index.ts                                  -- código REAL (29/07), Exílio já integrado
+      _shared/
+        lilith.ts                               -- cópia própria (dashboard isola functions, não compartilha pasta)
     compute-daily-window/index.ts
-    compute-solar-return/index.ts
-    compute-synastry/index.ts
+    compute-solar-return/index.ts                -- Exílio AINDA NÃO integrado aqui
+    compute-synastry/index.ts                    -- Exílio AINDA NÃO integrado aqui
 ```
 
 > **Nota importante sobre esse diagrama (29/07):** até hoje, essa pasta
 > `functions/` era só descrição — não existia de verdade no repo, porque
 > o código das Edge Functions sempre foi colado direto no editor do
 > painel Supabase (ver "Deploy sem terminal" abaixo), nunca versionado.
-> `_shared/lilith.ts` é o primeiro arquivo real dessa pasta. **A
+> `compute-natal-chart/index.ts` é o primeiro código real dessa pasta —
+> veio do próprio usuário, não foi eu que inventei o conteúdo. **A
 > integração GitHub configurada na seção acima aplica só migrations —
 > não faz deploy automático de Edge Function.** Deploy de function
 > automático via GitHub exigiria GitHub Actions + `SUPABASE_ACCESS_TOKEN`
 > + CLI, o que contradiz a restrição de "sem terminal" (usuário no iMac
 > 2011). Ou seja: colocar o `.ts` aqui garante histórico/rastreio no
 > Git, mas **não substitui** copiar o conteúdo pro editor do painel — sem
-> isso, o código fica no repo mas não está no ar.
+> isso, o código fica no repo mas não está no ar. **Cada function é
+> isolada no painel** — por isso `lilith.ts` existe duplicado: uma cópia
+> de referência em `functions/_shared/`, e uma cópia real dentro de cada
+> function que precisa dele (só `compute-natal-chart` por enquanto —
+> `compute-solar-return` e `compute-synastry` ainda faltam receber a
+> mesma integração, mesmo padrão de import `./_shared/lilith.ts`).
 
 **Ordem de execução (SQL Editor do Supabase, sem terminal)**:
 `0001_schema.sql` → `seed_0001_planets_houses_aspects.sql` →
@@ -357,12 +366,13 @@ production" ligado, branch de produção `main`, working directory `.`.
       duplicado após a fusão de identidade visual — conferir.
 - [ ] Monetização (paywall, preview parcial, assinatura) — desenho não
       iniciado, ver seção 1.
-- [ ] **Integrar "Exílio" (Lilith)** — código pronto em
-      `supabase/functions/_shared/lilith.ts` (já no repo, ver seção 5),
-      falta importar dentro de
-      `compute-natal-chart`/`compute-solar-return`/`compute-synastry`,
-      colar no editor do painel Supabase pra ir ao ar, e validar
-      grau-a-grau contra efeméride de referência antes de expor na UI.
+- [ ] **Integrar "Exílio" (Lilith) nas functions restantes** —
+      `compute-natal-chart/index.ts` já integrado e no repo (29/07,
+      código real do usuário). Falta repetir o mesmo em
+      `compute-solar-return` e `compute-synastry` (mandar o `index.ts`
+      real de cada uma, mesmo processo), colar no editor do painel
+      Supabase pra ir ao ar, e validar grau-a-grau contra efeméride de
+      referência antes de expor na UI.
 
 ---
 
