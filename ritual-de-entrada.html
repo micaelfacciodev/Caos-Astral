@@ -103,51 +103,7 @@
 </div>
 
 
-<header class="site-header">
-  <nav class="wrap">
-    <a href="index" class="logo"><svg class="star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 1 L13.6 9.5 L22 8 L15.2 13.2 L20 21 L12 16.4 L4 21 L8.8 13.2 L2 8 L10.4 9.5 Z"/></svg>Caos Astral</a>
-    <button type="button" class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
-      <svg class="icon-burger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-      <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
-    </button>
-
-        <div class="nav-links" id="nav-links">
-      <div class="nav-group">
-        <button type="button" class="nav-group-toggle" aria-haspopup="true" aria-expanded="false">Ferramentas <svg class="caret" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 1l4 4 4-4"/></svg></button>
-        <div class="nav-dropdown">
-          <a href="kit">O Kit</a>
-          <a href="retorno">Retorno</a>
-          <a href="ressonancia">O Terceiro</a>
-          <a href="ancora">Âncora</a>
-          <a href="deriva">Deriva</a>
-          <a href="oraculo">Oráculo</a>
-          <a href="diario">Diário</a>
-        </div>
-      </div>
-      <div class="nav-group">
-        <button type="button" class="nav-group-toggle" aria-haspopup="true" aria-expanded="false">Saber <svg class="caret" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 1l4 4 4-4"/></svg></button>
-        <div class="nav-dropdown">
-          <a href="raizes">Raízes</a>
-          <a href="enciclopedia">Enciclopédia</a>
-          <a href="blog">Blog</a>
-        </div>
-      </div>
-      <div class="nav-group">
-        <button type="button" class="nav-group-toggle" aria-haspopup="true" aria-expanded="false">Sobre <svg class="caret" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 1l4 4 4-4"/></svg></button>
-        <div class="nav-dropdown">
-          <a href="manifesto">Manifesto</a>
-          <a href="intento">Intento</a>
-          <a href="planos">Planos</a>
-        </div>
-      </div>
-    </div>
-    <a href="ritual-de-entrada" class="btn btn-ghost mono">Abrir meu kit</a>
-  <button type="button" class="theme-toggle" id="themeToggle" aria-label="Alternar modo claro/escuro" aria-pressed="false">
-      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.4A9 9 0 1 1 11.6 3a7 7 0 0 0 9.4 9.4Z"/></svg>
-      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
-    </button>
-  </nav>
-</header>
+<header class="site-header" id="site-header"></header>
 
 <div class="ritual-wrap">
 
@@ -637,6 +593,7 @@
 })();
 </script>
 
+<script src="assets/site-chrome.js" defer></script>
 <script src="assets/flash-decor.js" defer></script>
 <script src="assets/space-bg.js" defer></script>
 <script src="assets/theme-toggle.js" defer></script>

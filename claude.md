@@ -411,6 +411,63 @@ Diferente do resto deste documento (que é território do agente da
 máquina), esta seção é mantida pelo agente de front — registrando aqui
 pra manter os três sincronizados, já que agora commitamos direto.
 
+**Sessão de 31/07 — header/footer viraram componente único, norma daqui pra frente:**
+- **Motivo:** cada página tinha o `<header class="site-header">` e o
+  `<footer class="site-footer">` copiados e colados inline. Auditoria
+  encontrou 7 variantes reais de header e 6 de footer entre as páginas
+  (link faltando, CTA divergente, `Enciclopédia`/`Termos`/`Privacidade`
+  presentes num footer e ausentes em outro) — resultado natural de
+  vários agentes passando pelo mesmo arquivo em sessões diferentes.
+- **Decisão de arquitetura, vale como norma pra qualquer página nova:**
+  nenhuma página deve mais hardcodar o markup de header/footer. Criado
+  `assets/site-chrome.js` como fonte única — um script injeta o
+  `<nav>` (grupos Ferramentas/Saber/Sobre + CTA) e o `<footer>`
+  (h2 fixo + CTA + links) a partir de UMA lista, marcando o link ativo
+  pela URL atual. Cada página só tem o mount vazio:
+  ```html
+  <header class="site-header" id="site-header"></header>
+  ...
+  <footer class="site-footer" id="site-footer"></footer>
+  ```
+  e `<script src="assets/site-chrome.js" defer></script>` como o
+  **primeiro** script `defer` da página (antes de `nav-menu.js` e
+  `theme-toggle.js`, que dependem do markup injetado por ele).
+- Aplicado nas 33 páginas que já tinham o header padrão. Ficaram de
+  fora, deliberadamente: `deriva.html` (header com classe extra
+  `grid-only`, identidade visual própria ainda pendente de unificação —
+  ver seção 8) e `aura_flow.html` (documentado como sem menu, overlay
+  embutido). `enciclopedia-index.html` e `enciclopedia-verbete.html` já
+  não tinham o header padrão antes disso — não mexido, fica como
+  pendência separada se algum dia precisarem entrar no site principal.
+- **Rodapé — normalizado, não só centralizado:** a lista de links do
+  footer agora é sempre `Manifesto, Intento, Raízes, Enciclopédia,
+  Diário, Termos, Privacidade, Planos` em toda página — antes,
+  `Enciclopédia` só aparecia em alguns footers e `Termos`/`Privacidade`
+  só em 3 páginas (`dashboard`, `termos`, `privacidade`). Decisão minha,
+  favorecendo o superset (nunca removi link que já existia em algum
+  lugar) — reversível se o time achar que Termos/Privacidade não
+  deveriam estar em todo footer.
+- **`ancora.html` ganhou footer** — tinha o header padrão mas nunca teve
+  footer, parece esquecimento (não há nenhuma decisão registrada dizendo
+  que Âncora não deveria ter footer, ao contrário de `ritual-de-entrada`
+  e das páginas de admin, que continuam sem footer de propósito).
+- **CTA contextual preservado via override, não perdido na
+  centralização:** `dashboard.html` (usuário logado → "Registrar
+  experiência"/"Registrar minha primeira experiência", ambos apontando
+  pra `diario`), `admin-simbolos.html` ("Sair", chama `logout()`) e
+  `admin-iching.html` ("Admin Símbolos" → `admin-simbolos`) setam
+  `window.SITE_CHROME = {...}` antes de carregar `site-chrome.js`. Ver
+  comentário no topo do próprio arquivo pra sintaxe do override.
+- Removidos `nav-menu.js` e `style.css` da raiz do repo — cópias órfãs
+  desatualizadas (nada referenciava, as páginas já usavam
+  `assets/nav-menu.js` e `assets/style.css`; a existência das duas
+  cópias é o mesmo tipo de risco de divergência que motivou essa sessão
+  inteira, só que em arquivo em vez de em página).
+- **Norma daqui pra frente:** qualquer novo item de menu, mudança de
+  rótulo, ou novo link de footer se edita **só** em
+  `assets/site-chrome.js`. Nunca copiar o HTML do header/footer de uma
+  página pra outra de novo.
+
 **Sessão de 28/07:**
 - Removidos `caos-astral-landing.html` (landing single-file antiga) e
   `raizes-simbolos-sabianos.html` (duplicata de `raizes-cena-do-grau.html`).
