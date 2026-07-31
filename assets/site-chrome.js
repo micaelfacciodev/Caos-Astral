@@ -13,6 +13,19 @@
  * — isso é exatamente o que esse arquivo existe pra evitar (menu
  * divergindo por página, um por agente que passou por ali).
  *
+ * CTA do header — padrão é o dropdown "Entrar" (Google + e-mail/senha,
+ * via Supabase Auth, mesmas credenciais/chamadas de ritual-de-entrada.html)
+ * com link "Criar agora" pro ritual de entrada. Toda página que NÃO
+ * define window.SITE_CHROME.headerCta recebe esse dropdown — não dá
+ * mais "Abrir meu kit" estático.
+ *
+ * LIMITAÇÃO CONHECIDA: este script não checa sessão existente pra trocar
+ * o dropdown por um estado "logado" (ex.: "Minha conta"/"Sair") nas
+ * páginas comuns — só dashboard.html/admin-*.html têm CTA de logado,
+ * via override manual (abaixo), porque cada uma já checa a sessão na
+ * própria lógica da página. Um usuário já logado que visita raizes.html,
+ * por exemplo, ainda vê "Entrar". Ver claude.md seção 9, pendência.
+ *
  * Overrides pontuais (login-gated, admin etc.) via variável global
  * definida ANTES deste script, ex.:
  *   <script>
@@ -77,8 +90,12 @@
     ['planos', 'Planos'],
   ];
 
-  var DEFAULT_HEADER_CTA = { label: 'Abrir meu kit', href: 'ritual-de-entrada' };
   var DEFAULT_FOOTER_CTA = { label: 'Abrir meu kit, grátis', href: 'ritual-de-entrada' };
+
+  // credenciais públicas do Supabase (anon/publishable key — protegida por
+  // RLS, seguro deixar no código-fonte, ver claude.md seção 4)
+  var SUPABASE_URL = 'https://pvgeramqsatltnvkkpvf.supabase.co';
+  var SUPABASE_KEY = 'sb_publishable_f5iH4AnwTt1jnwGMWg0qGw_-rd06eGm';
 
   function currentSlug() {
     var last = location.pathname.split('/').pop() || '';
@@ -94,8 +111,27 @@
     return '<a href="' + cta.href + '" class="' + cls + '">' + cta.label + '</a>';
   }
 
+  function buildAuthBlock() {
+    return (
+      '<div class="nav-auth" id="navAuth">\n' +
+      '      <button type="button" class="btn btn-ghost mono" id="navAuthToggle" aria-expanded="false">Entrar</button>\n' +
+      '      <div class="auth-dropdown" id="navAuthDropdown">\n' +
+      '        <button type="button" class="auth-oauth-btn" id="navBtnGoogle">\n' +
+      '          <svg width="16" height="16" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.67 9c0-.59.1-1.17.28-1.7V4.97H.96A9 9 0 0 0 0 9c0 1.45.35 2.83.96 4.03l2.99-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.97l2.99 2.33C4.66 5.17 6.65 3.58 9 3.58z"/></svg>\n' +
+      '          Continuar com Google\n' +
+      '        </button>\n' +
+      '        <div class="auth-divider">ou com e-mail</div>\n' +
+      '        <div class="field"><input type="email" id="navInpEmail" placeholder="voce@email.com" autocomplete="email"></div>\n' +
+      '        <div class="field"><input type="password" id="navInpSenha" placeholder="senha" autocomplete="current-password"></div>\n' +
+      '        <p id="navAuthError" style="display:none; color:#e0665a; font-size:0.72rem; margin:-2px 0 10px;"></p>\n' +
+      '        <button type="button" class="btn btn-solid mono" id="navBtnEntrar" style="width:100%;">Entrar</button>\n' +
+      '        <p class="auth-dropdown-foot">Ainda não tem kit? <a href="ritual-de-entrada">Criar agora →</a></p>\n' +
+      '      </div>\n' +
+      '    </div>'
+    );
+  }
+
   function buildHeader(activeSlug) {
-    var cta = cfg.headerCta || DEFAULT_HEADER_CTA;
     var groupsHtml = NAV_GROUPS.map(function (group) {
       var linksHtml = group.links
         .map(function (l) {
@@ -114,6 +150,10 @@
       );
     }).join('\n      ');
 
+    // sem override (maioria das páginas) -> dropdown de Entrar/Cadastrar.
+    // com override (dashboard logado, admin) -> CTA simples de sempre.
+    var ctaSlot = cfg.headerCta ? ctaMarkup(cfg.headerCta, 'btn-ghost mono') : buildAuthBlock();
+
     return (
       '<nav class="wrap">\n' +
       '    <a href="index" class="logo">\n' +
@@ -129,7 +169,7 @@
       '    <div class="nav-links" id="nav-links">\n      ' +
       groupsHtml +
       '\n    </div>\n' +
-      '    ' + ctaMarkup(cta, 'btn-ghost mono') + '\n' +
+      '    ' + ctaSlot + '\n' +
       '  <button type="button" class="theme-toggle" id="themeToggle" aria-label="Alternar modo claro/escuro" aria-pressed="false">\n' +
       '      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.4A9 9 0 1 1 11.6 3a7 7 0 0 0 9.4 9.4Z"/></svg>\n' +
       '      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>\n' +
@@ -156,10 +196,85 @@
     );
   }
 
+  // ---- dropdown de Entrar/Cadastrar: interação + login real ----
+  // Carrega o supabase-js sob demanda (a maioria das páginas do site
+  // não precisa dele até alguém clicar em "Entrar") e reaproveita as
+  // mesmas credenciais/chamadas já usadas em ritual-de-entrada.html.
+  var authClientPromise = null;
+  function getAuthClient() {
+    if (authClientPromise) return authClientPromise;
+    authClientPromise = new Promise(function (resolve) {
+      function create() {
+        resolve(window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY));
+      }
+      if (window.supabase) { create(); return; }
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
+      s.onload = create;
+      document.head.appendChild(s);
+    });
+    return authClientPromise;
+  }
+
+  function setupAuthDropdown() {
+    var wrap = document.getElementById('navAuth');
+    if (!wrap) return; // página com CTA override (dashboard logado, admin) — nada a fazer
+
+    var toggle = document.getElementById('navAuthToggle');
+    var errorEl = document.getElementById('navAuthError');
+
+    function showError(msg) {
+      errorEl.textContent = msg;
+      errorEl.style.display = 'block';
+    }
+
+    toggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = wrap.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+    document.addEventListener('click', function (e) {
+      if (!wrap.contains(e.target)) {
+        wrap.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        wrap.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    document.getElementById('navBtnGoogle').addEventListener('click', function () {
+      getAuthClient().then(function (sb) {
+        sb.auth.signInWithOAuth({
+          provider: 'google',
+          // volta pra mesma página depois do login, igual ritual-de-entrada.html
+          options: { redirectTo: window.location.origin + window.location.pathname },
+        });
+      });
+    });
+
+    document.getElementById('navBtnEntrar').addEventListener('click', function () {
+      var email = document.getElementById('navInpEmail').value.trim();
+      var senha = document.getElementById('navInpSenha').value;
+      errorEl.style.display = 'none';
+      if (!email || !senha) { showError('preenche e-mail e senha.'); return; }
+      getAuthClient().then(function (sb) {
+        sb.auth.signInWithPassword({ email: email, password: senha }).then(function (res) {
+          if (res.error) { showError('e-mail ou senha incorretos.'); return; }
+          window.location.href = 'kit';
+        });
+      });
+    });
+  }
+
   var slug = currentSlug();
   var headerEl = document.getElementById('site-header') || document.querySelector('header.site-header');
   if (headerEl) {
     headerEl.innerHTML = buildHeader(slug);
+    setupAuthDropdown();
   }
 
   if (cfg.footer !== false) {

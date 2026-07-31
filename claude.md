@@ -411,6 +411,45 @@ Diferente do resto deste documento (que é território do agente da
 máquina), esta seção é mantida pelo agente de front — registrando aqui
 pra manter os três sincronizados, já que agora commitamos direto.
 
+**Sessão de 31/07 — CTA do header virou dropdown de Entrar/Cadastrar:**
+- **Pedido original desde o começo desta sessão**: tirar o "Abrir meu
+  kit" do menu e trocar por um Entrar/Cadastre-se simples, com Google.
+  Ficou pendente enquanto a unificação de header/footer era resolvida
+  primeiro — implementado agora, direto em `assets/site-chrome.js`, então
+  já vale pra toda página de uma vez (essa é a vantagem de ter
+  centralizado antes).
+- CTA padrão do header deixou de ser um link estático pro
+  `ritual-de-entrada` e virou um dropdown "Entrar": botão Google (OAuth)
+  + e-mail/senha, com "Ainda não tem kit? Criar agora →" apontando pro
+  `ritual-de-entrada` de qualquer forma — cadastro continua sendo lá, o
+  dropdown é só pra quem já tem conta.
+- **Login real, não placeholder**: reaproveitei exatamente as mesmas
+  chamadas/credenciais que `ritual-de-entrada.html` já usa
+  (`sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo:
+  origin + pathname } })` e `sb.auth.signInWithPassword({ email,
+  password })`). O `supabase-js` é carregado sob demanda (só quando
+  alguém clica em "Entrar"), pra não pesar toda página só por causa do
+  dropdown do header.
+- **Overrides continuam funcionando do jeito que já estavam**:
+  `dashboard.html`, `admin-simbolos.html`, `admin-iching.html` — que já
+  setam `window.SITE_CHROME.headerCta` — continuam com o CTA simples de
+  sempre (Registrar experiência / Sair / Admin Símbolos), sem o
+  dropdown. Testado (simulação Node) que o dropdown NÃO aparece nessas
+  três.
+- CSS novo (`.nav-auth`, `.auth-dropdown`, `.auth-oauth-btn`,
+  `.auth-divider`, `.auth-dropdown-foot`) foi pro `assets/style.css`
+  compartilhado, não em `<style>` de página — segue a mesma lógica de
+  fonte única.
+- **Pendência registrada, não resolvida agora**: o dropdown não checa se
+  já existe sessão ativa. Um usuário já logado navegando por qualquer
+  página comum (não-dashboard) ainda vê "Entrar" no lugar de algo tipo
+  "Minha conta"/"Sair". Só `dashboard.html`/`admin-*.html` têm
+  consciência de sessão hoje, cada um checando por conta própria. Trocar
+  isso exigiria `site-chrome.js` checar `getSession()` em toda página
+  (custo de uma chamada assíncrona a mais em toda navegação) — decisão
+  de custo/benefício que prefiro deixar pro time bater o martelo, não
+  implementei sozinho.
+
 **Sessão de 31/07 — header/footer viraram componente único, norma daqui pra frente:**
 - **Motivo:** cada página tinha o `<header class="site-header">` e o
   `<footer class="site-footer">` copiados e colados inline. Auditoria
