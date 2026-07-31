@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
+<script>(function(){try{var t=localStorage.getItem('caosastral-theme');if(t==='light'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches))document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Deriva</title>
@@ -9,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
 <style>
   :root{
     --bg:#0a0908;
@@ -29,52 +31,19 @@
 
   .mono{ font-family:'IBM Plex Mono', monospace; }
 
-  /* ---------- nav, mesmo menu do site, na paleta da Deriva ---------- */
-  nav{
-    position:sticky; top:0; z-index:110;
-    background:rgba(10,9,8,0.94);
-    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
-    border-bottom:1px solid rgba(179,18,23,0.2);
-    padding:.9rem 1.5rem;
-    display:flex; align-items:center; justify-content:space-between;
-  }
-  .nav-logo{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:.82rem; letter-spacing:.08em; text-transform:uppercase;
-    color:var(--sand); text-decoration:none;
-  }
-  .nav-links{
-    display:flex; gap:1.6rem; list-style:none; margin:0; padding:0;
-    overflow-x:auto; white-space:nowrap; scrollbar-width:none;
-  }
-  .nav-links::-webkit-scrollbar{ display:none; }
-  .nav-links li{ flex-shrink:0; }
-  .nav-links a{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:.76rem; letter-spacing:.06em; text-transform:uppercase;
-    color:var(--stone); text-decoration:none; transition:color .2s;
-  }
-  .nav-links a:hover{ color:var(--sand); }
-  .nav-links a.atual{ color:var(--red); }
-  @media (max-width:560px){
-    .nav-logo{ display:none; }
-    .nav-links{ gap:1rem; justify-content:flex-start; }
-    .nav-links .hide-sm{ display:none; }
-  }
-
-  header{
+  .page-header{
     padding:48px 40px 20px;
     display:flex; justify-content:space-between; align-items:flex-end;
     flex-wrap:wrap; gap:16px;
     border-bottom:1px solid rgba(179,18,23,0.15);
   }
-  header .brand{
+  .page-header .brand{
     font-family:'IBM Plex Mono', monospace;
     font-size:11px; letter-spacing:3px; text-transform:uppercase;
     color:var(--stone);
   }
-  header .brand a{ color:var(--stone); text-decoration:none; }
-  header h1{
+  .page-header .brand a{ color:var(--stone); text-decoration:none; }
+  .page-header h1{
     font-family:'Unbounded', sans-serif;
     font-size:clamp(36px, 6vw, 64px);
     font-weight:700;
@@ -82,10 +51,10 @@
     letter-spacing:-0.01em;
     color:var(--sand);
   }
-  header h1 em{
+  .page-header h1 em{
     font-style:italic; color:var(--sand);
   }
-  header .tagline{
+  .page-header .tagline{
     max-width:320px;
     font-size:14px;
     line-height:1.6;
@@ -93,8 +62,8 @@
     text-align:right;
   }
   @media (max-width:700px){
-    header{ flex-direction:column; align-items:flex-start; }
-    header .tagline{ text-align:left; }
+    .page-header{ flex-direction:column; align-items:flex-start; }
+    .page-header .tagline{ text-align:left; }
   }
 
   .intro-line{
@@ -319,17 +288,15 @@
     display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px;
   }
 
-  /* ---------- overlay do portal, visual em tela cheia, sem sair da página ---------- */
-  .portal-overlay{
-    position:fixed; inset:0; z-index:120;
-    background:#000; display:none;
-  }
-  .portal-overlay.open{ display:block; }
-  .portal-overlay iframe{
-    width:100%; height:100%; border:0; display:block;
-  }
-  .portal-back{
-    position:fixed; top:16px; left:16px; z-index:125;
+  /* ---------- editor de camadas, tela cheia, embutido na mesma página ---------- */
+  #editorView{ display:none; position:fixed; inset:0; z-index:60; background:#0a0908; }
+  body.editor-open #editorView{ display:block; }
+  body.editor-open .grid-only{ display:none !important; }
+  #editorView canvas{ position:fixed; inset:0; width:100%; height:100%; display:block; }
+  #rorschachLayer{ pointer-events:none; mix-blend-mode:plus-lighter; display:none; }
+
+  #gridBack{
+    position:fixed; top:16px; left:16px; z-index:65;
     font-family:'IBM Plex Mono', monospace;
     font-size:11px; letter-spacing:1.5px; text-transform:uppercase;
     background:rgba(10,9,8,0.72); border:1px solid rgba(179,18,23,0.4);
@@ -337,7 +304,110 @@
     -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px);
     transition:border-color 0.25s ease, background 0.25s ease;
   }
-  .portal-back:hover{ border-color:var(--red); background:rgba(179,18,23,0.18); }
+  #gridBack:hover{ border-color:var(--red); background:rgba(179,18,23,0.18); }
+
+  #editorToggle{
+    position:fixed; top:18px; right:18px; z-index:66;
+    width:44px; height:44px; border-radius:50%;
+    background:rgba(20,18,17,0.78);
+    border:1px solid rgba(179,18,23,0.6);
+    color:var(--sand); font-size:18px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    letter-spacing:1px; -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px);
+    transition:background 0.2s;
+  }
+  #editorToggle:hover{ background:rgba(179,18,23,0.35); }
+
+  #editorPanel{
+    position:fixed; top:18px; right:74px; z-index:64;
+    width:330px; max-width:calc(100vw - 24px);
+    max-height:calc(100vh - 90px);
+    background:rgba(14,12,12,0.92);
+    border:1px solid rgba(179,18,23,0.4);
+    border-radius:10px;
+    color:var(--paper);
+    -webkit-backdrop-filter:blur(7px); backdrop-filter:blur(7px);
+    box-shadow:0 8px 34px rgba(0,0,0,0.55);
+    transform:translateY(-12px);
+    opacity:0; pointer-events:none;
+    transition:opacity 0.25s ease, transform 0.25s ease;
+    display:flex; flex-direction:column;
+    overflow:hidden;
+    font-family:'IBM Plex Sans', sans-serif;
+  }
+  #editorPanel.open{ opacity:1; transform:translateY(0); pointer-events:auto; }
+  #editorPanel .panel-head{ padding:16px 18px 12px; border-bottom:1px solid rgba(179,18,23,0.25); flex-shrink:0; }
+  #editorPanel .panel-head h2{ font-size:16px; letter-spacing:3px; text-transform:uppercase; color:var(--red); margin:0 0 2px; font-weight:600; }
+  #editorPanel .panel-head .sub{ font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:1.5px; text-transform:uppercase; color:var(--stone); }
+
+  .e-global-row{ padding:12px 18px; border-bottom:1px dashed rgba(179,18,23,0.2); flex-shrink:0; }
+  .e-global-row label{ display:flex; justify-content:space-between; font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:0.5px; text-transform:uppercase; color:var(--stone); margin-bottom:6px; }
+  .e-global-row label .val{ color:var(--sand); }
+  .e-global-row input[type="range"]{ width:100%; accent-color:var(--red); height:3px; }
+  .e-global-actions{ display:flex; gap:8px; margin-top:10px; }
+  .e-global-actions button{
+    flex:1; font-family:'IBM Plex Mono', monospace; font-size:10.5px;
+    letter-spacing:1px; text-transform:uppercase;
+    background:transparent; border:1px solid rgba(179,18,23,0.4);
+    color:var(--sand); padding:8px 6px; cursor:pointer; border-radius:5px;
+  }
+  .e-global-actions button:hover{ background:rgba(179,18,23,0.18); }
+  .e-audio-react{ display:flex; align-items:center; gap:10px; margin-top:10px; }
+  .e-audio-react .mini-toggle{
+    font-family:'IBM Plex Mono', monospace; font-size:10px;
+    color:var(--stone); border:1px solid rgba(179,18,23,0.35);
+    padding:5px 10px; cursor:pointer; border-radius:4px;
+  }
+  .e-audio-react .mini-toggle.active{ border-color:var(--red); color:var(--sand); background:rgba(179,18,23,0.15); }
+  .e-audio-react span{ font-family:'IBM Plex Mono', monospace; font-size:9.5px; color:var(--stone); }
+
+  .e-tabs{ display:flex; flex-wrap:wrap; gap:5px; padding:11px 14px; border-bottom:1px solid rgba(179,18,23,0.25); flex-shrink:0; }
+  .e-tab-btn{
+    position:relative; font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:0.4px;
+    padding:6px 9px 6px 16px; cursor:pointer; user-select:none;
+    border:1px solid rgba(179,18,23,0.25); border-radius:5px;
+    color:var(--stone); background:rgba(255,255,255,0.02);
+  }
+  .e-tab-btn.selected{ color:var(--sand); border-color:rgba(179,18,23,0.7); background:rgba(179,18,23,0.12); }
+  .e-tab-btn .dot{ position:absolute; left:6px; top:50%; transform:translateY(-50%); width:6px; height:6px; border-radius:50%; background:rgba(140,125,111,0.35); }
+  .e-tab-btn.active .dot{ background:#e0102a; box-shadow:0 0 5px rgba(224,16,42,0.9); }
+
+  .e-tab-body{ padding:14px 18px 20px; overflow-y:auto; flex:1; }
+  .e-layer-toggle-row{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid rgba(179,18,23,0.2); }
+  .e-layer-toggle-row .name{ font-size:16px; font-style:italic; color:var(--sand); }
+  .e-layer-switch{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:1px; text-transform:uppercase;
+    border:1px solid rgba(179,18,23,0.45); color:var(--stone);
+    padding:6px 12px; cursor:pointer; border-radius:5px; background:transparent;
+  }
+  .e-layer-switch.on{ background:var(--red); border-color:var(--red); color:#0a0908; }
+
+  .e-row{ margin-bottom:12px; }
+  .e-row label{ display:flex; justify-content:space-between; font-size:12.5px; letter-spacing:0.3px; margin-bottom:5px; color:#a89a8c; }
+  .e-row label span.val{ color:var(--sand); font-family:'IBM Plex Mono', monospace; font-size:11px; }
+  .e-row input[type="range"]{ width:100%; accent-color:var(--red); height:3px; }
+  .e-row select{
+    width:100%; background:rgba(30,26,26,0.9); color:var(--paper);
+    border:1px solid rgba(179,18,23,0.4); border-radius:5px;
+    padding:6px 8px; font-size:13px; font-family:inherit;
+  }
+  .e-row h3{ font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--stone); margin:2px 0 8px; }
+  .e-toggles{ display:flex; flex-wrap:wrap; gap:6px; margin-top:4px; }
+  .e-toggles.two-col .e-mini-btn{ flex:1 1 calc(50% - 4px); }
+  .e-toggles.three-col .e-mini-btn{ flex:1 1 calc(33.333% - 5px); }
+  .e-mini-btn{
+    flex:1 1 auto; text-align:center; padding:7px 4px;
+    font-size:11px; border:1px solid rgba(179,18,23,0.35); border-radius:5px;
+    background:rgba(30,26,26,0.6); color:#a89a8c; cursor:pointer;
+    letter-spacing:0.3px; user-select:none; font-family:'IBM Plex Mono', monospace;
+  }
+  .e-mini-btn.active{ background:rgba(179,18,23,0.55); color:#f2e6dc; border-color:var(--red); }
+  #editorPanel::-webkit-scrollbar, .e-tab-body::-webkit-scrollbar{ width:6px; }
+  #editorPanel::-webkit-scrollbar-thumb, .e-tab-body::-webkit-scrollbar-thumb{ background:rgba(179,18,23,0.4); border-radius:3px; }
+  @media (max-width:640px){
+    #editorPanel{ right:12px; top:70px; width:calc(100vw - 24px); }
+    #editorToggle{ top:18px; right:14px; }
+  }
   .preset-btn{
     font-family:'IBM Plex Mono', monospace;
     font-size:10.5px; letter-spacing:0.5px;
@@ -446,26 +516,50 @@
   <canvas id="space-canvas"></canvas>
 </div>
 
-<nav>
-  <a href="index" class="nav-logo"><svg class="star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:6px;"><path d="M12 1 L13.6 9.5 L22 8 L15.2 13.2 L20 21 L12 16.4 L4 21 L8.8 13.2 L2 8 L10.4 9.5 Z"/></svg>Caos Astral</a>
-  <ul class="nav-links">
-    <li><a href="kit">O Kit</a></li>
-    <li><a href="retorno">Retorno</a></li>
-    <li><a href="ressonancia">O Terceiro</a></li>
-    <li><a href="ancora">Âncora</a></li>
-    <li><a href="deriva" class="atual">Deriva</a></li>
-    <li><a href="oraculo">Oráculo</a></li>
-    <li><a href="diario">Diário</a></li>
-    <li><a href="raizes">Raízes</a></li>
-    <li><a href="enciclopedia">Enciclopédia</a></li>
-    <li><a href="blog">Blog</a></li>
-    <li><a href="manifesto">Manifesto</a></li>
-    <li><a href="intento">Intento</a></li>
-    <li><a href="planos">Planos</a></li>
-  </ul>
-</nav>
+<header class="site-header grid-only"><nav class="wrap">
+  <a href="index" class="logo"><svg class="star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 1 L13.6 9.5 L22 8 L15.2 13.2 L20 21 L12 16.4 L4 21 L8.8 13.2 L2 8 L10.4 9.5 Z"/></svg>Caos Astral</a>
+  <button type="button" class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
+    <svg class="icon-burger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
+  </button>
+  <div class="nav-links" id="nav-links">
+    <div class="nav-group">
+      <button type="button" class="nav-group-toggle" aria-haspopup="true" aria-expanded="false">Ferramentas <svg class="caret" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 1l4 4 4-4"/></svg></button>
+      <div class="nav-dropdown">
+        <a href="kit">O Kit</a>
+        <a href="retorno">Retorno</a>
+        <a href="ressonancia">O Terceiro</a>
+        <a href="ancora">Âncora</a>
+        <a href="deriva" class="active">Deriva</a>
+        <a href="oraculo">Oráculo</a>
+        <a href="diario">Diário</a>
+      </div>
+    </div>
+    <div class="nav-group">
+      <button type="button" class="nav-group-toggle" aria-haspopup="true" aria-expanded="false">Saber <svg class="caret" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 1l4 4 4-4"/></svg></button>
+      <div class="nav-dropdown">
+        <a href="raizes">Raízes</a>
+        <a href="enciclopedia">Enciclopédia</a>
+        <a href="blog">Blog</a>
+      </div>
+    </div>
+    <div class="nav-group">
+      <button type="button" class="nav-group-toggle" aria-haspopup="true" aria-expanded="false">Sobre <svg class="caret" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 1l4 4 4-4"/></svg></button>
+      <div class="nav-dropdown">
+        <a href="manifesto">Manifesto</a>
+        <a href="intento">Intento</a>
+        <a href="planos">Planos</a>
+      </div>
+    </div>
+  </div>
+  <a href="ritual-de-entrada" class="btn btn-ghost mono">Abrir meu kit</a>
+  <button type="button" class="theme-toggle" id="themeToggle" aria-label="Alternar modo claro/escuro" aria-pressed="false">
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.4A9 9 0 1 1 11.6 3a7 7 0 0 0 9.4 9.4Z"/></svg>
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+  </button>
+</nav></header>
 
-<header>
+<div class="page-header grid-only">
   <div>
     <div class="brand"><a href="index">Caos Astral</a></div>
     <h1>Der<em>i</em>va</h1>
@@ -474,13 +568,13 @@
     Esta página não tem começo nem fim.<br>
     Entre por qualquer janela e fique o tempo que quiser.
   </div>
-</header>
+</div>
 
-<div class="intro-line">Nenhuma dessas telas quer nada de você.</div>
+<div class="intro-line grid-only">Nenhuma dessas telas quer nada de você.</div>
 
-<div class="portals">
+<div class="portals grid-only">
 
-  <a class="portal" id="p-rorschach" href="aura_flow?layer=rorschach">
+  <a class="portal" id="p-rorschach" href="#" data-layer="rorschach">
     <canvas id="c-rorschach"></canvas>
     <div class="veil"></div>
     <div class="label">
@@ -489,7 +583,7 @@
     </div>
   </a>
 
-  <a class="portal" id="p-stars" href="aura_flow?layer=stars">
+  <a class="portal" id="p-stars" href="#" data-layer="stars">
     <canvas id="c-stars"></canvas>
     <div class="veil"></div>
     <div class="label">
@@ -498,7 +592,7 @@
     </div>
   </a>
 
-  <a class="portal" id="p-wormhole" href="aura_flow?layer=wormhole">
+  <a class="portal" id="p-wormhole" href="#" data-layer="wormhole">
     <canvas id="c-wormhole"></canvas>
     <div class="veil"></div>
     <div class="label">
@@ -507,7 +601,7 @@
     </div>
   </a>
 
-  <a class="portal" id="p-plasma" href="aura_flow?layer=plasma">
+  <a class="portal" id="p-plasma" href="#" data-layer="plasma">
     <canvas id="c-plasma"></canvas>
     <div class="veil"></div>
     <div class="label">
@@ -516,7 +610,7 @@
     </div>
   </a>
 
-  <a class="portal" id="p-mandala" href="aura_flow?layer=mandala">
+  <a class="portal" id="p-mandala" href="#" data-layer="mandala">
     <canvas id="c-mandala"></canvas>
     <div class="veil"></div>
     <div class="label">
@@ -525,7 +619,7 @@
     </div>
   </a>
 
-  <a class="portal" id="p-vortice" href="aura_flow?layer=vortice">
+  <a class="portal" id="p-vortice" href="#" data-layer="vortice">
     <canvas id="c-vortice"></canvas>
     <div class="veil"></div>
     <div class="label">
@@ -534,7 +628,7 @@
     </div>
   </a>
 
-  <a class="portal" id="p-cimatica" href="aura_flow?layer=cimatica">
+  <a class="portal" id="p-cimatica" href="#" data-layer="cimatica">
     <canvas id="c-cimatica"></canvas>
     <div class="veil"></div>
     <div class="label">
@@ -543,7 +637,7 @@
     </div>
   </a>
 
-  <a class="portal" id="p-fumaca" href="aura_flow?layer=fumaca">
+  <a class="portal" id="p-fumaca" href="#" data-layer="fumaca">
     <canvas id="c-fumaca"></canvas>
     <div class="veil"></div>
     <div class="label">
@@ -552,7 +646,7 @@
     </div>
   </a>
 
-  <a class="portal" id="p-geometria" href="aura_flow?layer=geometria">
+  <a class="portal" id="p-geometria" href="#" data-layer="geometria">
     <canvas id="c-geometria"></canvas>
     <div class="veil"></div>
     <div class="label">
@@ -561,7 +655,7 @@
     </div>
   </a>
 
-  <a class="portal" id="p-constelacao" href="aura_flow?layer=constelacao">
+  <a class="portal" id="p-constelacao" href="#" data-layer="constelacao">
     <canvas id="c-constelacao"></canvas>
     <div class="veil"></div>
     <div class="label">
@@ -570,7 +664,7 @@
     </div>
   </a>
 
-  <a class="portal" id="p-olho" href="aura_flow?layer=olho">
+  <a class="portal" id="p-olho" href="#" data-layer="olho">
     <canvas id="c-olho"></canvas>
     <div class="veil"></div>
     <div class="label">
@@ -579,7 +673,7 @@
     </div>
   </a>
 
-  <a class="portal" id="p-batimento" href="aura_flow?layer=batimento">
+  <a class="portal" id="p-batimento" href="#" data-layer="batimento">
     <canvas id="c-batimento"></canvas>
     <div class="veil"></div>
     <div class="label">
@@ -591,9 +685,31 @@
 </div>
 
 <!-- ---------- visual do portal aberto em overlay, sem sair da página ---------- -->
-<div class="portal-overlay" id="portalOverlay">
-  <button class="portal-back" id="portalBack">← voltar</button>
-  <iframe id="portalFrame" src="" title="Portal visual" allow="autoplay"></iframe>
+<!-- ---------- editor de camadas, embutido na própria página ---------- -->
+<div id="editorView">
+  <canvas id="c"></canvas>
+  <canvas id="rorschachLayer"></canvas>
+  <button id="gridBack">← voltar à grade</button>
+  <div id="editorToggle">☰</div>
+  <div id="editorPanel">
+    <div class="panel-head">
+      <h2>Deriva</h2>
+      <div class="sub">misture quantas camadas quiser</div>
+    </div>
+    <div class="e-global-row">
+      <label>Persistência (rastro) <span class="val mono" id="gTrailVal">70%</span></label>
+      <input type="range" id="gTrail" min="0" max="95" value="70" step="5">
+      <div class="e-audio-react">
+        <div class="mini-toggle active" id="audioReactToggle">reagir ao som: ligado</div>
+      </div>
+      <div class="e-global-actions">
+        <button id="gClear">Limpar camadas</button>
+        <button id="gRandom">Combinação aleatória</button>
+      </div>
+    </div>
+    <div class="e-tabs" id="eTabs"></div>
+    <div class="e-tab-body" id="eTabBody"></div>
+  </div>
 </div>
 
 <div class="audio-bar" id="audioBar">
@@ -774,7 +890,7 @@
   </div>
 </div>
 
-<footer>
+<footer class="grid-only">
   <p>
     Estudo visual e sonoro.<br>
     Um lugar pra desconectar da tela que só quer sua atenção, dentro da tela.
@@ -1567,6 +1683,9 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   previewControls.push({ pause(){ active = false; }, resume(){ if (!active) { active = true; requestAnimationFrame(frame); } } });
 })();
 
+// ---------- ponte entre o motor de áudio e os efeitos visuais (pra reagir ao som) ----------
+const AudioBridge = { ctx: null, analyser: null, data: null };
+
 // ---------- motor de áudio: binaural + pulso isocrônico + textura (contraponto) ----------
 (function(){
   let ctx = null;
@@ -1574,6 +1693,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   let pulseLFO, pulseGain, pulseOffset; // amplitude modulation pra pulso isocrônico
   let noiseSource, noiseFilter, filterLFO, filterLFOGain, textureGain; // camada de textura (contraponto)
   let tremoloLFO, tremoloOffset, tremoloGain; // "batida" própria de algumas texturas (chocalho, tambor)
+  let masterBus, analyser; // barramento comum + analisador, usado pelos efeitos visuais reativos ao som
   let icaroVoices = []; // até 3 vozes simultâneas, cada uma com seu par de osciladores + formantes + ganho próprio
   let icaroVibratoLFO, icaroVibratoGain, icaroMasterMix, icaroPulseLFO, icaroPulseOffset, icaroPulseGain, icaroGain; // vocalização tipo ícaro
   let aumCycleTimers = [null, null, null];
@@ -1642,6 +1762,19 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   function buildGraph(){
     ctx = new (window.AudioContext || window.webkitAudioContext)();
 
+    // barramento comum: tudo passa por aqui antes da saída, e um analisador
+    // escuta esse mesmo ponto pra alimentar os efeitos visuais reativos ao som
+    masterBus = ctx.createGain();
+    masterBus.gain.value = 1;
+    analyser = ctx.createAnalyser();
+    analyser.fftSize = 256;
+    analyser.smoothingTimeConstant = 0.6;
+    masterBus.connect(ctx.destination);
+    masterBus.connect(analyser);
+    AudioBridge.ctx = ctx;
+    AudioBridge.analyser = analyser;
+    AudioBridge.data = new Uint8Array(analyser.frequencyBinCount);
+
     oscL = ctx.createOscillator();
     oscR = ctx.createOscillator();
     panL = ctx.createStereoPanner(); panL.pan.value = -1;
@@ -1671,7 +1804,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
 
     oscL.connect(panL).connect(pulseGain);
     oscR.connect(panR).connect(pulseGain);
-    pulseGain.connect(masterGain).connect(ctx.destination);
+    pulseGain.connect(masterGain).connect(masterBus);
 
     oscL.start();
     oscR.start();
@@ -1711,7 +1844,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
 
     filterLFO.connect(filterLFOGain);
     filterLFOGain.connect(noiseFilter.frequency);
-    noiseSource.connect(noiseFilter).connect(tremoloGain).connect(textureGain).connect(ctx.destination);
+    noiseSource.connect(noiseFilter).connect(tremoloGain).connect(textureGain).connect(masterBus);
 
     applyTextureParams(state.textureType);
 
@@ -1776,7 +1909,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
 
     icaroGain = ctx.createGain();
     icaroGain.gain.value = 0; // aplicado por applyIcaroOn logo abaixo
-    icaroMasterMix.connect(icaroPulseGain).connect(icaroGain).connect(ctx.destination);
+    icaroMasterMix.connect(icaroPulseGain).connect(icaroGain).connect(masterBus);
 
     applyAllIcaroVowels();
     applyIcaroVoiceCount(state.icaroVoiceCount);
@@ -1943,6 +2076,7 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
     icaroVoices = [];
     ctx.close();
     ctx = null; running = false;
+    AudioBridge.ctx = null; AudioBridge.analyser = null; AudioBridge.data = null;
   }
 
   powerBtn.addEventListener('click', () => {
@@ -2198,51 +2332,1176 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   });
 })();
 
-// ---------- portais: abrem o visual em tela cheia sem sair da página ----------
-// assim o som (controlado pela barra fixa) continua tocando enquanto o visual roda
+// ============================================================
+// EDITOR DE CAMADAS — todas as 12 camadas, abas, mistura livre,
+// reação ao áudio (via AudioBridge) e ao mouse (desligado por padrão)
+// ============================================================
 (function(){
-  const overlay = document.getElementById('portalOverlay');
-  const frame   = document.getElementById('portalFrame');
-  const backBtn = document.getElementById('portalBack');
 
-  function openPortal(url){
-    if (!url) return;
-    frame.src = url;
-    overlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-    previewControls.forEach(p => p.pause()); // libera CPU/GPU pro visual em tela cheia
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+  const dim = { w: 0, h: 0 };
+
+  function resizeMain(){
+    const dpr = window.devicePixelRatio || 1;
+    dim.w = window.innerWidth;
+    dim.h = window.innerHeight;
+    canvas.width = Math.round(dim.w * dpr);
+    canvas.height = Math.round(dim.h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
-  function closePortal(){
-    overlay.classList.remove('open');
-    frame.src = '';
-    document.body.style.overflow = '';
+  resizeMain();
+  window.addEventListener('resize', resizeMain);
+
+  let editorVisible = false;
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) previewControls.forEach(p => p.pause());
+    else if (!document.body.classList.contains('editor-open')) previewControls.forEach(p => p.resume());
+  });
+
+  // mouse global (usado só pelas camadas que tiverem "guiar com o mouse"/"reação ao mouse" ligados manualmente)
+  const mouse = { x: -9999, y: -9999 };
+  window.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
+  window.addEventListener('mouseleave', () => { mouse.x = -9999; mouse.y = -9999; });
+  window.addEventListener('touchmove', (e) => {
+    const t = e.touches[0];
+    if (t) { mouse.x = t.clientX; mouse.y = t.clientY; }
+  }, { passive: true });
+  let rorschachBurst = 0;
+  window.addEventListener('click', () => { rorschachBurst = 1; });
+
+  // ---- nível de áudio (0..1), lido do AudioBridge quando o som está ligado ----
+  let audioReactOn = true;
+  let audioSmoothed = 0;
+  function readAudioLevel(){
+    if (!AudioBridge.ctx || !AudioBridge.analyser) return 0;
+    AudioBridge.analyser.getByteTimeDomainData(AudioBridge.data);
+    let sum = 0;
+    for (let i=0;i<AudioBridge.data.length;i++){ const v=(AudioBridge.data[i]-128)/128; sum += v*v; }
+    const rms = Math.sqrt(sum/AudioBridge.data.length);
+    return Math.min(1, rms*4.5);
+  }
+  function audioMult(){
+    if (!audioReactOn) return 1;
+    return 1 + audioSmoothed*0.9;
+  }
+
+  // ============================================================
+  // paletas compartilhadas (estrelas / wormhole / plasma / mandala)
+  // ============================================================
+  const PALETTES = {
+    classic:    () => `rgba(255,255,255,`,
+    warp:       () => `rgba(${200 + Math.floor(Math.random()*55)},${10 + Math.floor(Math.random()*40)},${10 + Math.floor(Math.random()*30)},`,
+    ice:        () => `rgba(${140 + Math.floor(Math.random()*40)},${190 + Math.floor(Math.random()*40)},255,`,
+    matrix:     () => `rgba(${20 + Math.floor(Math.random()*40)},${200 + Math.floor(Math.random()*55)},${60 + Math.floor(Math.random()*40)},`,
+    multicolor: () => {
+      const hues = ['255,80,80', '90,180,255', '255,220,90', '140,255,140', '210,120,255'];
+      return `rgba(${hues[Math.floor(Math.random()*hues.length)]},`;
+    }
+  };
+  const HUE_BASE = {
+    classic:    { hue: 0,   sat: 0,  cycling: false },
+    warp:       { hue: 355, sat: 82, cycling: false },
+    ice:        { hue: 200, sat: 70, cycling: false },
+    matrix:     { hue: 130, sat: 75, cycling: false },
+    multicolor: { hue: 0,   sat: 70, cycling: true  }
+  };
+  function hslToRgb(h, s, l){
+    h = ((h % 360) + 360) % 360; s /= 100; l /= 100;
+    const c = (1 - Math.abs(2*l - 1)) * s, x = c * (1 - Math.abs((h/60) % 2 - 1)), m = l - c/2;
+    let r=0, g=0, b=0;
+    if (h<60){r=c;g=x;b=0;} else if(h<120){r=x;g=c;b=0;} else if(h<180){r=0;g=c;b=x;}
+    else if(h<240){r=0;g=x;b=c;} else if(h<300){r=x;g=0;b=c;} else {r=c;g=0;b=x;}
+    return [Math.round((r+m)*255), Math.round((g+m)*255), Math.round((b+m)*255)];
+  }
+  const PALETTE_OPTIONS = [
+    ['classic','Branco clássico'], ['warp','Vermelho warp'], ['ice','Azul gelo'],
+    ['matrix','Verde matrix'], ['multicolor','Multicor']
+  ];
+  const ROR_PALETTES = {
+    blood:     ['#b31217', '#8f0e14', '#a3121a', '#c81a1a', '#961014'],
+    red:       ['#ff1f1f', '#e0102a', '#ff3d1f', '#c8081f'],
+    mono:      ['#ffffff', '#e8e8e8', '#f5f5f5', '#dcdcdc'],
+    ink:       ['#1a3fb3', '#122a8f', '#1a4fc8', '#0e2196'],
+    verdigris: ['#1f8f5a', '#146b45', '#22b36e', '#0e5c3a']
+  };
+  const SIDES = { triangle: 3, square: 4, pentagon: 5, hexagon: 6 };
+  function hexToRgb(hex){
+    const v = hex.replace('#', '');
+    return { r: parseInt(v.substring(0,2),16), g: parseInt(v.substring(2,4),16), b: parseInt(v.substring(4,6),16) };
+  }
+  function shade(hex, amt){
+    const { r, g, b } = hexToRgb(hex);
+    const f = (c) => Math.max(0, Math.min(255, Math.round(c + amt)));
+    return `rgb(${f(r)}, ${f(g)}, ${f(b)})`;
+  }
+
+  // ============================================================
+  // definição das 12 camadas
+  // ============================================================
+  const LAYERS = {};
+  const ORDER = ['rorschach','stars','wormhole','plasma','mandala','vortice','cimatica','fumaca','geometria','constelacao','olho','batimento'];
+  const LABELS = {
+    rorschach:'Rorschach', stars:'Estrelas', wormhole:'Wormhole', plasma:'Plasma',
+    mandala:'Mandala', vortice:'Vórtice', cimatica:'Cimática', fumaca:'Fumaça',
+    geometria:'Geometria', constelacao:'Constelação', olho:'Olho', batimento:'Batimento'
+  };
+
+  // ---------------- RORSCHACH (canvas próprio + filtro CSS) ----------------
+  (function(){
+    const rc = document.getElementById('rorschachLayer');
+    const rctx = rc.getContext('2d');
+    function resizeR(){ rc.width = window.innerWidth; rc.height = window.innerHeight; }
+    resizeR();
+    window.addEventListener('resize', resizeR);
+
+    const cfg = {
+      palette: 'blood', count: 42, shapes: new Set(['circle','diamond']),
+      blur: 13, brightness: 95, speed: 100, gap: 0,
+      bevel: true, bevelAmt: 55, glow: 18, shadow: 10, reactive: false
+    };
+    let blobs = [];
+    function pickShape(){
+      const arr = Array.from(cfg.shapes);
+      return arr[Math.floor(Math.random()*arr.length)] || 'circle';
+    }
+    function buildBlobs(){
+      blobs = [];
+      const colors = ROR_PALETTES[cfg.palette];
+      for (let i=0;i<cfg.count;i++){
+        const small = Math.random() < 0.55;
+        blobs.push({
+          fx: 0.15+Math.random()*0.3, fy: 0.12+Math.random()*0.35,
+          px: Math.random()*Math.PI*2, py: Math.random()*Math.PI*2,
+          baseX: 0.22+Math.random()*0.32, baseY: 0.15+Math.random()*0.7,
+          ampX: 0.05+Math.random()*0.1, ampY: 0.08+Math.random()*0.18,
+          r: small ? (10+Math.random()*22) : (40+Math.random()*80),
+          rPhase: Math.random()*Math.PI*2, rFreq: 0.05+Math.random()*0.12,
+          rot: Math.random()*Math.PI, rotSpeed: (Math.random()-0.5)*0.01,
+          shape: pickShape(), color: colors[Math.floor(Math.random()*colors.length)],
+          ox:0, oy:0, vx:0, vy:0
+        });
+      }
+    }
+    function applyFilter(){
+      const glowPart = cfg.glow > 0 ? ` drop-shadow(0 0 ${cfg.glow}px rgba(179,18,23,0.85))` : '';
+      const shadowPart = cfg.shadow > 0 ? ` drop-shadow(${cfg.shadow*0.4}px ${cfg.shadow*0.6}px ${cfg.shadow*0.5}px rgba(0,0,0,0.8))` : '';
+      rc.style.filter = `blur(${cfg.blur}px) contrast(30) brightness(${cfg.brightness/100})` + glowPart + shadowPart;
+    }
+    function shapePath(r, shape){
+      if (shape === 'diamond'){
+        rctx.moveTo(0,-r); rctx.lineTo(r*0.75,0); rctx.lineTo(0,r); rctx.lineTo(-r*0.75,0); rctx.closePath();
+      } else if (shape === 'star'){
+        const spikes=5, outerR=r, innerR=r*0.48;
+        for (let i=0;i<spikes*2;i++){
+          const rad = i%2===0 ? outerR : innerR;
+          const ang = (Math.PI/spikes)*i - Math.PI/2;
+          const px = Math.cos(ang)*rad, py = Math.sin(ang)*rad;
+          if (i===0) rctx.moveTo(px,py); else rctx.lineTo(px,py);
+        }
+        rctx.closePath();
+      } else if (SIDES[shape]){
+        const sides = SIDES[shape];
+        for (let i=0;i<sides;i++){
+          const ang = (Math.PI*2/sides)*i - Math.PI/2;
+          const px = Math.cos(ang)*r, py = Math.sin(ang)*r;
+          if (i===0) rctx.moveTo(px,py); else rctx.lineTo(px,py);
+        }
+        rctx.closePath();
+      } else {
+        rctx.arc(0,0,r,0,Math.PI*2);
+      }
+    }
+    function drawShape(cx,cy,r,shape,rot,color){
+      rctx.save();
+      rctx.translate(cx,cy);
+      rctx.rotate(rot);
+      rctx.beginPath();
+      shapePath(r, shape);
+      if (cfg.bevel){
+        const amt = cfg.bevelAmt/100;
+        const light = shade(color, 130*amt), dark = shade(color, -70*amt);
+        const grad = rctx.createRadialGradient(-r*0.35,-r*0.35,r*0.05, 0,0,r*1.15);
+        grad.addColorStop(0, light); grad.addColorStop(0.55, color); grad.addColorStop(1, dark);
+        rctx.fillStyle = grad;
+      } else {
+        rctx.fillStyle = color;
+      }
+      rctx.fill();
+      rctx.restore();
+    }
+    let t = 0;
+    function draw(){
+      const w = rc.width, h = rc.height, midX = w/2;
+      const speedFactor = (cfg.speed/100) * audioMult();
+      rctx.fillStyle = '#000';
+      rctx.fillRect(0,0,w,h);
+      const influence = 220 + rorschachBurst*150;
+      const strength = 0.9 + rorschachBurst*3.5;
+      for (const b of blobs){
+        const baseX = midX*(b.baseX + b.ampX*Math.sin(t*b.fx + b.px));
+        const baseY = h*(b.baseY + b.ampY*Math.cos(t*b.fy + b.py));
+        const r = b.r + 20*Math.sin(t*b.rFreq + b.rPhase);
+        const mx = mouse.x > midX ? (w - mouse.x) : mouse.x;
+        const dx = baseX - mx, dy = baseY - mouse.y;
+        const dist = Math.sqrt(dx*dx+dy*dy) || 1;
+        if (cfg.reactive && dist < influence){
+          const force = ((influence-dist)/influence)*strength;
+          b.vx += (dx/dist)*force; b.vy += (dy/dist)*force;
+        }
+        b.vx *= 0.9; b.vy *= 0.9;
+        b.ox = (b.ox+b.vx)*0.94; b.oy = (b.oy+b.vy)*0.94;
+        const x = baseX + b.ox, y = baseY + b.oy;
+        b.rot += b.rotSpeed*speedFactor;
+        const offsetPx = (cfg.gap/100)*midX;
+        const distFromCenter = midX - x;
+        const newDist = distFromCenter + offsetPx;
+        const leftX = midX - newDist, rightX = midX + newDist;
+        drawShape(leftX, y, Math.max(r,5), b.shape, b.rot, b.color);
+        drawShape(rightX, y, Math.max(r,5), b.shape, -b.rot, b.color);
+      }
+      rorschachBurst *= 0.85;
+      t += 0.012*speedFactor;
+    }
+    buildBlobs();
+    applyFilter();
+
+    LAYERS.rorschach = {
+      ownCanvas: true,
+      cfg,
+      setActive(on){ rc.style.display = on ? 'block' : 'none'; },
+      tick(){ draw(); },
+      controls: [
+        { type:'select', key:'palette', label:'Paleta', options:[['blood','Sangue / vinho'],['red','Vermelho vivo'],['mono','Preto e branco'],['ink','Tinta azul'],['verdigris','Verde óxido']],
+          onChange(v){ cfg.palette=v; const colors=ROR_PALETTES[v]; for(const b of blobs) b.color = colors[Math.floor(Math.random()*colors.length)]; } },
+        { type:'multitoggle', key:'shapes', label:'Formas no mix', cols:3,
+          options:[['circle','Círculo'],['diamond','Losango'],['triangle','Triângulo'],['square','Quadrado'],['pentagon','Pentágono'],['hexagon','Hexágono'],['star','Estrela']],
+          onChange(){ for(const b of blobs) b.shape = pickShape(); } },
+        { type:'range', key:'count', label:'Quantidade', min:8, max:80, step:1, fmt:v=>v, default:42,
+          onChange(v){ cfg.count=v; buildBlobs(); } },
+        { type:'range', key:'blur', label:'Fusão (blur)', min:4, max:26, step:1, fmt:v=>v, default:13,
+          onChange(v){ cfg.blur=v; applyFilter(); } },
+        { type:'range', key:'brightness', label:'Escuridão', min:60, max:115, step:1, fmt:v=>v+'%', default:95,
+          onChange(v){ cfg.brightness=v; applyFilter(); } },
+        { type:'range', key:'speed', label:'Velocidade', min:20, max:220, step:5, fmt:v=>(v/100).toFixed(1)+'x', default:100,
+          onChange(v){ cfg.speed=v; } },
+        { type:'range', key:'gap', label:'Espaçamento das metades', min:-100, max:100, step:2, fmt:v=>v, default:0,
+          onChange(v){ cfg.gap=v; } },
+        { type:'h3', label:'Relevo e luz' },
+        { type:'toggle2', key:'bevel', label:'Relevo (bevel/emboss)', on:'Ligado', off:'Desligado', default:true,
+          onChange(v){ cfg.bevel=v; } },
+        { type:'range', key:'bevelAmt', label:'Intensidade do relevo', min:0, max:100, step:5, fmt:v=>v+'%', default:55,
+          onChange(v){ cfg.bevelAmt=v; } },
+        { type:'range', key:'glow', label:'Brilho externo (glow)', min:0, max:60, step:2, fmt:v=>v, default:18,
+          onChange(v){ cfg.glow=v; applyFilter(); } },
+        { type:'range', key:'shadow', label:'Sombra projetada', min:0, max:40, step:2, fmt:v=>v, default:10,
+          onChange(v){ cfg.shadow=v; applyFilter(); } },
+        { type:'toggle2', key:'reactive', label:'Reação ao mouse', on:'Ligada', off:'Desligada', default:false,
+          onChange(v){ cfg.reactive=v; } },
+        { type:'button', label:'Gerar nova mancha', onClick(){ buildBlobs(); } }
+      ]
+    };
+  })();
+
+  // ---------------- ESTRELAS ----------------
+  (function(){
+    const cfg = { palette:'classic', count:550, speed:3.0, size:1.0, direction:1, steer:false };
+    let stars = [];
+    const state = { centerX:0, centerY:0 };
+    function md(){ return Math.max(dim.w, dim.h); }
+    function resetStar(s){
+      const m = md();
+      s.x = (Math.random()*2-1)*dim.w; s.y = (Math.random()*2-1)*dim.h;
+      s.z = m*1.2; s.prevZ = s.z; s.colorFn = PALETTES[cfg.palette]();
+    }
+    function build(){
+      stars = [];
+      const m = md();
+      for (let i=0;i<cfg.count;i++){
+        const s = { x:(Math.random()*2-1)*dim.w, y:(Math.random()*2-1)*dim.h, z:Math.random()*m*1.2+1, prevZ:0, colorFn:PALETTES[cfg.palette]() };
+        s.prevZ = s.z; stars.push(s);
+      }
+    }
+    build();
+    window.addEventListener('resize', build);
+
+    function draw(){
+      const w=dim.w, h=dim.h;
+      if (state.centerX === 0 && state.centerY === 0){ state.centerX=w/2; state.centerY=h/2; }
+      const targetX = (cfg.steer && mouse.x>-9000) ? mouse.x : w/2;
+      const targetY = (cfg.steer && mouse.y>-9000) ? mouse.y : h/2;
+      state.centerX += (targetX - state.centerX)*0.04;
+      state.centerY += (targetY - state.centerY)*0.04;
+      const cx = state.centerX, cy = state.centerY;
+      const am = audioMult();
+      const sp = cfg.speed*(w/900);
+      const focal = Math.min(w,h)*0.5;
+      const m = md();
+      for (const s of stars){
+        s.prevZ = s.z;
+        s.z -= sp*cfg.direction;
+        if (s.z<=1 || s.z>m*1.3){ resetStar(s); continue; }
+        const k = focal/s.z;
+        const px = cx+s.x*k, py = cy+s.y*k;
+        const kPrev = focal/s.prevZ;
+        const ppx = cx+s.x*kPrev, ppy = cy+s.y*kPrev;
+        const proximity = 1 - Math.min(s.z/m,1);
+        const size = Math.max(0.4, proximity*3.2*cfg.size*am);
+        const alpha = Math.min(1, 0.15+proximity*1.1);
+        ctx.strokeStyle = s.colorFn+alpha+')';
+        ctx.lineWidth = size;
+        ctx.beginPath(); ctx.moveTo(ppx,ppy); ctx.lineTo(px,py); ctx.stroke();
+      }
+    }
+    LAYERS.stars = {
+      cfg, draw, build,
+      controls: [
+        { type:'select', key:'palette', label:'Paleta', options:PALETTE_OPTIONS,
+          onChange(v){ cfg.palette=v; for(const s of stars) s.colorFn = PALETTES[v](); } },
+        { type:'range', key:'count', label:'Quantidade', min:100, max:1800, step:50, fmt:v=>v, default:550,
+          onChange(v){ cfg.count=v; build(); } },
+        { type:'range', key:'speed', label:'Velocidade (warp)', min:2, max:40, step:1, fmt:v=>(v/10).toFixed(1), default:30,
+          onChange(v){ cfg.speed=v/10; } },
+        { type:'range', key:'size', label:'Tamanho', min:30, max:250, step:10, fmt:v=>(v/100).toFixed(1)+'x', default:100,
+          onChange(v){ cfg.size=v/100; } },
+        { type:'toggle2', key:'direction', label:'Direção', on:'Aproximando', off:'Afastando', default:true,
+          onChange(v){ cfg.direction = v ? 1 : -1; } },
+        { type:'toggle2', key:'steer', label:'Guiar com o mouse', on:'Ligado', off:'Desligado', default:false,
+          onChange(v){ cfg.steer=v; } }
+      ]
+    };
+  })();
+
+  // ---------------- WORMHOLE ----------------
+  (function(){
+    const cfg = { palette:'classic', count:40, speed:3.0, size:1.0, distort:45, steer:false };
+    let rings = [];
+    const state = { centerX:0, centerY:0 };
+    function md(){ return Math.max(dim.w, dim.h); }
+    function resetRing(r){
+      const m = md();
+      r.z = m*1.3; r.seedPhase = Math.random()*Math.PI*2;
+      r.h1 = 2+Math.floor(Math.random()*3); r.h2 = 4+Math.floor(Math.random()*4);
+      r.rotSpeed = (Math.random()-0.5)*0.006; r.rot = Math.random()*Math.PI*2;
+      r.colorFn = PALETTES[cfg.palette]();
+    }
+    function build(){
+      rings = [];
+      const m = md();
+      for (let i=0;i<cfg.count;i++){
+        rings.push({ z:(i/cfg.count)*m*1.3+1, seedPhase:Math.random()*Math.PI*2, h1:2+Math.floor(Math.random()*3),
+          h2:4+Math.floor(Math.random()*4), rotSpeed:(Math.random()-0.5)*0.006, rot:Math.random()*Math.PI*2,
+          colorFn: PALETTES[cfg.palette]() });
+      }
+    }
+    build();
+    window.addEventListener('resize', build);
+
+    let t = 0;
+    function ringPath(cx,cy,baseR,ring){
+      const points=56, distortAmt = cfg.distort/100;
+      ctx.beginPath();
+      for (let i=0;i<=points;i++){
+        const ang = (i/points)*Math.PI*2 + ring.rot;
+        const wobble = 1 + distortAmt*0.18*Math.sin(ang*ring.h1 + t*0.6 + ring.seedPhase) + distortAmt*0.1*Math.sin(ang*ring.h2 - t*0.4 + ring.seedPhase*1.6);
+        const rr = baseR*wobble;
+        const px = cx+Math.cos(ang)*rr, py = cy+Math.sin(ang)*rr;
+        if (i===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+      }
+      ctx.closePath();
+    }
+    function draw(){
+      const w=dim.w, h=dim.h;
+      if (state.centerX === 0 && state.centerY === 0){ state.centerX=w/2; state.centerY=h/2; }
+      const targetX = (cfg.steer && mouse.x>-9000) ? mouse.x : w/2;
+      const targetY = (cfg.steer && mouse.y>-9000) ? mouse.y : h/2;
+      state.centerX += (targetX-state.centerX)*0.04;
+      state.centerY += (targetY-state.centerY)*0.04;
+      const cx=state.centerX, cy=state.centerY;
+      const am = audioMult();
+      const speed = cfg.speed*(w/900)*0.6;
+      const focal = Math.min(w,h)*0.55;
+      const m = md();
+      const baseR0 = Math.min(w,h)*0.06*cfg.size;
+      for (const r of rings){
+        r.z -= speed; r.rot += r.rotSpeed;
+        if (r.z<=1 || r.z>m*1.35){ resetRing(r); continue; }
+        const k = focal/r.z;
+        const displayR = baseR0*k;
+        if (displayR > Math.max(w,h)*1.4) continue;
+        const proximity = 1 - Math.min(r.z/m,1);
+        const alpha = Math.min(1, (0.12+proximity*0.9)*am);
+        const width = Math.max(0.8, proximity*4.5);
+        ctx.save();
+        ctx.strokeStyle = r.colorFn+alpha+')';
+        ctx.lineWidth = width;
+        ctx.shadowColor = r.colorFn+Math.min(1,alpha+0.2)+')';
+        ctx.shadowBlur = 6+proximity*22;
+        ringPath(cx,cy,displayR,r);
+        ctx.stroke();
+        ctx.restore();
+      }
+      t += 0.015;
+    }
+    LAYERS.wormhole = {
+      cfg, draw, build,
+      controls: [
+        { type:'select', key:'palette', label:'Paleta', options:PALETTE_OPTIONS,
+          onChange(v){ cfg.palette=v; for(const r of rings) r.colorFn = PALETTES[v](); } },
+        { type:'range', key:'count', label:'Quantidade de anéis', min:10, max:120, step:5, fmt:v=>v, default:40,
+          onChange(v){ cfg.count=v; build(); } },
+        { type:'range', key:'speed', label:'Velocidade (warp)', min:2, max:40, step:1, fmt:v=>(v/10).toFixed(1), default:30,
+          onChange(v){ cfg.speed=v/10; } },
+        { type:'range', key:'size', label:'Tamanho', min:30, max:250, step:10, fmt:v=>(v/100).toFixed(1)+'x', default:100,
+          onChange(v){ cfg.size=v/100; } },
+        { type:'range', key:'distort', label:'Distorção do túnel', min:0, max:100, step:5, fmt:v=>v+'%', default:45,
+          onChange(v){ cfg.distort=v; } },
+        { type:'toggle2', key:'steer', label:'Guiar com o mouse', on:'Ligado', off:'Desligado', default:false,
+          onChange(v){ cfg.steer=v; } }
+      ]
+    };
+  })();
+
+  // ---------------- PLASMA ----------------
+  (function(){
+    const cfg = { palette:'classic', opacity:55, turbulence:1.0, speed:1.5 };
+    const off = document.createElement('canvas');
+    const octx = off.getContext('2d');
+    const TARGET_W = 220;
+    let img;
+    function resizeOff(){
+      const scale = dim.w/TARGET_W;
+      off.width = TARGET_W;
+      off.height = Math.max(2, Math.round(dim.h/scale));
+      img = octx.createImageData(off.width, off.height);
+    }
+    resizeOff();
+    window.addEventListener('resize', resizeOff);
+    let t = 0;
+    function draw(){
+      const base = HUE_BASE[cfg.palette];
+      const turb = cfg.turbulence;
+      const freq1=0.04*turb, freq2=0.05*turb, freq3=0.03*turb, freq4=0.06*turb;
+      const pw = off.width, ph = off.height;
+      const data = img.data;
+      let idx=0;
+      for (let y=0;y<ph;y++){
+        for (let x=0;x<pw;x++){
+          const v = Math.sin(x*freq1+t) + Math.sin(y*freq2-t*0.8) + Math.sin((x+y)*freq3+t*1.3) +
+                    Math.sin(Math.sqrt((x-pw/2)**2+(y-ph/2)**2)*freq4-t*2);
+          const norm = (v+4)/8;
+          let hue, sat, light;
+          if (base.cycling){ hue=(t*25+norm*220)%360; sat=base.sat; light=12+norm*38; }
+          else if (base.sat===0){ hue=0; sat=0; light=8+norm*55; }
+          else { hue=base.hue+(norm-0.5)*40; sat=base.sat; light=10+norm*42; }
+          const [r,g,b] = hslToRgb(hue,sat,light);
+          data[idx++]=r; data[idx++]=g; data[idx++]=b; data[idx++]=255;
+        }
+      }
+      octx.putImageData(img,0,0);
+      const opacity = Math.min(1, (cfg.opacity/100)*audioMult());
+      if (opacity <= 0) return;
+      ctx.save();
+      ctx.globalAlpha = opacity;
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(off, 0, 0, dim.w, dim.h);
+      ctx.restore();
+      t += 0.015*cfg.speed;
+    }
+    LAYERS.plasma = {
+      cfg, draw,
+      controls: [
+        { type:'select', key:'palette', label:'Paleta', options:PALETTE_OPTIONS, onChange(v){ cfg.palette=v; } },
+        { type:'range', key:'opacity', label:'Opacidade', min:0, max:100, step:5, fmt:v=>v+'%', default:55, onChange(v){ cfg.opacity=v; } },
+        { type:'range', key:'turbulence', label:'Turbulência', min:20, max:250, step:10, fmt:v=>(v/100).toFixed(1)+'x', default:100, onChange(v){ cfg.turbulence=v/100; } },
+        { type:'range', key:'speed', label:'Velocidade', min:20, max:300, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:150, onChange(v){ cfg.speed=v/100; } }
+      ]
+    };
+  })();
+
+  // ---------------- MANDALA ----------------
+  (function(){
+    const cfg = { palette:'classic', segments:8, size:1.0, speed:1.5, direction:1 };
+    let t = 0;
+    function mandalaColor(i,total){
+      const base = HUE_BASE[cfg.palette];
+      let hue;
+      if (base.cycling) hue = (t*30+(i/total)*360)%360;
+      else if (base.sat===0) hue = 0;
+      else hue = base.hue + Math.sin(t*0.3+i)*20;
+      const sat = base.sat===0 ? 0 : base.sat;
+      const light = base.sat===0 ? (55+Math.sin(t+i)*25) : (50+Math.sin(t*0.7+i)*18);
+      const [r,g,b] = hslToRgb(hue,sat,light);
+      return `rgba(${r},${g},${b},`;
+    }
+    function draw(){
+      const w=dim.w, h=dim.h, cx=w/2, cy=h/2;
+      const am = audioMult();
+      const segs = cfg.segments;
+      const maxR = Math.min(w,h)*0.48*cfg.size;
+      const rotBase = t*0.15*cfg.direction;
+      ctx.save();
+      ctx.translate(cx,cy);
+      for (let i=0;i<segs;i++){
+        ctx.save();
+        ctx.rotate(rotBase+(i/segs)*Math.PI*2);
+        if (i%2===1) ctx.scale(1,-1);
+        const pulses=3;
+        ctx.beginPath();
+        ctx.moveTo(0,0);
+        for (let p=0;p<=24;p++){
+          const f=p/24, rad=f*maxR;
+          const width = Math.sin(f*Math.PI)*maxR*0.22*(1+0.4*Math.sin(t*1.4+i+f*pulses*Math.PI))*am;
+          const ang=f*0.9;
+          ctx.lineTo(Math.sin(ang)*width+rad*0.02, rad);
+        }
+        for (let p=24;p>=0;p--){
+          const f=p/24, rad=f*maxR;
+          const width = Math.sin(f*Math.PI)*maxR*0.22*(1+0.4*Math.sin(t*1.4+i+f*pulses*Math.PI))*am;
+          const ang=f*0.9;
+          ctx.lineTo(-Math.sin(ang)*width+rad*0.02, rad);
+        }
+        ctx.closePath();
+        const color = mandalaColor(i,segs);
+        const grad = ctx.createLinearGradient(0,0,0,maxR);
+        grad.addColorStop(0,color+'0)'); grad.addColorStop(0.5,color+'0.55)'); grad.addColorStop(1,color+'0)');
+        ctx.fillStyle = grad;
+        ctx.fill();
+        ctx.restore();
+      }
+      ctx.restore();
+      t += 0.015*cfg.speed;
+    }
+    LAYERS.mandala = {
+      cfg, draw,
+      controls: [
+        { type:'select', key:'palette', label:'Paleta', options:PALETTE_OPTIONS, onChange(v){ cfg.palette=v; } },
+        { type:'range', key:'segments', label:'Segmentos', min:3, max:18, step:1, fmt:v=>v, default:8, onChange(v){ cfg.segments=v; } },
+        { type:'range', key:'size', label:'Tamanho', min:30, max:250, step:10, fmt:v=>(v/100).toFixed(1)+'x', default:100, onChange(v){ cfg.size=v/100; } },
+        { type:'range', key:'speed', label:'Velocidade', min:2, max:40, step:1, fmt:v=>(v/10).toFixed(1), default:15, onChange(v){ cfg.speed=v/10; } },
+        { type:'toggle2', key:'direction', label:'Direção', on:'Horário', off:'Anti-horário', default:true, onChange(v){ cfg.direction = v?1:-1; } }
+      ]
+    };
+  })();
+
+  // ---------------- VÓRTICE ----------------
+  (function(){
+    const cfg = { speed:1.0, arms:3, density:7, opacity:0.7 };
+    let blobs = [];
+    function build(){
+      blobs = [];
+      for (let a=0;a<cfg.arms;a++){
+        for (let s=0;s<cfg.density;s++){
+          const f = s/(cfg.density-1);
+          blobs.push({ arm:a, f, rr: 0.055*(1-f*0.55)+0.01 });
+        }
+      }
+    }
+    build();
+    const off = document.createElement('canvas');
+    const octx = off.getContext('2d');
+    const OW = 110;
+    let OH = 110, img;
+    function resizeOff(){
+      OH = Math.max(2, Math.round(OW*(dim.h/Math.max(dim.w,1))));
+      off.width=OW; off.height=OH; img = octx.createImageData(OW,OH);
+    }
+    resizeOff();
+    window.addEventListener('resize', resizeOff);
+    let t = 0;
+    function draw(){
+      const w=dim.w, h=dim.h;
+      const am = audioMult();
+      const data = img.data;
+      const minDim = Math.min(OW,OH);
+      let idx=0;
+      for (let y=0;y<OH;y++){
+        const ny = (y/OH-0.5)*(OH/minDim)*2;
+        for (let x=0;x<OW;x++){
+          const nx = (x/OW-0.5)*(OW/minDim)*2;
+          let field=0;
+          for (const b of blobs){
+            const theta = b.f*5.4+(b.arm/cfg.arms)*Math.PI*2 - t*0.55;
+            const r = 0.66*(1-b.f)+0.015;
+            const bx=Math.cos(theta)*r, by=Math.sin(theta)*r;
+            const r2=b.rr*b.rr;
+            field += r2/((nx-bx)**2+(ny-by)**2+0.0006);
+          }
+          const edge=1.3;
+          const alpha = Math.max(0, Math.min(1,(field-edge)*6.5))*Math.min(1,cfg.opacity*am);
+          const shade = Math.min(1, field/(edge*2.2));
+          data[idx++] = Math.round(80+shade*150);
+          data[idx++] = Math.round(4+shade*12);
+          data[idx++] = Math.round(4+shade*12);
+          data[idx++] = Math.round(alpha*255);
+        }
+      }
+      octx.putImageData(img,0,0);
+      ctx.drawImage(off,0,0,w,h);
+      t += 0.012*cfg.speed;
+    }
+    LAYERS.vortice = {
+      cfg, draw,
+      controls: [
+        { type:'range', key:'speed', label:'Velocidade', min:20, max:300, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.speed=v/100; } },
+        { type:'range', key:'arms', label:'Braços', min:2, max:6, step:1, fmt:v=>v, default:3, onChange(v){ cfg.arms=v; build(); } },
+        { type:'range', key:'density', label:'Densidade por braço', min:3, max:12, step:1, fmt:v=>v, default:7, onChange(v){ cfg.density=v; build(); } },
+        { type:'range', key:'opacity', label:'Intensidade', min:20, max:100, step:5, fmt:v=>v+'%', default:70, onChange(v){ cfg.opacity=v/100; } }
+      ]
+    };
+  })();
+
+  // ---------------- CIMÁTICA ----------------
+  (function(){
+    const cfg = { speed:1.0, detail:140, intensity:1.0 };
+    const off = document.createElement('canvas');
+    const octx = off.getContext('2d');
+    let OW = 140, OH = 140, img;
+    function resizeOff(){
+      OW = cfg.detail;
+      OH = Math.max(2, Math.round(OW*(dim.h/Math.max(dim.w,1))));
+      off.width=OW; off.height=OH; img = octx.createImageData(OW,OH);
+    }
+    resizeOff();
+    window.addEventListener('resize', resizeOff);
+    let t = 0;
+    function draw(){
+      const w=dim.w, h=dim.h;
+      const am = audioMult();
+      const data = img.data;
+      let idx=0;
+      const n = 4+Math.sin(t*0.1)*2.5;
+      const m = 6+Math.cos(t*0.075)*3;
+      for (let y=0;y<OH;y++){
+        const ny=(y/OH)*Math.PI;
+        for (let x=0;x<OW;x++){
+          const nx=(x/OW)*Math.PI;
+          const v = Math.sin(n*nx)*Math.sin(m*ny) - Math.sin(m*nx)*Math.sin(n*ny);
+          const nodal = 1 - Math.min(1, Math.abs(v)*3.4);
+          const light = Math.round(Math.min(255, nodal*nodal*205*cfg.intensity*am));
+          data[idx++] = Math.round(20+light*0.9);
+          data[idx++] = Math.round(6+light*0.35);
+          data[idx++] = Math.round(6+light*0.35);
+          data[idx++] = light;
+        }
+      }
+      octx.putImageData(img,0,0);
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(off,0,0,w,h);
+      t += 0.017*cfg.speed;
+    }
+    LAYERS.cimatica = {
+      cfg, draw,
+      controls: [
+        { type:'range', key:'speed', label:'Velocidade', min:20, max:300, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.speed=v/100; } },
+        { type:'range', key:'detail', label:'Detalhe (resolução)', min:60, max:220, step:10, fmt:v=>v, default:140, onChange(v){ cfg.detail=v; resizeOff(); } },
+        { type:'range', key:'intensity', label:'Intensidade', min:50, max:150, step:5, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.intensity=v/100; } }
+      ]
+    };
+  })();
+
+  // ---------------- FUMAÇA ----------------
+  (function(){
+    const cfg = { speed:1.0, density:1.0, opacity:0.8 };
+    const off = document.createElement('canvas');
+    const octx = off.getContext('2d');
+    const OW = 70;
+    let OH = 100, img;
+    function resizeOff(){
+      OH = Math.max(2, Math.round(OW*(dim.h/Math.max(dim.w,1))));
+      off.width=OW; off.height=OH; img = octx.createImageData(OW,OH);
+    }
+    resizeOff();
+    window.addEventListener('resize', resizeOff);
+    let t = 0;
+    function draw(){
+      const w=dim.w, h=dim.h;
+      const am = audioMult();
+      const data = img.data;
+      let idx=0;
+      for (let y=0;y<OH;y++){
+        const fy=y/OH;
+        for (let x=0;x<OW;x++){
+          const fx=x/OW;
+          const v = Math.sin(fx*7.5+(fy*9.5-t*1.05))*0.5 + Math.sin(fx*13.5-(fy*5.2-t*0.68)+2.1)*0.3 + Math.sin((fx+fy)*10.5-t*0.85)*0.2;
+          const norm=(v+1)/2;
+          const density = norm*(1-fy*0.75)*cfg.density;
+          const light = Math.round(Math.min(255, density*190));
+          data[idx++] = Math.round(60+light*0.7);
+          data[idx++] = Math.round(30+light*0.55);
+          data[idx++] = Math.round(30+light*0.5);
+          data[idx++] = Math.round(Math.min(255, density*205*cfg.opacity*am));
+        }
+      }
+      octx.putImageData(img,0,0);
+      ctx.save();
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(off,0,0,w,h);
+      ctx.restore();
+      t += 0.01*cfg.speed;
+    }
+    LAYERS.fumaca = {
+      cfg, draw,
+      controls: [
+        { type:'range', key:'speed', label:'Velocidade', min:20, max:300, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.speed=v/100; } },
+        { type:'range', key:'density', label:'Densidade', min:50, max:200, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.density=v/100; } },
+        { type:'range', key:'opacity', label:'Opacidade', min:20, max:100, step:5, fmt:v=>v+'%', default:80, onChange(v){ cfg.opacity=v/100; } }
+      ]
+    };
+  })();
+
+  // ---------------- GEOMETRIA SAGRADA ----------------
+  (function(){
+    const cfg = { speed:1.0, size:1.0, camadas:3, opacity:0.6 };
+    let t = 0;
+    function draw(){
+      const w=dim.w, h=dim.h;
+      const am = audioMult();
+      const cx=w/2, cy=h/2;
+      const R = Math.min(w,h)*0.16*cfg.size;
+      const pulse = 1+Math.sin(t*0.45)*0.05;
+      const rot = t*0.06;
+      ctx.save();
+      ctx.translate(cx,cy);
+      ctx.lineWidth = 1.2;
+      const centers = [[0,0]];
+      if (cfg.camadas >= 1){
+        for (let i=0;i<6;i++){ const a=rot+(i/6)*Math.PI*2; centers.push([Math.cos(a)*R*pulse, Math.sin(a)*R*pulse]); }
+      }
+      if (cfg.camadas >= 2){
+        for (let i=0;i<6;i++){ const a=rot+(i/6)*Math.PI*2+Math.PI/6; centers.push([Math.cos(a)*R*pulse*1.73, Math.sin(a)*R*pulse*1.73]); }
+      }
+      if (cfg.camadas >= 3){
+        for (let i=0;i<12;i++){ const a=rot-(i/12)*Math.PI*2; centers.push([Math.cos(a)*R*pulse*2.6, Math.sin(a)*R*pulse*2.6]); }
+      }
+      for (const [x,y] of centers){
+        const alpha = Math.min(1, (0.22+0.12*Math.sin(t*0.6+x*0.01+y*0.01))*cfg.opacity*am);
+        ctx.strokeStyle = `rgba(216,183,161,${alpha})`;
+        ctx.beginPath(); ctx.arc(x,y,R*pulse,0,Math.PI*2); ctx.stroke();
+      }
+      ctx.restore();
+      t += 0.012*cfg.speed;
+    }
+    LAYERS.geometria = {
+      cfg, draw,
+      controls: [
+        { type:'range', key:'speed', label:'Velocidade', min:20, max:300, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.speed=v/100; } },
+        { type:'range', key:'size', label:'Tamanho', min:50, max:200, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.size=v/100; } },
+        { type:'range', key:'camadas', label:'Camadas de círculos', min:1, max:3, step:1, fmt:v=>v, default:3, onChange(v){ cfg.camadas=v; } },
+        { type:'range', key:'opacity', label:'Opacidade', min:20, max:100, step:5, fmt:v=>v+'%', default:60, onChange(v){ cfg.opacity=v/100; } }
+      ]
+    };
+  })();
+
+  // ---------------- CONSTELAÇÃO ----------------
+  (function(){
+    const cfg = { count:46, speed:1.0, reach:16, opacity:0.7 };
+    let pts = [];
+    function build(){
+      pts = Array.from({length:cfg.count}, () => ({
+        x:Math.random(), y:Math.random(), vx:(Math.random()-0.5)*0.00025, vy:(Math.random()-0.5)*0.00025, tw:Math.random()*Math.PI*2
+      }));
+    }
+    build();
+    function draw(){
+      const w=dim.w, h=dim.h;
+      const am = audioMult();
+      for (const p of pts){
+        p.x += p.vx*cfg.speed; p.y += p.vy*cfg.speed;
+        if (p.x<0||p.x>1) p.vx*=-1;
+        if (p.y<0||p.y>1) p.vy*=-1;
+        p.tw += 0.018*cfg.speed;
+      }
+      const thresh = Math.min(w,h)*(cfg.reach/100);
+      ctx.strokeStyle = `rgba(179,18,23,${Math.min(1,0.35*cfg.opacity*am)})`;
+      ctx.lineWidth = 0.8;
+      for (let i=0;i<pts.length;i++){
+        for (let j=i+1;j<pts.length;j++){
+          const dx=(pts[i].x-pts[j].x)*w, dy=(pts[i].y-pts[j].y)*h;
+          const d = Math.hypot(dx,dy);
+          if (d<thresh){
+            ctx.globalAlpha = Math.min(1, (1-d/thresh)*cfg.opacity*am);
+            ctx.beginPath(); ctx.moveTo(pts[i].x*w,pts[i].y*h); ctx.lineTo(pts[j].x*w,pts[j].y*h); ctx.stroke();
+          }
+        }
+      }
+      ctx.globalAlpha = 1;
+      for (const p of pts){
+        const s = 1+Math.sin(p.tw)*0.6;
+        ctx.fillStyle = `rgba(216,183,161,${Math.min(1,0.85*cfg.opacity*am)})`;
+        ctx.beginPath(); ctx.arc(p.x*w,p.y*h,1.6*s,0,Math.PI*2); ctx.fill();
+      }
+    }
+    LAYERS.constelacao = {
+      cfg, draw,
+      controls: [
+        { type:'range', key:'count', label:'Quantidade de pontos', min:10, max:90, step:5, fmt:v=>v, default:46, onChange(v){ cfg.count=v; build(); } },
+        { type:'range', key:'speed', label:'Velocidade', min:20, max:300, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.speed=v/100; } },
+        { type:'range', key:'reach', label:'Alcance das conexões', min:8, max:30, step:1, fmt:v=>v+'%', default:16, onChange(v){ cfg.reach=v; } },
+        { type:'range', key:'opacity', label:'Opacidade', min:20, max:100, step:5, fmt:v=>v+'%', default:70, onChange(v){ cfg.opacity=v/100; } }
+      ]
+    };
+  })();
+
+  // ---------------- OLHO ----------------
+  (function(){
+    const cfg = { speed:1.0, size:1.0, dilatacao:15 };
+    let t = 0;
+    function draw(){
+      const w=dim.w, h=dim.h;
+      const am = audioMult();
+      const cx=w/2, cy=h/2;
+      const irisR = Math.min(w,h)*0.3*cfg.size;
+      const pupilR = irisR*(0.32+(cfg.dilatacao/100)*am*Math.sin(t*0.22));
+      ctx.save();
+      ctx.globalAlpha = 0.9;
+      ctx.fillStyle = '#14100e';
+      ctx.beginPath(); ctx.ellipse(cx,cy,irisR*1.65,irisR*1.08,0,0,Math.PI*2); ctx.fill();
+      const grad = ctx.createRadialGradient(cx,cy,pupilR,cx,cy,irisR);
+      grad.addColorStop(0,'rgba(179,18,23,0.55)'); grad.addColorStop(0.6,'rgba(140,125,111,0.5)'); grad.addColorStop(1,'rgba(10,9,8,0.9)');
+      ctx.fillStyle = grad;
+      ctx.beginPath(); ctx.arc(cx,cy,irisR,0,Math.PI*2); ctx.fill();
+
+      ctx.save();
+      ctx.translate(cx,cy);
+      ctx.rotate(t*0.015);
+      ctx.strokeStyle = 'rgba(216,183,161,0.22)';
+      ctx.lineWidth = 1.2;
+      const striae = 40;
+      for (let i=0;i<striae;i++){
+        const a = (i/striae)*Math.PI*2;
+        ctx.beginPath();
+        ctx.moveTo(Math.cos(a)*pupilR*1.1, Math.sin(a)*pupilR*1.1);
+        ctx.lineTo(Math.cos(a)*irisR*0.97, Math.sin(a)*irisR*0.97);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      ctx.fillStyle = '#050403';
+      ctx.beginPath(); ctx.arc(cx,cy,pupilR,0,Math.PI*2); ctx.fill();
+      ctx.restore();
+      t += 0.013*cfg.speed;
+    }
+    LAYERS.olho = {
+      cfg, draw,
+      controls: [
+        { type:'range', key:'speed', label:'Velocidade', min:20, max:300, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.speed=v/100; } },
+        { type:'range', key:'size', label:'Tamanho', min:50, max:200, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.size=v/100; } },
+        { type:'range', key:'dilatacao', label:'Dilatação da pupila', min:5, max:40, step:1, fmt:v=>v+'%', default:15, onChange(v){ cfg.dilatacao=v; } }
+      ]
+    };
+  })();
+
+  // ---------------- BATIMENTO ----------------
+  (function(){
+    const cfg = { speed:1.0, amplitude:1.0, lineWidth:1.8 };
+    let t = 0;
+    const history = [];
+    function pulseValue(phase){
+      const f = phase % 1;
+      if (f>0.46 && f<0.58){ const k=(f-0.46)/0.12; return Math.sin(k*Math.PI)*(k<0.5?1:-0.35)*1.4; }
+      if (f>0.6 && f<0.78){ return Math.sin(((f-0.6)/0.18)*Math.PI)*0.18; }
+      return 0;
+    }
+    function draw(){
+      const w=dim.w, h=dim.h;
+      const am = audioMult();
+      t += 0.014*cfg.speed;
+      history.push(pulseValue(t*0.5));
+      const maxPts = Math.max(40, Math.round(w/1.4));
+      while (history.length > maxPts) history.shift();
+      ctx.strokeStyle = 'rgba(216,183,161,0.9)';
+      ctx.lineWidth = cfg.lineWidth;
+      ctx.beginPath();
+      const midY = h*0.5;
+      for (let i=0;i<history.length;i++){
+        const x = (i/(maxPts-1))*w;
+        const y = midY - history[i]*h*0.24*cfg.amplitude*am;
+        if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+      if (history.length){
+        const lastX = ((history.length-1)/(maxPts-1))*w;
+        const lastY = midY - history[history.length-1]*h*0.24*cfg.amplitude*am;
+        ctx.fillStyle = 'rgba(179,18,23,0.9)';
+        ctx.beginPath(); ctx.arc(lastX,lastY,4,0,Math.PI*2); ctx.fill();
+      }
+    }
+    LAYERS.batimento = {
+      cfg, draw,
+      controls: [
+        { type:'range', key:'speed', label:'Velocidade', min:20, max:300, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.speed=v/100; } },
+        { type:'range', key:'amplitude', label:'Amplitude', min:50, max:200, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.amplitude=v/100; } },
+        { type:'range', key:'lineWidth', label:'Espessura da linha', min:10, max:40, step:2, fmt:v=>(v/10).toFixed(1), default:18, onChange(v){ cfg.lineWidth=v/10; } }
+      ]
+    };
+  })();
+
+  // ============================================================
+  // estado de ativação + loop principal
+  // ============================================================
+  const active = new Set();
+  function setLayerActive(id, on){
+    if (on) active.add(id); else active.delete(id);
+    const layer = LAYERS[id];
+    if (layer.ownCanvas) layer.setActive(on);
+    refreshTabDots();
+  }
+
+  let globalTrail = 70;
+  function mainFrame(){
+    requestAnimationFrame(mainFrame);
+    if (!editorVisible || document.hidden) return;
+
+    const raw = readAudioLevel();
+    audioSmoothed += (raw - audioSmoothed) * (raw > audioSmoothed ? 0.35 : 0.06);
+
+    const w = dim.w, h = dim.h;
+    const fadeAlpha = 1 - (globalTrail/100);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = `rgba(10,9,8,${Math.max(fadeAlpha,0.04)})`;
+    ctx.fillRect(0,0,w,h);
+    ctx.globalCompositeOperation = 'lighter';
+    for (const id of active){
+      const layer = LAYERS[id];
+      if (layer.ownCanvas) continue;
+      layer.draw();
+    }
+    ctx.globalCompositeOperation = 'source-over';
+
+    if (active.has('rorschach')) LAYERS.rorschach.tick();
+  }
+  mainFrame();
+
+  // ============================================================
+  // construção do painel (abas)
+  // ============================================================
+  const tabsEl = document.getElementById('eTabs');
+  const bodyEl = document.getElementById('eTabBody');
+  let currentTab = null;
+
+  function refreshTabDots(){
+    document.querySelectorAll('.e-tab-btn').forEach(btn => {
+      btn.classList.toggle('active', active.has(btn.dataset.id));
+    });
+  }
+
+  function buildControlEl(layerId, control){
+    const layer = LAYERS[layerId];
+    const wrap = document.createElement('div');
+
+    if (control.type === 'h3'){
+      wrap.innerHTML = `<h3>${control.label}</h3>`;
+      return wrap;
+    }
+    if (control.type === 'button'){
+      wrap.className = 'e-row';
+      const btn = document.createElement('button');
+      btn.className = 'e-mini-btn';
+      btn.style.width = '100%';
+      btn.textContent = control.label;
+      btn.addEventListener('click', () => control.onClick());
+      wrap.appendChild(btn);
+      return wrap;
+    }
+    if (control.type === 'select'){
+      wrap.className = 'e-row';
+      const label = document.createElement('label');
+      label.textContent = control.label;
+      const sel = document.createElement('select');
+      control.options.forEach(([val,text]) => {
+        const opt = document.createElement('option');
+        opt.value = val; opt.textContent = text;
+        if (val === layer.cfg[control.key]) opt.selected = true;
+        sel.appendChild(opt);
+      });
+      sel.addEventListener('change', (e) => control.onChange(e.target.value));
+      wrap.appendChild(label); wrap.appendChild(sel);
+      return wrap;
+    }
+    if (control.type === 'range'){
+      wrap.className = 'e-row';
+      const label = document.createElement('label');
+      const span = document.createElement('span');
+      span.className = 'val mono';
+      label.textContent = control.label + ' ';
+      label.appendChild(span);
+      const input = document.createElement('input');
+      input.type = 'range'; input.min = control.min; input.max = control.max; input.step = control.step;
+      input.value = control.default;
+      span.textContent = control.fmt(parseFloat(input.value));
+      input.addEventListener('input', (e) => {
+        const v = parseFloat(e.target.value);
+        span.textContent = control.fmt(v);
+        control.onChange(v);
+      });
+      wrap.appendChild(label); wrap.appendChild(input);
+      return wrap;
+    }
+    if (control.type === 'toggle2'){
+      wrap.className = 'e-row';
+      const label = document.createElement('label');
+      label.textContent = control.label;
+      const toggles = document.createElement('div');
+      toggles.className = 'e-toggles two-col';
+      const onBtn = document.createElement('div'); onBtn.className = 'e-mini-btn'; onBtn.textContent = control.on;
+      const offBtn = document.createElement('div'); offBtn.className = 'e-mini-btn'; offBtn.textContent = control.off;
+      const initialOn = !!control.default;
+      onBtn.classList.toggle('active', initialOn);
+      offBtn.classList.toggle('active', !initialOn);
+      onBtn.addEventListener('click', () => { onBtn.classList.add('active'); offBtn.classList.remove('active'); control.onChange(true); });
+      offBtn.addEventListener('click', () => { offBtn.classList.add('active'); onBtn.classList.remove('active'); control.onChange(false); });
+      toggles.appendChild(onBtn); toggles.appendChild(offBtn);
+      wrap.appendChild(label); wrap.appendChild(toggles);
+      return wrap;
+    }
+    if (control.type === 'multitoggle'){
+      wrap.className = 'e-row';
+      const label = document.createElement('label');
+      label.textContent = control.label;
+      const toggles = document.createElement('div');
+      toggles.className = 'e-toggles ' + (control.cols === 3 ? 'three-col' : control.cols === 2 ? 'two-col' : '');
+      control.options.forEach(([val,text]) => {
+        const btn = document.createElement('div');
+        btn.className = 'e-mini-btn' + (layer.cfg[control.key].has(val) ? ' active' : '');
+        btn.textContent = text;
+        btn.addEventListener('click', () => {
+          const set = layer.cfg[control.key];
+          if (set.has(val)){
+            if (set.size > 1){ set.delete(val); btn.classList.remove('active'); control.onChange(); }
+          } else {
+            set.add(val); btn.classList.add('active'); control.onChange();
+          }
+        });
+        toggles.appendChild(btn);
+      });
+      wrap.appendChild(label); wrap.appendChild(toggles);
+      return wrap;
+    }
+    return wrap;
+  }
+
+  function renderTabBody(id){
+    currentTab = id;
+    document.querySelectorAll('.e-tab-btn').forEach(b => b.classList.toggle('selected', b.dataset.id === id));
+    const layer = LAYERS[id];
+    bodyEl.innerHTML = '';
+
+    const head = document.createElement('div');
+    head.className = 'e-layer-toggle-row';
+    const name = document.createElement('div');
+    name.className = 'name'; name.textContent = LABELS[id];
+    const sw = document.createElement('div');
+    sw.className = 'e-layer-switch' + (active.has(id) ? ' on' : '');
+    sw.textContent = active.has(id) ? 'ativa na cena' : 'ativar camada';
+    sw.addEventListener('click', () => {
+      const on = !active.has(id);
+      setLayerActive(id, on);
+      sw.classList.toggle('on', on);
+      sw.textContent = on ? 'ativa na cena' : 'ativar camada';
+    });
+    head.appendChild(name); head.appendChild(sw);
+    bodyEl.appendChild(head);
+
+    layer.controls.forEach(c => bodyEl.appendChild(buildControlEl(id, c)));
+  }
+
+  ORDER.forEach(id => {
+    const btn = document.createElement('div');
+    btn.className = 'e-tab-btn';
+    btn.dataset.id = id;
+    btn.innerHTML = `<span class="dot"></span>${LABELS[id]}`;
+    btn.addEventListener('click', () => renderTabBody(id));
+    tabsEl.appendChild(btn);
+  });
+
+  // ============================================================
+  // controles globais do editor
+  // ============================================================
+  const editorToggleBtn = document.getElementById('editorToggle');
+  const editorPanelEl = document.getElementById('editorPanel');
+  editorToggleBtn.addEventListener('click', () => editorPanelEl.classList.toggle('open'));
+
+  const gTrail = document.getElementById('gTrail');
+  const gTrailVal = document.getElementById('gTrailVal');
+  gTrail.addEventListener('input', (e) => {
+    globalTrail = parseFloat(e.target.value);
+    gTrailVal.textContent = globalTrail + '%';
+  });
+
+  const audioReactToggle = document.getElementById('audioReactToggle');
+  audioReactToggle.addEventListener('click', () => {
+    audioReactOn = !audioReactOn;
+    audioReactToggle.classList.toggle('active', audioReactOn);
+    audioReactToggle.textContent = 'reagir ao som: ' + (audioReactOn ? 'ligado' : 'desligado');
+  });
+
+  document.getElementById('gClear').addEventListener('click', () => {
+    ORDER.forEach(id => setLayerActive(id, false));
+    if (currentTab) renderTabBody(currentTab);
+  });
+  document.getElementById('gRandom').addEventListener('click', () => {
+    ORDER.forEach(id => setLayerActive(id, false));
+    const shuffled = [...ORDER].sort(() => Math.random()-0.5);
+    const howMany = 2 + Math.floor(Math.random()*2);
+    shuffled.slice(0, howMany).forEach(id => setLayerActive(id, true));
+    if (currentTab) renderTabBody(currentTab);
+  });
+
+  // ============================================================
+  // abrir/fechar o editor a partir da grade de portais
+  // ============================================================
+  const gridBackBtn = document.getElementById('gridBack');
+
+  function openEditor(layerId){
+    ORDER.forEach(id => setLayerActive(id, false));
+    setLayerActive(layerId, true);
+    renderTabBody(layerId);
+    document.body.classList.add('editor-open');
+    editorVisible = true;
+    previewControls.forEach(p => p.pause());
+    resizeMain();
+  }
+  function closeEditor(){
+    document.body.classList.remove('editor-open');
+    editorVisible = false;
+    editorPanelEl.classList.remove('open');
     if (!document.hidden) previewControls.forEach(p => p.resume());
   }
 
-  // pausa tudo quando a aba não está visível (evita gastar bateria/CPU em segundo plano)
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      previewControls.forEach(p => p.pause());
-    } else if (!overlay.classList.contains('open')) {
-      previewControls.forEach(p => p.resume());
-    }
-  });
-
   document.querySelectorAll('.portal:not(.ghost)').forEach(portal => {
     portal.addEventListener('click', e => {
-      // deixa ctrl/cmd/shift/click-do-meio abrirem em nova aba normalmente
       if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       e.preventDefault();
-      openPortal(portal.getAttribute('href'));
+      openEditor(portal.dataset.layer);
     });
   });
-
-  backBtn.addEventListener('click', closePortal);
+  gridBackBtn.addEventListener('click', closeEditor);
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && overlay.classList.contains('open')) closePortal();
+    if (e.key === 'Escape' && document.body.classList.contains('editor-open')) closeEditor();
   });
+
+  // abertura direta via ?layer=a,b,c (link compartilhável)
+  const params = new URLSearchParams(location.search);
+  const layerParam = params.get('layer');
+  if (layerParam){
+    const requested = layerParam.split(',').map(s => s.trim()).filter(id => LAYERS[id]);
+    if (requested.length){
+      ORDER.forEach(id => setLayerActive(id, false));
+      requested.forEach(id => setLayerActive(id, true));
+      renderTabBody(requested[0]);
+      document.body.classList.add('editor-open');
+      editorVisible = true;
+      previewControls.forEach(p => p.pause());
+      resizeMain();
+    }
+  }
+
 })();
+
 </script>
 <script src="assets/space-bg.js" defer></script>
+<script src="assets/theme-toggle.js" defer></script>
+<script src="assets/nav-menu.js" defer></script>
 </body>
 </html>
