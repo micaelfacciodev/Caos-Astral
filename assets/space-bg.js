@@ -98,11 +98,23 @@
     requestAnimationFrame(tick);
   }
 
-  // Pausa completamente quando a aba não está visível, economiza bateria/CPU
+  function isLightMode() {
+    return document.documentElement.getAttribute('data-theme') === 'light';
+  }
+
+  // Pausa completamente quando a aba não está visível, economiza bateria/CPU.
+  // Também pausa em modo claro (CSS já esconde com opacity:0, mas sem isso
+  // o canvas continuaria desenhando escondido, gastando CPU à toa).
   document.addEventListener('visibilitychange', function () {
-    running = !document.hidden;
+    running = !document.hidden && !isLightMode();
+    if (running) requestAnimationFrame(tick);
+  });
+  document.addEventListener('caosastral:theme', function (e) {
+    var light = e && e.detail && e.detail.theme === 'light';
+    running = !light && !document.hidden;
     if (running) requestAnimationFrame(tick);
   });
 
-  requestAnimationFrame(tick);
+  running = !isLightMode();
+  if (running) requestAnimationFrame(tick);
 })();
