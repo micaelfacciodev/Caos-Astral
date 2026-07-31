@@ -259,3 +259,141 @@ dono, ou vinculado só ao criador da consulta).
 - [ ] Construir formulário de "mapa de terceiro não cadastrado" (data,
       hora, local) pra Câmara de ressonância/O Terceiro funcionar com
       quem não tem conta no site
+
+---
+
+## Anexo, Comparativo com concorrente (Astrolink.com.br), 30/07
+
+Auditoria de 26 telas do Astrolink (referência comercial mainstream)
+contra o estado atual do repo, pra identificar o que já existe e pode
+ser aproveitado, o que existe mas em formato diferente (por causa do
+vocabulário/posicionamento próprios do Caos Astral), e o que é lacuna
+real. **Não é recomendação de copiar o tom do Astrolink** — o
+posicionamento do Caos Astral é deliberadamente o oposto da astrologia
+preditiva comercial (seção 1 do CLAUDE.md); isto é um mapeamento
+funcional, não estético.
+
+### O que já existe e pode ser aproveitado como está
+
+| Recurso no Astrolink | Equivalente no Caos Astral | Status |
+|---|---|---|
+| Formulário de cadastro (cidade/data/hora de nascimento) | `ritual-de-entrada.html` (onboarding) | existe, login Google já funcional |
+| Resumo rápido no topo (signo/ascendente/lua) | Cards Núcleo/Máscara/Fome em `kit.html` e `dashboard.html` | existe, vocabulário próprio |
+| Roda do mapa astral (wheel chart) | `#kit-wheel-svg` em `kit.html` | existe (placeholder SVG, ver `ENGINE:` linha 78) |
+| Posição dos astros (lista planeta/grau/signo) | Bloco `ENGINE:` em `kit.html` linha 105 (Núcleo/Máscara/Fome/Territórios) | existe, aguarda plugue do cálculo real |
+| Trânsito do dia / influências ativas | "Janela do dia", `daily_readings` + `compute-daily-window` | existe, calculado de verdade |
+| Trânsitos de médio prazo | "Janela estendida" | vocabulário já fechado, sem Edge Function ainda (ver seção 5) |
+| Aspectos planetários com orbe | `aspects` table + `rotulo_caos` (fricção/corrente) | existe no motor |
+| Casas astrológicas | `houses` table, "território" | existe no motor |
+| Retrogradação | "Eco" | vocabulário fechado, ver seção 5 |
+| Quíron | "Cicatriz" | existe, embutido nas 4 Edge Functions |
+| Sinastria/compatibilidade | "Câmara de ressonância", `compute-synastry` | existe, mas só com dados manuais do parceiro (pendência de consentimento pra conta↔conta, seção 7) |
+| Mapa composto (pontos médios) | "O Terceiro" | existe, ponto médio + ascendente composto |
+| Revolução solar (mapa do ano) | "Retorno", `compute-solar-return` | existe, reescrito do zero em 30/07 |
+| Dashboard/hub central com menu lateral | `dashboard.html` | existe, cards de produto + prévia do Diário |
+| Diário pessoal | `diario.html` / `diario_gnose` | existe |
+| Blog institucional | `blog.html`, `blog-eco.html` | existe |
+| Conteúdo educativo por conceito (não por tradição) | `enciclopedia*.html` (9 páginas) | existe como stub, alta prioridade de aprofundamento (ver README) |
+| Página de preços | `planos.html` | existe, modelo grátis/assinatura/avulso fechado (Correção 8) |
+| Exclusão de conta | Edge Function `delete-account` | existe (Astrolink nem mostra isso nas 26 telas — ponto a favor do Caos Astral) |
+
+### O que existe só em parte, ou em formato diferente
+
+- **Distribuição energética (gráfico de Elementos/Qualidades/Polaridade)**
+  do Astrolink não tem equivalente direto — o Caos Astral tem os
+  ingredientes (planetas, signos, temperamento em `planets.temperamento`)
+  mas não uma visualização agregada desse tipo. Se fizer sentido pro
+  produto, dá pra construir em cima do dado que já existe no motor, sem
+  Edge Function nova — é só agregação do que `compute-natal-chart` já
+  devolve. **Decisão de produto pendente**, não codar sem validar se
+  cabe no tom "ferramenta, não personalidade" do Caos Astral (risco de
+  virar leitura de traço fixo, o que o produto evita deliberadamente).
+- **Horóscopo diário com categorias (Amor, Carreira, Família, Saúde)**:
+  a Janela do dia existe e é calculada de verdade, mas não é
+  segmentada por área da vida como no Astrolink — hoje é texto único.
+  Segmentar por território (casa) já daria essa granularidade sem
+  reinventar o motor, mas também é decisão de produto/copy, não só
+  técnica.
+- **Cena do grau** (interpretação por grau exato, 1º–30º) é uma
+  vantagem que o Astrolink **não tem** nas 26 telas analisadas — nenhum
+  concorrente mainstream comum oferece isso, é diferencial autoral
+  próprio do Caos Astral (360 graus já escritos).
+
+### Lacunas reais (Astrolink tem, Caos Astral não tem e não está no roadmap)
+
+- **Recursos sociais** (visitantes do perfil, "quem me curtiu", buscar
+  pessoas, rede de amigos): zero equivalente no Caos Astral. Não consta
+  em nenhuma seção do CLAUDE.md como pendência — é ausência por
+  posicionamento (produto individual/introspectivo), não esquecimento.
+  Só adicionar se for decisão de produto explícita, não é lacuna
+  técnica a fechar.
+- **App mobile nativo**: Astrolink tem banner fixo de Google
+  Play/App Store. Caos Astral é site estático, sem menção a app em
+  nenhum lugar do repo. Fora de escopo atual.
+- **Contador de urgência / oferta com timer regressivo**: tática de
+  conversão do Astrolink, sem equivalente e sem menção no modelo de
+  pricing já fechado (Correção 8). Coerente não ter — tom de urgência
+  artificial destoa do "tom de voz: nunca 'você vai'" da seção 1.
+- **Gate "recurso bloqueado com cadeado + desbloquear"** como padrão
+  visual recorrente: o Caos Astral tem paywall (Correção 8), mas não
+  necessariamente esse padrão visual específico de grid de barras
+  cinzas com cadeado. Se o Front-end quiser usar visualização parecida
+  pra sinalizar conteúdo pago (ex: nas frições/correntes extras), é
+  decisão de UI a validar com o design system existente
+  (`assets/style.css`), não puxar CSS do Astrolink.
+
+### Item aprovado pra spec, "O céu no momento" (30/07)
+
+Feedback direto do fundador: gostou do widget do Astrolink que mostra a
+posição atual de todos os planetas em tempo real (independente do mapa
+natal de quem está olhando — é o céu de agora, não a Janela do dia
+pessoal). Sem equivalente hoje no Caos Astral. Diferença importante pra
+não confundir escopo:
+
+- **Janela do dia** (já existe) = como o céu de agora *conversa com o
+  mapa natal da pessoa* — é pessoal, uma linha por usuário por dia,
+  `daily_readings`.
+- **O céu no momento** (novo, ainda não nomeado no glossário oficial)
+  = só a fotografia atual do céu, sem cruzar com ninguém — mesmo dado
+  pra qualquer visitante, não precisa de conta nem de mapa natal
+  calculado. Pode aparecer solto (ex: sidebar do Dashboard, do Kit, ou
+  até da landing pra visitante não logado) como "isca" de conteúdo
+  sempre fresco.
+
+**Pendências antes de implementar:**
+- Nome oficial em vocabulário Caos Astral — não usar "céu no momento"
+  como rótulo final sem passar pelo glossário primeiro (mesma regra da
+  seção 1 do CLAUDE.md: nenhum termo novo entra em uso sem entrar no
+  `glossario-caos-astral.md` antes). Sugestões a validar com o
+  fundador, não decidir sozinho: "O agora", "Céu vivo", "Trânsito
+  aberto" — evitar "trânsito" puro porque já é usado tecnicamente em
+  outros contextos do produto.
+- Tecnicamente é o mais simples de todo o motor: não depende de dado de
+  usuário nenhum, só `Astronomy.GeoVector` + `Ecliptic` pros 10-11
+  corpos já cobertos, calculado pro instante exato da requisição. Não
+  precisa de tabela nova nem de persistência — pode ser Edge Function
+  sem estado (`compute-sky-now` ou nome equivalente) ou até calculado
+  direto no client se for aceitável expor a lógica de efemérides no
+  front (a definir com o time, considerando que o resto do motor já é
+  server-side).
+- Puxando do Astrolink como referência de exibição (não de nome): lista
+  planeta → grau → signo, com destaque pra Lua (fase atual, já que o
+  Caos Astral não tem página de Ciclo Lunar ainda — outra lacuna que
+  não estava no comparativo original, mas fica próxima o suficiente
+  desse widget pra valer registrar aqui: **Ciclo Lunar/fase da lua
+  atual é outro item do Astrolink sem equivalente hoje no Caos
+  Astral**, adicionar à lista de lacunas reais acima).
+
+---
+
+### Recomendação de próximo passo
+
+Nenhum item acima de "lacuna real" parece urgente ou alinhado ao
+posicionamento do produto — a maior parte do valor do Astrolink já tem
+equivalente funcional no Caos Astral, só com vocabulário e tom
+diferentes (o que é intencional, não gap). O ganho de comparar os dois
+é mais **validação** (o roadmap já cobre o essencial de um produto de
+mapa astral) do que uma lista nova de tarefas. Os dois itens que valem
+avaliação de produto antes de codar são o gráfico de distribuição
+energética e a segmentação da Janela do dia por área de vida — ambos
+apoiados em dado que o motor já calcula, sem exigir Edge Function nova.
