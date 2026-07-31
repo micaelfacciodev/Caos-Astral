@@ -289,14 +289,15 @@
 //    `compute-natal-chart`, e atualiza a prévia com os valores REAIS
 //    retornados — sem deixar "no seu Kit ✦" like eterno.
 //
-// ATENÇÃO — SCHEMA ASSUMIDO: as colunas de `profiles` usadas aqui
-// (nome, data_nascimento, hora_nascimento, cidade_nascimento, latitude,
-// longitude, utc_offset) seguem a convenção usada em compute-natal-chart
-// — não tive o SQL exato de `profiles` em mãos nesta revisão; conferir
-// contra o schema real se o upsert falhar com "column does not exist".
-// Consentimento assume 4 colunas novas em `profiles` (ver migration
-// 0010_consentimento_profiles.sql, entregue junto): termos_aceitos_em,
-// termos_versao, consentimento_sensivel_aceito_em, consentimento_sensivel_versao.
+// SCHEMA CONFIRMADO (via código real de compute-natal-chart): `profiles`
+// usa `id` como chave (NÃO `user_id` — diferente de natal_charts/
+// solar_returns/etc). Colunas confirmadas: data_nascimento,
+// hora_nascimento, utc_offset, latitude, longitude. `nome` e
+// `cidade_nascimento` são suposição do onboarding — migration 0010
+// garante a existência delas de forma idempotente. Consentimento
+// assume 4 colunas novas (ver migration 0010_consentimento_profiles.sql,
+// entregue junto): termos_aceitos_em, termos_versao,
+// consentimento_sensivel_aceito_em, consentimento_sensivel_versao.
 //
 // LIMITAÇÃO CONHECIDA — confirmação de e-mail: se o projeto Supabase
 // exigir confirmação de e-mail antes de logar, o signUp não retorna
@@ -558,7 +559,7 @@
       const utcOffset = -(new Date().getTimezoneOffset() / 60);
 
       const { error: profileErr } = await sb.from('profiles').upsert({
-        user_id: session.user.id,
+        id: session.user.id, // compute-natal-chart filtra profiles por `.eq("id", user.id)` — NÃO é `user_id`
         nome: estado.nome,
         data_nascimento: estado.data_nascimento,
         hora_nascimento: estado.hora_nascimento,
@@ -570,7 +571,7 @@
         termos_versao: CONSENT_VERSAO,
         consentimento_sensivel_aceito_em: new Date().toISOString(),
         consentimento_sensivel_versao: CONSENT_VERSAO,
-      });
+      }, { onConflict: 'id' });
       if (profileErr) throw profileErr;
 
       const { data: calcResult, error: calcErr } = await sb.functions.invoke('compute-natal-chart');
