@@ -400,6 +400,52 @@ padrão (`nav class="wrap"`):**
   cores foram escolhidas visualmente, vale conferir com uma ferramenta
   de contraste antes de considerar definitivo.
 
+**Correção de direção (30/07, mesma sessão):** a primeira versão tinha
+saído "dia claro pastel" (fundo bege claro, painéis brancos, texto
+escuro, estrelas desligadas). Feedback do fundador: não é isso — é
+**pré-amanhecer**, referência visual anexada (`preDawn.jpg`): céu ainda
+predominantemente escuro/azul-noite, faixa quente subindo do horizonte,
+lua/planeta/estrelas ainda visíveis. Corrigido:
+- Paleta reescrita pra tons escuros azulados (`--bg:#0c1526`,
+  `--bg-panel:#111b30`) em vez de bege/branco — **texto continua claro**
+  (`--ink:#f2e9da`, igual em espírito ao modo noturno), porque o céu de
+  pré-amanhecer ainda é majoritariamente escuro; não fazia sentido
+  trocar pra texto escuro como um "modo dia" de verdade trocaria.
+- Nebulosa virou gradiente linear azul-noite (topo) → laranja de
+  horizonte (base), com glow radial quente simulando a luz subindo,
+  em vez do gradiente radial pastel anterior.
+- Estrelas (`.stars-static` e `#space-canvas`) **voltaram a ficar
+  visíveis** (opacity 0.75 em vez de 0) — pedido explícito do fundador
+  foi não apagar as estrelas, já que ainda é de madrugada/começo do
+  dia, não dia claro. `space-bg.js` não pausa mais o canvas por causa
+  do tema, só por aba oculta.
+- Ainda não implementado: lua e "planeta" (ponto brilhante) da
+  referência não foram desenhados como elementos próprios — hoje o
+  efeito de pré-amanhecer vem só da paleta/gradiente + estrelas
+  normais, sem um corpo celeste em destaque. Se o fundador quiser esse
+  detalhe (uma lua crescente sutil, por exemplo), é o próximo
+  incremento natural, não coberto ainda.
+
+**Gap encontrado no re-sync com o repo remoto (31/07):** `deriva.html`
+tem uma cópia **embutida** do CSS de fundo espacial (comentário no
+próprio arquivo: `/* ===== Fundo espacial (versão embutida, sem
+depender do style.css global) ===== */`, por volta da linha 488) —
+criada porque a página usa paleta própria (oxblood/paper), separada do
+design system principal. Essa cópia embutida **não tem nenhuma
+variante de tema claro/pré-amanhecer** — só o CSS escuro original. O
+botão de tema existe na página (herdado do header padrão) e o clique
+funciona (seta `data-theme="light"` no `<html>`), mas visualmente não
+muda nada nessa página específica, porque não há regra
+`[data-theme="light"]` no bloco embutido pra reagir. Não mexi nesse
+arquivo agora de propósito — o CLAUDE.md já registra que outro agente
+está reconstruindo a Deriva do zero, e editar um arquivo em
+reconstrução ativa por outra sessão arrisca conflito de merge. Quando
+essa reconstrução avançar (ou se ninguém estiver mexendo nela no
+momento), replicar o mesmo bloco `[data-theme="light"] #space-bg
+.nebula`/`.stars-static` de `assets/style.css` dentro do `<style>`
+embutido de `deriva.html`, adaptando as cores pra combinar com a
+paleta oxblood/paper da página em vez da paleta padrão do site.
+
 ---
 
 ### Item aprovado pra spec, "O céu no momento" (30/07)

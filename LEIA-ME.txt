@@ -1,0 +1,25 @@
+Estes 3 arquivos foram gerados em cima do estado ATUAL do GitHub
+(clonado agora, 31/07), não da minha cópia local antiga.
+
+Por quê: entre a sua primeira mensagem sobre modo claro/escuro e agora,
+outros agentes trabalharam no repo (kit.html, ritual-de-entrada.html,
+deriva.html, CLAUDE.md, e uma migration nova de consentimento LGPD).
+Minha cópia local tinha ficado defasada. Se eu tivesse te mandado o
+zip do repo inteiro a partir da minha cópia local, isso reverteria
+todo esse trabalho novo.
+
+Como aplicar:
+1. Substitua exatamente estes 3 arquivos no seu repo local/GitHub:
+   - assets/style.css
+   - assets/space-bg.js
+   - ADENDO-CLAUDE.md
+2. Não mexe em mais nada — todo o resto (kit.html, deriva.html,
+   ritual-de-entrada.html, CLAUDE.md, migrations/) já está correto
+   como está no GitHub agora, com o trabalho dos outros agentes +
+   o botão/script de tema que eu tinha adicionado antes (preservados).
+
+Pendência registrada no ADENDO: deriva.html tem uma cópia embutida do
+CSS de fundo espacial que não ganhou a variante pré-amanhecer ainda
+(de propósito, pra não conflitar com quem está reconstruindo aquela
+página). Ver a seção "Gap encontrado no re-sync com o repo remoto" no
+ADENDO-CLAUDE.md.
