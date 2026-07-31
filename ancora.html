@@ -55,10 +55,13 @@
   .slider-row{display:flex; align-items:center; gap:10px;}
   .slider-row input[type=range]{flex:1; accent-color:var(--accent-bright);}
   .slider-row span{font-size:13px; color:var(--ink-dim); width:34px; text-align:right;}
-  .btn{width:100%; font-family:'IBM Plex Mono',monospace; font-size:12.5px; letter-spacing:.1em; text-transform:uppercase; padding:12px 14px; border-radius:3px; border:1px solid var(--accent); background:transparent; color:var(--accent-bright); cursor:pointer; transition:all .2s ease;}
-  .btn:hover{background:rgba(198,161,91,0.1); box-shadow:0 0 12px rgba(193,74,60,0.5);}
-  .btn.primary{background:var(--accent-bright); color:#1a1508; border-color:var(--accent-bright); font-weight:600;}
-  .btn.primary:hover{box-shadow:0 0 18px rgba(198,161,91,.55);}
+  /* Escopado pra .panel — antes era .btn global e colidia com o
+     .btn do header/footer compartilhado (site-chrome.js), quebrando
+     o layout do menu (CTA virava bloco full-width, ver claude.md §9). */
+  .panel .btn{width:100%; font-family:'IBM Plex Mono',monospace; font-size:12.5px; letter-spacing:.1em; text-transform:uppercase; padding:12px 14px; border-radius:3px; border:1px solid var(--accent); background:transparent; color:var(--accent-bright); cursor:pointer; transition:all .2s ease;}
+  .panel .btn:hover{background:rgba(198,161,91,0.1); box-shadow:0 0 12px rgba(193,74,60,0.5);}
+  .panel .btn.primary{background:var(--accent-bright); color:#1a1508; border-color:var(--accent-bright); font-weight:600;}
+  .panel .btn.primary:hover{box-shadow:0 0 18px rgba(198,161,91,.55);}
   .btn-row{display:flex; gap:9px; margin-top:9px;}
   .btn-row .btn{flex:1;}
   .divider{height:1px; background:var(--line); margin:20px 0;}
