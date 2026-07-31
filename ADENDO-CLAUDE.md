@@ -161,6 +161,80 @@ o login funciona mas o salvamento da consulta falha silenciosamente
 
 ---
 
+## Correção 8, Modelo de preços grátis/avulso/assinatura [NOVO]
+
+Auditoria de CTA encontrou promessas conflitantes entre `planos.html`,
+`index.html`, `kit.html` e `ressonancia.html` sobre o que é grátis, o que
+é avulso e o que é assinatura. Modelo abaixo é a versão final, decidida
+nesta sessão, e já aplicada nos quatro arquivos citados. Qualquer agente
+mexendo em copy, pricing ou lógica de acesso deve usar exatamente esta
+referência, não inventar variação.
+
+**Kit (grátis, sempre):**
+- Mapa astral **calculado por completo** (posições, Quíron incluso), mas
+  **leitura em texto resumida**. Distinção importante: o cálculo nunca é
+  parcial no grátis, só a interpretação escrita é truncada. Não usar
+  "mapa completo" sozinho como benefício do grátis, gera ambiguidade,
+  usar "mapa calculado" + "leitura resumida" como dois itens separados.
+- Janela diária resumida
+- 1 fricção e 1 corrente principais
+- Diário de gnose (sem limite conhecido/definido ainda)
+- I Ching: 2 perguntas
+- Âncoras de intenção: até 2
+- Câmara de ressonância + O Terceiro: resultado resumido (corrente ou
+  fricção predominante), sem custo
+
+**Assinatura (R$14,90/mês ou R$99/ano):**
+- Leitura completa do mapa astral (o cálculo já era completo no grátis,
+  aqui libera é a interpretação)
+- Janela completa + notificações
+- Todos os territórios, frições e correntes
+- Cicatriz completa
+- Retorno, o mapa do ano
+- Câmara de ressonância + O Terceiro: **3 leituras de par por mês**
+  inclusas, cada leitura vale para um par específico de pessoas (não é
+  compatibilidade genérica, é por par). Depois da 3ª do mês, cobra
+  avulso normalmente.
+- Âncoras de intenção ilimitadas
+- I Ching ilimitado
+
+**Avulsos (sem assinatura, pagamento único):**
+- Cicatriz completa: R$19,90
+- Câmara de ressonância + O Terceiro, leitura completa: R$24,90 **por
+  par de pessoas**. Assinante que já usou as 3 leituras do mês também
+  paga esse valor pela 4ª em diante.
+
+**Implicação de schema/engine (adicionar à seção 4/7 quando for
+implementar):**
+- `synastry_readings` (ou onde ficar O Terceiro, ver Correção 4) precisa
+  de contador de uso mensal por usuário assinante, pra saber quando as 3
+  leituras gratuitas do mês acabaram e a próxima cobra avulso. Resetar
+  no ciclo de cobrança da assinatura, não no calendário civil.
+- Cada linha de leitura de par precisa registrar **os dois lados do
+  par** (ex: `user_id` + `partner_id` ou `partner_natal_chart_id`), não
+  só um id de sessão, porque o mesmo assinante pode ter várias leituras
+  de pares diferentes no mesmo mês e cada uma consome uma unidade das 3.
+- Pagamento avulso (Cicatriz e O Terceiro) precisa de fluxo de cobrança
+  separado do fluxo de assinatura recorrente no gateway escolhido
+  (Mercado Pago, Conta Negócio ativada em CPF por ora). Ver histórico da
+  conversa de precificação/gateway pra contexto, não repetir aqui.
+
+**Escopo de O Terceiro/Câmara de ressonância, atualização:** não é
+sinastria romântica apenas. Cobre qualquer par de pessoas (trabalho,
+amizade, família etc.). O copy de `ressonancia.html` já era neutro
+("duas pessoas se encontram"), não precisou reescrita, só a nota de
+acesso/preço foi corrigida.
+
+**Pendente, ainda não implementado:** opção de calcular mapa de uma
+pessoa não cadastrada no site (terceiro), a partir de data, hora e local
+de nascimento informados na hora, sem precisar dela ter conta. Necessário
+pra O Terceiro/Câmara de ressonância funcionar com quem não é usuário do
+Caos Astral. Precisa de formulário próprio e decisão de onde esse "mapa
+de terceiro avulso" fica salvo (tabela própria, sem RLS de usuário
+dono, ou vinculado só ao criador da consulta).
+
+---
+
 - [ ] Substituir tabela de vocabulário na seção 1 do CLAUDE.md
 - [ ] Renomear `sigil_journal` → `intent_anchors` (+ migration)
 - [ ] Renomear `graus_simbolicos` → `cenas_grau` (+ migration)
@@ -177,3 +251,11 @@ o login funciona mas o salvamento da consulta falha silenciosamente
       pro histórico do Oráculo salvar de verdade)
 - [ ] Adicionar Edge Functions pendentes (sinastria já estava
       pendente; agora também Retorno e O Terceiro) à seção 7
+- [ ] Implementar contador mensal de leituras de par (3/mês incluídas na
+      assinatura) em `synastry_readings`, resetando no ciclo de
+      cobrança do assinante
+- [ ] Implementar fluxo de cobrança avulsa (Cicatriz R$19,90, O Terceiro
+      R$24,90/par) separado do fluxo de assinatura recorrente
+- [ ] Construir formulário de "mapa de terceiro não cadastrado" (data,
+      hora, local) pra Câmara de ressonância/O Terceiro funcionar com
+      quem não tem conta no site
