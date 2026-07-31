@@ -342,6 +342,66 @@ funcional, não estético.
   decisão de UI a validar com o design system existente
   (`assets/style.css`), não puxar CSS do Astrolink.
 
+### Item aprovado pra spec, Modo claro/escuro (30/07) — IMPLEMENTADO (30/07)
+
+Feedback direto do fundador: gostaria de um **modo claro**, onde a
+nebulosa (`#space-bg .nebula`, `assets/style.css` linhas ~299-311) é
+substituída por um céu de amanhecer — não é só inverter texto/fundo
+(padrão "dark mode" convencional), é trocar o cenário todo mantendo a
+mesma metáfora (o céu como pano de fundo do produto, ver seção 1 do
+CLAUDE.md).
+
+**Feito nesta sessão (30/07), aplicado nas 33 páginas com o header
+padrão (`nav class="wrap"`):**
+- Bloco `:root[data-theme="light"]` em `assets/style.css` com paleta
+  clara própria (não é a escura com opacidade ajustada): fundo
+  `#fbf1e6`, painéis brancos, tinta escura `#2a2016`, accent
+  recalibrado (`#c1503f`/`#e0654f`) pra manter contraste sobre claro.
+- Nebulosa clara: mesmo seletor CSS puro (`[data-theme="light"] #space-bg
+  .nebula`), gradientes radiais em tons de pêssego/rosa/lavanda de
+  amanhecer sobre `#fbe4cf`, mesma animação `nebula-drift`, só trocando
+  os stops de cor.
+- Estrelas (`.stars-static` e `#space-canvas`) ficam com `opacity:0` no
+  modo claro — não fazem sentido contra céu de dia. `space-bg.js`
+  também pausa o loop de desenho do canvas quando o tema é claro (não
+  só esconde visualmente, evita gasto de CPU à toa desenhando algo
+  invisível), reagindo tanto ao estado inicial quanto a um evento
+  customizado `caosastral:theme` disparado no toggle.
+- **`assets/theme-toggle.js`** (novo arquivo): aplica o tema salvo
+  (`localStorage`, chave `caosastral-theme`) ou o preferido do sistema
+  (`prefers-color-scheme`) assim que o script roda; expõe o toggle via
+  botão `#themeToggle`; persiste a escolha manual, que passa a
+  sobrepor a preferência do sistema.
+- **Snippet anti-flash**: inline `<script>` síncrono inserido logo após
+  `<head>` em cada página (antes de qualquer CSS/imagem carregar), lê
+  `localStorage`/`prefers-color-scheme` e já aplica `data-theme="light"`
+  no `<html>` antes da primeira pintura — evita o flash de escuro→claro
+  na carga da página. `theme-toggle.js` (com `defer`) faz a mesma
+  checagem depois, de forma idempotente, e cuida da parte interativa
+  (clique no botão).
+- Botão de alternância (`.theme-toggle`, ícone lua/sol) adicionado no
+  header de todas as 33 páginas, ao lado do CTA existente, antes do
+  fechamento de `</nav>`.
+- `body{ transition: background .4s ease, color .4s ease; }` e
+  transições equivalentes na nebulosa/estrelas, pra troca suave entre
+  os dois modos em vez de corte seco.
+
+**Não incluído nesta rodada, ainda em aberto:**
+- Ícones decorativos do `flash-decor.js` (arte de `simbolos_astrologicos`
+  no Supabase) não foram auditados visualmente contra o fundo claro —
+  conferir se a arte atual funciona nos dois modos ou precisa de
+  variante própria.
+- `aura_flow.html` (overlay de canvas dentro de `deriva.html`) não usa o
+  header padrão (`nav class="wrap"`) e não foi tocado — não tem botão
+  de toggle próprio; herda o `data-theme` do documento pai via CSS
+  (`:root[data-theme="light"]`) se estiver na mesma página, mas não foi
+  testado especificamente.
+- Sem validação de contraste formal (WCAG AA) feita nesta sessão — as
+  cores foram escolhidas visualmente, vale conferir com uma ferramenta
+  de contraste antes de considerar definitivo.
+
+---
+
 ### Item aprovado pra spec, "O céu no momento" (30/07)
 
 Feedback direto do fundador: gostou do widget do Astrolink que mostra a
