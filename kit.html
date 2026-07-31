@@ -16,6 +16,16 @@
   .data-table th{ text-align:left; color:var(--ink-faint); font-weight:400; padding:10px 14px; border-bottom:1px solid var(--line-bright); text-transform:uppercase; letter-spacing:0.05em; font-size:0.7rem; }
   .data-table td{ padding:12px 14px; border-bottom:1px solid var(--line); color:var(--ink-dim); }
   .data-table td.strong{ color:var(--ink); }
+  .data-table td.retro{ color:var(--accent); font-size:0.72rem; margin-left:6px; }
+  .kit-empty-state, .kit-error-state{
+    max-width:520px; margin:0 auto 40px; padding:22px 24px; border:1px solid var(--line-bright);
+    background:var(--bg-panel-2); text-align:center; font-family:'IBM Plex Sans', sans-serif;
+  }
+  .kit-error-state{ border-color:var(--accent); }
+  .kit-loading-state{
+    max-width:520px; margin:0 auto 40px; text-align:center; font-family:'IBM Plex Mono', monospace;
+    font-size:0.85rem; color:var(--ink-faint);
+  }
 </style>
 </head>
 <body>
@@ -77,45 +87,50 @@
     <div class="wrap-narrow">
       <p class="eyebrow center"><span class="glyph">◈</span> o kit</p>
       <h1>Seu kit não é personalidade. É ferramenta de uso.</h1>
-      <p class="sub">Esqueça "signo de touro, ascendente em leão". Aqui, seu mapa vira um kit de operação, cada peça calculada com precisão real, inclusive Quíron.</p>
+      <p class="sub">Esqueça "signo de touro, ascendente em leão". Aqui, seu mapa vira um kit de operação, cada peça calculada com precisão real, inclusive Quíron e Exílio.</p>
     </div>
   </section>
 
-  <!-- ENGINE: bloco abaixo é onde o cálculo real (núcleo/fome/máscara/territórios/aspectos/Quíron)
-       deve ser injetado a partir dos dados de nascimento do usuário logado (tabela profiles).
-       Roda SVG abaixo é placeholder estático, substituir por render dinâmico da posição real. -->
   <section class="tight">
     <div class="wrap">
-      <div class="kit-wheel-box">
-        <svg viewBox="0 0 400 400" id="kit-wheel-svg">
-          <circle cx="200" cy="200" r="182" fill="none" stroke="var(--line-bright)" stroke-width="1"/>
-          <circle cx="200" cy="200" r="140" fill="none" stroke="var(--line)" stroke-width="0.6"/>
-          <circle cx="200" cy="200" r="60" fill="none" stroke="var(--line)" stroke-width="0.6"/>
-          <g stroke="var(--ink-dim)" stroke-width="0.6" opacity="0.7">
-            <line x1="200" y1="18" x2="200" y2="382"/><line x1="18" y1="200" x2="382" y2="200"/>
-            <line x1="61" y1="61" x2="339" y2="339"/><line x1="339" y1="61" x2="61" y2="339"/>
-          </g>
-          <text x="196" y="70" font-family="IBM Plex Mono" font-size="15" fill="var(--ink)">☉</text>
-          <text x="292" y="140" font-family="IBM Plex Mono" font-size="15" fill="var(--ink)">☽</text>
-          <text x="110" y="300" font-family="IBM Plex Mono" font-size="14" fill="var(--accent-bright)">⚷</text>
-          <text x="270" y="290" font-family="IBM Plex Mono" font-size="13" fill="var(--ink)">♄</text>
-        </svg>
+
+      <!-- estados de carregamento/erro/vazio — controlados pelo script no fim do arquivo -->
+      <div id="kit-loading" class="kit-loading-state" style="display:none;">Calculando seu mapa…</div>
+      <div id="kit-empty" class="kit-empty-state" style="display:none;">
+        Você ainda não abriu seu kit. <a href="ritual-de-entrada" class="link-out mono">Abrir agora →</a>
+      </div>
+      <div id="kit-error" class="kit-error-state" style="display:none;">
+        Não consegui calcular seu mapa agora. <button type="button" id="kit-retry" class="btn btn-ghost mono" style="margin-top:10px;">Tentar de novo</button>
       </div>
 
-      <div class="section-head center" style="margin-bottom:20px;">
-        <p class="eyebrow center"><span class="glyph">☰</span> dados do kit</p>
+      <div id="kit-content" style="display:none;">
+        <div class="kit-wheel-box">
+          <svg viewBox="0 0 400 400" id="kit-wheel-svg">
+            <circle cx="200" cy="200" r="182" fill="none" stroke="var(--line-bright)" stroke-width="1"/>
+            <circle cx="200" cy="200" r="140" fill="none" stroke="var(--line)" stroke-width="0.6"/>
+            <circle cx="200" cy="200" r="60" fill="none" stroke="var(--line)" stroke-width="0.6"/>
+            <g stroke="var(--ink-dim)" stroke-width="0.6" opacity="0.7">
+              <line x1="200" y1="18" x2="200" y2="382"/><line x1="18" y1="200" x2="382" y2="200"/>
+              <line x1="61" y1="61" x2="339" y2="339"/><line x1="339" y1="61" x2="61" y2="339"/>
+            </g>
+            <text x="196" y="70" font-family="IBM Plex Mono" font-size="15" fill="var(--ink)">☉</text>
+            <text x="292" y="140" font-family="IBM Plex Mono" font-size="15" fill="var(--ink)">☽</text>
+            <text x="110" y="300" font-family="IBM Plex Mono" font-size="14" fill="var(--accent-bright)">⚷</text>
+            <text x="270" y="290" font-family="IBM Plex Mono" font-size="13" fill="var(--ink)">♄</text>
+          </svg>
+        </div>
+
+        <div class="section-head center" style="margin-bottom:20px;">
+          <p class="eyebrow center"><span class="glyph">☰</span> dados do kit</p>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>Peça</th><th>Signo</th><th>Território</th><th>Grau</th></tr></thead>
+          <tbody id="kit-data-body">
+            <!-- preenchido dinamicamente pelo script no fim do arquivo -->
+          </tbody>
+        </table>
       </div>
-      <table class="data-table">
-        <thead><tr><th>Peça</th><th>Signo</th><th>Território</th><th>Grau</th></tr></thead>
-        <tbody id="kit-data-body">
-          <!-- ENGINE: preencher linhas dinamicamente: Núcleo (Sol), Máscara (Asc), Fome (Lua),
-               Mercúrio, Vênus, Marte, Júpiter, Saturno, Urano, Netuno, Plutão, Quíron, Meio do Céu, Descendente, Fundo do Céu -->
-          <tr><td class="strong">Núcleo</td><td>-</td><td>-</td><td>-</td></tr>
-          <tr><td class="strong">Máscara</td><td>-</td><td>-</td><td>-</td></tr>
-          <tr><td class="strong">Fome</td><td>-</td><td>-</td><td>-</td></tr>
-          <tr><td class="strong">Cicatriz (Quíron)</td><td>-</td><td>-</td><td>-</td></tr>
-        </tbody>
-      </table>
+
     </div>
   </section>
 
@@ -125,7 +140,7 @@
     <div class="wrap">
       <div class="section-head center">
         <p class="eyebrow center"><span class="glyph">◈</span> as peças</p>
-        <h2>Cinco cards, cinco funções</h2>
+        <h2>Seis cards, seis funções</h2>
       </div>
       <div class="card-grid">
         <div class="card"><span class="glyph mono">☉</span><h3>Núcleo</h3><p>O motor que não se negocia. Signo solar, a força que anima.</p></div>
@@ -133,6 +148,7 @@
         <div class="card"><span class="glyph mono">☽</span><h3>Fome</h3><p>O apetite cru que pede satisfação. Signo lunar, o que recebe e gesta.</p></div>
         <div class="card"><span class="glyph mono">⌂</span><h3>Territórios</h3><p>As doze áreas onde núcleo e fome operam. Casas astrológicas.</p></div>
         <div class="card scar" style="border-top:1px solid var(--accent);"><span class="glyph mono">⚷</span><h3>Cicatriz</h3><p>O que sobrou depois que a dor já fez seu trabalho. Quíron, órbita kepleriana real, via JPL SBDB.</p></div>
+        <div class="card scar" style="border-top:1px solid var(--accent);"><span class="glyph mono">⚸</span><h3>Exílio</h3><p>O que foi expulso antes de virar cicatriz. Lilith Negra verdadeira, apogeu real da órbita da Lua, não a versão média.</p></div>
       </div>
     </div>
   </section>
@@ -142,7 +158,7 @@
       <div>
         <p class="eyebrow"><span class="glyph">◇</span> fricção e corrente</p>
         <h2>Onde as peças se tocam</h2>
-        <p style="margin:18px 0;">Cada par de peças forma um aspecto, <strong style="color:var(--ink)">fricção</strong> (atrito que exige decisão) ou <strong style="color:var(--ink)">corrente</strong> (fluxo que já existe, fácil de mais até). Quíron entra nesse cálculo com todos os outros pontos, do mesmo jeito que qualquer planeta.</p>
+        <p style="margin:18px 0;">Cada par de peças forma um aspecto, <strong style="color:var(--ink)">fricção</strong> (atrito que exige decisão) ou <strong style="color:var(--ink)">corrente</strong> (fluxo que já existe, fácil de mais até). Quíron e Exílio entram nesse cálculo com todos os outros pontos, do mesmo jeito que qualquer planeta.</p>
       </div>
       <div class="diagram-col">
         <div class="diagram-box">
@@ -158,7 +174,7 @@
     </div>
   </section>
 
-  <div class="wrap"><div class="gate-note">Este produto é gratuito, sempre, mapa completo calculado, Quíron incluso. Leitura expandida de todos os territórios, frições e correntes fica na assinatura. <a href="planos" class="link-out mono" style="border:none;">Ver planos →</a></div></div>
+  <div class="wrap"><div class="gate-note">Este produto é gratuito, sempre, mapa completo calculado, Quíron e Exílio inclusos. Leitura expandida de todos os territórios, frições e correntes fica na assinatura. <a href="planos" class="link-out mono" style="border:none;">Ver planos →</a></div></div>
 </main>
 
 <footer class="site-footer">
@@ -172,6 +188,204 @@
     </div>
   </div>
 </footer>
+
+<!-- SDK do Supabase (v2, build UMD) — expõe window.supabase.createClient -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
+<script>
+// ============================================================
+// CAOS ASTRAL — kit.html: leitura real do mapa natal
+//
+// O que faz:
+// 1. Confere se tem sessão logada (Supabase Auth). Sem sessão, mostra
+//    estado vazio com link pro ritual de entrada — não tenta calcular
+//    nada.
+// 2. Busca a linha do usuário em `natal_charts`. Se não existir ainda
+//    (usuário logou mas nunca rodou o cálculo — ex: veio direto sem
+//    passar pelo ritual completo), invoca `compute-natal-chart` na
+//    hora, aqui mesmo.
+// 3. Busca os rótulos de território (`houses.rotulo_caos`) numa
+//    passada só, pra não fazer 14 requisições separadas.
+// 4. Monta a tabela com todos os pontos: Núcleo, Máscara, Fome,
+//    Mercúrio…Plutão, Cicatriz (Quíron), Exílio, Meio do Céu,
+//    Descendente, Fundo do Céu.
+//
+// Mesma URL/chave anon já usadas em flash-decor.js — projeto Supabase
+// do Caos Astral, chave pública protegida por RLS (não é service_role).
+// ============================================================
+(function () {
+  'use strict';
+
+  const SUPABASE_URL = 'https://pvgeramqsatltnvkkpvf.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_f5iH4AnwTt1jnwGMWg0qGw_-rd06eGm';
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const SIGN_NAMES = [
+    'áries', 'touro', 'gêmeos', 'câncer', 'leão', 'virgem',
+    'libra', 'escorpião', 'sagitário', 'capricórnio', 'aquário', 'peixes',
+  ];
+
+  const PIECE_LABELS = {
+    sun: 'Núcleo', moon: 'Fome', mercury: 'Mercúrio', venus: 'Vênus',
+    mars: 'Marte', jupiter: 'Júpiter', saturn: 'Saturno', uranus: 'Urano',
+    neptune: 'Netuno', pluto: 'Plutão', chiron: 'Cicatriz (Quíron)',
+    exilio: 'Exílio',
+  };
+  // ordem de exibição: peças centrais primeiro (Núcleo, Máscara, Fome),
+  // depois os planetas pessoais/sociais/transpessoais, depois Quíron e
+  // Exílio, depois os três ângulos derivados
+  const PLANET_ORDER = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter',
+    'saturn', 'uranus', 'neptune', 'pluto', 'chiron', 'exilio'];
+
+  function capitalize(s) {
+    if (!s) return '—';
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  }
+
+  function norm360(x) { x = x % 360; if (x < 0) x += 360; return x; }
+
+  function signoEGrauDeLongitude(lonDeg) {
+    const lon = norm360(lonDeg);
+    const signIdx = Math.floor(lon / 30);
+    const lonInSign = lon - signIdx * 30;
+    const grau = Math.min(Math.max(Math.floor(lonInSign) + 1, 1), 30);
+    return { signo: SIGN_NAMES[signIdx], grau };
+  }
+
+  function showOnly(id) {
+    ['kit-loading', 'kit-empty', 'kit-error', 'kit-content'].forEach((elId) => {
+      document.getElementById(elId).style.display = (elId === id) ? '' : 'none';
+    });
+  }
+
+  async function fetchHouseLabels() {
+    // uma passada só, monta mapa numero -> rotulo_caos, usado tanto pros
+    // planetas (via `casa`) quanto pros ângulos derivados (asc/mc/desc/ic)
+    const map = new Map();
+    try {
+      const { data, error } = await sb.from('houses').select('numero, rotulo_caos');
+      if (error) throw error;
+      (data || []).forEach((h) => map.set(h.numero, h.rotulo_caos));
+    } catch (e) {
+      console.error('não consegui buscar rótulos de território:', e);
+    }
+    return map;
+  }
+
+  function territorioLabel(map, numero) {
+    return map.get(numero) || `Território ${numero}`;
+  }
+
+  function renderRow(label, signo, territorio, grau, retro) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="strong">${label}</td>
+      <td>${capitalize(signo)}</td>
+      <td>${territorio}</td>
+      <td>${grau}${retro ? ' <span class="retro" title="Eco (retrógrado)">R</span>' : ''}</td>
+    `;
+    return tr;
+  }
+
+  async function renderChart(chart) {
+    const tbody = document.getElementById('kit-data-body');
+    tbody.innerHTML = '';
+
+    const houseLabels = await fetchHouseLabels();
+    const planetasByChave = new Map((chart.planetas || []).map((p) => [p.chave, p]));
+
+    // Núcleo, Máscara, Fome primeiro (ordem canônica), depois o resto
+    const nucleo = planetasByChave.get('sun');
+    if (nucleo) {
+      tbody.appendChild(renderRow(
+        PIECE_LABELS.sun, nucleo.signo, territorioLabel(houseLabels, nucleo.casa),
+        nucleo.grau_no_signo, nucleo.retrogrado,
+      ));
+    }
+
+    // Máscara (Ascendente) — não vem no array de planetas, é campo
+    // próprio do mapa (`chart.ascendente`, longitude em graus). Sob
+    // casas de signo inteiro, o ascendente sempre abre o território 1.
+    if (chart.ascendente != null) {
+      const { signo, grau } = signoEGrauDeLongitude(chart.ascendente);
+      tbody.appendChild(renderRow('Máscara', signo, territorioLabel(houseLabels, 1), grau, false));
+    }
+
+    const fome = planetasByChave.get('moon');
+    if (fome) {
+      tbody.appendChild(renderRow(
+        PIECE_LABELS.moon, fome.signo, territorioLabel(houseLabels, fome.casa),
+        fome.grau_no_signo, fome.retrogrado,
+      ));
+    }
+
+    // demais planetas + Quíron + Exílio, na ordem definida acima
+    PLANET_ORDER.filter((k) => k !== 'sun' && k !== 'moon').forEach((chave) => {
+      const p = planetasByChave.get(chave);
+      if (!p) return; // pode faltar se o mapa foi calculado antes do Exílio existir — recalcular resolve
+      tbody.appendChild(renderRow(
+        PIECE_LABELS[chave], p.signo, territorioLabel(houseLabels, p.casa),
+        p.grau_no_signo, p.retrogrado,
+      ));
+    });
+
+    // ângulos derivados: Meio do Céu (território 10), Descendente (território 7,
+    // oposto ao Ascendente), Fundo do Céu (território 4, oposto ao Meio do Céu)
+    if (chart.meio_ceu != null) {
+      const mc = signoEGrauDeLongitude(chart.meio_ceu);
+      tbody.appendChild(renderRow('Meio do Céu', mc.signo, territorioLabel(houseLabels, 10), mc.grau, false));
+    }
+    if (chart.ascendente != null) {
+      const desc = signoEGrauDeLongitude(chart.ascendente + 180);
+      tbody.appendChild(renderRow('Descendente', desc.signo, territorioLabel(houseLabels, 7), desc.grau, false));
+    }
+    if (chart.meio_ceu != null) {
+      const ic = signoEGrauDeLongitude(chart.meio_ceu + 180);
+      tbody.appendChild(renderRow('Fundo do Céu', ic.signo, territorioLabel(houseLabels, 4), ic.grau, false));
+    }
+
+    showOnly('kit-content');
+  }
+
+  async function loadKit() {
+    showOnly('kit-loading');
+
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) {
+      showOnly('kit-empty');
+      return;
+    }
+
+    try {
+      let { data: chart, error } = await sb
+        .from('natal_charts')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (!chart) {
+        // usuário logado mas sem mapa ainda — calcula agora, aqui mesmo
+        const { data: calcResult, error: calcErr } = await sb.functions.invoke('compute-natal-chart');
+        if (calcErr) throw calcErr;
+        chart = calcResult?.mapa || calcResult;
+        if (!chart) throw new Error('compute-natal-chart não retornou um mapa.');
+      }
+
+      await renderChart(chart);
+    } catch (e) {
+      console.error('erro ao carregar o kit:', e);
+      showOnly('kit-error');
+    }
+  }
+
+  document.getElementById('kit-retry').addEventListener('click', loadKit);
+
+  loadKit();
+})();
+</script>
+
 <script src="assets/flash-decor.js" defer></script>
 <script src="assets/space-bg.js" defer></script>
 <script src="assets/theme-toggle.js" defer></script>

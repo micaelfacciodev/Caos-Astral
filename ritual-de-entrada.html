@@ -71,6 +71,7 @@
     transition:border-color .2s ease, background .2s ease;
   }
   .oauth-btn:hover{ border-color:var(--ink-dim); background:var(--bg-panel); }
+  .oauth-btn:disabled{ opacity:0.5; cursor:default; }
   .divider-or{ display:flex; align-items:center; gap:14px; margin-bottom:22px; font-family:'IBM Plex Mono', monospace; font-size:0.72rem; color:var(--ink-faint); text-transform:uppercase; }
   .divider-or::before, .divider-or::after{ content:""; flex:1; height:1px; background:var(--line); }
 
@@ -89,6 +90,9 @@
   .checkbox-card .cc-sub{ font-size:0.82rem; color:var(--ink-faint); }
 
   .success-icon{ width:44px; height:44px; margin-bottom:22px; color:var(--accent-bright); }
+
+  .field-error{ font-family:'IBM Plex Mono', monospace; font-size:0.76rem; color:var(--accent); margin:-14px 0 16px; }
+  .field-loading{ font-family:'IBM Plex Mono', monospace; font-size:0.76rem; color:var(--ink-faint); margin:-14px 0 16px; }
 </style>
 </head>
 <body>
@@ -194,6 +198,7 @@
         <h2 style="margin-bottom:10px;">Onde você nasceu?</h2>
         <p class="step-hint">✦ isso define o território de abertura do seu kit e a leitura de fricção/corrente com precisão geográfica real</p>
         <div class="field"><label>Cidade de nascimento</label><input type="text" id="inpLocal" placeholder="Cidade, estado, país" autocomplete="off"></div>
+        <div id="localError" class="field-error" style="display:none;"></div>
         <div class="step-nav">
           <button class="step-back">← voltar</button>
           <button class="btn btn-solid mono" id="btnStep1">Continuar</button>
@@ -215,7 +220,6 @@
       <div class="step" data-step="3">
         <h2 style="margin-bottom:10px;">Como você quer voltar aqui depois?</h2>
         <p class="step-hint">✦ seus dados de nascimento e diário ficam privados, só você acessa (RLS ativo, auth.uid())</p>
-        <!-- ENGINE: botão abaixo dispara o fluxo Google OAuth nativo do Supabase Auth -->
         <button class="oauth-btn" id="btnGoogle">
           <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.67 9c0-.59.1-1.17.28-1.7V4.97H.96A9 9 0 0 0 0 9c0 1.45.35 2.83.96 4.03l2.99-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.97l2.99 2.33C4.66 5.17 6.65 3.58 9 3.58z"/></svg>
           Continuar com Google
@@ -223,6 +227,7 @@
         <div class="divider-or">ou com e-mail</div>
         <div class="field"><label>E-mail</label><input type="email" id="inpEmail" placeholder="voce@email.com" autocomplete="email"></div>
         <div class="field"><label>Crie sua senha</label><input type="password" id="inpSenha" placeholder="mínimo 8 caracteres" autocomplete="new-password"></div>
+        <div id="step3Error" class="field-error" style="display:none;"></div>
         <div class="terms-row">
           <input type="checkbox" id="inpTermos">
           <label for="inpTermos">Li e concordo com os <a href="termos" target="_blank">termos de uso</a> e a <a href="privacidade" target="_blank">política de privacidade</a> do Caos Astral.</label>
@@ -261,29 +266,69 @@
   </div>
 </div>
 
+<!-- SDK do Supabase (v2, build UMD) — expõe window.supabase.createClient -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
 <script>
-  // ===================================================================
-  // ENGINE: este script controla só a NAVEGAÇÃO entre etapas e a prévia
-  // visual local (dados fake, sem cálculo real). O agente do engine deve:
-  // 1. Substituir a autenticação do botão Google por chamada real ao
-  //    Supabase Auth (signInWithOAuth, provider: 'google').
-  // 2. No submit do step 3, criar/atualizar a linha em `profiles` com
-  //    nome, data_nascimento, hora_nascimento, cidade_nascimento.
-  // 3. Disparar `compute-natal-chart` e usar o retorno real (núcleo,
-  //    fome, máscara, território de abertura) no lugar dos valores
-  //    fake do preview abaixo, atualizando os campos ANTES de avançar
-  //    pro step de confirmação.
-  // 4. No step 4, gravar as preferências de notificação em `daily_readings`
-  //    ou tabela de preferências do usuário.
-  // ===================================================================
+// ===================================================================
+// CAOS ASTRAL — ritual-de-entrada.html: fluxo real de onboarding
+//
+// O que este script faz, de verdade, agora:
+// 1. Geocodifica a cidade digitada no step 1 via Nominatim (OSM) — não
+//    existia nenhuma geocodificação antes disso; sem lat/long reais,
+//    compute-natal-chart não roda.
+// 2. Persiste o estado do formulário em sessionStorage a cada etapa —
+//    necessário porque "Continuar com Google" navega a página inteira
+//    pra fora do site e volta; sem isso, qualquer estado só-em-memória
+//    se perde no meio do caminho (foi exatamente esse bug identificado
+//    antes: login completa, mas os dados de nascimento nunca chegam a
+//    lugar nenhum).
+// 3. No retorno do OAuth (ou depois do signUp por e-mail, se a conta
+//    já vier confirmada), detecta a sessão + o estado pendente salvo, e
+//    só então: grava `profiles`, grava consentimento (LGPD), invoca
+//    `compute-natal-chart`, e atualiza a prévia com os valores REAIS
+//    retornados — sem deixar "no seu Kit ✦" like eterno.
+//
+// ATENÇÃO — SCHEMA ASSUMIDO: as colunas de `profiles` usadas aqui
+// (nome, data_nascimento, hora_nascimento, cidade_nascimento, latitude,
+// longitude, utc_offset) seguem a convenção usada em compute-natal-chart
+// — não tive o SQL exato de `profiles` em mãos nesta revisão; conferir
+// contra o schema real se o upsert falhar com "column does not exist".
+// Consentimento assume 4 colunas novas em `profiles` (ver migration
+// 0010_consentimento_profiles.sql, entregue junto): termos_aceitos_em,
+// termos_versao, consentimento_sensivel_aceito_em, consentimento_sensivel_versao.
+//
+// LIMITAÇÃO CONHECIDA — confirmação de e-mail: se o projeto Supabase
+// exigir confirmação de e-mail antes de logar, o signUp não retorna
+// sessão na hora — a pessoa precisa clicar no link do e-mail. Pra essa
+// continuação funcionar, a URL de redirect de confirmação configurada
+// no painel do Supabase (Authentication → URL Configuration) precisa
+// apontar de volta pra esta mesma página, senão o estado salvo em
+// sessionStorage nunca é retomado (sessionStorage não sobrevive a
+// trocar de aba/domínio, só ao redirect de volta pro mesmo site).
+// ===================================================================
+(function () {
+  'use strict';
+
+  const SUPABASE_URL = 'https://pvgeramqsatltnvkkpvf.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_f5iH4AnwTt1jnwGMWg0qGw_-rd06eGm';
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const STORAGE_KEY = 'caos_astral_ritual_pendente_v1';
+  const CONSENT_VERSAO = '2026-07-30';
+
+  const SIGN_NAMES = [
+    'áries', 'touro', 'gêmeos', 'câncer', 'leão', 'virgem',
+    'libra', 'escorpião', 'sagitário', 'capricórnio', 'aquário', 'peixes',
+  ];
 
   let current = 0;
   const steps = document.querySelectorAll('.step');
   const dots = document.querySelectorAll('.steps-track .dot');
 
-  function goTo(n){
-    steps.forEach(s => s.classList.toggle('active', +s.dataset.step === n));
-    dots.forEach(d => {
+  function goTo(n) {
+    steps.forEach((s) => s.classList.toggle('active', +s.dataset.step === n));
+    dots.forEach((d) => {
       const ds = +d.dataset.step;
       d.classList.toggle('done', ds < n);
       d.classList.toggle('current', ds === n);
@@ -291,87 +336,304 @@
     current = n;
   }
 
-  function revealField(field, value, accent){
+  function revealField(field, value, accent) {
     const row = document.querySelector(`.pf-row[data-field="${field}"]`);
-    if(!row) return;
+    if (!row) return;
     row.classList.add('filled');
-    if(accent) row.classList.add('revealed');
+    if (accent) row.classList.add('revealed');
     const val = row.querySelector('.pf-value');
     val.textContent = value;
     val.classList.remove('pending');
-    if(accent) val.classList.add('accent');
+    if (accent) val.classList.add('accent');
   }
 
-  // Núcleo: cálculo real por data de corte de signo solar (não depende de
-  // hora/local, só precisa da data, então dá pra ser 100% correto aqui
-  // mesmo sem chamar o motor completo no backend).
-  function sunSignFromDate(isoDateStr){
+  function capitalize(s) {
+    if (!s) return '—';
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  }
+
+  function norm360(x) { x = x % 360; if (x < 0) x += 360; return x; }
+
+  function signoDeLongitude(lonDeg) {
+    return SIGN_NAMES[Math.floor(norm360(lonDeg) / 30)];
+  }
+
+  // Núcleo: cálculo real por data de corte de signo solar — não depende
+  // de hora/local, só da data, então é 100% correto direto no cliente.
+  function sunSignFromDate(isoDateStr) {
     const [, m, day] = isoDateStr.split('-').map(Number);
     const cutoffs = [
-      [1,19,'Capricórnio'],[2,18,'Aquário'],[3,20,'Peixes'],[4,19,'Áries'],
-      [5,20,'Touro'],[6,20,'Gêmeos'],[7,22,'Câncer'],[8,22,'Leão'],
-      [9,22,'Virgem'],[10,22,'Libra'],[11,21,'Escorpião'],[12,21,'Sagitário'],
+      [1, 19, 'Capricórnio'], [2, 18, 'Aquário'], [3, 20, 'Peixes'], [4, 19, 'Áries'],
+      [5, 20, 'Touro'], [6, 20, 'Gêmeos'], [7, 22, 'Câncer'], [8, 22, 'Leão'],
+      [9, 22, 'Virgem'], [10, 22, 'Libra'], [11, 21, 'Escorpião'], [12, 21, 'Sagitário'],
     ];
-    for(const [cm, cd, sign] of cutoffs){
-      if(m < cm || (m === cm && day <= cd)) return sign;
+    for (const [cm, cd, sign] of cutoffs) {
+      if (m < cm || (m === cm && day <= cd)) return sign;
     }
     return 'Capricórnio'; // 22-31 de dezembro
   }
 
+  // --- geocodificação via Nominatim (OpenStreetMap) ---
+  async function geocodeCidade(texto) {
+    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(texto)}`;
+    const r = await fetch(url, { headers: { 'Accept-Language': 'pt-BR' } });
+    if (!r.ok) throw new Error('Nominatim respondeu com erro.');
+    const rows = await r.json();
+    if (!rows.length) return null;
+    return { latitude: parseFloat(rows[0].lat), longitude: parseFloat(rows[0].lon), display_name: rows[0].display_name };
+  }
+
+  // --- estado persistido (sobrevive ao redirect do OAuth) ---
+  function salvarEstado(obj) {
+    const atual = lerEstado() || {};
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ ...atual, ...obj }));
+  }
+  function lerEstado() {
+    try {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
+  }
+  function limparEstado() {
+    sessionStorage.removeItem(STORAGE_KEY);
+  }
+
+  // --- step 0: nome + data ---
   document.getElementById('btnStep0').addEventListener('click', () => {
     const nome = document.getElementById('inpNome').value.trim();
     const data = document.getElementById('inpData').value;
-    if(!nome || !data){ return; }
+    if (!nome || !data) return;
     revealField('nome', nome);
     revealField('nucleo', sunSignFromDate(data), true);
+    salvarEstado({ nome, data_nascimento: data });
     goTo(1);
   });
 
-  document.getElementById('btnStep1').addEventListener('click', () => {
+  // --- step 1: cidade (com geocodificação real) ---
+  document.getElementById('btnStep1').addEventListener('click', async () => {
+    const btn = document.getElementById('btnStep1');
     const local = document.getElementById('inpLocal').value.trim();
-    if(!local){ return; }
-    // Território real depende do mapa completo (ascendente + casas), não
-    // dá pra saber só com o nome da cidade. Reveal honesto, sem fingir
-    // um valor específico que provavelmente estaria errado.
-    revealField('territorio', 'no seu Kit ✦');
-    goTo(2);
+    const errBox = document.getElementById('localError');
+    errBox.style.display = 'none';
+    if (!local) return;
+
+    btn.disabled = true;
+    btn.textContent = 'Localizando…';
+    try {
+      const geo = await geocodeCidade(local);
+      if (!geo) {
+        errBox.textContent = 'Não encontrei essa cidade — tenta ser mais específico (ex: "Rio de Janeiro, Brasil").';
+        errBox.style.display = '';
+        return;
+      }
+      salvarEstado({
+        cidade_nascimento: local,
+        latitude: geo.latitude,
+        longitude: geo.longitude,
+      });
+      // Território real depende do mapa completo (ascendente + casas),
+      // não dá pra saber só com a cidade — reveal honesto continua aqui,
+      // mas agora É atualizado com o valor de verdade depois do login
+      // (ver finalizarRitual abaixo) — não fica "no seu Kit ✦" pra sempre.
+      revealField('territorio', 'calculando…');
+      goTo(2);
+    } catch (e) {
+      console.error(e);
+      errBox.textContent = 'Não consegui localizar essa cidade agora. Tenta de novo em alguns segundos.';
+      errBox.style.display = '';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Continuar';
+    }
   });
 
+  // --- step 2: hora ---
   document.getElementById('btnStep2').addEventListener('click', () => {
     const hora = document.getElementById('inpHora').value;
-    if(!hora){ return; }
-    // Fome (Lua) muda de signo a cada ~2,5 dias e precisa do horário em
-    // UTC preciso; Máscara (Ascendente) precisa de latitude/longitude
-    // reais. Nenhum dos dois dá pra calcular direito só com hora local
-    // e nome de cidade em texto, por isso reveal honesto aqui também,
-    // em vez de mostrar um signo que pode estar errado (foi exatamente
-    // isso que aconteceu com Núcleo antes dessa correção).
-    revealField('fome', 'no seu Kit ✦');
-    revealField('mascara', 'no seu Kit ✦', true);
+    if (!hora) return;
+    revealField('fome', 'calculando…');
+    revealField('mascara', 'calculando…', true);
+    salvarEstado({ hora_nascimento: hora });
     goTo(3);
   });
 
-  document.getElementById('btnStep3').addEventListener('click', () => {
+  // --- step 3: autenticação ---
+  function validarConsentimentos() {
     const termos = document.getElementById('inpTermos').checked;
     const consentimentoSensivel = document.getElementById('inpConsentimentoSensivel').checked;
-    if(!termos || !consentimentoSensivel){ return; }
-    // ENGINE: gravar em `profiles` (ou tabela de consentimentos própria) o timestamp
-    // e a versão do documento aceita pra cada um dos dois consentimentos —
-    // termos/privacidade (geral) e consentimento específico de dado sensível
-    // (art. 11 LGPD), não basta um booleano só, guardar quando e qual versão.
-    const nome = document.getElementById('inpNome').value.trim().split(' ')[0] || '';
-    document.getElementById('successName').textContent = nome ? `${nome}, seu kit foi aberto.` : 'Seu kit foi aberto.';
-    goTo(4);
+    const errBox = document.getElementById('step3Error');
+    if (!termos || !consentimentoSensivel) {
+      errBox.textContent = 'Precisa aceitar os dois itens acima pra continuar.';
+      errBox.style.display = '';
+      return false;
+    }
+    errBox.style.display = 'none';
+    return true;
+  }
+
+  document.getElementById('btnGoogle').addEventListener('click', async (e) => {
+    if (!validarConsentimentos()) return;
+    const btn = e.currentTarget;
+    salvarEstado({
+      termos_aceitos: true,
+      consentimento_sensivel_aceito: true,
+      // dados de nascimento já foram salvos progressivamente nos steps 0-2
+    });
+    btn.disabled = true;
+    const { error } = await sb.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin + window.location.pathname },
+    });
+    if (error) {
+      console.error(error);
+      btn.disabled = false;
+      document.getElementById('step3Error').textContent = 'Não consegui abrir o login do Google agora.';
+      document.getElementById('step3Error').style.display = '';
+    }
+    // se não deu erro, a página vai navegar pro Google — o resto do
+    // fluxo continua em finalizarSeVoltandoDeLogin(), chamado no load
   });
 
-  document.getElementById('btnGoogle').addEventListener('click', () => {
-    // ENGINE: substituir por supabase.auth.signInWithOAuth({ provider: 'google' })
-    goTo(4);
+  document.getElementById('btnStep3').addEventListener('click', async () => {
+    if (!validarConsentimentos()) return;
+    const email = document.getElementById('inpEmail').value.trim();
+    const senha = document.getElementById('inpSenha').value;
+    const errBox = document.getElementById('step3Error');
+    if (!email || senha.length < 8) {
+      errBox.textContent = 'Preencha e-mail e uma senha de pelo menos 8 caracteres.';
+      errBox.style.display = '';
+      return;
+    }
+
+    const btn = document.getElementById('btnStep3');
+    btn.disabled = true;
+    btn.textContent = 'Abrindo…';
+
+    salvarEstado({ termos_aceitos: true, consentimento_sensivel_aceito: true });
+
+    const { data, error } = await sb.auth.signUp({ email, password: senha });
+    if (error) {
+      errBox.textContent = error.message || 'Não consegui criar sua conta agora.';
+      errBox.style.display = '';
+      btn.disabled = false;
+      btn.textContent = 'Abrir meu kit';
+      return;
+    }
+
+    if (data.session) {
+      // projeto com confirmação de e-mail desligada — já loga direto
+      await finalizarRitual(data.session);
+    } else {
+      // projeto exige confirmar e-mail antes de logar — não dá pra
+      // continuar agora; o estado já está salvo em sessionStorage, e
+      // se o redirect de confirmação apontar pra esta página, o fluxo
+      // completa sozinho quando a pessoa voltar (ver load no fim do arquivo)
+      errBox.textContent = 'Te mandamos um e-mail de confirmação — clica no link pra abrir seu kit.';
+      errBox.style.display = '';
+      errBox.style.color = 'var(--ink-dim)';
+      btn.disabled = false;
+      btn.textContent = 'Abrir meu kit';
+    }
   });
 
-  document.querySelectorAll('.step-back').forEach(btn => {
-    btn.addEventListener('click', () => { if(current > 0) goTo(current - 1); });
+  document.querySelectorAll('.step-back').forEach((btn) => {
+    btn.addEventListener('click', () => { if (current > 0) goTo(current - 1); });
   });
+
+  // --- finalização real: roda depois de login confirmado (Google ou e-mail) ---
+  async function finalizarRitual(session) {
+    const estado = lerEstado();
+    if (!estado) return; // nada pendente — provavelmente já foi finalizado antes
+
+    goTo(3); // garante que a UI não fique "presa" no step errado durante o processamento
+    const btnAtivo = document.getElementById('btnStep3');
+    if (btnAtivo) { btnAtivo.disabled = true; btnAtivo.textContent = 'Calculando seu mapa…'; }
+
+    try {
+      // utc_offset: aproximação pelo fuso do navegador no momento do
+      // cadastro — mesma limitação já documentada no motor (usa o fuso
+      // de "agora" como proxy, não necessariamente o de nascimento se a
+      // pessoa nasceu em outro fuso e nunca morou lá; é o melhor dado
+      // disponível sem pedir fuso separado no formulário)
+      const utcOffset = -(new Date().getTimezoneOffset() / 60);
+
+      const { error: profileErr } = await sb.from('profiles').upsert({
+        user_id: session.user.id,
+        nome: estado.nome,
+        data_nascimento: estado.data_nascimento,
+        hora_nascimento: estado.hora_nascimento,
+        cidade_nascimento: estado.cidade_nascimento,
+        latitude: estado.latitude,
+        longitude: estado.longitude,
+        utc_offset: utcOffset,
+        termos_aceitos_em: new Date().toISOString(),
+        termos_versao: CONSENT_VERSAO,
+        consentimento_sensivel_aceito_em: new Date().toISOString(),
+        consentimento_sensivel_versao: CONSENT_VERSAO,
+      });
+      if (profileErr) throw profileErr;
+
+      const { data: calcResult, error: calcErr } = await sb.functions.invoke('compute-natal-chart');
+      if (calcErr) throw calcErr;
+
+      const mapa = calcResult?.mapa || calcResult;
+      const planetas = new Map((mapa.planetas || []).map((p) => [p.chave, p]));
+
+      // atualiza a prévia com os valores REAIS — não fica em "no seu Kit ✦"
+      const nucleo = planetas.get('sun');
+      if (nucleo) revealField('nucleo', capitalize(nucleo.signo), true);
+
+      const fome = planetas.get('moon');
+      if (fome) revealField('fome', capitalize(fome.signo));
+
+      if (mapa.ascendente != null) {
+        revealField('mascara', capitalize(signoDeLongitude(mapa.ascendente)), true);
+      }
+
+      if (calcResult?.ascendente_grau_simbolico?.leitura) {
+        revealField('territorio', 'no seu Kit ✦');
+      } else if (nucleo) {
+        // fallback simples: mostra o território (casa) do Núcleo, já
+        // que é o dado mais imediato disponível caso a leitura do grau
+        // simbólico não tenha vindo na resposta
+        revealField('territorio', `Território ${nucleo.casa}`);
+      }
+
+      const primeiroNome = (estado.nome || '').trim().split(' ')[0] || '';
+      document.getElementById('successName').textContent = primeiroNome
+        ? `${primeiroNome}, seu kit foi aberto.`
+        : 'Seu kit foi aberto.';
+
+      limparEstado();
+      goTo(4);
+    } catch (e) {
+      console.error('erro ao finalizar o ritual:', e);
+      const errBox = document.getElementById('step3Error');
+      errBox.textContent = 'Login funcionou, mas não consegui calcular seu mapa agora. Tenta abrir o Kit direto — ele recalcula sozinho.';
+      errBox.style.display = '';
+      goTo(3);
+    } finally {
+      if (btnAtivo) { btnAtivo.disabled = false; btnAtivo.textContent = 'Abrir meu kit'; }
+    }
+  }
+
+  // --- no carregamento da página: já tem sessão + estado pendente? (volta do OAuth) ---
+  (async function finalizarSeVoltandoDeLogin() {
+    const estado = lerEstado();
+    if (!estado) return; // fluxo normal, começando do zero
+
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) {
+      await finalizarRitual(session);
+    }
+    // sem sessão ainda: a pessoa só recarregou a página no meio do
+    // formulário — não faz nada, ela continua de onde parou visualmente
+    // (os campos do formulário em si não são restaurados aqui de
+    // propósito, é um caso raro e o preview já perdeu o "filled" visual
+    // de qualquer forma; o dado que importa, em sessionStorage, segue
+    // intacto pro momento em que ela de fato logar)
+  })();
+})();
 </script>
 
 <script src="assets/flash-decor.js" defer></script>
