@@ -17,8 +17,8 @@
   'use strict';
 
   // ENGINE: confirmar que estes valores batem com o projeto Supabase real do Caos Astral
-  const SUPABASE_URL = 'https://pvgeramqsatltnvkkpvf.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_f5iH4AnwTt1jnwGMWg0qGw_-rd06eGm';
+  const SUPABASE_URL = 'https://pibwwyqjrsdwnzsiremx.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_kPxQ9BGs68o9lich7qWTKw_W83iNPgs';
   const CACHE_KEY = 'caos_astral_simbolos_v2';
 
   // ── Pool ────────────────────────────────────────────────────

@@ -1,5 +1,15 @@
 # CLAUDE.md — Caos Astral
 
+> ⚠️ **Achado em 01/08 pelo agente de front**: este arquivo (`CLAUDE.md`,
+> maiúsculo) parece ser uma versão mais antiga de `claude.md`
+> (minúsculo, mesma pasta) — os dois coexistem no repo porque o
+> sistema de arquivos é case-sensitive. `claude.md` está sendo mantido
+> ativamente (última sessão registrada: troca de projeto Supabase,
+> 01/08) e por isso é a fonte mais confiável agora. Ainda não apaguei
+> nem reconciliei este arquivo — só atualizei a URL do Supabase aqui
+> pra não deixar credencial morta. Ver `claude.md` seção 9 pra mais
+> detalhes desse achado, e decidir se este arquivo deve ser apagado.
+
 Documento vivo. Atualizar sempre que uma decisão de arquitetura, schema
 ou convenção for tomada por qualquer um dos três agentes. Nenhum agente
 deve alterar schema compartilhado sem registrar aqui primeiro.
@@ -211,7 +221,7 @@ motor astrológico; se precisar zerar isso também, apagar manualmente).
 - `simbolos_astrologicos` — galeria de arte pra decoração do site. `titulo`, `image_url`, `tags` (text[]), `decor` (boolean), `created_at`. RLS: **SELECT público** (consultado anonimamente por `flash-decor.js` em qualquer página); INSERT/UPDATE/DELETE só `auth.role() = 'authenticated'` — admin único, sem multi-tenant por enquanto.
 - Bucket de Storage `simbolos` — público pra leitura, upload restrito ao admin (ver correção de segurança abaixo). Mesma lógica de RLS aplicada em `storage.objects` filtrando por `bucket_id = 'simbolos'`.
 - **Correção de segurança (0006)**: a policy original (`auth.role() = 'authenticated'`) liberava escrita pra QUALQUER usuário cadastrado no site — não só o admin. Como o Caos Astral tem cadastro aberto (Google OAuth) pro produto principal, isso deixaria qualquer cliente comum apagar/subir símbolo na galeria. Corrigido pra `auth.uid() = '<uuid do admin>'::uuid`, tanto na tabela quanto no bucket. **Regra geral daqui pra frente: nunca usar `auth.role() = 'authenticated'` como controle de admin em nenhuma tabela nova — isso significa "qualquer usuário logado", não "o dono do site". Pra admin único, sempre `auth.uid() = <uuid fixo>`.**
-- Projeto Supabase: `https://pvgeramqsatltnvkkpvf.supabase.co`. A chave publicável (anon key) está hardcoded em `admin-simbolos.html` e `assets/flash-decor.js` — **isso é seguro**, é a chave protegida por RLS, não a `service_role`; não reabrir essa discussão sem motivo novo.
+- Projeto Supabase: `https://pibwwyqjrsdwnzsiremx.supabase.co`. A chave publicável (anon key) está hardcoded em `admin-simbolos.html` e `assets/flash-decor.js` — **isso é seguro**, é a chave protegida por RLS, não a `service_role`; não reabrir essa discussão sem motivo novo.
 
 ### Autenticação
 Login via Google OAuth nativo do Supabase Auth. Config manual no
@@ -635,7 +645,7 @@ pra manter os três sincronizados, já que agora commitamos direto.
   mas depende de schema que o agente da máquina ainda precisa criar (ver
   spec abaixo). Credenciais Supabase do projeto Caos Astral já recebidas
   do usuário e hardcoded nos dois arquivos (URL:
-  `https://pvgeramqsatltnvkkpvf.supabase.co`, chave publicável — é
+  `https://pibwwyqjrsdwnzsiremx.supabase.co`, chave publicável — é
   seguro deixar no código-fonte, é a chave pública protegida por RLS,
   não a `service_role`).
 

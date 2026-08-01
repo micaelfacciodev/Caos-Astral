@@ -1,5 +1,11 @@
 # ADENDO CLAUDE.md, Sincronização pós-auditoria (Front ↔ Engine ↔ I Ching)
 
+> ⚠️ **Achado em 01/08 pelo agente de front**: pelo conteúdo de
+> `claude.md` (minúsculo, mantido ativamente), este adendo já parece
+> ter sido incorporado lá em algum momento — não confirmei linha a
+> linha. Ver `claude.md` seção 9 (achado sobre os três arquivos de doc)
+> antes de tratar este arquivo como pendente de aplicar.
+
 Cole este bloco no topo do CLAUDE.md existente, ou substitua as seções
 correspondentes (1, 4, 7) pelo conteúdo abaixo. Motivo: auditoria do repo
 encontrou deriva de vocabulário entre o front (já alinhado com o glossário
@@ -153,7 +159,7 @@ seguir o mesmo padrão de `oraculo.html`: mesmo `SUPABASE_URL` e
 `SUPABASE_ANON_KEY`, mesma chamada de `signInWithOAuth`.
 
 Callback URL registrada no Google Cloud (não mexer nela sem atualizar
-também no Supabase): `https://pvgeramqsatltnvkkpvf.supabase.co/auth/v1/callback`.
+também no Supabase): `https://pibwwyqjrsdwnzsiremx.supabase.co/auth/v1/callback`.
 
 Tabela de histórico do Oráculo (`iching_readings`, migration 0006), rodar a migration no SQL Editor se ainda não tiver sido rodada; sem ela,
 o login funciona mas o salvamento da consulta falha silenciosamente

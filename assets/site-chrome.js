@@ -104,8 +104,8 @@
 
   // credenciais públicas do Supabase (anon/publishable key — protegida por
   // RLS, seguro deixar no código-fonte, ver claude.md seção 4)
-  var SUPABASE_URL = 'https://pvgeramqsatltnvkkpvf.supabase.co';
-  var SUPABASE_KEY = 'sb_publishable_f5iH4AnwTt1jnwGMWg0qGw_-rd06eGm';
+  var SUPABASE_URL = 'https://pibwwyqjrsdwnzsiremx.supabase.co';
+  var SUPABASE_KEY = 'sb_publishable_kPxQ9BGs68o9lich7qWTKw_W83iNPgs';
 
   function currentSlug() {
     var last = location.pathname.split('/').pop() || '';
@@ -122,7 +122,7 @@
   // precisar dele de verdade vai falhar e pedir login de novo).
   function readStoredSession() {
     try {
-      var raw = window.localStorage.getItem('sb-pvgeramqsatltnvkkpvf-auth-token');
+      var raw = window.localStorage.getItem('sb-pibwwyqjrsdwnzsiremx-auth-token');
       if (!raw) return null;
       var parsed = JSON.parse(raw);
       var session = parsed && (parsed.currentSession || parsed);

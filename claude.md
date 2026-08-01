@@ -174,7 +174,7 @@ motor astrológico; se precisar zerar isso também, apagar manualmente).
 - `simbolos_astrologicos` — galeria de arte pra decoração do site. `titulo`, `image_url`, `tags` (text[]), `decor` (boolean), `created_at`. RLS: **SELECT público** (consultado anonimamente por `flash-decor.js` em qualquer página); INSERT/UPDATE/DELETE só `auth.role() = 'authenticated'` — admin único, sem multi-tenant por enquanto.
 - Bucket de Storage `simbolos` — público pra leitura, upload restrito ao admin (ver correção de segurança abaixo). Mesma lógica de RLS aplicada em `storage.objects` filtrando por `bucket_id = 'simbolos'`.
 - **Correção de segurança (0006)**: a policy original (`auth.role() = 'authenticated'`) liberava escrita pra QUALQUER usuário cadastrado no site — não só o admin. Como o Caos Astral tem cadastro aberto (Google OAuth) pro produto principal, isso deixaria qualquer cliente comum apagar/subir símbolo na galeria. Corrigido pra `auth.uid() = '<uuid do admin>'::uuid`, tanto na tabela quanto no bucket. **Regra geral daqui pra frente: nunca usar `auth.role() = 'authenticated'` como controle de admin em nenhuma tabela nova — isso significa "qualquer usuário logado", não "o dono do site". Pra admin único, sempre `auth.uid() = <uuid fixo>`.**
-- Projeto Supabase: `https://pvgeramqsatltnvkkpvf.supabase.co`. A chave publicável (anon key) está hardcoded em `admin-simbolos.html` e `assets/flash-decor.js` — **isso é seguro**, é a chave protegida por RLS, não a `service_role`; não reabrir essa discussão sem motivo novo.
+- Projeto Supabase: `https://pibwwyqjrsdwnzsiremx.supabase.co`. A chave publicável (anon key) está hardcoded em `admin-simbolos.html` e `assets/flash-decor.js` — **isso é seguro**, é a chave protegida por RLS, não a `service_role`; não reabrir essa discussão sem motivo novo.
 
 ### Autenticação
 Login via Google OAuth nativo do Supabase Auth. Config manual no
@@ -464,6 +464,68 @@ pra manter os três sincronizados, já que agora commitamos direto.
 - Rótulos de aspecto reaproveitam a convenção do glossário (fricção = quadratura/oposição, corrente = trígono/sextil) — cores diferentes no widget pra cada categoria.
 - CSS em `assets/style.css` (seção "CÉU AGORA"), script incluído nas mesmas 33 páginas que já têm o header/footer padrão (mesmo `<script defer>`, sem precisar rodar antes de mais nada — não depende do markup do header/footer, só faz `document.body.appendChild`).
 
+**Sessão de 01/08 — 🔴 projeto Supabase INTEIRO trocado (era nos EUA, agora Brasil) — bloqueia tudo até checklist abaixo:**
+- Usuário deletou o projeto Supabase antigo (`pvgeramqsatltnvkkpvf`, hospedado
+  nos EUA) e criou um novo, hospedado no Brasil: `pibwwyqjrsdwnzsiremx`.
+  Edge Functions já redeployadas lá pelo usuário. **Todo o resto (banco,
+  auth, storage) é novo e vazio** — isso não é só trocar URL/key.
+- **O que eu já corrigi neste repo** (mecânico, sem risco): troquei
+  `SUPABASE_URL`/`SUPABASE_KEY`/`SUPABASE_ANON_KEY` e a chave de
+  localStorage (`sb-<ref>-auth-token`, o ref muda) em TODOS os arquivos
+  que tinham credencial antiga hardcoded: `ritual-de-entrada.html`,
+  `kit.html`, `dashboard.html`, `oraculo.html`, `admin-simbolos.html`,
+  `admin-iching.html`, `admin-enciclopedia.html`,
+  `enciclopedia-index.html`, `enciclopedia-verbete.html`,
+  `assets/flash-decor.js`, `assets/site-chrome.js`. Também atualizei as
+  três menções de URL nesta própria documentação (ver nota grande sobre
+  os três arquivos de doc, logo abaixo).
+- **🔴 O que EU NÃO CONSIGO fazer daqui (sem acesso ao Supabase) — pendência
+  do agente da máquina/usuário, nessa ordem, senão nada funciona**:
+  1. **Rodar TODAS as migrations no projeto novo, do zero** — inclusive
+     `0001`–`0004` (que criam `profiles`, `natal_charts`, `cenas_grau`,
+     `planets`, `houses`, `aspects`, e o RLS base) — **esse repo nunca
+     teve esses arquivos versionados aqui** (só existem `0005` em
+     diante). Precisa da fonte original de `0001_schema.sql` até
+     `0004_solar_return_localizacao.sql` de algum outro lugar (histórico
+     do SQL Editor do projeto antigo? backup? outro repo do agente da
+     máquina?) — **se essa fonte não existir em lugar nenhum, o schema
+     base precisa ser reconstruído do zero olhando o código das Edge
+     Functions**, que é a única fonte de verdade restante de como as
+     colunas se chamam.
+  2. **Rodar os seeds** (`seed_0001_planets_houses_aspects.sql`,
+     `seed_0002_graus_simbolicos.sql`, 360 cenas de grau) — mesmo
+     problema, não estão neste repo.
+  3. **Reconfigurar Google OAuth** no projeto novo (Dashboard →
+     Authentication → Providers → Google) — client ID/secret e a
+     redirect URL (`https://pibwwyqjrsdwnzsiremx.supabase.co/auth/v1/callback`)
+     mudaram, mesmo que o client ID do Google Cloud seja reaproveitado,
+     o provider precisa ser configurado de novo no projeto novo.
+  4. **Recriar o bucket de Storage `simbolos`** (RLS: leitura pública,
+     escrita só `auth.uid()` do admin — ver seção 4/9 antiga) — bucket
+     não migra sozinho entre projetos.
+  5. Depois de 1–4: minha migration `0011_profiles_update_policy.sql`
+     (policy de UPDATE em `profiles`) precisa rodar de novo também —
+     ela só existia no projeto antigo, que foi apagado.
+  6. Todas as contas de usuário do projeto antigo (inclusive as duas
+     contas de teste com `profiles` travado que a gente debugou nesta
+     mesma sessão) **deixaram de existir** — auth é por projeto, não
+     migra. Todo mundo precisa se cadastrar de novo no projeto novo.
+- **Achado no meio do caminho, sem relação direta com a troca de
+  projeto, mas sério**: existem **três arquivos de documentação quase
+  duplicados** na raiz do repo — `claude.md` (o que uso a sessão
+  inteira), `CLAUDE.md` (maiúsculo — mesmo conteúdo só que uma versão
+  mais antiga, existia desde antes de eu clonar o repo pela primeira
+  vez e eu nunca tinha reparado, porque git é case-sensitive e os dois
+  coexistem sem conflito) e `ADENDO-CLAUDE.md` (505 linhas, um adendo
+  separado). **Nada do que documentei nesta sessão inteira (RLS fix,
+  site-chrome.js, widget céu-agora, dropdown de login, etc.) foi
+  refletido em `CLAUDE.md` nem em `ADENDO-CLAUDE.md`** — só em
+  `claude.md`. Não tentei reconciliar os três agora (fora de escopo
+  urgente, e não sei qual os outros dois agentes efetivamente leem) —
+  só troquei a URL do Supabase nos três pra não deixar credencial morta
+  espalhada, e estou sinalizando bem alto aqui pra alguém decidir qual
+  arquivo é a fonte de verdade e apagar os outros dois (ou reconciliar).
+
 **Sessão de 01/08 — widget céu-agora usa "Lilith", não "Exílio" (exceção deliberada):**
 - Decisão explícita do usuário: nesse widget especificamente, o rótulo
   é **"Lilith"**, não "Exílio". Chave interna continua `exilio` (mesmo
@@ -493,7 +555,7 @@ pra manter os três sincronizados, já que agora commitamos direto.
 - **Decisão de implementação**: não carreguei o `supabase-js` nem chamei
   `getSession()` em toda página só pra decidir isso — leio direto a
   chave que o próprio `supabase-js` já guarda em `localStorage`
-  (`sb-pvgeramqsatltnvkkpvf-auth-token`). Síncrono, sem esperar rede,
+  (`sb-pibwwyqjrsdwnzsiremx-auth-token`). Síncrono, sem esperar rede,
   sem peso extra de biblioteca carregada à toa. **É otimista de
   propósito**: não valido o token com o servidor, é só decoração do
   header — se o token realmente expirou, a primeira ação que precisar
@@ -630,7 +692,7 @@ pra manter os três sincronizados, já que agora commitamos direto.
   mas depende de schema que o agente da máquina ainda precisa criar (ver
   spec abaixo). Credenciais Supabase do projeto Caos Astral já recebidas
   do usuário e hardcoded nos dois arquivos (URL:
-  `https://pvgeramqsatltnvkkpvf.supabase.co`, chave publicável — é
+  `https://pibwwyqjrsdwnzsiremx.supabase.co`, chave publicável — é
   seguro deixar no código-fonte, é a chave pública protegida por RLS,
   não a `service_role`).
 
