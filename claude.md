@@ -464,6 +464,75 @@ pra manter os três sincronizados, já que agora commitamos direto.
 - Rótulos de aspecto reaproveitam a convenção do glossário (fricção = quadratura/oposição, corrente = trígono/sextil) — cores diferentes no widget pra cada categoria.
 - CSS em `assets/style.css` (seção "CÉU AGORA"), script incluído nas mesmas 33 páginas que já têm o header/footer padrão (mesmo `<script defer>`, sem precisar rodar antes de mais nada — não depende do markup do header/footer, só faz `document.body.appendChild`).
 
+**Sessão de 01/08 — varredura completa fechada: mais um gap (`enciclopedia_simbolos`), agora sim tudo client-side coberto:**
+- Completei a varredura que deixei como pendência no achado anterior:
+  grep de `.from(`/`.storage.from(`/`.rpc(` em TODO o código (literal E
+  variável — `admin-simbolos.html` usa `const TABLE = 'simbolos_astrologicos'`,
+  grep só de string literal não pegava isso). Achei mais um gap real:
+  **`enciclopedia_simbolos`** (tabela) + **`enciclopedia_indice_publico`**
+  (view pública) + **`profiles.is_admin`** (coluna) — mesma história das
+  outras duas rodadas: só existiam citadas em comentário dentro de
+  `admin-enciclopedia.html` como "0003_enciclopedia_simbolos.sql"/
+  "0004_...sql", nunca foram arquivo de verdade neste repo.
+- `supabase/migrations/0013_enciclopedia_simbolos.sql` criada e testada
+  (Postgres local) — schema reconstruído do payload real do formulário
+  admin (14 colunas), RLS: SELECT completo só `tier='gratis'` ou admin
+  (monetização de `tier='pago'` continua sem implementação nenhuma, é o
+  estado real do produto, não um bug), view pública expõe metadados de
+  TODOS os verbetes (inclusive pagos) sem vazar conteúdo, seguindo
+  exatamente o comentário que já existia no código do front.
+- **Achado outro conteúdo real recuperável**: `lote_001_enciclopedia.json`,
+  já versionado neste repo, com 5 verbetes reais (Caosphere, Sigilo
+  pessoal, Ouroboros, Sol, Lua) — não é a enciclopédia inteira (nome
+  já indica lotes), mas é conteúdo de verdade, não inventado. Virou
+  `supabase/seed/seed_0003_enciclopedia.sql`, testado, 5 linhas batendo
+  na tabela E na view depois de rodar.
+- **Resultado da varredura, pra fechar de vez**: as únicas tabelas
+  referenciadas direto por código client-side (HTML/JS, não Edge
+  Function) são: `profiles`, `natal_charts`, `houses`,
+  `iching_hexagrams`, `iching_readings`, `simbolos_astrologicos`,
+  `enciclopedia_simbolos`, `enciclopedia_indice_publico` — todas
+  cobertas agora. `planets`, `aspects`, `cenas_grau`, `daily_readings`,
+  `synastry_readings`, `solar_returns`, `intent_anchors`,
+  `diario_gnose` só são tocadas por Edge Functions (server-side, fora
+  deste repo) — não aparecem em grep de front, por isso continuam só
+  com a confiança que eu já tinha (alta pras que vi o código real,
+  baixa pras 3 que nunca vi).
+- **Ação manual que falta**: `update public.profiles set is_admin =
+  true where id = '<seu-uuid-no-projeto-novo>';` pra conseguir usar
+  `admin-enciclopedia.html` de novo (mesma lógica do UUID hardcoded em
+  `0012`, mas aqui é coluna, roda uma vez só).
+
+**Sessão de 01/08 — mais um gap achado durante o teste do usuário: `simbolos_astrologicos` também nunca foi versionado (404 em produção):**
+- Usuário testou o ritual de entrada no projeto novo, abriu o console
+  do navegador a pedido meu, achou `GET .../rest/v1/simbolos_astrologicos
+  404 (Not Found)` vindo de `flash-decor.js` — **não era a causa do bug
+  de cálculo** (esse erro falha graciosamente, só afeta a decoração
+  visual, claude.md já documentava isso), mas revelou um gap real que
+  eu tinha deixado passar na reconstrução de 01/08: `simbolos_astrologicos`
+  (tabela) + bucket `simbolos` (Storage) **nunca existiram como arquivo
+  neste repo** — só descritos em prosa no claude.md, igual 0001-0004
+  estavam. Migration `0012_simbolos_astrologicos.sql` criada e testada
+  (Postgres local, com `storage.objects` simulado) pra cobrir isso.
+- **Ação manual obrigatória antes de rodar 0012**: o arquivo tem um
+  UUID placeholder (`00000000-...`) nas duas policies de escrita —
+  precisa trocar pelo `auth.uid()` real do admin no projeto NOVO
+  (Authentication → Users → copiar o ID), porque o UUID antigo morreu
+  junto com o projeto deletado. Sem essa troca a policy nunca deixa
+  ninguém escrever (mais seguro que deixar aberto por engano, mas
+  também não funciona até trocar).
+- **Norma que eu deveria ter seguido desde a reconstrução de 01/08 e só
+  segui agora**: qualquer coisa que claude.md só descreve em prosa,
+  sem arquivo `.sql` correspondente neste repo, precisa ser tratada como
+  não-migrada de verdade — o texto da doc não é garantia de que o
+  arquivo existiu ou rodou. Vale a pena, antes de considerar a
+  reconstrução do schema "completa", grepar o código de TODAS as
+  páginas/admin hubs por `.from(` e `supabase.storage.from(` e conferir
+  cada tabela/bucket citado contra o que existe de fato em
+  `supabase/migrations/` — não fiz essa varredura sistemática ainda,
+  fiz reativo (o usuário achou por acaso testando). Pendência: rodar
+  essa varredura completa antes de dar o schema como 100% reconstruído.
+
 **Sessão de 01/08 — schema 0001-0004 reconstruído e VALIDADO (não é só arquivo escrito, rodei de verdade):**
 - Resposta ao pedido "me dá os SQL todos, sem os erros que tavam
   tendo". Como não existe backup do schema original em lugar nenhum,
