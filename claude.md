@@ -341,6 +341,52 @@ embutidos:
 
 ## 7. Pendências conhecidas
 
+- [ ] **🔴 URGENTE — compute-natal-chart retornando 400 em produção**
+      (achado 31/07-01/08, pelo agente de front, fora do escopo normal
+      dele — sinalizando bem alto porque bloqueia o produto inteiro).
+      Sintoma: usuário completa o ritual de entrada inteiro (nome, data,
+      cidade, hora), vê "Login funcionou, mas não consegui calcular seu
+      mapa agora", e `kit.html` também falha depois ("Não consegui
+      calcular seu mapa agora"). Invocations do Supabase confirmam
+      `POST compute-natal-chart` → **400**, ~1.4s de execução (rápido
+      demais pra ter rodado o cálculo — bate com uma validação batendo
+      logo no início, tipo o check de `data_nascimento`/`hora_nascimento`/
+      `utc_offset`/`latitude`/`longitude` faltando).
+      **Causa raiz confirmada em parte**: conferido em duas contas reais
+      via Table Editor — `profiles` fica travado no que a trigger de
+      auto-criação deixa (`nome = 'EMPTY'`, `data_nascimento`/
+      `hora_nascimento` NULL). O upsert real de
+      `ritual-de-entrada.html:finalizarRitual()` está **correto no
+      código** (usa `id`, não `user_id`, `onConflict: 'id'` — já
+      conferido linha a linha) mas parece nunca "pegar".
+      **Hipótese principal, não 100% confirmada**: falta policy de
+      UPDATE em `profiles` pro próprio usuário — a trigger faz o INSERT
+      inicial (não sofre RLS), o upsert do front vira um UPDATE via
+      onConflict e aí precisa de policy própria; se só existir
+      SELECT/INSERT (a tela mostrava "2 RLS policies"), o UPDATE é
+      recusado, o upsert lança erro, cai no catch genérico do front.
+      **Ação tomada**: `supabase/migrations/0011_profiles_update_policy.sql`
+      — cria a policy de UPDATE só se realmente não existir nenhuma
+      ainda (idempotente, seguro mesmo se a hipótese estiver errada).
+      **Falta fazer** (agente da máquina): (1) confirmar via
+      `select * from pg_policies where tablename = 'profiles'` se era
+      isso mesmo antes/depois de rodar a 0011; (2) se não era isso,
+      olhar o `response.body` real do 400 direto no código de
+      `compute-natal-chart` (não consegui pegar o corpo da resposta
+      pelos logs do dashboard, só os metadados — teria que ser via
+      DevTools do navegador ou `curl` com JWT válido); (3) as duas
+      contas já travadas (`nome='EMPTY'`, ids conferidos em conversa,
+      não repetidos aqui por serem PII) continuam quebradas até
+      refazerem o ritual ou alguém rodar um UPDATE manual — a 0011 só
+      destrava upserts *futuros*.
+- [ ] **Seção 4 (schema) está desatualizada** — lista só até
+      `0007_exilio_planeta.sql`, mas o repo já tem `0008_diario.sql`,
+      `0009_exilio_planeta.sql` (nome real da migration do Exílio, não
+      `0007`), `0010_consentimento_profiles.sql`, e agora `0011`. Não
+      reconciliei a lista inteira agora (não tenho certeza de todo o
+      histórico/ordem sem acesso a `supabase/functions/`) — fica pro
+      agente da máquina revisar e corrigir a seção 4 pra bater com a
+      pasta de verdade.
 - [ ] **Sinastria entre duas contas registradas**: hoje `compute-synastry`
       só aceita dados manuais do parceiro — RLS de `natal_charts` bloqueia
       ler o mapa de outro usuário. Precisa de mecanismo de consentimento
