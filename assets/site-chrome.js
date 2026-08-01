@@ -17,7 +17,12 @@
  * via Supabase Auth, mesmas credenciais/chamadas de ritual-de-entrada.html)
  * com link "Criar agora" pro ritual de entrada. Toda página que NÃO
  * define window.SITE_CHROME.headerCta recebe esse dropdown — não dá
- * mais "Abrir meu kit" estático.
+ * mais "Abrir meu kit" estático. Login bem-sucedido (Google ou
+ * e-mail/senha) redireciona pro `dashboard` — não pro `kit` — porque o
+ * dashboard é o hub e ainda funciona (fallback gracioso) mesmo com
+ * compute-natal-chart/compute-daily-window fora do ar; o kit hoje trava
+ * numa tela de erro morta quando o cálculo falha (ver claude.md,
+ * pendência do compute-natal-chart).
  *
  * LIMITAÇÃO CONHECIDA: este script não checa sessão existente pra trocar
  * o dropdown por um estado "logado" (ex.: "Minha conta"/"Sair") nas
@@ -248,10 +253,16 @@
 
     document.getElementById('navBtnGoogle').addEventListener('click', function () {
       getAuthClient().then(function (sb) {
+        // mesma pasta da página atual (preserva o base path, ex.: /Caos-Astral/),
+        // trocando só o arquivo final por dashboard — consistente com o
+        // e-mail/senha logo abaixo. NÃO confundir com o botão Google
+        // de dentro de ritual-de-entrada.html, que é outro código e
+        // continua voltando pra si mesmo de propósito (precisa terminar
+        // o ritual/cálculo antes de sair da página).
+        var dir = window.location.pathname.replace(/[^/]*$/, '');
         sb.auth.signInWithOAuth({
           provider: 'google',
-          // volta pra mesma página depois do login, igual ritual-de-entrada.html
-          options: { redirectTo: window.location.origin + window.location.pathname },
+          options: { redirectTo: window.location.origin + dir + 'dashboard' },
         });
       });
     });
@@ -264,7 +275,10 @@
       getAuthClient().then(function (sb) {
         sb.auth.signInWithPassword({ email: email, password: senha }).then(function (res) {
           if (res.error) { showError('e-mail ou senha incorretos.'); return; }
-          window.location.href = 'kit';
+          // dashboard é o hub — funciona mesmo com compute-daily-window/
+          // compute-natal-chart fora do ar (mostra fallback gracioso em
+          // vez de travar numa tela de erro, como o kit faz hoje)
+          window.location.href = 'dashboard';
         });
       });
     });
