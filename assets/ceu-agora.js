@@ -35,7 +35,7 @@
     { key: 'neptune', label: 'Netuno', glyph: '♆', body: 'Neptune' },
     { key: 'pluto', label: 'Plutão', glyph: '♇', body: 'Pluto' },
     { key: 'chiron', label: 'Quíron', glyph: '⚷', custom: true },
-    { key: 'exilio', label: 'Exílio', glyph: '⚸', lilith: true },
+    { key: 'exilio', label: 'Lilith', glyph: '⚸', lilith: true },
   ];
 
   var ASPECTS = [
@@ -106,8 +106,12 @@
     return norm360(ecl.elon);
   }
 
-  // ---- Exílio (Lilith Negra verdadeira = apogeu osculante da órbita
-  // lunar): NÃO é a Lilith média (polinômio suavizado que a maioria dos
+  // ---- Lilith (True Black Moon Lilith = apogeu osculante da órbita
+  // lunar): chave interna continua 'exilio' (mesmo ponto que o resto do
+  // produto chama de Exílio), mas o RÓTULO aqui é "Lilith" de propósito
+  // — decisão explícita do usuário pra este widget especificamente, não
+  // reverter pra "Exílio" achando que é inconsistência com o glossário.
+  // NÃO é a Lilith média (polinômio suavizado que a maioria dos
   // sites usa por padrão) — é o apogeu instantâneo, calculado a partir
   // do vetor de excentricidade osculante da órbita relativa Terra-Lua
   // no instante exato. Perigeu e apogeu ficam na mesma reta (vistos da

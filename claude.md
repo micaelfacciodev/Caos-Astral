@@ -464,6 +464,20 @@ pra manter os três sincronizados, já que agora commitamos direto.
 - Rótulos de aspecto reaproveitam a convenção do glossário (fricção = quadratura/oposição, corrente = trígono/sextil) — cores diferentes no widget pra cada categoria.
 - CSS em `assets/style.css` (seção "CÉU AGORA"), script incluído nas mesmas 33 páginas que já têm o header/footer padrão (mesmo `<script defer>`, sem precisar rodar antes de mais nada — não depende do markup do header/footer, só faz `document.body.appendChild`).
 
+**Sessão de 01/08 — widget céu-agora usa "Lilith", não "Exílio" (exceção deliberada):**
+- Decisão explícita do usuário: nesse widget especificamente, o rótulo
+  é **"Lilith"**, não "Exílio". Chave interna continua `exilio` (mesmo
+  ponto, mesmo cálculo), só o texto mostrado mudou.
+- **Registrando pra não ser revertido por engano depois**: isso É uma
+  exceção ao glossário (`Exílio` é o termo de marca em todo o resto do
+  produto — kit.html, `planets.rotulo_caos`, etc.). Não generalizei pro
+  resto do site. Se um agente futuro notar essa "inconsistência" e
+  achar que devia unificar, essa nota é o motivo de não mexer sem
+  perguntar de novo — foi pedido assim de propósito, provavelmente
+  porque esse widget é uma leitura mais crua/técnica (no estilo do
+  print de referência do astro.com que motivou a ferramenta), não
+  conteúdo de marca do kit.
+
 **Sessão de 01/08 — widget "O céu agora": Exílio (Lilith verdadeira) + botão com texto:**
 - **Botão deixou de ser só um ícone** — agora mostra "Céu agora" escrito (pílula com texto, não mais bolinha só com glifo). Feedback direto: "só chico xavier sabe que tá ali" — justo, ícone sozinho não se explica.
 - **Adicionado Exílio** (Lilith Negra verdadeira) à lista de pontos do widget — era o único do glossário faltando (já tinha Quíron). Implementação **não trivial**, documentando aqui porque é fácil de fazer errado: True Lilith é o apogeu *osculante* da órbita lunar (a direção instantânea, calculada a partir do vetor de excentricidade osculante Terra-Lua no exato momento — não é a Lilith média, que é um polinômio suavizado que a maioria dos sites usa por padrão sem avisar qual é qual). Usei `Astronomy.GeoMoonState()` (posição+velocidade da Lua) rotacionado pra eclíptica, calculei o vetor de excentricidade com μ geocêntrico Terra+Lua (não só GM da Terra sozinha — usar só GM_Terra dá direção sistematicamente errada), e Lilith = direção desse vetor + 180° (perigeu e apogeu ficam na mesma reta vista da Terra).
