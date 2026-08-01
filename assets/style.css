@@ -165,6 +165,45 @@ nav.wrap{ display:flex; align-items:center; justify-content:space-between; heigh
   .auth-dropdown{ width:calc(100vw - 40px); right:-14px; }
 }
 
+/* ---------- CÉU AGORA (widget fixo, canto inferior direito) ---------- */
+.ceu-agora{ position:fixed; right:20px; bottom:20px; z-index:70; font-family:'IBM Plex Mono', monospace; }
+.ceu-agora-toggle{
+  width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  background:var(--bg-panel-2); border:1px solid var(--line-bright); color:var(--accent-bright);
+  cursor:pointer; font-size:1.1rem; box-shadow:0 4px 18px rgba(0,0,0,0.4);
+  transition:transform .2s ease, border-color .2s ease;
+}
+.ceu-agora-toggle:hover{ border-color:var(--ink-dim); transform:scale(1.06); }
+.ceu-agora.open .ceu-agora-toggle{ display:none; }
+.ceu-agora-panel{
+  display:none; position:absolute; right:0; bottom:0; width:300px; max-height:70vh; overflow-y:auto;
+  background:var(--bg-panel-2); border:1px solid var(--line-bright); padding:16px;
+  box-shadow:0 12px 34px rgba(0,0,0,0.45);
+}
+.ceu-agora.open .ceu-agora-panel{ display:block; }
+.ceu-agora-head{ display:flex; align-items:center; justify-content:space-between; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-dim); margin-bottom:4px; }
+.ceu-agora-close{ background:none; border:none; color:var(--ink-dim); font-size:1rem; cursor:pointer; line-height:1; padding:0 2px; }
+.ceu-agora-close:hover{ color:var(--ink); }
+.ceu-agora-time{ font-size:0.68rem; color:var(--ink-faint); margin-bottom:12px; }
+.ceu-agora-planetas{ display:flex; flex-direction:column; gap:1px; margin-bottom:14px; }
+.ceu-agora-row{ display:flex; align-items:center; gap:8px; padding:5px 0; border-bottom:1px solid var(--line); font-size:0.74rem; }
+.ceu-agora-row:last-child{ border-bottom:none; }
+.ceu-agora-glyph-sm{ width:16px; text-align:center; color:var(--accent-bright); }
+.ceu-agora-planeta-nome{ flex:1; color:var(--ink-dim); }
+.ceu-agora-grau{ color:var(--ink); white-space:nowrap; }
+.ceu-agora-aspectos-head{ font-size:0.68rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-faint); margin-bottom:6px; }
+.ceu-agora-aspectos{ display:flex; flex-direction:column; gap:1px; }
+.ceu-agora-aspecto{ display:flex; align-items:center; justify-content:space-between; gap:8px; padding:5px 0; border-bottom:1px solid var(--line); font-size:0.7rem; color:var(--ink-dim); }
+.ceu-agora-aspecto:last-child{ border-bottom:none; }
+.ceu-agora-aspecto--friccao{ color:#c14a3c; }
+.ceu-agora-aspecto--corrente{ color:#6ea36b; }
+.ceu-agora-orbe{ color:var(--ink-faint); font-size:0.66rem; white-space:nowrap; }
+.ceu-agora-sem-aspecto{ font-size:0.7rem; color:var(--ink-faint); font-style:italic; }
+@media (max-width:480px){
+  .ceu-agora{ right:14px; bottom:14px; }
+  .ceu-agora-panel{ width:calc(100vw - 28px); right:-6px; }
+}
+
 /* ---------- THEME TOGGLE (claro/escuro) ---------- */
 .theme-toggle{
   display:inline-flex; align-items:center; justify-content:center;
