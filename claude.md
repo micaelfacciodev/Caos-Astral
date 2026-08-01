@@ -464,6 +464,54 @@ pra manter os três sincronizados, já que agora commitamos direto.
 - Rótulos de aspecto reaproveitam a convenção do glossário (fricção = quadratura/oposição, corrente = trígono/sextil) — cores diferentes no widget pra cada categoria.
 - CSS em `assets/style.css` (seção "CÉU AGORA"), script incluído nas mesmas 33 páginas que já têm o header/footer padrão (mesmo `<script defer>`, sem precisar rodar antes de mais nada — não depende do markup do header/footer, só faz `document.body.appendChild`).
 
+**Sessão de 01/08 — schema 0001-0004 reconstruído e VALIDADO (não é só arquivo escrito, rodei de verdade):**
+- Resposta ao pedido "me dá os SQL todos, sem os erros que tavam
+  tendo". Como não existe backup do schema original em lugar nenhum,
+  reconstruí do zero — mas não entreguei sem testar: instalei Postgres
+  localmente (sandbox), simulei `auth.users`/`auth.uid()`/`auth.jwt()`
+  (o mínimo que o Supabase fornece nativamente) e rodei os arquivos
+  novos **de verdade**, na ordem, mais TODAS as migrations que já
+  existiam neste repo (0005-0011) por cima, pra confirmar que tudo se
+  encaixa sem erro de verdade (só notices esperados de `drop policy if
+  exists` em tabela nova, e um erro que era só limitação do meu teste —
+  faltava simular `auth.jwt()`, corrigido e re-testado). Contagens
+  finais batendo: 12 planets, 12 houses, 5 aspects, **360 cenas_grau**,
+  64 iching_hexagrams, `profiles` nascendo com as 2 policies certas
+  (SELECT+UPDATE) — sem precisar da 0011 depois, ela já roda como no-op
+  idempotente se aplicada de novo.
+- **Arquivos criados**: `supabase/migrations/0001_schema.sql` (profiles,
+  natal_charts, planets, houses, aspects, cenas_grau, daily_readings,
+  synastry_readings, solar_returns — todas com RLS),
+  `supabase/seed/seed_0001_planets_houses_aspects.sql`,
+  `supabase/seed/seed_0002_graus_simbolicos.sql`.
+- **Achado ótimo no meio do caminho**: as 360 cenas de grau (conteúdo
+  autoral, a peça que eu realmente não tinha como reconstruir sozinho)
+  **não estavam perdidas** — tinha uma pasta `graus-caos-astral/` já
+  versionada neste mesmo repo com o JSON completo
+  (`graus-caos-astral-completo.json`), 360 entradas, validei 1:1 contra
+  o schema esperado (12 signos × 30 graus, todos os campos, zero
+  duplicata/falta) antes de gerar o INSERT — gerado por script a partir
+  do JSON real, não digitado/reconstruído de memória.
+- **Nível de confiança documentado dentro do próprio 0001_schema.sql**,
+  por tabela: ALTO (profiles, natal_charts, planets, aspects — direto
+  do código real de compute-natal-chart + das migrations 0005-0011 que
+  já existiam), MÉDIO (cenas_grau — estrutura confirmada por código,
+  conteúdo recuperado de verdade), BAIXO (houses, daily_readings,
+  synastry_readings, solar_returns — nunca vi compute-daily-window/
+  compute-solar-return/compute-synastry, essas 3 Edge Functions nunca
+  foram versionadas neste repo; inferi o shape só pela descrição em
+  claude.md, PROVÁVEL que precise ajuste depois de testar de verdade).
+- **Gap real que não dá pra fingir que resolvi**: `houses.rotulo_caos`
+  (o texto de marca por casa, ex. nomes próprios de território) fica
+  **NULL de propósito** — não tenho esse conteúdo em lugar nenhum, só
+  os placeholders óbvios de preview (`FAKE_TERRITORIOS` no rascunho
+  antigo do onboarding) que nunca foram o texto real. `tema` preenchido
+  com conhecimento astrológico tradicional/genérico (domínio público,
+  não é conteúdo de marca) só pra tabela não ficar vazia.
+- **Efeito colateral direto dessa troca de projeto**: toda conta de
+  teste anterior (as duas que a gente debugou na sessão passada)
+  deixou de existir — banco novo, ninguém cadastrado ainda.
+
 **Sessão de 01/08 — 🔴 projeto Supabase INTEIRO trocado (era nos EUA, agora Brasil) — bloqueia tudo até checklist abaixo:**
 - Usuário deletou o projeto Supabase antigo (`pvgeramqsatltnvkkpvf`, hospedado
   nos EUA) e criou um novo, hospedado no Brasil: `pibwwyqjrsdwnzsiremx`.
