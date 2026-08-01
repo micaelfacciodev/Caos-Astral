@@ -161,6 +161,10 @@ nav.wrap{ display:flex; align-items:center; justify-content:space-between; heigh
 .auth-divider::before, .auth-divider::after{ content:""; flex:1; height:1px; background:var(--line); }
 .auth-dropdown-foot{ margin-top:12px; font-size:0.74rem; color:var(--ink-dim); text-align:center; }
 .auth-dropdown-foot a{ color:var(--ink); border-bottom:1px solid var(--line-bright); }
+.nav-account-caret{ font-size:0.6rem; color:var(--ink-faint); }
+.auth-account-email{ font-size:0.72rem; color:var(--ink-faint); word-break:break-all; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid var(--line); }
+.auth-account-link{ display:block; padding:8px 0; font-family:'IBM Plex Mono', monospace; font-size:0.82rem; color:var(--ink-dim); }
+.auth-account-link:hover{ color:var(--ink); }
 @media (max-width:480px){
   .auth-dropdown{ width:calc(100vw - 40px); right:-14px; }
 }

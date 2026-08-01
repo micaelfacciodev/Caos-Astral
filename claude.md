@@ -464,6 +464,29 @@ pra manter os três sincronizados, já que agora commitamos direto.
 - Rótulos de aspecto reaproveitam a convenção do glossário (fricção = quadratura/oposição, corrente = trígono/sextil) — cores diferentes no widget pra cada categoria.
 - CSS em `assets/style.css` (seção "CÉU AGORA"), script incluído nas mesmas 33 páginas que já têm o header/footer padrão (mesmo `<script defer>`, sem precisar rodar antes de mais nada — não depende do markup do header/footer, só faz `document.body.appendChild`).
 
+**Sessão de 01/08 — CTA do header agora sabe se você está logado:**
+- Fechei a pendência registrada na sessão anterior ("usuário logado em
+  página comum ainda vê Entrar"). Agora o header tem 3 estados: override
+  manual (dashboard/admin, como já era) → sessão salva → mostra o
+  e-mail com um menuzinho (Meu ecossistema / Meu kit / Sair) → sem
+  sessão → dropdown de Entrar de sempre.
+- **Decisão de implementação**: não carreguei o `supabase-js` nem chamei
+  `getSession()` em toda página só pra decidir isso — leio direto a
+  chave que o próprio `supabase-js` já guarda em `localStorage`
+  (`sb-pvgeramqsatltnvkkpvf-auth-token`). Síncrono, sem esperar rede,
+  sem peso extra de biblioteca carregada à toa. **É otimista de
+  propósito**: não valido o token com o servidor, é só decoração do
+  header — se o token realmente expirou, a primeira ação que precisar
+  dele de verdade (abrir o kit, etc.) falha do jeito normal e pede login
+  de novo, igual qualquer outro app.
+- **Limitação que ainda fica**: sem `onAuthStateChange` entre páginas —
+  se alguém loga em `ritual-de-entrada.html` (fluxo próprio dela, não o
+  dropdown) e não recarrega, o header de outra aba/página não atualiza
+  sozinho até o próximo load. Aceitável, não vale a complexidade de um
+  listener cross-tab pra isso agora.
+- Botão "Sair" chama `sb.auth.signOut()` (mesmo client sob demanda já
+  usado pro login) e manda pro `index`.
+
 **Sessão de 31/07 — CTA do header virou dropdown de Entrar/Cadastrar:**
 - **Pedido original desde o começo desta sessão**: tirar o "Abrir meu
   kit" do menu e trocar por um Entrar/Cadastre-se simples, com Google.

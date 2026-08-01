@@ -13,23 +13,28 @@
  * — isso é exatamente o que esse arquivo existe pra evitar (menu
  * divergindo por página, um por agente que passou por ali).
  *
- * CTA do header — padrão é o dropdown "Entrar" (Google + e-mail/senha,
- * via Supabase Auth, mesmas credenciais/chamadas de ritual-de-entrada.html)
- * com link "Criar agora" pro ritual de entrada. Toda página que NÃO
- * define window.SITE_CHROME.headerCta recebe esse dropdown — não dá
- * mais "Abrir meu kit" estático. Login bem-sucedido (Google ou
+ * CTA do header — três estados. (1) Override manual (dashboard logado,
+ * admin) -> CTA simples de sempre, sem checar nada. (2) Sem override +
+ * sessão salva no navegador -> mostra o e-mail com um menu de conta
+ * (Meu ecossistema / Meu kit / Sair). (3) Sem override + sem sessão ->
+ * dropdown "Entrar" (Google + e-mail/senha via Supabase Auth, mesmas
+ * credenciais/chamadas de ritual-de-entrada.html) com link "Criar
+ * agora" pro ritual de entrada. Login bem-sucedido (Google ou
  * e-mail/senha) redireciona pro `dashboard` — não pro `kit` — porque o
  * dashboard é o hub e ainda funciona (fallback gracioso) mesmo com
  * compute-natal-chart/compute-daily-window fora do ar; o kit hoje trava
  * numa tela de erro morta quando o cálculo falha (ver claude.md,
  * pendência do compute-natal-chart).
  *
- * LIMITAÇÃO CONHECIDA: este script não checa sessão existente pra trocar
- * o dropdown por um estado "logado" (ex.: "Minha conta"/"Sair") nas
- * páginas comuns — só dashboard.html/admin-*.html têm CTA de logado,
- * via override manual (abaixo), porque cada uma já checa a sessão na
- * própria lógica da página. Um usuário já logado que visita raizes.html,
- * por exemplo, ainda vê "Entrar". Ver claude.md seção 9, pendência.
+ * Detecção de sessão é OTIMISTA: lê direto a chave que o supabase-js
+ * já guarda em localStorage (sem carregar a lib nem validar com o
+ * servidor) só pra decidir o que mostrar. É decoração de UI, não gate
+ * de conteúdo — se o token realmente tiver expirado, a primeira ação
+ * que precisar dele de verdade (abrir o kit, etc.) vai falhar do jeito
+ * normal e pedir login de novo. Login/logout feito por FORA deste
+ * dropdown (ex.: login direto em ritual-de-entrada.html) só reflete
+ * aqui depois de recarregar a página — não há listener de
+ * onAuthStateChange entre páginas.
  *
  * Overrides pontuais (login-gated, admin etc.) via variável global
  * definida ANTES deste script, ex.:
@@ -108,6 +113,26 @@
     return last === '' ? 'index' : last;
   }
 
+  // ---- sessão salva: lida direto do localStorage, sem carregar o
+  // supabase-js inteiro só pra decidir o que mostrar no header. O
+  // supabase-js v2 guarda a sessão em 'sb-<project-ref>-auth-token'.
+  // Leitura otimista: se tem usuário guardado, mostra estado logado —
+  // não valida token com o servidor aqui (isso é decoração de UI, não
+  // gate de conteúdo; se o token realmente expirou, a primeira ação que
+  // precisar dele de verdade vai falhar e pedir login de novo).
+  function readStoredSession() {
+    try {
+      var raw = window.localStorage.getItem('sb-pvgeramqsatltnvkkpvf-auth-token');
+      if (!raw) return null;
+      var parsed = JSON.parse(raw);
+      var session = parsed && (parsed.currentSession || parsed);
+      if (!session || !session.user) return null;
+      return session;
+    } catch (e) {
+      return null;
+    }
+  }
+
   function ctaMarkup(cta, extraClass) {
     var cls = 'btn ' + (extraClass || 'btn-ghost mono');
     if (cta.onclick) {
@@ -136,6 +161,22 @@
     );
   }
 
+  function buildAccountBlock(session) {
+    var email = (session.user && session.user.email) || '';
+    var label = email ? email.split('@')[0] : 'Minha conta';
+    return (
+      '<div class="nav-auth" id="navAccount">\n' +
+      '      <button type="button" class="btn btn-ghost mono" id="navAccountToggle" aria-expanded="false">' + label + ' <span class="nav-account-caret">▾</span></button>\n' +
+      '      <div class="auth-dropdown" id="navAccountDropdown">\n' +
+      '        <div class="auth-account-email">' + (email || label) + '</div>\n' +
+      '        <a href="dashboard" class="auth-account-link">Meu ecossistema</a>\n' +
+      '        <a href="kit" class="auth-account-link">Meu kit</a>\n' +
+      '        <button type="button" class="btn btn-ghost mono" id="navBtnSair" style="width:100%; margin-top:12px;">Sair</button>\n' +
+      '      </div>\n' +
+      '    </div>'
+    );
+  }
+
   function buildHeader(activeSlug) {
     var groupsHtml = NAV_GROUPS.map(function (group) {
       var linksHtml = group.links
@@ -155,9 +196,18 @@
       );
     }).join('\n      ');
 
-    // sem override (maioria das páginas) -> dropdown de Entrar/Cadastrar.
-    // com override (dashboard logado, admin) -> CTA simples de sempre.
-    var ctaSlot = cfg.headerCta ? ctaMarkup(cfg.headerCta, 'btn-ghost mono') : buildAuthBlock();
+    // três estados possíveis: override manual (dashboard logado, admin) ->
+    // CTA simples de sempre; sem override + sessão salva -> conta logada;
+    // sem override + sem sessão -> dropdown de Entrar/Cadastrar.
+    var session = cfg.headerCta ? null : readStoredSession();
+    var ctaSlot;
+    if (cfg.headerCta) {
+      ctaSlot = ctaMarkup(cfg.headerCta, 'btn-ghost mono');
+    } else if (session) {
+      ctaSlot = buildAccountBlock(session);
+    } else {
+      ctaSlot = buildAuthBlock();
+    }
 
     return (
       '<nav class="wrap">\n' +
@@ -284,11 +334,44 @@
     });
   }
 
+  function setupAccountDropdown() {
+    var wrap = document.getElementById('navAccount');
+    if (!wrap) return; // não está logado, ou é página com override — nada a fazer
+
+    var toggle = document.getElementById('navAccountToggle');
+    toggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = wrap.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+    document.addEventListener('click', function (e) {
+      if (!wrap.contains(e.target)) {
+        wrap.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        wrap.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    document.getElementById('navBtnSair').addEventListener('click', function () {
+      getAuthClient().then(function (sb) {
+        sb.auth.signOut().then(function () {
+          window.location.href = 'index';
+        });
+      });
+    });
+  }
+
   var slug = currentSlug();
   var headerEl = document.getElementById('site-header') || document.querySelector('header.site-header');
   if (headerEl) {
     headerEl.innerHTML = buildHeader(slug);
     setupAuthDropdown();
+    setupAccountDropdown();
   }
 
   if (cfg.footer !== false) {
