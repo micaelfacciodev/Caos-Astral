@@ -464,6 +464,56 @@ pra manter os três sincronizados, já que agora commitamos direto.
 - Rótulos de aspecto reaproveitam a convenção do glossário (fricção = quadratura/oposição, corrente = trígono/sextil) — cores diferentes no widget pra cada categoria.
 - CSS em `assets/style.css` (seção "CÉU AGORA"), script incluído nas mesmas 33 páginas que já têm o header/footer padrão (mesmo `<script defer>`, sem precisar rodar antes de mais nada — não depende do markup do header/footer, só faz `document.body.appendChild`).
 
+**Sessão de 01/08 — kit.html: mapa astral deixa de ser placeholder estático, vira SVG dinâmico com posições reais + aspectos:**
+- Usuário testou de novo depois da `0015` — **calculou!** Ritual completo
+  funcionando de ponta a ponta pela primeira vez desde a troca de
+  projeto (RLS de UPDATE + GRANT sistêmico + RLS de INSERT, as três
+  causas juntas, resolvidas).
+- Usuário reparou que o `<svg id="kit-wheel-svg">` de `kit.html` era
+  puramente decorativo — glifos em coordenadas de pixel fixas no
+  código, sem nenhuma relação com o mapa real da pessoa (já vinha
+  assim desde o protótipo original, com comentário `ENGINE:` avisando
+  "substituir por render dinâmico da posição real", nunca feito).
+  Implementado agora:
+  - **Rotação do mapa**: ascendente sempre no ponto esquerdo (9h),
+    casas (signo inteiro) preenchendo os 12 setores de 30° em sentido
+    anti-horário a partir do INÍCIO do signo do ascendente (não do grau
+    exato do ascendente) — bate exatamente com como
+    `compute-natal-chart` já calcula `casa` (`(signIdx - ascSignIdx +
+    12) % 12 + 1`, só por diferença de signo).
+  - **Testado ANTES de integrar**: matemática de rotação isolada num
+    script Node à parte, conferindo que ASC cai exatamente no ponto
+    esquerdo, a casa 2 fica abaixo-à-esquerda (sentido anti-horário
+    correto), 90° adiante cai embaixo (região do Fundo do Céu) — só
+    depois de bater certo é que entrou no `kit.html`.
+  - **Testado de novo depois de integrado**: extraí as funções puras de
+    geometria do arquivo real (não uma cópia) e rodei com um mapa de
+    teste completo (12 pontos, incluindo 3 próximos entre si em Leão
+    pra testar anti-sobreposição, 6 aspectos variados) — SVG gerado,
+    198 coordenadas conferidas uma a uma (nenhuma fora do viewBox,
+    nenhuma NaN), convertido pra PNG e inspecionado, e conferido
+    programaticamente que os 12 signos aparecem na ordem certa girando
+    anti-horário a partir do signo do ascendente.
+  - **Anti-sobreposição simples**: planetas a menos de 7° de longitude
+    um do outro alternam entre dois raios (mais próximo/mais afastado
+    do centro), evita glifos empilhados exatamente um em cima do outro.
+  - **Linhas de aspecto**: desenhadas num raio interno fixo (separado
+    da posição visual dos glifos, que pode ter sido deslocada pelo
+    anti-sobreposição), cor por categoria — fricção (quadratura/
+    oposição) em tom de acento, corrente (trígono/sextil) em verde,
+    conjunção em cinza tracejado — mesma paleta já usada no widget "céu
+    agora", por consistência.
+  - **Marcadores de ASC/DESC/MC/IC** na borda externa, nas posições
+    reais (MC/IC não caem necessariamente em cima/embaixo sob signo
+    inteiro, já que a rotação segue o início do signo do ascendente,
+    não o grau exato — isso é esperado, não bug).
+  - Retrogradação: pequeno "r" ao lado do glifo, mesma convenção do
+    resto do site.
+  - SVG estático inicial (fallback antes do JS rodar, ou se
+    `chart.ascendente` vier nulo por algum motivo) simplificado pra só
+    os círculos de referência — sem mais glifo nenhum em posição falsa,
+    pra nunca mostrar dado errado por engano.
+
 **Sessão de 01/08 — 🔴 depois do GRANT, apareceu a causa raiz seguinte: faltava policy de INSERT em profiles:**
 - GRANT resolvido (0014) não foi suficiente sozinho — usuário testou de
   novo, mesma mensagem genérica pro usuário, mas dessa vez o console

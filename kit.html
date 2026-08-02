@@ -63,16 +63,8 @@
         <div class="kit-wheel-box">
           <svg viewBox="0 0 400 400" id="kit-wheel-svg">
             <circle cx="200" cy="200" r="182" fill="none" stroke="var(--line-bright)" stroke-width="1"/>
-            <circle cx="200" cy="200" r="140" fill="none" stroke="var(--line)" stroke-width="0.6"/>
-            <circle cx="200" cy="200" r="60" fill="none" stroke="var(--line)" stroke-width="0.6"/>
-            <g stroke="var(--ink-dim)" stroke-width="0.6" opacity="0.7">
-              <line x1="200" y1="18" x2="200" y2="382"/><line x1="18" y1="200" x2="382" y2="200"/>
-              <line x1="61" y1="61" x2="339" y2="339"/><line x1="339" y1="61" x2="61" y2="339"/>
-            </g>
-            <text x="196" y="70" font-family="IBM Plex Mono" font-size="15" fill="var(--ink)">☉</text>
-            <text x="292" y="140" font-family="IBM Plex Mono" font-size="15" fill="var(--ink)">☽</text>
-            <text x="110" y="300" font-family="IBM Plex Mono" font-size="14" fill="var(--accent-bright)">⚷</text>
-            <text x="270" y="290" font-family="IBM Plex Mono" font-size="13" fill="var(--ink)">♄</text>
+            <circle cx="200" cy="200" r="155" fill="none" stroke="var(--line)" stroke-width="0.6"/>
+            <circle cx="200" cy="200" r="62" fill="none" stroke="var(--line)" stroke-width="0.6"/>
           </svg>
         </div>
 
@@ -183,6 +175,25 @@
   const PLANET_ORDER = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter',
     'saturn', 'uranus', 'neptune', 'pluto', 'chiron', 'exilio'];
 
+  // glifos — mesmo padrão usado em assets/ceu-agora.js, pra consistência
+  // visual entre o widget "céu agora" e o mapa do kit
+  const PLANET_GLYPHS = {
+    sun: '☉', moon: '☽', mercury: '☿', venus: '♀', mars: '♂',
+    jupiter: '♃', saturn: '♄', uranus: '♅', neptune: '♆', pluto: '♇',
+    chiron: '⚷', exilio: '⚸',
+  };
+  const SIGN_GLYPHS = ['♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏', '♐', '♑', '♒', '♓'];
+
+  // fricção = quadratura/oposição, corrente = trígono/sextil — mesma
+  // convenção do glossário, mesmas cores do widget céu-agora
+  const ASPECT_STYLE = {
+    square: { cor: '#c14a3c', largura: 1, traco: null },
+    opposition: { cor: '#c14a3c', largura: 1, traco: null },
+    trine: { cor: '#6ea36b', largura: 1, traco: null },
+    sextile: { cor: '#6ea36b', largura: 0.8, traco: null },
+    conjunction: { cor: 'var(--ink-faint)', largura: 0.6, traco: '2,2' },
+  };
+
   function capitalize(s) {
     if (!s) return '—';
     return s.charAt(0).toUpperCase() + s.slice(1);
@@ -233,9 +244,140 @@
     return tr;
   }
 
+  // ------------------------------------------------------------
+  // MAPA DINÂMICO — ascendente sempre no ponto esquerdo (9h), casas
+  // (signo inteiro) preenchendo os 12 setores de 30° em sentido
+  // anti-horário a partir dali. Testado à parte antes de integrar
+  // (ver claude.md) — ASC cai exatamente no ponto esquerdo, casa 2
+  // fica abaixo-esquerda (sentido anti-horário correto), 90° adiante
+  // cai embaixo (região do Fundo do Céu).
+  // ------------------------------------------------------------
+  const WHEEL_CX = 200, WHEEL_CY = 200;
+
+  function wheelXY(lonDeg, radius, rotationOffset) {
+    const screenLon = norm360(lonDeg - rotationOffset);
+    const phi = (180 - screenLon) * Math.PI / 180;
+    return { x: WHEEL_CX + radius * Math.cos(phi), y: WHEEL_CY + radius * Math.sin(phi) };
+  }
+
+  function buildWheelSVG(chart) {
+    const ascendente = chart.ascendente;
+    if (ascendente == null) return null; // sem ascendente não dá pra orientar o mapa
+
+    const ascSignIdx = Math.floor(norm360(ascendente) / 30);
+    const rotationOffset = ascSignIdx * 30;
+
+    const R_OUTER = 182, R_SIGN_IN = 155, R_HOUSE_LABEL = 168;
+    const R_PLANET_A = 130, R_PLANET_B = 106, R_ASPECT = 62;
+
+    let svg = '';
+
+    // três círculos de referência (mesmos raios do placeholder antigo)
+    svg += `<circle cx="${WHEEL_CX}" cy="${WHEEL_CY}" r="${R_OUTER}" fill="none" stroke="var(--line-bright)" stroke-width="1"/>`;
+    svg += `<circle cx="${WHEEL_CX}" cy="${WHEEL_CY}" r="${R_SIGN_IN}" fill="none" stroke="var(--line)" stroke-width="0.6"/>`;
+    svg += `<circle cx="${WHEEL_CX}" cy="${WHEEL_CY}" r="${R_ASPECT}" fill="none" stroke="var(--line)" stroke-width="0.6"/>`;
+
+    // 12 linhas de casa (= fronteira de signo, sob signo inteiro) do
+    // centro até a borda do anel de signos, + glifo do signo no meio
+    // de cada setor + número da casa
+    for (let h = 0; h < 12; h++) {
+      const lonSetor = rotationOffset + h * 30;
+      const p1 = wheelXY(lonSetor, 0, rotationOffset);
+      const p2 = wheelXY(lonSetor, R_SIGN_IN, rotationOffset);
+      const opacity = h === 0 ? '1' : '0.5'; // linha da casa 1 (ascendente) destacada
+      svg += `<line x1="${p1.x.toFixed(1)}" y1="${p1.y.toFixed(1)}" x2="${p2.x.toFixed(1)}" y2="${p2.y.toFixed(1)}" stroke="var(--ink-dim)" stroke-width="${h === 0 ? 1 : 0.6}" opacity="${opacity}"/>`;
+
+      const signIdx = Math.floor(norm360(lonSetor) / 30);
+      const signMid = wheelXY(lonSetor + 15, (R_OUTER + R_SIGN_IN) / 2, rotationOffset);
+      svg += `<text x="${signMid.x.toFixed(1)}" y="${signMid.y.toFixed(1)}" font-family="IBM Plex Mono" font-size="13" fill="var(--ink-dim)" text-anchor="middle" dominant-baseline="middle">${SIGN_GLYPHS[signIdx]}</text>`;
+
+      const houseNumPos = wheelXY(lonSetor + 4, R_HOUSE_LABEL, rotationOffset);
+      svg += `<text x="${houseNumPos.x.toFixed(1)}" y="${houseNumPos.y.toFixed(1)}" font-family="IBM Plex Mono" font-size="8" fill="var(--ink-faint)" text-anchor="middle">${h + 1}</text>`;
+    }
+
+    // pontos a plotar: planetas reais + Quíron/Exílio (tudo que veio
+    // em chart.planetas) — não inclui MC/ASC aqui, esses ganham
+    // marcador próprio mais abaixo
+    const pontos = (chart.planetas || [])
+      .filter((p) => PLANET_GLYPHS[p.chave])
+      .slice()
+      .sort((a, b) => norm360(a.longitude) - norm360(b.longitude));
+
+    // anti-sobreposição simples: alterna o raio quando dois pontos
+    // consecutivos (em longitude) ficam a menos de 7° um do outro
+    const posByChave = new Map();
+    let raioAnterior = R_PLANET_A;
+    let lonAnterior = null;
+    pontos.forEach((p) => {
+      const lon = norm360(p.longitude);
+      const raio = (lonAnterior != null && Math.abs(lon - lonAnterior) < 7) ? R_PLANET_B : R_PLANET_A;
+      posByChave.set(p.chave, wheelXY(lon, raio, rotationOffset));
+      raioAnterior = raio;
+      lonAnterior = lon;
+    });
+
+    // linhas de aspecto — desenhadas num raio interno próprio (fixo),
+    // separado da posição visual (com jitter) do glifo, pra ficar
+    // limpo mesmo quando dois planetas foram deslocados pra evitar
+    // sobreposição
+    (chart.aspectos || []).forEach((asp) => {
+      const style = ASPECT_STYLE[asp.aspecto];
+      if (!style) return;
+      const a = (chart.planetas || []).find((p) => p.chave === asp.planeta_a);
+      const b = (chart.planetas || []).find((p) => p.chave === asp.planeta_b);
+      if (!a || !b) return;
+      const p1 = wheelXY(a.longitude, R_ASPECT, rotationOffset);
+      const p2 = wheelXY(b.longitude, R_ASPECT, rotationOffset);
+      const dash = style.traco ? ` stroke-dasharray="${style.traco}"` : '';
+      svg += `<line x1="${p1.x.toFixed(1)}" y1="${p1.y.toFixed(1)}" x2="${p2.x.toFixed(1)}" y2="${p2.y.toFixed(1)}" stroke="${style.cor}" stroke-width="${style.largura}" opacity="0.55"${dash}/>`;
+    });
+
+    // glifos dos planetas por cima das linhas de aspecto
+    pontos.forEach((p) => {
+      const pos = posByChave.get(p.chave);
+      if (!pos) return;
+      const cor = (p.chave === 'chiron' || p.chave === 'exilio') ? 'var(--accent-bright)' : 'var(--ink)';
+      svg += `<text x="${pos.x.toFixed(1)}" y="${pos.y.toFixed(1)}" font-family="IBM Plex Mono" font-size="14" fill="${cor}" text-anchor="middle" dominant-baseline="middle">${PLANET_GLYPHS[p.chave]}</text>`;
+      if (p.retrogrado) {
+        svg += `<text x="${(pos.x + 9).toFixed(1)}" y="${(pos.y - 7).toFixed(1)}" font-family="IBM Plex Mono" font-size="7" fill="var(--accent)">r</text>`;
+      }
+    });
+
+    // marcadores dos 4 ângulos (ASC/DESC/MC/IC) na borda externa —
+    // ASC/DESC caem exatamente nos pontos 9h/3h por construção; MC/IC
+    // ficam onde a longitude real deles cair (não necessariamente
+    // 12h/6h, já que a rotação segue o INÍCIO do signo do ascendente,
+    // não o grau exato do ascendente — ver claude.md)
+    const angulos = [['ASC', ascendente], ['DESC', ascendente + 180]];
+    if (chart.meio_ceu != null) {
+      angulos.push(['MC', chart.meio_ceu], ['IC', chart.meio_ceu + 180]);
+    }
+    angulos.forEach(([label, lon]) => {
+      const pOuter = wheelXY(lon, R_OUTER, rotationOffset);
+      const pInner = wheelXY(lon, R_OUTER - 10, rotationOffset);
+      svg += `<line x1="${pOuter.x.toFixed(1)}" y1="${pOuter.y.toFixed(1)}" x2="${pInner.x.toFixed(1)}" y2="${pInner.y.toFixed(1)}" stroke="var(--accent)" stroke-width="1.4"/>`;
+      const pLabel = wheelXY(lon, R_OUTER + 10, rotationOffset);
+      svg += `<text x="${pLabel.x.toFixed(1)}" y="${pLabel.y.toFixed(1)}" font-family="IBM Plex Mono" font-size="8" fill="var(--accent)" text-anchor="middle">${label}</text>`;
+    });
+
+    return svg;
+  }
+
+  function renderWheel(chart) {
+    const svgEl = document.getElementById('kit-wheel-svg');
+    const conteudo = buildWheelSVG(chart);
+    if (conteudo) {
+      svgEl.innerHTML = conteudo;
+    }
+    // se não tiver ascendente por algum motivo, mantém o SVG como
+    // estava (vazio/placeholder) em vez de quebrar a página
+  }
+
   async function renderChart(chart) {
     const tbody = document.getElementById('kit-data-body');
     tbody.innerHTML = '';
+
+    renderWheel(chart);
 
     const houseLabels = await fetchHouseLabels();
     const planetasByChave = new Map((chart.planetas || []).map((p) => [p.chave, p]));
