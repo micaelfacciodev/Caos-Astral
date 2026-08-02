@@ -223,6 +223,7 @@
 </div>
 
 <!-- SDK do Supabase (v2, build UMD) — expõe window.supabase.createClient -->
+<script src="https://cdn.jsdelivr.net/npm/tz-lookup@6.1.25/tz.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 
 <script>
@@ -507,12 +508,44 @@
     if (btnAtivo) { btnAtivo.disabled = true; btnAtivo.textContent = 'Calculando seu mapa…'; }
 
     try {
-      // utc_offset: aproximação pelo fuso do navegador no momento do
-      // cadastro — mesma limitação já documentada no motor (usa o fuso
-      // de "agora" como proxy, não necessariamente o de nascimento se a
-      // pessoa nasceu em outro fuso e nunca morou lá; é o melhor dado
-      // disponível sem pedir fuso separado no formulário)
-      const utcOffset = -(new Date().getTimezoneOffset() / 60);
+      // utc_offset: CORRIGIDO 01/08 — antes usava o fuso ATUAL do
+      // navegador de quem preenchia o formulário (bug real, achado
+      // porque um usuário nasceu em Escorpião no ascendente e o
+      // sistema calculou Touro — 180° de erro). Agora calcula de
+      // verdade: fuso IANA da cidade de nascimento via tz-lookup
+      // (latitude/longitude já geocodificados no step 1) + offset
+      // histórico EXATO pra aquela data/hora via Intl.DateTimeFormat
+      // (considera horário de verão que valia NA ÉPOCA — ex: Brasil
+      // teve DST até 2019, em datas variáveis por ano — não o de
+      // hoje). Testado contra casos conhecidos (NY verão/inverno,
+      // Londres BST, Tóquio, e especificamente Brasil com e sem DST
+      // histórico) antes de entrar aqui.
+      function offsetParaData(tzName, ano, mes, dia, hora, min) {
+        const dataBase = new Date(Date.UTC(ano, mes - 1, dia, hora, min, 0));
+        const fmt = new Intl.DateTimeFormat('en-US', {
+          timeZone: tzName, hourCycle: 'h23',
+          year: 'numeric', month: '2-digit', day: '2-digit',
+          hour: '2-digit', minute: '2-digit', second: '2-digit',
+        });
+        const partes = {};
+        fmt.formatToParts(dataBase).forEach((p) => { partes[p.type] = p.value; });
+        const comoVistoNoFuso = Date.UTC(+partes.year, +partes.month - 1, +partes.day, +partes.hour, +partes.minute, +partes.second);
+        return (comoVistoNoFuso - dataBase.getTime()) / 3600000;
+      }
+
+      const [anoNasc, mesNasc, diaNasc] = estado.data_nascimento.split('-').map(Number);
+      const [horaNasc, minNasc] = estado.hora_nascimento.split(':').map(Number);
+      let utcOffset;
+      try {
+        const fusoIANA = tzlookup(estado.latitude, estado.longitude);
+        utcOffset = offsetParaData(fusoIANA, anoNasc, mesNasc, diaNasc, horaNasc, minNasc);
+      } catch (e) {
+        // fallback só se tz-lookup travar por algum motivo (coordenada
+        // fora dos limites, etc.) — pior caso vira o bug antigo, mas
+        // pelo menos não trava o cadastro inteiro
+        console.error('tz-lookup falhou, caindo pro fuso do navegador como fallback:', e);
+        utcOffset = -(new Date().getTimezoneOffset() / 60);
+      }
 
       const { error: profileErr } = await sb.from('profiles').upsert({
         id: session.user.id, // compute-natal-chart filtra profiles por `.eq("id", user.id)` — NÃO é `user_id`

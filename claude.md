@@ -464,6 +464,55 @@ pra manter os três sincronizados, já que agora commitamos direto.
 - Rótulos de aspecto reaproveitam a convenção do glossário (fricção = quadratura/oposição, corrente = trígono/sextil) — cores diferentes no widget pra cada categoria.
 - CSS em `assets/style.css` (seção "CÉU AGORA"), script incluído nas mesmas 33 páginas que já têm o header/footer padrão (mesmo `<script defer>`, sem precisar rodar antes de mais nada — não depende do markup do header/footer, só faz `document.body.appendChild`).
 
+**Sessão de 01/08 — 🔴 BUG CRÍTICO achado (não corrigido por mim, código não está neste repo): ascendente sai com 180° de erro em TODA conta:**
+- Usuário testou o mapa dinâmico novo, reparou que o ascendente mostrado
+  não batia com o que ele sabe ser o real (Touro em vez de Escorpião).
+  Investigado a fundo, não é bug do mapa nem dado velho em cache — é bug
+  real na fórmula do ascendente dentro de `compute-natal-chart`.
+- **Confirmado contra Swiss Ephemeris** (`pyswisseph`, padrão-ouro de
+  cálculo astrológico, instalado só pra essa validação) em 3 casos
+  independentes (São Paulo 1977, Rio 1990, Londres 2000): a fórmula
+  atual do `computeAscMc` devolve o **Descendente**, não o Ascendente —
+  erro de exatamente 180° em todo caso testado, sem exceção. O Meio do
+  Céu está calculado certinho (bate exato com Swiss Ephemeris) — o erro
+  está isolado só na linha do `asc`, não no resto da cadeia (GMST,
+  obliquidade, LST — todos corretos, confirmados pelo MC batendo).
+- **Correção (uma linha)**, dentro de `computeAscMc`:
+  ```
+  // ANTES (errado — devolve o Descendente):
+  const asc = norm360(Math.atan2(ascY, ascX) * 180 / Math.PI);
+  // DEPOIS (corrigido, validado contra Swiss Ephemeris em 3 casos):
+  const asc = norm360(Math.atan2(ascY, ascX) * 180 / Math.PI + 180);
+  ```
+- **NÃO CONSEGUI APLICAR ISSO** — `compute-natal-chart/index.ts` não
+  está versionado neste repo (só o front tem acesso de escrita aqui).
+  Precisa ser aplicado manualmente no Supabase Dashboard → Edge
+  Functions → `compute-natal-chart` → Code → deploy. Passado pro
+  usuário aplicar diretamente.
+- **Impacto, pra dimensionar a gravidade**: como `casa` de cada planeta
+  é calculado só por diferença de signo em relação ao ascendente
+  (`(signIdx - ascSignIdx + 12) % 12 + 1`), esse bug não afeta só o
+  rótulo "Máscara" — desloca a casa de TODO planeta de TODO mapa já
+  calculado em exatamente 6 posições (o que devia ser casa 1 aparece
+  como casa 7, etc.). Qualquer `natal_charts` já salvo antes dessa
+  correção está com ascendente E todas as 12 casas erradas — precisa
+  ser apagado e recalculado depois do fix (mesmo passo já usado nas
+  contas de teste: apagar a linha em `natal_charts`, `kit.html`
+  recalcula sozinho na próxima visita).
+- **Contexto de como cheguei nisso**: no caminho, também troquei o
+  cálculo de `utc_offset` em `ritual-de-entrada.html` (antes usava
+  `new Date().getTimezoneOffset()` — o fuso ATUAL do navegador de quem
+  preenche o formulário, não o fuso histórico da cidade/data de
+  nascimento — comentário no código já admitia isso como aproximação
+  grosseira). Essa troca **era uma correção real e válida** (agora usa
+  `tz-lookup` pra achar o fuso IANA da cidade + `Intl.DateTimeFormat`
+  pra pegar o offset histórico exato daquela data, testado contra DST
+  histórico do Brasil e de outros países) — só que **não era a causa
+  deste bug específico** (nesse caso de teste o offset já batia por
+  coincidência). Mantive a correção do fuso mesmo assim porque é
+  melhoria real e necessária pra outros casos (alguém nascido num fuso
+  diferente de onde está agora, ou em data com DST diferente de hoje).
+
 **Sessão de 01/08 — kit.html: mapa astral deixa de ser placeholder estático, vira SVG dinâmico com posições reais + aspectos:**
 - Usuário testou de novo depois da `0015` — **calculou!** Ritual completo
   funcionando de ponta a ponta pela primeira vez desde a troca de
