@@ -464,6 +464,38 @@ pra manter os três sincronizados, já que agora commitamos direto.
 - Rótulos de aspecto reaproveitam a convenção do glossário (fricção = quadratura/oposição, corrente = trígono/sextil) — cores diferentes no widget pra cada categoria.
 - CSS em `assets/style.css` (seção "CÉU AGORA"), script incluído nas mesmas 33 páginas que já têm o header/footer padrão (mesmo `<script defer>`, sem precisar rodar antes de mais nada — não depende do markup do header/footer, só faz `document.body.appendChild`).
 
+**Sessão de 01/08 — 🔴 depois do GRANT, apareceu a causa raiz seguinte: faltava policy de INSERT em profiles:**
+- GRANT resolvido (0014) não foi suficiente sozinho — usuário testou de
+  novo, mesma mensagem genérica pro usuário, mas dessa vez o console
+  mostrou um erro DIFERENTE do 42501 anterior: `code: "42501"` de novo,
+  mas `message: "new row violates row-level security policy for table
+  profiles"` — RLS de verdade dessa vez, não GRANT.
+- **Causa**: `sb.from('profiles').upsert({...}, {onConflict:'id'})` vira
+  `INSERT ... ON CONFLICT (id) DO UPDATE` por baixo. Mesmo quando o
+  resultado final é um UPDATE (linha já existe, criada pela trigger),
+  o COMANDO começa como INSERT — Postgres exige policy de INSERT válida
+  pra sequer tentar, antes de resolver o conflito. `0001_schema.sql`
+  só tinha criado SELECT + UPDATE em `profiles`, copiando o que
+  confirmamos via `pg_policies` no projeto ANTIGO — só que nunca
+  chegamos a validar isso de ponta a ponta lá (a troca de projeto
+  interrompeu o teste antes da confirmação final). Ficou faltando a de
+  INSERT o tempo todo, nos dois projetos.
+- **Validado com reprodução exata, não só teoria**: simulei o cenário
+  completo — usuário com linha já existente em `profiles` (via
+  trigger), como role `authenticated`, rodando o mesmo `INSERT ... ON
+  CONFLICT DO UPDATE` que o front roda. **Sem a correção: mesma
+  mensagem de erro exata da produção.** Com `0015_profiles_insert_policy.sql`
+  aplicada: funciona, linha atualiza.
+- `0001_schema.sql` também corrigido direto (não só a migration
+  incremental `0015`) — quem instalar o schema do zero a partir de
+  agora já não precisa da 0015 como remendo, ela existe pra aplicar
+  retroativamente no banco que já estava rodando.
+- **Padrão pra lembrar dessa vez**: qualquer tabela onde o front usa
+  `.upsert(...)` (não `.update(...)` puro) precisa de policy de INSERT
+  E de UPDATE, mesmo que a intenção seja "só atualizar uma linha que já
+  existe" — o Postgres não sabe disso de antemão, o comando upsert
+  sempre passa pelo caminho de INSERT primeiro.
+
 **Sessão de 01/08 — 🔴 causa raiz real do ritual travando no projeto novo: faltava GRANT, não RLS:**
 - Usuário testou de novo, console mostrou o erro de verdade dessa vez:
   `POST .../rest/v1/profiles 403 (Forbidden)`, código Postgres `42501`,

@@ -66,6 +66,18 @@ create policy "profiles_select_own"
 -- compute-natal-chart retornando 400 em produção (01/08) era essa
 -- policy faltando (só existia SELECT). Ver claude.md, pendência
 -- resolvida. Não omitir de novo.
+-- policy de INSERT — necessária mesmo a trigger já criando a linha:
+-- o upsert do front (INSERT ... ON CONFLICT DO UPDATE) exige policy de
+-- INSERT válida pra sequer tentar o comando, mesmo quando o resultado
+-- final é um UPDATE por conflito. Descoberto em produção 01/08 —
+-- SELECT+UPDATE sozinhas não bastam (ver migration 0015, que aplicou
+-- esse mesmo fix retroativamente no banco já rodando; aqui é só pra
+-- quem instalar do zero não precisar da 0015 como remendo).
+drop policy if exists "profiles_insert_own" on public.profiles;
+create policy "profiles_insert_own"
+  on public.profiles for insert
+  with check (auth.uid() = id);
+
 drop policy if exists "profiles_update_own" on public.profiles;
 create policy "profiles_update_own"
   on public.profiles for update
