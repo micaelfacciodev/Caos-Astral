@@ -464,6 +464,43 @@ pra manter os três sincronizados, já que agora commitamos direto.
 - Rótulos de aspecto reaproveitam a convenção do glossário (fricção = quadratura/oposição, corrente = trígono/sextil) — cores diferentes no widget pra cada categoria.
 - CSS em `assets/style.css` (seção "CÉU AGORA"), script incluído nas mesmas 33 páginas que já têm o header/footer padrão (mesmo `<script defer>`, sem precisar rodar antes de mais nada — não depende do markup do header/footer, só faz `document.body.appendChild`).
 
+**Sessão de 01/08 — 🔴 causa raiz real do ritual travando no projeto novo: faltava GRANT, não RLS:**
+- Usuário testou de novo, console mostrou o erro de verdade dessa vez:
+  `POST .../rest/v1/profiles 403 (Forbidden)`, código Postgres `42501`,
+  mensagem `permission denied for table profiles`, hint sugerindo
+  `GRANT ... ON public.profiles TO authenticated`. **Isso não é RLS** —
+  a policy de UPDATE estava certa desde a `0001`. É a camada de baixo:
+  Postgres exige GRANT explícito de SQL (SELECT/INSERT/UPDATE/DELETE)
+  pra uma role ANTES de RLS decidir quais linhas — sem o grant, a RLS
+  nem chega a ser avaliada.
+- **Achado sistêmico, não isolado em profiles**: nenhuma migration
+  deste repo tinha `grant` explícito nenhum (conferido via grep) — nem
+  as que eu escrevi (0001/0012/0013) nem as que já existiam antes de
+  mim (0005-0011). Ou seja, TODA tabela criada por SQL direto nesse
+  projeto novo provavelmente estava com o mesmo problema, só que só
+  profiles tinha sido testada até agora. Não confirmei a causa exata de
+  por que o projeto novo não veio com os grants padrão de fábrica que
+  Supabase geralmente configura sozinho (suspeita: relacionado ao
+  formato de chave `sb_publishable_...`, mais novo — não tenho certeza).
+- `supabase/migrations/0014_grants.sql` criada: `grant select, insert,
+  update, delete ... to authenticated` + `grant select ... to anon` em
+  TODAS as tabelas do schema public de uma vez, mais `alter default
+  privileges` pra qualquer tabela criada depois já nascer com o grant
+  certo (não deveria precisar disso de novo pra tabela nova, mas não
+  custa ficar).
+- **Validado de verdade, não só "rodou sem erro de sintaxe"**: testei
+  reproduzindo o cenário exato que quebrou — criei um usuário de teste
+  (dispara a trigger), simulei a role `authenticated` (não `postgres`)
+  fazendo `UPDATE` em `profiles` como o front faz de verdade via
+  `SET ROLE authenticated` + `auth.uid()` apontando pro usuário certo —
+  sem a `0014`, dava exatamente o mesmo 42501 que apareceu em produção;
+  com a `0014`, `UPDATE 1` — confirma que resolve o problema real, não
+  só "parece certo no papel".
+- **Lição registrada pra não repetir**: daqui pra frente, toda migration
+  nova que cria tabela precisa incluir seu próprio `grant` — não confiar
+  que o projeto Supabase configura isso sozinho. Ver 0014 como rede de
+  segurança, não como substituto de fazer certo desde a próxima tabela.
+
 **Sessão de 01/08 — varredura completa fechada: mais um gap (`enciclopedia_simbolos`), agora sim tudo client-side coberto:**
 - Completei a varredura que deixei como pendência no achado anterior:
   grep de `.from(`/`.storage.from(`/`.rpc(` em TODO o código (literal E
