@@ -886,6 +886,27 @@
         <div class="shape-btn icaro-pulse-shape-btn" data-icaropulse="square">seco</div>
       </div>
     </div>
+
+    <div class="a-group-title">Ritmo (loops)</div>
+    <div class="a-row" style="grid-column:1 / -1;">
+      <div class="pulse-on-row">
+        <div class="mini-toggle" id="rhythmToggle" data-on="0">desligado</div>
+        <span class="mono" style="font-size:10.5px; color:var(--stone);">atabaque, cítara, flauta, metais ou deep techno, por baixo do resto</span>
+      </div>
+    </div>
+    <div class="a-row">
+      <label>Volume <span class="val mono" id="valRhythmVol">35%</span></label>
+      <input type="range" id="rhythmVol" min="0" max="100" value="35" step="1">
+    </div>
+    <div class="a-row" style="grid-column:1 / -1;">
+      <label>Faixa</label>
+      <div class="shape-toggles" id="rhythmTrackToggles"></div>
+    </div>
+    <div class="a-row" style="grid-column:1 / -1;">
+      <div class="pulse-on-row">
+        <div class="mini-toggle active" id="rhythmCrossfadeToggle" data-on="1">alternância automática: ligada</div>
+      </div>
+    </div>
   </div>
   </div>
 </div>
@@ -1753,8 +1774,26 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
     icaroPulseOn: false,
     icaroPulseRate: 0.35,
     icaroPulseShape: 'sine',
-    aumCycleOn: false
+    aumCycleOn: false,
+    rhythmOn: false,
+    rhythmTrack: 'atabaque',
+    rhythmVolume: 35,
+    rhythmCrossfade: true,
+    rhythmCrossfadeSeconds: 40
   };
+
+  // catálogo de loops de ritmo — troque as URLs pelos seus arquivos em assets/audio/
+  const RHYTHM_TRACKS = {
+    atabaque:   { label: 'Atabaque',    url: 'assets/audio/atabaque-loop.mp3' },
+    citara:     { label: 'Cítara',      url: 'assets/audio/citara-loop.mp3' },
+    flauta:     { label: 'Flauta',      url: 'assets/audio/flauta-loop.mp3' },
+    metais:     { label: 'Metais',      url: 'assets/audio/metais-loop.mp3' },
+    deeptechno: { label: 'Deep Techno', url: 'assets/audio/deep-techno-loop.mp3' }
+  };
+  let rhythmBuffers = {};
+  let rhythmGainMain, rhythmGainAlt;
+  let rhythmSourceMain = null, rhythmSourceAlt = null;
+  let rhythmCrossfadeTimer = null;
 
   const $ = id => document.getElementById(id);
   const powerBtn = $('audioPower');
@@ -2041,6 +2080,136 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
     textureGain.gain.setTargetAtTime(target, ctx.currentTime, 0.6);
   }
 
+  // ---- ritmo (loops de áudio reais: atabaque, cítara, flauta, metais, deep techno) ----
+  async function loadRhythmBuffer(trackId){
+    if (rhythmBuffers[trackId]) return rhythmBuffers[trackId];
+    const track = RHYTHM_TRACKS[trackId];
+    if (!track) return null;
+    try {
+      const res = await fetch(track.url);
+      const arrayBuf = await res.arrayBuffer();
+      const buf = await ctx.decodeAudioData(arrayBuf);
+      rhythmBuffers[trackId] = buf;
+      return buf;
+    } catch (e) {
+      console.warn('Não foi possível carregar o loop de ritmo:', track.url, e);
+      return null;
+    }
+  }
+
+  function startRhythmSource(buffer, gainNode, startGain){
+    const src = ctx.createBufferSource();
+    src.buffer = buffer;
+    src.loop = true;
+    gainNode.gain.value = startGain;
+    src.connect(gainNode).connect(masterBus);
+    src.start();
+    return src;
+  }
+
+  async function applyRhythmOn(on){
+    state.rhythmOn = on;
+    if (!ctx) return;
+
+    if (!on){
+      if (rhythmGainMain) rhythmGainMain.gain.setTargetAtTime(0, ctx.currentTime, 1.2);
+      if (rhythmGainAlt) rhythmGainAlt.gain.setTargetAtTime(0, ctx.currentTime, 1.2);
+      if (rhythmCrossfadeTimer){ clearTimeout(rhythmCrossfadeTimer); rhythmCrossfadeTimer = null; }
+      return;
+    }
+
+    if (!rhythmGainMain){
+      rhythmGainMain = ctx.createGain(); rhythmGainMain.gain.value = 0;
+      rhythmGainAlt  = ctx.createGain(); rhythmGainAlt.gain.value = 0;
+    }
+
+    const buf = await loadRhythmBuffer(state.rhythmTrack);
+    if (!buf) return;
+
+    if (rhythmSourceMain) { try { rhythmSourceMain.stop(); } catch(e){} }
+    rhythmSourceMain = startRhythmSource(buf, rhythmGainMain, 0);
+    rhythmGainMain.gain.setTargetAtTime(state.rhythmVolume/100 * 0.5, ctx.currentTime, 1.5);
+
+    if (state.rhythmCrossfade) scheduleRhythmCrossfade();
+  }
+
+  function scheduleRhythmCrossfade(){
+    if (rhythmCrossfadeTimer) clearTimeout(rhythmCrossfadeTimer);
+    rhythmCrossfadeTimer = setTimeout(async () => {
+      if (!state.rhythmOn || !state.rhythmCrossfade) return;
+      const ids = Object.keys(RHYTHM_TRACKS).filter(id => id !== state.rhythmTrack);
+      const nextId = ids[Math.floor(Math.random() * ids.length)];
+      const buf = await loadRhythmBuffer(nextId);
+      if (!buf) return;
+
+      if (rhythmSourceAlt) { try { rhythmSourceAlt.stop(); } catch(e){} }
+      rhythmSourceAlt = startRhythmSource(buf, rhythmGainAlt, 0);
+      const target = state.rhythmVolume/100 * 0.5;
+      rhythmGainAlt.gain.setTargetAtTime(target, ctx.currentTime, 6);
+      rhythmGainMain.gain.setTargetAtTime(0, ctx.currentTime, 6);
+
+      setTimeout(() => {
+        if (rhythmSourceMain) { try { rhythmSourceMain.stop(); } catch(e){} }
+        [rhythmSourceMain, rhythmSourceAlt] = [rhythmSourceAlt, rhythmSourceMain];
+        [rhythmGainMain, rhythmGainAlt] = [rhythmGainAlt, rhythmGainMain];
+        state.rhythmTrack = nextId;
+        scheduleRhythmCrossfade();
+      }, 7000);
+
+    }, state.rhythmCrossfadeSeconds * 1000);
+  }
+
+  function applyRhythmVolume(v){
+    state.rhythmVolume = v;
+    if (!ctx) return;
+    const target = state.rhythmOn ? v/100 * 0.5 : 0;
+    if (rhythmGainMain) rhythmGainMain.gain.setTargetAtTime(target, ctx.currentTime, 0.4);
+  }
+
+  function wireRhythmControls(){
+    const rhythmToggle = $('rhythmToggle');
+    rhythmToggle.addEventListener('click', () => {
+      const on = rhythmToggle.dataset.on !== '1';
+      rhythmToggle.dataset.on = on ? '1' : '0';
+      rhythmToggle.textContent = on ? 'ligado' : 'desligado';
+      rhythmToggle.classList.toggle('active', on);
+      applyRhythmOn(on);
+    });
+
+    $('rhythmVol').addEventListener('input', e => {
+      const v = parseFloat(e.target.value);
+      $('valRhythmVol').textContent = v + '%';
+      applyRhythmVolume(v);
+    });
+
+    const trackWrap = $('rhythmTrackToggles');
+    Object.entries(RHYTHM_TRACKS).forEach(([id, t], i) => {
+      const btn = document.createElement('div');
+      btn.className = 'shape-btn rhythm-track-btn' + (i === 0 ? ' active' : '');
+      btn.textContent = t.label;
+      btn.dataset.track = id;
+      btn.addEventListener('click', async () => {
+        document.querySelectorAll('.rhythm-track-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.rhythmTrack = id;
+        if (state.rhythmOn) await applyRhythmOn(true);
+      });
+      trackWrap.appendChild(btn);
+    });
+
+    const crossfadeToggle = $('rhythmCrossfadeToggle');
+    crossfadeToggle.addEventListener('click', () => {
+      const on = crossfadeToggle.dataset.on !== '1';
+      crossfadeToggle.dataset.on = on ? '1' : '0';
+      crossfadeToggle.textContent = 'alternância automática: ' + (on ? 'ligada' : 'desligada');
+      crossfadeToggle.classList.toggle('active', on);
+      state.rhythmCrossfade = on;
+      if (on && state.rhythmOn) scheduleRhythmCrossfade();
+      else if (rhythmCrossfadeTimer) { clearTimeout(rhythmCrossfadeTimer); rhythmCrossfadeTimer = null; }
+    });
+  }
+  wireRhythmControls();
+
   function updatePulseDepth(){
     // profundidade 0 = LFO não afeta nada (offset amplitude 0)
     // profundidade 100 = LFO varia o ganho de 0 a 1 (corte total)
@@ -2068,12 +2237,17 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
       if (voice.driftTimer) clearTimeout(voice.driftTimer);
     }
     stopAumCycle();
+    if (rhythmCrossfadeTimer) { clearTimeout(rhythmCrossfadeTimer); rhythmCrossfadeTimer = null; }
     try {
       oscL.stop(); oscR.stop(); pulseLFO.stop(); noiseSource.stop(); filterLFO.stop(); tremoloLFO.stop();
       icaroVibratoLFO.stop(); icaroPulseLFO.stop();
       for (const voice of icaroVoices) { voice.osc1.stop(); voice.osc2.stop(); }
+      if (rhythmSourceMain) rhythmSourceMain.stop();
+      if (rhythmSourceAlt) rhythmSourceAlt.stop();
     } catch(e){}
     icaroVoices = [];
+    rhythmSourceMain = null; rhythmSourceAlt = null;
+    rhythmGainMain = null; rhythmGainAlt = null;
     ctx.close();
     ctx = null; running = false;
     AudioBridge.ctx = null; AudioBridge.analyser = null; AudioBridge.data = null;
