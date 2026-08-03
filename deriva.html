@@ -887,11 +887,11 @@
       </div>
     </div>
 
-    <div class="a-group-title">Ritmo (loops)</div>
+    <div class="a-group-title">Ritmo (sons do estúdio)</div>
     <div class="a-row" style="grid-column:1 / -1;">
       <div class="pulse-on-row">
         <div class="mini-toggle" id="rhythmToggle" data-on="0">desligado</div>
-        <span class="mono" style="font-size:10.5px; color:var(--stone);">atabaque, cítara, flauta, metais ou deep techno, por baixo do resto</span>
+        <span class="mono" style="font-size:10.5px; color:var(--stone);">solta por baixo do resto os áudios do estúdio</span>
       </div>
     </div>
     <div class="a-row">
@@ -899,12 +899,36 @@
       <input type="range" id="rhythmVol" min="0" max="100" value="35" step="1">
     </div>
     <div class="a-row" style="grid-column:1 / -1;">
-      <label>Faixa</label>
-      <div class="shape-toggles" id="rhythmTrackToggles"></div>
+      <label>Faixas</label>
+      <div id="rhythmTrackList" style="display:flex; flex-direction:column; gap:6px;">
+        <div class="mono" id="rhythmEmptyHint" style="font-size:10.5px; color:var(--stone);">carregando...</div>
+      </div>
     </div>
     <div class="a-row" style="grid-column:1 / -1;">
       <div class="pulse-on-row">
         <div class="mini-toggle active" id="rhythmCrossfadeToggle" data-on="1">alternância automática: ligada</div>
+      </div>
+    </div>
+
+    <!-- área do admin: só aparece funcional depois de login -->
+    <div class="a-row" style="grid-column:1 / -1; border-top:1px dashed rgba(179,18,23,0.15); padding-top:14px; margin-top:4px;">
+      <div class="mono" id="rhythmAdminLink" style="font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--stone); cursor:pointer;">área do admin ▾</div>
+      <div id="rhythmAdminPanel" style="display:none; margin-top:10px;">
+        <div id="rhythmLoginBox">
+          <input type="email" id="rhythmAdminEmail" placeholder="email" class="mono" style="width:100%; margin-bottom:6px; padding:8px; background:rgba(30,26,26,0.9); border:1px solid rgba(179,18,23,0.4); color:var(--paper); border-radius:5px;">
+          <input type="password" id="rhythmAdminPassword" placeholder="senha" class="mono" style="width:100%; margin-bottom:8px; padding:8px; background:rgba(30,26,26,0.9); border:1px solid rgba(179,18,23,0.4); color:var(--paper); border-radius:5px;">
+          <div class="shape-btn" id="rhythmLoginBtn" style="display:inline-block;">entrar</div>
+          <div class="mono" id="rhythmLoginStatus" style="font-size:10px; color:var(--stone); margin-top:6px;"></div>
+        </div>
+        <div id="rhythmUploadBox" style="display:none;">
+          <div class="mono" style="font-size:10.5px; color:var(--sand); margin-bottom:8px;">logado como admin</div>
+          <label class="preset-btn" id="rhythmUploadBtn" style="display:inline-block; cursor:pointer; width:auto;">
+            + adicionar áudio
+            <input type="file" id="rhythmFileInput" accept="audio/*" multiple style="display:none;">
+          </label>
+          <div class="shape-btn" id="rhythmLogoutBtn" style="display:inline-block; margin-left:8px;">sair</div>
+          <div class="mono" id="rhythmUploadStatus" style="font-size:10px; color:var(--stone); margin-top:6px;"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -919,6 +943,15 @@
   <a class="back" href="#">← voltar ao site</a>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+// ---- config do Supabase (mesmo projeto usado no restante do Caos Astral) ----
+// troque pelos valores do seu projeto: Settings → API, no painel do Supabase
+const SUPABASE_URL = 'COLE_AQUI_A_URL_DO_SEU_PROJETO_SUPABASE';
+const SUPABASE_ANON_KEY = 'COLE_AQUI_A_ANON_PUBLIC_KEY';
+const RHYTHM_BUCKET = 'deriva-ritmo'; // nome do bucket de Storage a criar no Supabase
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+</script>
 <script>
 // ---------- helper: canvas ciente de devicePixelRatio ----------
 // resolve o serrilhado/borrado em telas retina/4K: o canvas interno é
@@ -1776,21 +1809,59 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
     icaroPulseShape: 'sine',
     aumCycleOn: false,
     rhythmOn: false,
-    rhythmTrack: 'atabaque',
+    rhythmTrackId: null,
     rhythmVolume: 35,
     rhythmCrossfade: true,
     rhythmCrossfadeSeconds: 40
   };
 
-  // catálogo de loops de ritmo — troque as URLs pelos seus arquivos em assets/audio/
-  const RHYTHM_TRACKS = {
-    atabaque:   { label: 'Atabaque',    url: 'assets/audio/atabaque-loop.mp3' },
-    citara:     { label: 'Cítara',      url: 'assets/audio/citara-loop.mp3' },
-    flauta:     { label: 'Flauta',      url: 'assets/audio/flauta-loop.mp3' },
-    metais:     { label: 'Metais',      url: 'assets/audio/metais-loop.mp3' },
-    deeptechno: { label: 'Deep Techno', url: 'assets/audio/deep-techno-loop.mp3' }
-  };
-  let rhythmBuffers = {};
+  // ---- Supabase Storage: os áudios ficam no bucket, valem pra todo mundo que abrir o site ----
+  // leitura é pública (qualquer visitante ouve); upload/remoção exigem login de admin (ver policies no Supabase)
+  let rhythmIsAdmin = false;
+
+  async function rhythmCheckSession(){
+    const { data: { session } } = await sb.auth.getSession();
+    rhythmIsAdmin = !!session;
+    return rhythmIsAdmin;
+  }
+
+  async function rhythmLogin(email, password){
+    const { error } = await sb.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    rhythmIsAdmin = true;
+  }
+
+  async function rhythmLogout(){
+    await sb.auth.signOut();
+    rhythmIsAdmin = false;
+  }
+
+  // lista os arquivos do bucket e monta a URL pública de cada um
+  async function rhythmListTracks(){
+    const { data, error } = await sb.storage.from(RHYTHM_BUCKET).list('', { sortBy: { column: 'created_at', order: 'asc' } });
+    if (error) { console.warn('Erro ao listar áudios do Supabase:', error); return []; }
+    return (data || [])
+      .filter(f => f.name && !f.name.startsWith('.'))
+      .map(f => ({
+        id: f.name, // o próprio caminho no bucket serve de id único
+        name: f.name,
+        publicUrl: sb.storage.from(RHYTHM_BUCKET).getPublicUrl(f.name).data.publicUrl
+      }));
+  }
+
+  async function rhythmUploadFile(file){
+    // mantém o nome original; upsert:true permite reenviar substituindo o mesmo nome
+    const { error } = await sb.storage.from(RHYTHM_BUCKET).upload(file.name, file, { upsert: true });
+    if (error) throw error;
+  }
+
+  async function rhythmDeleteFile(path){
+    const { error } = await sb.storage.from(RHYTHM_BUCKET).remove([path]);
+    if (error) throw error;
+  }
+
+  let rhythmTracks = [];   // [{ id, name, publicUrl }] carregado do Supabase Storage
+  let rhythmBuffers = {};  // cache: id -> AudioBuffer decodado
   let rhythmGainMain, rhythmGainAlt;
   let rhythmSourceMain = null, rhythmSourceAlt = null;
   let rhythmCrossfadeTimer = null;
@@ -2080,19 +2151,19 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
     textureGain.gain.setTargetAtTime(target, ctx.currentTime, 0.6);
   }
 
-  // ---- ritmo (loops de áudio reais: atabaque, cítara, flauta, metais, deep techno) ----
+  // ---- ritmo: áudios do bucket público do Supabase Storage ----
   async function loadRhythmBuffer(trackId){
     if (rhythmBuffers[trackId]) return rhythmBuffers[trackId];
-    const track = RHYTHM_TRACKS[trackId];
+    const track = rhythmTracks.find(t => t.id === trackId);
     if (!track) return null;
     try {
-      const res = await fetch(track.url);
+      const res = await fetch(track.publicUrl);
       const arrayBuf = await res.arrayBuffer();
       const buf = await ctx.decodeAudioData(arrayBuf);
       rhythmBuffers[trackId] = buf;
       return buf;
     } catch (e) {
-      console.warn('Não foi possível carregar o loop de ritmo:', track.url, e);
+      console.warn('Não foi possível carregar o áudio:', track.name, e);
       return null;
     }
   }
@@ -2118,28 +2189,32 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
       return;
     }
 
+    if (!state.rhythmTrackId && rhythmTracks.length) state.rhythmTrackId = rhythmTracks[0].id;
+    if (!state.rhythmTrackId) return; // bucket ainda vazio
+
     if (!rhythmGainMain){
       rhythmGainMain = ctx.createGain(); rhythmGainMain.gain.value = 0;
       rhythmGainAlt  = ctx.createGain(); rhythmGainAlt.gain.value = 0;
     }
 
-    const buf = await loadRhythmBuffer(state.rhythmTrack);
+    const buf = await loadRhythmBuffer(state.rhythmTrackId);
     if (!buf) return;
 
     if (rhythmSourceMain) { try { rhythmSourceMain.stop(); } catch(e){} }
     rhythmSourceMain = startRhythmSource(buf, rhythmGainMain, 0);
     rhythmGainMain.gain.setTargetAtTime(state.rhythmVolume/100 * 0.5, ctx.currentTime, 1.5);
 
-    if (state.rhythmCrossfade) scheduleRhythmCrossfade();
+    if (state.rhythmCrossfade && rhythmTracks.length > 1) scheduleRhythmCrossfade();
   }
 
   function scheduleRhythmCrossfade(){
     if (rhythmCrossfadeTimer) clearTimeout(rhythmCrossfadeTimer);
     rhythmCrossfadeTimer = setTimeout(async () => {
       if (!state.rhythmOn || !state.rhythmCrossfade) return;
-      const ids = Object.keys(RHYTHM_TRACKS).filter(id => id !== state.rhythmTrack);
-      const nextId = ids[Math.floor(Math.random() * ids.length)];
-      const buf = await loadRhythmBuffer(nextId);
+      const others = rhythmTracks.filter(t => t.id !== state.rhythmTrackId);
+      if (!others.length) { scheduleRhythmCrossfade(); return; }
+      const next = others[Math.floor(Math.random() * others.length)];
+      const buf = await loadRhythmBuffer(next.id);
       if (!buf) return;
 
       if (rhythmSourceAlt) { try { rhythmSourceAlt.stop(); } catch(e){} }
@@ -2152,7 +2227,8 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
         if (rhythmSourceMain) { try { rhythmSourceMain.stop(); } catch(e){} }
         [rhythmSourceMain, rhythmSourceAlt] = [rhythmSourceAlt, rhythmSourceMain];
         [rhythmGainMain, rhythmGainAlt] = [rhythmGainAlt, rhythmGainMain];
-        state.rhythmTrack = nextId;
+        state.rhythmTrackId = next.id;
+        renderRhythmTrackList();
         scheduleRhythmCrossfade();
       }, 7000);
 
@@ -2166,10 +2242,91 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
     if (rhythmGainMain) rhythmGainMain.gain.setTargetAtTime(target, ctx.currentTime, 0.4);
   }
 
+  // rótulo amigável: tira a extensão do nome do arquivo original
+  function rhythmDisplayName(filename){
+    return filename.replace(/\.[^.]+$/, '');
+  }
+
+  function renderRhythmTrackList(){
+    const listEl = $('rhythmTrackList');
+    const emptyHint = $('rhythmEmptyHint');
+    listEl.querySelectorAll('.rhythm-track-item').forEach(el => el.remove());
+    if (!rhythmTracks.length){
+      emptyHint.textContent = 'nenhum áudio no estúdio ainda';
+      emptyHint.style.display = 'block';
+      return;
+    }
+    emptyHint.style.display = 'none';
+
+    rhythmTracks.forEach(track => {
+      const row = document.createElement('div');
+      row.className = 'rhythm-track-item';
+      row.style.cssText = 'display:flex; align-items:center; gap:8px;';
+
+      const selectBtn = document.createElement('div');
+      selectBtn.className = 'shape-btn' + (state.rhythmTrackId === track.id ? ' active' : '');
+      selectBtn.style.cssText = 'flex:1; text-align:left; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;';
+      selectBtn.textContent = rhythmDisplayName(track.name);
+      selectBtn.title = track.name;
+      selectBtn.addEventListener('click', async () => {
+        state.rhythmTrackId = track.id;
+        renderRhythmTrackList();
+        if (state.rhythmOn) await applyRhythmOn(true);
+      });
+
+      row.appendChild(selectBtn);
+
+      // botão de remover só aparece pra quem está logado como admin
+      if (rhythmIsAdmin){
+        const delBtn = document.createElement('div');
+        delBtn.className = 'shape-btn';
+        delBtn.style.cssText = 'flex:0 0 auto; padding:7px 10px; color:var(--stone);';
+        delBtn.textContent = '×';
+        delBtn.title = 'remover';
+        delBtn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          try {
+            await rhythmDeleteFile(track.id);
+          } catch (err) {
+            console.warn('Erro ao remover áudio:', err);
+            return;
+          }
+          delete rhythmBuffers[track.id];
+          rhythmTracks = rhythmTracks.filter(t => t.id !== track.id);
+          if (state.rhythmTrackId === track.id){
+            state.rhythmTrackId = rhythmTracks.length ? rhythmTracks[0].id : null;
+            if (state.rhythmOn) await applyRhythmOn(state.rhythmTrackId ? true : false);
+          }
+          renderRhythmTrackList();
+        });
+        row.appendChild(delBtn);
+      }
+
+      listEl.appendChild(row);
+    });
+  }
+
+  async function refreshRhythmTracks(){
+    rhythmTracks = await rhythmListTracks();
+    renderRhythmTrackList();
+  }
+
+  function renderRhythmAdminUI(){
+    const loginBox = $('rhythmLoginBox');
+    const uploadBox = $('rhythmUploadBox');
+    loginBox.style.display = rhythmIsAdmin ? 'none' : 'block';
+    uploadBox.style.display = rhythmIsAdmin ? 'block' : 'none';
+    renderRhythmTrackList(); // pra mostrar/esconder os botões de remover
+  }
+
   function wireRhythmControls(){
     const rhythmToggle = $('rhythmToggle');
     rhythmToggle.addEventListener('click', () => {
       const on = rhythmToggle.dataset.on !== '1';
+      if (on && !rhythmTracks.length){
+        $('rhythmEmptyHint').textContent = 'nenhum áudio no estúdio ainda';
+        return;
+      }
       rhythmToggle.dataset.on = on ? '1' : '0';
       rhythmToggle.textContent = on ? 'ligado' : 'desligado';
       rhythmToggle.classList.toggle('active', on);
@@ -2182,21 +2339,6 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
       applyRhythmVolume(v);
     });
 
-    const trackWrap = $('rhythmTrackToggles');
-    Object.entries(RHYTHM_TRACKS).forEach(([id, t], i) => {
-      const btn = document.createElement('div');
-      btn.className = 'shape-btn rhythm-track-btn' + (i === 0 ? ' active' : '');
-      btn.textContent = t.label;
-      btn.dataset.track = id;
-      btn.addEventListener('click', async () => {
-        document.querySelectorAll('.rhythm-track-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        state.rhythmTrack = id;
-        if (state.rhythmOn) await applyRhythmOn(true);
-      });
-      trackWrap.appendChild(btn);
-    });
-
     const crossfadeToggle = $('rhythmCrossfadeToggle');
     crossfadeToggle.addEventListener('click', () => {
       const on = crossfadeToggle.dataset.on !== '1';
@@ -2204,9 +2346,61 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
       crossfadeToggle.textContent = 'alternância automática: ' + (on ? 'ligada' : 'desligada');
       crossfadeToggle.classList.toggle('active', on);
       state.rhythmCrossfade = on;
-      if (on && state.rhythmOn) scheduleRhythmCrossfade();
+      if (on && state.rhythmOn && rhythmTracks.length > 1) scheduleRhythmCrossfade();
       else if (rhythmCrossfadeTimer) { clearTimeout(rhythmCrossfadeTimer); rhythmCrossfadeTimer = null; }
     });
+
+    // ---- área do admin: abrir/fechar, login, upload, logout ----
+    const adminLink = $('rhythmAdminLink');
+    const adminPanel = $('rhythmAdminPanel');
+    adminLink.addEventListener('click', () => {
+      const open = adminPanel.style.display === 'none';
+      adminPanel.style.display = open ? 'block' : 'none';
+      adminLink.textContent = open ? 'área do admin ▴' : 'área do admin ▾';
+    });
+
+    $('rhythmLoginBtn').addEventListener('click', async () => {
+      const email = $('rhythmAdminEmail').value.trim();
+      const password = $('rhythmAdminPassword').value;
+      const statusEl = $('rhythmLoginStatus');
+      if (!email || !password){ statusEl.textContent = 'preencha email e senha'; return; }
+      statusEl.textContent = 'entrando...';
+      try {
+        await rhythmLogin(email, password);
+        statusEl.textContent = '';
+        $('rhythmAdminPassword').value = '';
+        renderRhythmAdminUI();
+      } catch (err) {
+        statusEl.textContent = 'login inválido';
+      }
+    });
+
+    $('rhythmLogoutBtn').addEventListener('click', async () => {
+      await rhythmLogout();
+      renderRhythmAdminUI();
+    });
+
+    $('rhythmFileInput').addEventListener('change', async (e) => {
+      const files = Array.from(e.target.files || []);
+      if (!files.length) return;
+      const statusEl = $('rhythmUploadStatus');
+      statusEl.textContent = `enviando ${files.length} arquivo(s)...`;
+      let ok = 0;
+      for (const file of files){
+        try { await rhythmUploadFile(file); ok++; }
+        catch (err) { console.warn('Erro ao enviar', file.name, err); }
+      }
+      statusEl.textContent = `${ok} de ${files.length} arquivo(s) enviado(s)`;
+      await refreshRhythmTracks();
+      if (!state.rhythmTrackId && rhythmTracks.length) state.rhythmTrackId = rhythmTracks[0].id;
+      e.target.value = '';
+    });
+
+    (async () => {
+      await rhythmCheckSession();
+      renderRhythmAdminUI();
+      await refreshRhythmTracks();
+    })();
   }
   wireRhythmControls();
 
