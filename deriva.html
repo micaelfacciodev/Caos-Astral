@@ -915,9 +915,7 @@
       <div class="mono" id="rhythmAdminLink" style="font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--stone); cursor:pointer;">área do admin ▾</div>
       <div id="rhythmAdminPanel" style="display:none; margin-top:10px;">
         <div id="rhythmLoginBox">
-          <input type="email" id="rhythmAdminEmail" placeholder="email" class="mono" style="width:100%; margin-bottom:6px; padding:8px; background:rgba(30,26,26,0.9); border:1px solid rgba(179,18,23,0.4); color:var(--paper); border-radius:5px;">
-          <input type="password" id="rhythmAdminPassword" placeholder="senha" class="mono" style="width:100%; margin-bottom:8px; padding:8px; background:rgba(30,26,26,0.9); border:1px solid rgba(179,18,23,0.4); color:var(--paper); border-radius:5px;">
-          <div class="shape-btn" id="rhythmLoginBtn" style="display:inline-block;">entrar</div>
+          <div class="shape-btn" id="rhythmLoginBtn" style="display:inline-block;">entrar com Google</div>
           <div class="mono" id="rhythmLoginStatus" style="font-size:10px; color:var(--stone); margin-top:6px;"></div>
         </div>
         <div id="rhythmUploadBox" style="display:none;">
@@ -1816,19 +1814,25 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
   };
 
   // ---- Supabase Storage: os áudios ficam no bucket, valem pra todo mundo que abrir o site ----
-  // leitura é pública (qualquer visitante ouve); upload/remoção exigem login de admin (ver policies no Supabase)
+  // leitura é pública (qualquer visitante ouve); upload/remoção exigem login com a conta Google
+  // do admin (a policy no Supabase já trava por UID, isso aqui é só pra esconder/mostrar a UI certa)
+  const RHYTHM_ADMIN_EMAIL = 'micaelfacciodev@gmail.com';
   let rhythmIsAdmin = false;
 
   async function rhythmCheckSession(){
     const { data: { session } } = await sb.auth.getSession();
-    rhythmIsAdmin = !!session;
+    rhythmIsAdmin = !!session && (session.user.email || '').toLowerCase() === RHYTHM_ADMIN_EMAIL;
     return rhythmIsAdmin;
   }
 
-  async function rhythmLogin(email, password){
-    const { error } = await sb.auth.signInWithPassword({ email, password });
+  async function rhythmLoginGoogle(){
+    const { error } = await sb.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.href }
+    });
     if (error) throw error;
-    rhythmIsAdmin = true;
+    // o navegador é redirecionado pro Google e depois volta pra essa página;
+    // rhythmCheckSession() roda de novo no carregamento seguinte
   }
 
   async function rhythmLogout(){
@@ -2311,9 +2315,20 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
     renderRhythmTrackList();
   }
 
-  function renderRhythmAdminUI(){
+  async function renderRhythmAdminUI(){
     const loginBox = $('rhythmLoginBox');
     const uploadBox = $('rhythmUploadBox');
+    const statusEl = $('rhythmLoginStatus');
+
+    const { data: { session } } = await sb.auth.getSession();
+    if (session && !rhythmIsAdmin){
+      // logou com Google, mas não é a conta admin: avisa e desloga
+      statusEl.textContent = 'essa conta Google não é a de admin do Deriva';
+      await sb.auth.signOut();
+    } else {
+      statusEl.textContent = '';
+    }
+
     loginBox.style.display = rhythmIsAdmin ? 'none' : 'block';
     uploadBox.style.display = rhythmIsAdmin ? 'block' : 'none';
     renderRhythmTrackList(); // pra mostrar/esconder os botões de remover
@@ -2360,18 +2375,12 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
     });
 
     $('rhythmLoginBtn').addEventListener('click', async () => {
-      const email = $('rhythmAdminEmail').value.trim();
-      const password = $('rhythmAdminPassword').value;
       const statusEl = $('rhythmLoginStatus');
-      if (!email || !password){ statusEl.textContent = 'preencha email e senha'; return; }
-      statusEl.textContent = 'entrando...';
+      statusEl.textContent = 'redirecionando pro Google...';
       try {
-        await rhythmLogin(email, password);
-        statusEl.textContent = '';
-        $('rhythmAdminPassword').value = '';
-        renderRhythmAdminUI();
+        await rhythmLoginGoogle();
       } catch (err) {
-        statusEl.textContent = 'login inválido';
+        statusEl.textContent = 'não foi possível iniciar o login';
       }
     });
 
