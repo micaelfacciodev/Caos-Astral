@@ -464,6 +464,28 @@ pra manter os três sincronizados, já que agora commitamos direto.
 - Rótulos de aspecto reaproveitam a convenção do glossário (fricção = quadratura/oposição, corrente = trígono/sextil) — cores diferentes no widget pra cada categoria.
 - CSS em `assets/style.css` (seção "CÉU AGORA"), script incluído nas mesmas 33 páginas que já têm o header/footer padrão (mesmo `<script defer>`, sem precisar rodar antes de mais nada — não depende do markup do header/footer, só faz `document.body.appendChild`).
 
+**Sessão de 01/08 — dashboard.html conectado a compute-daily-window (finalmente, texto estático desde sempre):**
+- Painel "Janela de hoje" do dashboard tinha um comentário `ENGINE:`
+  desde sempre dizendo pra plugar a Edge Function real — nunca foi
+  feito. Diferente do resto das pendências desta sessão, essa function
+  **já existe e está deployada** (claude.md seção 4/5 já documentava:
+  revisada 30/07, Exílio integrado, cálculo de "hoje" via utc_offset,
+  rótulos vindos do banco) — só nunca tinha sido chamada do front.
+- **Não sei o formato exato da resposta** (nomes de campo não estavam
+  documentados, só o comportamento). Em vez de arriscar renderizar
+  errado silenciosamente, `dashboard.html` agora chama
+  `sb.functions.invoke('compute-daily-window')` de verdade e tenta
+  montar um resumo bonito testando os nomes de campo mais prováveis
+  (`destaque`/`destaque_do_dia`/primeiro item de `aspectos`, etc.) —
+  se não bater com nenhum padrão esperado, mostra o **JSON bruto da
+  resposta direto na página** (não só no console — um `<pre>` visível,
+  pra eu conseguir ver o formato real sem precisar pedir print de
+  DevTools de novo) e um aviso claro de que a renderização ainda não
+  está fechada.
+- **Pendência explícita**: depois que alguém (usuário, testando
+  logado) me mandar o que aparece nesse debug, eu fecho a renderização
+  de verdade (tirar o `<pre>`, mostrar só o resumo bonito).
+
 **Sessão de 01/08 — 🔴 BUG CRÍTICO achado (não corrigido por mim, código não está neste repo): ascendente sai com 180° de erro em TODA conta:**
 - Usuário testou o mapa dinâmico novo, reparou que o ascendente mostrado
   não batia com o que ele sabe ser o real (Touro em vez de Escorpião).

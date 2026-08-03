@@ -101,9 +101,10 @@
     <div class="wrap">
       <div class="window-panel">
         <div class="wp-text">
-          <span class="wp-date">Janela de hoje</span>
-          <h2>Sua leitura tática do dia ainda não foi calculada aqui.</h2>
-          <p>Assim que a Edge Function <code class="mono">compute-daily-window</code> estiver conectada, este espaço mostra fricção/corrente do dia, puxado direto do seu Kit.</p>
+          <span class="wp-date" id="wpDate">Janela de hoje</span>
+          <h2 id="wpTitulo">Sua leitura tática do dia ainda não foi calculada aqui.</h2>
+          <p id="wpTexto">Assim que a Edge Function <code class="mono">compute-daily-window</code> estiver conectada, este espaço mostra fricção/corrente do dia, puxado direto do seu Kit.</p>
+          <pre id="wpDebug" class="mono" style="display:none; margin-top:14px; font-size:0.68rem; color:var(--ink-faint); white-space:pre-wrap; max-height:200px; overflow:auto; border-top:1px solid var(--line); padding-top:10px;"></pre>
         </div>
         <a href="kit" class="btn btn-ghost mono">Ver meu Kit →</a>
       </div>
@@ -213,6 +214,70 @@
   const SUPABASE_KEY = 'sb_publishable_kPxQ9BGs68o9lich7qWTKw_W83iNPgs';
   const { createClient } = supabase;
   const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // ------------------------------------------------------------
+  // Janela do dia — chama compute-daily-window de verdade. A function
+  // já existe e está deployada (ver claude.md seção 4/5), só nunca
+  // tinha sido conectada aqui no front. Como não tenho o formato exato
+  // da resposta documentado, tento os nomes de campo mais prováveis
+  // (baseado no que compute-natal-chart e o resto do produto usam) e,
+  // se não bater com nenhum padrão esperado, mostro o JSON bruto num
+  // <pre> visível na própria página — sem precisar abrir o console —
+  // pra eu conseguir fechar a renderização certa depois de ver o
+  // formato real.
+  // ------------------------------------------------------------
+  async function carregarJanelaDoDia() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) return; // sem sessão, mantém o texto padrão (Entrar no header já cobre isso)
+
+    try {
+      const { data, error } = await sb.functions.invoke('compute-daily-window');
+      if (error) throw error;
+
+      const wpTitulo = document.getElementById('wpTitulo');
+      const wpTexto = document.getElementById('wpTexto');
+      const wpDate = document.getElementById('wpDate');
+      const wpDebug = document.getElementById('wpDebug');
+
+      // tentativas de shape mais prováveis, na ordem — para no
+      // primeiro que achar algo utilizável
+      const destaque = data?.destaque || data?.destaque_do_dia || data?.janela?.destaque
+        || (Array.isArray(data?.aspectos) ? data.aspectos[0] : null)
+        || (Array.isArray(data?.janela?.aspectos) ? data.janela.aspectos[0] : null);
+
+      const dataLabel = data?.data || data?.dia || data?.janela?.data;
+      if (dataLabel) wpDate.textContent = 'Janela de ' + dataLabel;
+
+      if (destaque) {
+        const rotulo = destaque.rotulo_caos || destaque.rotulo || destaque.tom || '';
+        const planetaA = destaque.planeta_a || destaque.transito || destaque.a || '';
+        const planetaB = destaque.planeta_b || destaque.natal || destaque.b || '';
+        const aspectoNome = destaque.aspecto_rotulo || destaque.aspecto || '';
+        if (planetaA && planetaB) {
+          wpTitulo.textContent = `${capitalize(planetaA)} ${aspectoNome} seu ${capitalize(planetaB)}${rotulo ? ' — ' + rotulo : ''}`;
+          wpTexto.textContent = destaque.leitura || destaque.texto || 'Veja o mapa completo da janela no seu Kit.';
+        } else {
+          // achou "destaque" mas não no formato esperado -> mostra debug
+          wpTitulo.textContent = 'Sua janela de hoje está calculada.';
+          wpTexto.textContent = 'Não consegui montar o resumo bonito ainda (formato de resposta inesperado) — dado bruto abaixo pra eu ajustar.';
+          wpDebug.style.display = 'block';
+        }
+      } else if (data) {
+        wpTitulo.textContent = 'Sua janela de hoje está calculada.';
+        wpTexto.textContent = 'Recebi resposta de compute-daily-window mas não reconheço o formato ainda — dado bruto abaixo pra eu ajustar a renderização.';
+        wpDebug.style.display = 'block';
+      }
+      if (data) wpDebug.textContent = JSON.stringify(data, null, 2);
+    } catch (e) {
+      console.error('compute-daily-window falhou:', e);
+      const wpTexto = document.getElementById('wpTexto');
+      wpTexto.textContent = 'Não consegui calcular a janela de hoje agora (' + (e?.message || 'erro desconhecido') + '). Tenta recarregar em instantes.';
+    }
+  }
+
+  function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+
+  carregarJanelaDoDia();
 
   const inpConfirma = document.getElementById('inpConfirmaExclusao');
   const btnExcluir = document.getElementById('btnExcluirConta');
