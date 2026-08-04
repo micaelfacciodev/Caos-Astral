@@ -80,12 +80,8 @@
   <div class="login-card">
     <div class="login-title mono">Caos Astral</div>
     <div class="login-sub">Admin · Símbolos</div>
-    <form id="loginForm">
-      <div class="field"><label>E-mail</label><input type="email" id="inputEmail" required></div>
-      <div class="field"><label>Senha</label><input type="password" id="inputSenha" required></div>
-      <button type="submit" class="btn btn-solid mono btn-block">Acessar</button>
-      <div class="login-err" id="loginErr"></div>
-    </form>
+    <button id="loginBtn" class="btn btn-solid mono btn-block">Entrar com Google</button>
+    <div class="login-err" id="loginErr"></div>
   </div>
 </div>
 
@@ -364,16 +360,15 @@
   });
 
   // ---- login ----
-  document.getElementById('loginForm').addEventListener('submit', async e => {
-    e.preventDefault();
-    const email = document.getElementById('inputEmail').value.trim();
-    const senha = document.getElementById('inputSenha').value;
+  document.getElementById('loginBtn').addEventListener('click', async () => {
     const errEl = document.getElementById('loginErr');
-    errEl.textContent = 'Entrando...';
-    const { error } = await sb.auth.signInWithPassword({ email, password: senha });
-    if (error) { errEl.textContent = 'Credenciais inválidas.'; return; }
-    errEl.textContent = '';
-    showPanel();
+    errEl.textContent = 'Redirecionando pro Google...';
+    const { error } = await sb.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.href }
+    });
+    if (error) errEl.textContent = 'Não foi possível iniciar o login.';
+    // navegador vai pro Google e volta; a checagem abaixo roda de novo no carregamento seguinte
   });
 
   async function logout() {
@@ -392,7 +387,22 @@
 
   (async () => {
     const { data: { session } } = await sb.auth.getSession();
-    if (session) showPanel();
+    if (!session) return;
+
+    const { data: perfil, error } = await sb
+      .from('profiles')
+      .select('is_admin')
+      .eq('id', session.user.id)
+      .single();
+
+    if (error || !perfil?.is_admin) {
+      // logado, mas sem permissão: sai e deixa a tela de login visível
+      document.getElementById('loginErr').textContent = 'essa conta Google não tem permissão de admin aqui';
+      await sb.auth.signOut();
+      return;
+    }
+
+    showPanel();
   })();
 </script>
 
