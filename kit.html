@@ -90,7 +90,7 @@
         <p class="eyebrow center"><span class="glyph">◈</span> as peças</p>
         <h2>Seis cards, seis funções</h2>
       </div>
-      <div class="card-grid">
+      <div class="card-grid" id="vocabularioGrid">
         <div class="card"><span class="glyph mono">☉</span><h3>Núcleo</h3><p>O motor que não se negocia. Signo solar, a força que anima.</p></div>
         <div class="card"><span class="glyph mono">▲</span><h3>Máscara</h3><p>A interface que o mundo vê primeiro. Ascendente.</p></div>
         <div class="card"><span class="glyph mono">☽</span><h3>Fome</h3><p>O apetite cru que pede satisfação. Signo lunar, o que recebe e gesta.</p></div>
@@ -98,6 +98,8 @@
         <div class="card scar" style="border-top:1px solid var(--accent);"><span class="glyph mono">⚷</span><h3>Cicatriz</h3><p>O que sobrou depois que a dor já fez seu trabalho. Quíron, órbita kepleriana real, via JPL SBDB.</p></div>
         <div class="card scar" style="border-top:1px solid var(--accent);"><span class="glyph mono">⚸</span><h3>Exílio</h3><p>O que foi expulso antes de virar cicatriz. Lilith Negra verdadeira, apogeu real da órbita da Lua, não a versão média.</p></div>
       </div>
+      <!-- os 6 cards acima são o fallback estático (SEO / JS desligado);
+           assim que o Supabase responde, initVocabularioGrid() substitui pelo conteúdo real do banco -->
     </div>
   </section>
 
@@ -157,6 +159,33 @@
   const SUPABASE_URL = 'https://pibwwyqjrsdwnzsiremx.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_kPxQ9BGs68o9lich7qWTKw_W83iNPgs';
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // ---- vocabulário fechado (Núcleo, Cicatriz, Eco etc), agora vindo do
+  // banco (tabela vocabulario) em vez de fixo no HTML. RLS já filtra pra
+  // só trazer status='fechado', então isso nunca vaza termo pendente. ----
+  async function initVocabularioGrid() {
+    const grid = document.getElementById('vocabularioGrid');
+    if (!grid) return;
+    try {
+      const { data, error } = await sb
+        .from('vocabulario')
+        .select('termo, definicao_curta, glyph, destaque')
+        .eq('categoria', 'mapa_individual')
+        .order('ordem');
+      if (error || !data || !data.length) return; // mantém o fallback estático em caso de erro
+
+      grid.innerHTML = data.map(v => `
+        <div class="card${v.destaque ? ' scar' : ''}"${v.destaque ? ' style="border-top:1px solid var(--accent);"' : ''}>
+          <span class="glyph mono">${v.glyph || '·'}</span>
+          <h3>${v.termo}</h3>
+          <p>${v.definicao_curta}</p>
+        </div>
+      `).join('');
+    } catch (e) {
+      // silencioso: mantém os 6 cards fixos já renderizados no HTML
+    }
+  }
+  initVocabularioGrid();
 
   const SIGN_NAMES = [
     'áries', 'touro', 'gêmeos', 'câncer', 'leão', 'virgem',

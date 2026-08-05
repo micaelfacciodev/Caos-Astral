@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<script>(function(){try{var t=localStorage.getItem('caosastral-theme');if(t==='light'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches))document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin, Caos Astral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  body{ background: var(--bg); }
+
+  /* ---- login ---- */
+  #loginBox{
+    max-width: 380px; margin: 140px auto; background: var(--bg-panel);
+    border: 1px solid var(--line); padding: 34px 30px; text-align:center;
+  }
+  #loginBox h2{ font-size: 1.2rem; margin: 0 0 20px; }
+  #loginBox .err{ font-family:'IBM Plex Mono', monospace; font-size:0.78rem; color:var(--accent-bright); margin-top:14px; min-height:1em; }
+
+  /* ---- casca: sidebar + conteúdo ---- */
+  #shell{ display:none; }
+  #shell.on{ display:flex; }
+  .admin-body{ padding-top:72px; min-height:100vh; display:flex; }
+
+  .sidebar{
+    width:230px; flex-shrink:0; border-right:1px solid var(--line);
+    background:var(--bg-panel); padding:26px 0; min-height:calc(100vh - 72px);
+  }
+  .sidebar .grupo{ padding:0 20px; margin-bottom:26px; }
+  .sidebar .grupo-titulo{
+    font-family:'IBM Plex Mono', monospace; font-size:0.66rem; letter-spacing:0.1em;
+    text-transform:uppercase; color:var(--ink-faint); margin-bottom:10px;
+  }
+  .sidebar button.item{
+    display:block; width:100%; text-align:left; background:none; border:none;
+    color:var(--ink-dim); font-family:'IBM Plex Sans', sans-serif; font-size:0.9rem;
+    padding:9px 10px; cursor:pointer; border-left:2px solid transparent; border-radius:0;
+  }
+  .sidebar button.item:hover{ color:var(--ink); background:rgba(255,255,255,0.03); }
+  .sidebar button.item.ativo{ color:var(--accent-bright); border-left-color:var(--accent-bright); background:rgba(255,255,255,0.03); }
+  .sidebar a.item{
+    display:block; text-decoration:none; color:var(--ink-dim); font-size:0.9rem;
+    padding:9px 10px; border-left:2px solid transparent;
+  }
+  .sidebar a.item:hover{ color:var(--ink); background:rgba(255,255,255,0.03); }
+  .sidebar a.item .seta{ float:right; opacity:0.5; }
+
+  .conteudo{ flex:1; padding:36px 40px 80px; max-width:900px; }
+  .conteudo h1{ font-size:1.6rem; margin:0 0 6px; }
+  .conteudo .sub{ color:var(--ink-dim); font-size:0.92rem; margin:0 0 30px; }
+
+  /* ---- cards de "abre em outro admin" ---- */
+  .link-card{
+    display:block; background:var(--bg-panel); border:1px solid var(--line);
+    padding:20px 22px; text-decoration:none; color:inherit; margin-bottom:14px;
+  }
+  .link-card:hover{ border-color:var(--line-bright); }
+  .link-card h3{ margin:0 0 6px; font-size:1.02rem; color:var(--ink); }
+  .link-card p{ margin:0; font-size:0.85rem; color:var(--ink-dim); }
+  .link-card .abrir{ font-family:'IBM Plex Mono', monospace; font-size:0.72rem; color:var(--accent-bright); margin-top:10px; display:inline-block; }
+
+  /* ---- vocabulário: tabela + form ---- */
+  .voc-toolbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; gap:10px; flex-wrap:wrap; }
+  .voc-toolbar .filtros{ display:flex; gap:6px; }
+  .voc-toolbar .filtros button{
+    font-family:'IBM Plex Mono', monospace; font-size:0.72rem; text-transform:uppercase;
+    background:var(--bg-panel); border:1px solid var(--line); color:var(--ink-dim);
+    padding:6px 12px; cursor:pointer;
+  }
+  .voc-toolbar .filtros button.ativo{ border-color:var(--accent-bright); color:var(--accent-bright); }
+
+  .voc-lista{ border:1px solid var(--line); }
+  .voc-linha{
+    display:flex; align-items:center; gap:14px; padding:13px 16px;
+    border-bottom:1px solid var(--line); cursor:pointer; background:var(--bg-panel);
+  }
+  .voc-linha:last-child{ border-bottom:none; }
+  .voc-linha:hover{ background:var(--bg-panel-2); }
+  .voc-linha .glyph{ width:22px; text-align:center; color:var(--accent-bright); }
+  .voc-linha .nome{ flex:1; font-size:0.94rem; }
+  .voc-linha .nome small{ display:block; color:var(--ink-faint); font-size:0.76rem; margin-top:2px; }
+  .voc-linha .tag-status{
+    font-family:'IBM Plex Mono', monospace; font-size:0.66rem; text-transform:uppercase;
+    padding:3px 9px; border:1px solid var(--line-bright); color:var(--ink-dim); white-space:nowrap;
+  }
+  .voc-linha .tag-status.fechado{ color:#7fbf7f; border-color:#3c5c3c; }
+  .voc-linha .tag-status.pendente{ color:var(--accent-bright); border-color:var(--accent); }
+  .voc-linha .tag-status.standby{ color:var(--ink-faint); }
+
+  .voc-form{
+    background:var(--bg-panel); border:1px solid var(--line); padding:24px 26px; margin-top:20px;
+  }
+  .voc-form h2{ font-size:1.1rem; margin:0 0 18px; }
+  .voc-form label{
+    display:block; font-family:'IBM Plex Mono', monospace; font-size:0.7rem; color:var(--ink-dim);
+    text-transform:uppercase; letter-spacing:0.05em; margin:14px 0 6px;
+  }
+  .voc-form label:first-of-type{ margin-top:0; }
+  .voc-form input[type=text], .voc-form textarea, .voc-form select{
+    width:100%; background:var(--bg-panel-2); border:1px solid var(--line-bright); color:var(--ink);
+    padding:10px 12px; font-family:'IBM Plex Sans', sans-serif; font-size:0.9rem;
+  }
+  .voc-form textarea{ min-height:70px; resize:vertical; font-family:inherit; }
+  .voc-form .linha-dupla{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .voc-form .linha-tripla{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+  .voc-form .check{ display:flex; align-items:center; gap:8px; margin-top:14px; }
+  .voc-form .check input{ width:auto; }
+  .voc-form .check label{ margin:0; text-transform:none; font-size:0.85rem; }
+  .voc-form .acoes{ display:flex; justify-content:space-between; margin-top:24px; }
+  .voc-form .msg{ font-family:'IBM Plex Mono', monospace; font-size:0.78rem; margin-top:10px; min-height:1em; color:var(--accent-bright); }
+
+  @media (max-width:760px){
+    .admin-body{ flex-direction:column; }
+    .sidebar{ width:100%; min-height:auto; display:flex; overflow-x:auto; padding:14px 0; }
+    .sidebar .grupo{ padding:0 10px; margin-bottom:0; white-space:nowrap; }
+    .conteudo{ padding:26px 18px 60px; }
+    .voc-form .linha-dupla, .voc-form .linha-tripla{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div id="space-bg" aria-hidden="true">
+  <div class="nebula"></div>
+  <div class="stars-static" id="stars-static"></div>
+  <canvas id="space-canvas"></canvas>
+</div>
+
+<header class="site-header" id="site-header"></header>
+
+<div id="loginBox">
+  <h2>Admin · Caos Astral</h2>
+  <button class="btn btn-solid mono" id="loginBtn" style="width:100%;">Entrar com Google</button>
+  <div class="err" id="loginErr"></div>
+</div>
+
+<div id="shell">
+  <div class="admin-body">
+    <nav class="sidebar">
+      <div class="grupo">
+        <div class="grupo-titulo">Conteúdo</div>
+        <button class="item ativo" data-secao="vocabulario">Vocabulário</button>
+        <a class="item" href="admin-enciclopedia.html">Enciclopédia de Símbolos <span class="seta">↗</span></a>
+        <button class="item" data-secao="posts" disabled style="opacity:0.4; cursor:default;">Posts <span style="font-size:0.7em;">(em breve)</span></button>
+      </div>
+      <div class="grupo">
+        <div class="grupo-titulo">Ferramentas</div>
+        <a class="item" href="admin-simbolos.html">Galeria de Símbolos <span class="seta">↗</span></a>
+        <a class="item" href="admin-iching.html">I Ching <span class="seta">↗</span></a>
+        <a class="item" href="deriva.html">Ritmo (Deriva) <span class="seta">↗</span></a>
+      </div>
+      <div class="grupo">
+        <button class="item" id="logoutBtn">Sair</button>
+      </div>
+    </nav>
+
+    <main class="conteudo" id="conteudo">
+      <!-- preenchido via JS -->
+    </main>
+  </div>
+</div>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<script>
+const SUPABASE_URL = 'https://pibwwyqjrsdwnzsiremx.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_kPxQ9BGs68o9lich7qWTKw_W83iNPgs';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const loginBox = document.getElementById('loginBox');
+const loginErr = document.getElementById('loginErr');
+const shell = document.getElementById('shell');
+const conteudo = document.getElementById('conteudo');
+
+document.getElementById('loginBtn').addEventListener('click', async () => {
+  loginErr.textContent = 'redirecionando pro Google...';
+  const { error } = await sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.href }
+  });
+  if (error) loginErr.textContent = 'não foi possível iniciar o login';
+});
+
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+  await sb.auth.signOut();
+  location.reload();
+});
+
+async function checkSession() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { loginBox.style.display = 'block'; shell.classList.remove('on'); return; }
+
+  const { data: perfil, error } = await sb
+    .from('profiles')
+    .select('is_admin')
+    .eq('id', session.user.id)
+    .single();
+
+  if (error || !perfil?.is_admin) {
+    loginErr.textContent = 'essa conta Google não tem permissão de admin aqui';
+    await sb.auth.signOut();
+    loginBox.style.display = 'block';
+    shell.classList.remove('on');
+    return;
+  }
+
+  loginBox.style.display = 'none';
+  shell.classList.add('on');
+  mostrarSecao('vocabulario');
+}
+
+// ============================================================
+// navegação entre seções
+// ============================================================
+function mostrarSecao(secao) {
+  document.querySelectorAll('.sidebar button.item[data-secao]').forEach(b => {
+    b.classList.toggle('ativo', b.dataset.secao === secao);
+  });
+  if (secao === 'vocabulario') renderVocabulario();
+}
+
+document.querySelectorAll('.sidebar button.item[data-secao]').forEach(btn => {
+  btn.addEventListener('click', () => { if (!btn.disabled) mostrarSecao(btn.dataset.secao); });
+});
+
+// ============================================================
+// seção: Vocabulário
+// ============================================================
+let vocTermos = [];
+let vocFiltro = 'todos';
+let vocEditandoId = null;
+
+async function renderVocabulario() {
+  conteudo.innerHTML = `
+    <h1>Vocabulário</h1>
+    <p class="sub">Os termos do vocabulário fechado (Núcleo, Cicatriz, Eco etc). Só o que está marcado como <b>fechado</b> aparece no site público (hoje, nos cards do Kit).</p>
+
+    <div class="voc-toolbar">
+      <div class="filtros" id="vocFiltros">
+        <button data-f="todos" class="ativo">todos</button>
+        <button data-f="fechado">fechado</button>
+        <button data-f="pendente">pendente</button>
+        <button data-f="standby">standby</button>
+      </div>
+      <button class="btn btn-solid mono" id="vocNovoBtn">+ novo termo</button>
+    </div>
+
+    <div class="voc-lista" id="vocLista"><div style="padding:20px; color:var(--ink-faint); font-family:'IBM Plex Mono',monospace; font-size:0.85rem;">carregando...</div></div>
+    <div id="vocFormWrap"></div>
+  `;
+
+  document.getElementById('vocNovoBtn').addEventListener('click', () => abrirForm(null));
+  document.querySelectorAll('#vocFiltros button').forEach(b => {
+    b.addEventListener('click', () => {
+      vocFiltro = b.dataset.f;
+      document.querySelectorAll('#vocFiltros button').forEach(x => x.classList.remove('ativo'));
+      b.classList.add('ativo');
+      renderLista();
+    });
+  });
+
+  await carregarVocabulario();
+}
+
+async function carregarVocabulario() {
+  const { data, error } = await sb
+    .from('vocabulario')
+    .select('*')
+    .order('categoria')
+    .order('ordem');
+  if (error) {
+    document.getElementById('vocLista').innerHTML = `<div style="padding:20px; color:var(--accent-bright);">erro ao carregar: ${error.message}</div>`;
+    return;
+  }
+  vocTermos = data || [];
+  renderLista();
+}
+
+function renderLista() {
+  const lista = document.getElementById('vocLista');
+  if (!lista) return;
+  const filtradas = vocFiltro === 'todos' ? vocTermos : vocTermos.filter(v => v.status === vocFiltro);
+  if (!filtradas.length) {
+    lista.innerHTML = `<div style="padding:20px; color:var(--ink-faint);">nenhum termo aqui.</div>`;
+    return;
+  }
+  lista.innerHTML = filtradas.map(v => `
+    <div class="voc-linha" data-id="${v.id}">
+      <span class="glyph mono">${v.glyph || '·'}</span>
+      <span class="nome">${v.termo}<small>${v.substitui || ''}</small></span>
+      <span class="tag-status ${v.status}">${v.status}</span>
+    </div>
+  `).join('');
+  lista.querySelectorAll('.voc-linha').forEach(row => {
+    row.addEventListener('click', () => abrirForm(row.dataset.id));
+  });
+}
+
+function abrirForm(id) {
+  vocEditandoId = id;
+  const termo = id ? vocTermos.find(v => v.id === id) : null;
+  const wrap = document.getElementById('vocFormWrap');
+
+  wrap.innerHTML = `
+    <div class="voc-form">
+      <h2>${termo ? 'Editar termo' : 'Novo termo'}</h2>
+
+      <label>Termo</label>
+      <input type="text" id="fTermo" value="${termo?.termo || ''}">
+
+      <div class="linha-dupla">
+        <div>
+          <label>Substitui (opcional)</label>
+          <input type="text" id="fSubstitui" value="${termo?.substitui || ''}">
+        </div>
+        <div>
+          <label>Glyph (símbolo unicode)</label>
+          <input type="text" id="fGlyph" value="${termo?.glyph || ''}" placeholder="⚷">
+        </div>
+      </div>
+
+      <label>Definição curta (o que aparece no card)</label>
+      <textarea id="fDefCurta">${termo?.definicao_curta || ''}</textarea>
+
+      <label>Definição longa (opcional, uso futuro)</label>
+      <textarea id="fDefLonga">${termo?.definicao_longa || ''}</textarea>
+
+      <div class="linha-tripla">
+        <div>
+          <label>Categoria</label>
+          <select id="fCategoria">
+            <option value="mapa_individual" ${termo?.categoria === 'mapa_individual' ? 'selected' : ''}>mapa individual</option>
+            <option value="feature_de_acao" ${termo?.categoria === 'feature_de_acao' ? 'selected' : ''}>feature de ação</option>
+            <option value="relacional" ${termo?.categoria === 'relacional' ? 'selected' : ''}>relacional</option>
+          </select>
+        </div>
+        <div>
+          <label>Status</label>
+          <select id="fStatus">
+            <option value="fechado" ${termo?.status === 'fechado' ? 'selected' : ''}>fechado (visível no site)</option>
+            <option value="pendente" ${!termo || termo?.status === 'pendente' ? 'selected' : ''}>pendente</option>
+            <option value="standby" ${termo?.status === 'standby' ? 'selected' : ''}>standby</option>
+          </select>
+        </div>
+        <div>
+          <label>Ordem</label>
+          <input type="text" id="fOrdem" value="${termo?.ordem ?? 0}" inputmode="numeric">
+        </div>
+      </div>
+
+      <div class="check">
+        <input type="checkbox" id="fDestaque" ${termo?.destaque ? 'checked' : ''}>
+        <label for="fDestaque">Destaque visual (borda de acento, tipo Cicatriz/Exílio)</label>
+      </div>
+
+      <div class="acoes">
+        <div>
+          <button class="btn btn-solid mono" id="fSalvar">Salvar</button>
+          <button class="btn mono" id="fCancelar">Cancelar</button>
+        </div>
+        ${termo ? '<button class="btn mono" id="fExcluir" style="color:var(--accent-bright);">Excluir</button>' : ''}
+      </div>
+      <div class="msg" id="fMsg"></div>
+    </div>
+  `;
+
+  document.getElementById('fCancelar').addEventListener('click', () => { wrap.innerHTML = ''; });
+  document.getElementById('fSalvar').addEventListener('click', () => salvarTermo(termo?.id || null));
+  if (termo) {
+    document.getElementById('fExcluir').addEventListener('click', () => excluirTermo(termo.id));
+  }
+
+  wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function salvarTermo(id) {
+  const msg = document.getElementById('fMsg');
+  const payload = {
+    termo: document.getElementById('fTermo').value.trim(),
+    substitui: document.getElementById('fSubstitui').value.trim() || null,
+    definicao_curta: document.getElementById('fDefCurta').value.trim(),
+    definicao_longa: document.getElementById('fDefLonga').value.trim() || null,
+    glyph: document.getElementById('fGlyph').value.trim() || null,
+    categoria: document.getElementById('fCategoria').value,
+    status: document.getElementById('fStatus').value,
+    ordem: parseInt(document.getElementById('fOrdem').value, 10) || 0,
+    destaque: document.getElementById('fDestaque').checked
+  };
+
+  if (!payload.termo || !payload.definicao_curta) {
+    msg.textContent = 'preencha ao menos termo e definição curta';
+    return;
+  }
+
+  msg.textContent = 'salvando...';
+  const { error } = id
+    ? await sb.from('vocabulario').update(payload).eq('id', id)
+    : await sb.from('vocabulario').insert(payload);
+
+  if (error) { msg.textContent = 'erro: ' + error.message; return; }
+
+  document.getElementById('vocFormWrap').innerHTML = '';
+  await carregarVocabulario();
+}
+
+async function excluirTermo(id) {
+  if (!confirm('Excluir esse termo? Não dá pra desfazer.')) return;
+  const { error } = await sb.from('vocabulario').delete().eq('id', id);
+  if (error) { alert('erro ao excluir: ' + error.message); return; }
+  document.getElementById('vocFormWrap').innerHTML = '';
+  await carregarVocabulario();
+}
+
+checkSession();
+</script>
+
+<script>window.SITE_CHROME = { headerCta: { label: "Sair", onclick: "document.getElementById('logoutBtn').click()" } };</script>
+<script src="assets/site-chrome.js" defer></script>
+<script src="assets/space-bg.js" defer></script>
+<script src="assets/theme-toggle.js" defer></script>
+<script src="assets/nav-menu.js" defer></script>
+<script src="assets/ceu-agora.js" defer></script>
+</body>
+</html>
