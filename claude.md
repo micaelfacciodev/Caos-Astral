@@ -464,6 +464,36 @@ pra manter os três sincronizados, já que agora commitamos direto.
 - Rótulos de aspecto reaproveitam a convenção do glossário (fricção = quadratura/oposição, corrente = trígono/sextil) — cores diferentes no widget pra cada categoria.
 - CSS em `assets/style.css` (seção "CÉU AGORA"), script incluído nas mesmas 33 páginas que já têm o header/footer padrão (mesmo `<script defer>`, sem precisar rodar antes de mais nada — não depende do markup do header/footer, só faz `document.body.appendChild`).
 
+**Sessão de 04/08 — causa final do 500 (depois do fix de CPU): coluna errada em daily_readings:**
+- Depois da otimização de CPU (entrada anterior), duration caiu pra
+  ~550ms (bem dentro do limite) mas o 500 continuou. Conseguimos o
+  corpo real do erro pela primeira vez (via `fetch` direto no console
+  do navegador, mais confiável que o painel "Test" do Supabase, que
+  deu problema de token expirado/colagem mais de uma vez):
+  `"falha ao gravar a leitura: Could not find the 'leitura' column of
+  'daily_readings' in the schema cache"`.
+- **Causa exata**: a reconstrução do schema (0001, sem ter visto o
+  código real na época, marcada como confiança BAIXA de propósito)
+  nomeou a coluna de conteúdo como `janela` — o código real usa
+  `leitura` (`insert({ user_id, data: hoje, leitura: leituraPayload })`).
+  Confiança baixa vs alta se provou o critério certo: foi exatamente
+  aqui, na tabela sinalizada como incerta, que o erro real apareceu —
+  as tabelas marcadas como confiança ALTA (profiles, natal_charts,
+  planets, aspects) não tiveram nenhum problema de nome de coluna em
+  nenhuma etapa desta sessão inteira.
+- `0016_daily_readings_leitura.sql`: renomeia `janela` → `leitura` (não
+  recria a tabela, preserva o resto). Testado (Postgres local,
+  simulando o estado real com `janela`), rodei a migration duas vezes
+  seguidas pra confirmar idempotência. Confirmado que o GRANT da 0014
+  cobre a coluna renomeada automaticamente (é por tabela, não por
+  coluna) — não precisa rodar de novo.
+- **Estado no fim desta sessão**: dashboard.html chamando
+  compute-daily-window de verdade, function rodando dentro do limite
+  de CPU, gravando na coluna certa. Ainda não confirmado end-to-end se
+  o resultado final renderiza bonito no dashboard (a réplica de
+  renderização defensiva já commitada deve dar conta, mas não vi
+  confirmação visual do usuário depois deste último fix).
+
 **Sessão de 01/08-04/08 — 🔴 compute-daily-window: 500 em produção, causa era limite de CPU Time (2s), não bug de lógica:**
 - Depois de conectar o dashboard (entrada anterior), a function retornava
   **500 sem log de erro nenhum** (só `booted`/`shutdown`, nem o
