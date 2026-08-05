@@ -4,17 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin, Enciclopédia | Caos Astral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
 <!--
   Admin hub da Enciclopédia. Página estática, sem build step, igual ao resto
   do repo. Depende de:
-    1. RLS criada em 0003_enciclopedia_simbolos.sql (leitura/escrita por is_admin)
-    2. profiles.is_admin = true pro seu próprio usuário (rodar manualmente
-       no SQL Editor: update public.profiles set is_admin = true where id = '<seu-uuid>';)
-    3. Trocar SUPABASE_URL e SUPABASE_ANON_KEY abaixo pelos valores reais do projeto.
+    1. RLS criada em 0013_enciclopedia_simbolos.sql (leitura/escrita por is_admin)
+    2. profiles.is_admin = true pro seu próprio usuário
+    3. SUPABASE_URL e SUPABASE_ANON_KEY corretos abaixo.
 
-  TODO de estilo: importar assets/style.css do repo e trocar as variáveis CSS
-  abaixo pelos tokens reais do design system. Aqui estão valores neutros de
-  placeholder só pra função ficar testável.
+  O <link rel="stylesheet" href="assets/style.css"> acima é o que faz o
+  #space-bg funcionar (ele define position:fixed pro fundo estrelado);
+  sem ele, a div vira um bloco normal enorme empurrando o resto da
+  página pra baixo. As variáveis de cor abaixo continuam sendo o
+  esquema próprio desta página (não colidem com as do style.css,
+  namespaces diferentes), um re-skin completo pros tokens reais
+  (--bg-panel, --ink etc) fica pra quando essa tela for portada
+  pra dentro do admin.html.
 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -109,7 +117,10 @@
 
 
 <header>
-  <h1>Enciclopédia, Admin</h1>
+  <div>
+    <a href="admin.html" style="font-family:'IBM Plex Mono',monospace; font-size:0.72rem; color:var(--text-dim); text-decoration:none;">← voltar ao admin</a>
+    <h1 style="margin-top:6px;">Enciclopédia, Admin</h1>
+  </div>
   <div class="status" id="status">verificando acesso…</div>
 </header>
 
