@@ -3877,6 +3877,26 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
 })();
 
 </script>
+<script>
+// vindo do admin.html (link "Ritmo (Deriva)"): abre a barra de áudio e a
+// área do admin já expandidas, e rola até lá, em vez de deixar tudo
+// fechado esperando três cliques manuais.
+if (window.location.hash === '#ritmo-admin') {
+  window.addEventListener('load', () => {
+    const audioToggle = document.getElementById('audioToggle');
+    const audioPanel = document.getElementById('audioPanel');
+    const adminLink = document.getElementById('rhythmAdminLink');
+    const adminPanel = document.getElementById('rhythmAdminPanel');
+
+    if (audioPanel && !audioPanel.classList.contains('open')) audioToggle?.click();
+    if (adminPanel && adminPanel.style.display === 'none') adminLink?.click();
+
+    setTimeout(() => {
+      document.getElementById('audioBar')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
+  });
+}
+</script>
 <script src="assets/space-bg.js" defer></script>
 <script src="assets/theme-toggle.js" defer></script>
 <script src="assets/nav-menu.js" defer></script>
