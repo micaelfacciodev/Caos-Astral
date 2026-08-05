@@ -464,6 +464,60 @@ pra manter os três sincronizados, já que agora commitamos direto.
 - Rótulos de aspecto reaproveitam a convenção do glossário (fricção = quadratura/oposição, corrente = trígono/sextil) — cores diferentes no widget pra cada categoria.
 - CSS em `assets/style.css` (seção "CÉU AGORA"), script incluído nas mesmas 33 páginas que já têm o header/footer padrão (mesmo `<script defer>`, sem precisar rodar antes de mais nada — não depende do markup do header/footer, só faz `document.body.appendChild`).
 
+**Sessão de 01/08-04/08 — 🔴 compute-daily-window: 500 em produção, causa era limite de CPU Time (2s), não bug de lógica:**
+- Depois de conectar o dashboard (entrada anterior), a function retornava
+  **500 sem log de erro nenhum** (só `booted`/`shutdown`, nem o
+  `console.error(err)` do próprio catch aparecia) — sintoma esquisito,
+  já que o código tem try/catch cobrindo tudo.
+- **Testei o código real** (usuário colou o `.ts` inteiro): montei um
+  harness Node com o `astronomy-engine@2.1.19` de verdade (mesma versão
+  exata do import) + mock do supabase-js simulando as 6 tabelas
+  consultadas, transpilei TS→JS com o compilador oficial (não regex
+  manual, que já tinha se mostrado frágil demais numa tentativa
+  anterior). **Rodou perfeito, sem erro, devolveu 200 com a leitura
+  completa** — ou seja, a lógica do código está correta.
+- Isso descartou bug de lógica e apontou pra fora do JS. Usuário testou
+  via o botão "Test" do próprio Supabase com token de sessão real
+  (peguei via `localStorage` — só uso local, não tenho rede pro
+  Supabase daqui) → aba Overview mostrou **duration: 1999ms** no
+  request que deu 500. Pesquisei os limites oficiais do Supabase:
+  **CPU Time máximo é 2000ms** (diferente do wall-clock, que é 400s) —
+  bate quase exato. Não é timeout de rede, é CPU de verdade estourando.
+- **Causa provável do consumo alto**: 12 corpos × 2 instantes (hoje e
+  ontem, pra retrogradação) via efemérides reais, Quíron kepleriano,
+  Lilith verdadeira (vetores de estado) — tudo isso já é comparável ao
+  que `compute-natal-chart` faz (que funciona) — mas em cima disso,
+  `compute-daily-window` ainda buscava a tabela **`cenas_grau` inteira
+  (360 linhas, com texto longo em `leitura`/`imagem`)** só pra usar
+  ~12. Parsear esse JSON grande é CPU, não é rede — provável maior
+  consumidor isolado do orçamento de 2s.
+- **Otimização feita** (testada de novo com o mesmo harness, ainda
+  devolve 200 e resultado correto):
+  1. `cenas_grau`: troca busca da tabela inteira por um filtro
+     `.or()` com só os pares signo+grau que os planetas em trânsito de
+     hoje realmente caem (no máximo 12 linhas, não 360).
+  2. `planets` + `aspects`: eram sequenciais (um esperando o outro),
+     agora rodam em paralelo via `Promise.all` (esses dois são
+     independentes entre si).
+  - **Resalva honesta**: não tenho como confirmar 100% se o filtro
+    `.or()` com valor acentuado (`áries`) é codificado certinho pelo
+    supabase-js na requisição HTTP real (meu teste intercepta antes de
+    virar HTTP de verdade) — bem provável que funcione (mesmo texto já
+    salvo no banco), mas se algum planeta em Áries aparecer sem
+    `grau_simbolico`, é o primeiro lugar a olhar.
+- **Não consegui aplicar isso** — mesma limitação de sempre, código não
+  está neste repo. Entreguei o `.ts` completo pro usuário colar e
+  redeployar.
+- **Pendência que registro mas não resolvi**: se essa otimização não
+  bastar sozinha (ainda estourar perto de 2s), os próximos cortes mais
+  óbvios seriam (a) reduzir de 2 pra 1 o número de instantes calculados
+  por corpo — ex. usar uma diferença de poucas horas em vez de um dia
+  inteiro pra estimar retrogradação, mais barato de calcular; (b) trocar
+  o Quíron kepleriano por uma tabela pré-calculada de posições diárias
+  (praticamente elimina o custo desse ponto). Não implementei nenhuma
+  das duas agora — são mudanças de comportamento/precisão, não só
+  performance, valem decisão do time antes.
+
 **Sessão de 01/08 — dashboard.html conectado a compute-daily-window (finalmente, texto estático desde sempre):**
 - Painel "Janela de hoje" do dashboard tinha um comentário `ENGINE:`
   desde sempre dizendo pra plugar a Edge Function real — nunca foi
