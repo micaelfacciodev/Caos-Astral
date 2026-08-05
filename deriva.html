@@ -940,7 +940,7 @@ function makeRetinaCanvas(id){
   const ctx = canvas.getContext('2d');
   const dim = { w: 0, h: 0 };
   function resize(){
-    const dpr = window.devicePixelRatio || 1;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2); // acima de 2x é imperceptível numa prévia pequena, só custa RAM/GPU
     const rect = canvas.getBoundingClientRect();
     dim.w = rect.width;
     dim.h = rect.height;
@@ -1164,15 +1164,21 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
       const displayR = 8 + r.z * maxR;
       const alpha = Math.min(1, 0.15 + r.z * 0.85);
 
-      ctx.save();
       ctx.strokeStyle = `rgba(216,183,161,${alpha})`;
       ctx.lineWidth = 1 + r.z * 2.2;
-      ctx.shadowColor = `rgba(179,18,23,${Math.min(1, alpha + 0.15)})`;
-      ctx.shadowBlur = 4 + r.z * 14;
+      // shadowBlur é a operação mais cara do canvas (recalcula um blur sobre a
+      // área toda do traço); só vale a pena nos anéis próximos/brilhantes,
+      // nos distantes o blur seria imperceptível de qualquer forma
+      if (r.z > 0.55) {
+        ctx.shadowColor = `rgba(179,18,23,${Math.min(1, alpha + 0.15)})`;
+        ctx.shadowBlur = 4 + r.z * 14;
+      } else {
+        ctx.shadowBlur = 0;
+      }
       ringPath(cx, cy, displayR, r);
       ctx.stroke();
-      ctx.restore();
     }
+    ctx.shadowBlur = 0;
     ctx.globalCompositeOperation = 'source-over';
 
     t += 0.015;
@@ -2576,7 +2582,7 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
   const dim = { w: 0, h: 0 };
 
   function resizeMain(){
-    const dpr = window.devicePixelRatio || 1;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2); // era 3x em iPhone Pro; 2x já é nítido e usa bem menos memória de canvas
     dim.w = window.innerWidth;
     dim.h = window.innerHeight;
     canvas.width = Math.round(dim.w * dpr);
@@ -2587,9 +2593,36 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
   window.addEventListener('resize', resizeMain);
 
   let editorVisible = false;
+
+  // ---- pausa prévias que saem da viewport (rolagem, celular etc) ----
+  // hoje as 12 prévias do grid rodam sempre, mesmo fora da tela; isso
+  // reduz o uso de CPU/GPU real na maior parte do tempo, sem mudar nada
+  // visualmente pro que já está visível.
+  const portalEls = Array.from(document.querySelectorAll('.portal:not(.ghost)'));
+  const portalVisible = portalEls.map(() => true);
+  if ('IntersectionObserver' in window) {
+    const portalObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const idx = portalEls.indexOf(entry.target);
+        if (idx === -1) return;
+        portalVisible[idx] = entry.isIntersecting;
+        const ctrl = previewControls[idx];
+        if (!ctrl) return;
+        if (entry.isIntersecting) {
+          if (!document.hidden && !document.body.classList.contains('editor-open')) ctrl.resume();
+        } else {
+          ctrl.pause();
+        }
+      });
+    }, { threshold: 0.01 });
+    portalEls.forEach(el => portalObserver.observe(el));
+  }
+
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) previewControls.forEach(p => p.pause());
-    else if (!document.body.classList.contains('editor-open')) previewControls.forEach(p => p.resume());
+    else if (!document.body.classList.contains('editor-open')) {
+      previewControls.forEach((p, i) => { if (portalVisible[i]) p.resume(); });
+    }
   });
 
   // mouse global (usado só pelas camadas que tiverem "guiar com o mouse"/"reação ao mouse" ligados manualmente)
@@ -2965,15 +2998,19 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
         const proximity = 1 - Math.min(r.z/m,1);
         const alpha = Math.min(1, (0.12+proximity*0.9)*am);
         const width = Math.max(0.8, proximity*4.5);
-        ctx.save();
         ctx.strokeStyle = r.colorFn+alpha+')';
         ctx.lineWidth = width;
-        ctx.shadowColor = r.colorFn+Math.min(1,alpha+0.2)+')';
-        ctx.shadowBlur = 6+proximity*22;
+        // mesmo corte de custo do preview: shadowBlur só nos anéis próximos
+        if (proximity > 0.4) {
+          ctx.shadowColor = r.colorFn+Math.min(1,alpha+0.2)+')';
+          ctx.shadowBlur = 6+proximity*22;
+        } else {
+          ctx.shadowBlur = 0;
+        }
         ringPath(cx,cy,displayR,r);
         ctx.stroke();
-        ctx.restore();
       }
+      ctx.shadowBlur = 0;
       t += 0.015;
     }
     LAYERS.wormhole = {
@@ -3699,7 +3736,7 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
     document.body.classList.remove('editor-open');
     editorVisible = false;
     editorPanelEl.classList.remove('open');
-    if (!document.hidden) previewControls.forEach(p => p.resume());
+    if (!document.hidden) previewControls.forEach((p, i) => { if (portalVisible[i]) p.resume(); });
   }
 
   document.querySelectorAll('.portal:not(.ghost)').forEach(portal => {
