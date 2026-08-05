@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<script>(function(){try{var t=localStorage.getItem('caosastral-theme');if(t==='light'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches))document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin, Ritmo (Deriva) | Caos Astral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  body{ background: var(--bg); }
+  .admin-wrap{ max-width: 760px; margin: 0 auto; padding: 150px 20px 80px; }
+  .admin-header{ margin-bottom: 28px; }
+  .admin-header h1{ font-size: 1.5rem; margin:0 0 6px; }
+  .admin-header .who{ font-family:'IBM Plex Mono', monospace; font-size:0.78rem; color:var(--ink-dim); }
+  .voltar{ font-family:'IBM Plex Mono', monospace; font-size:0.72rem; color:var(--ink-dim); text-decoration:none; display:block; margin-bottom:10px; }
+
+  #loginBox{
+    max-width: 380px; margin: 140px auto; background: var(--bg-panel);
+    border: 1px solid var(--line); padding: 34px 30px; text-align:center;
+  }
+  #loginBox h2{ font-size: 1.2rem; margin: 0 0 20px; }
+  #loginBox .err{ font-family:'IBM Plex Mono', monospace; font-size:0.78rem; color:var(--accent-bright); margin-top:14px; min-height:1em; }
+
+  #adminArea{ display:none; }
+
+  .dropzone{
+    border: 1px dashed var(--line-bright); background: var(--bg-panel);
+    padding: 40px 24px; text-align:center; cursor:pointer; margin-bottom:24px;
+  }
+  .dropzone:hover, .dropzone.over{ border-color: var(--accent-bright); }
+  .dropzone p{ margin:0; color:var(--ink-dim); font-size:0.9rem; }
+  .dropzone input{ display:none; }
+
+  .fila{ margin-bottom: 30px; }
+  .fila-item{
+    display:flex; align-items:center; gap:12px; padding:10px 14px;
+    background:var(--bg-panel); border:1px solid var(--line); margin-bottom:6px;
+  }
+  .fila-item .nome{ flex:1; font-size:0.85rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .fila-item .estado{ font-family:'IBM Plex Mono', monospace; font-size:0.72rem; color:var(--ink-dim); white-space:nowrap; }
+  .fila-item .estado.ok{ color:#7fbf7f; }
+  .fila-item .estado.erro{ color:var(--accent-bright); }
+
+  .lista-titulo{
+    font-family:'IBM Plex Mono', monospace; font-size:0.7rem; text-transform:uppercase;
+    letter-spacing:0.06em; color:var(--ink-faint); margin: 34px 0 12px;
+  }
+  .track-lista{ border:1px solid var(--line); }
+  .track-linha{
+    display:flex; align-items:center; gap:12px; padding:12px 16px;
+    border-bottom:1px solid var(--line); background:var(--bg-panel);
+  }
+  .track-linha:last-child{ border-bottom:none; }
+  .track-linha .nome{ flex:1; font-size:0.9rem; }
+  .track-linha .del{
+    font-family:'IBM Plex Mono', monospace; font-size:0.78rem; color:var(--ink-dim);
+    background:none; border:none; cursor:pointer; padding:4px 8px;
+  }
+  .track-linha .del:hover{ color:var(--accent-bright); }
+  #vazio{ color:var(--ink-faint); padding:20px; text-align:center; font-size:0.85rem; }
+</style>
+</head>
+<body>
+<div id="space-bg" aria-hidden="true">
+  <div class="nebula"></div>
+  <div class="stars-static" id="stars-static"></div>
+  <canvas id="space-canvas"></canvas>
+</div>
+
+<header class="site-header" id="site-header"></header>
+
+<div id="loginBox">
+  <h2>Admin · Ritmo (Deriva)</h2>
+  <button class="btn btn-solid mono" id="loginBtn" style="width:100%;">Entrar com Google</button>
+  <div class="err" id="loginErr"></div>
+</div>
+
+<div class="admin-wrap" id="adminArea">
+  <div class="admin-header">
+    <a class="voltar" href="admin.html">← voltar ao admin</a>
+    <h1>Ritmo, Admin</h1>
+    <div class="who"><span id="whoEmail"></span> · <a href="#" id="logoutLink" class="mono" style="color:var(--ink-dim);">sair</a></div>
+  </div>
+
+  <div class="dropzone" id="dropzone">
+    <p><strong>Clique ou arraste</strong> um ou vários áudios aqui (mp3, wav, ogg...)</p>
+    <input type="file" id="fileInput" accept="audio/*" multiple>
+  </div>
+
+  <div class="fila" id="fila"></div>
+
+  <div class="lista-titulo">Faixas publicadas</div>
+  <div class="track-lista" id="trackLista">
+    <div id="vazio">carregando...</div>
+  </div>
+</div>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<script>
+const SUPABASE_URL = 'https://pibwwyqjrsdwnzsiremx.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_kPxQ9BGs68o9lich7qWTKw_W83iNPgs';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const BUCKET = 'deriva-ritmo';
+
+const loginBox = document.getElementById('loginBox');
+const loginErr = document.getElementById('loginErr');
+const adminArea = document.getElementById('adminArea');
+
+document.getElementById('loginBtn').addEventListener('click', async () => {
+  loginErr.textContent = 'redirecionando pro Google...';
+  const { error } = await sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.href }
+  });
+  if (error) loginErr.textContent = 'não foi possível iniciar o login';
+});
+
+document.getElementById('logoutLink').addEventListener('click', async (e) => {
+  e.preventDefault();
+  await sb.auth.signOut();
+  location.reload();
+});
+
+async function checkSession() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { loginBox.style.display = 'block'; adminArea.style.display = 'none'; return; }
+
+  const { data: perfil, error } = await sb.from('profiles').select('is_admin').eq('id', session.user.id).single();
+  if (error || !perfil?.is_admin) {
+    loginErr.textContent = 'essa conta Google não tem permissão de admin aqui';
+    await sb.auth.signOut();
+    loginBox.style.display = 'block';
+    adminArea.style.display = 'none';
+    return;
+  }
+
+  document.getElementById('whoEmail').textContent = session.user.email;
+  loginBox.style.display = 'none';
+  adminArea.style.display = 'block';
+  carregarFaixas();
+}
+
+// ============================================================
+// upload em lote, com nomes à prova de colisão
+// ============================================================
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+const filaEl = document.getElementById('fila');
+
+dropzone.addEventListener('click', () => fileInput.click());
+dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('over'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('over'));
+dropzone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dropzone.classList.remove('over');
+  handleFiles(Array.from(e.dataTransfer.files || []));
+});
+fileInput.addEventListener('change', (e) => {
+  handleFiles(Array.from(e.target.files || []));
+  e.target.value = ''; // permite selecionar os mesmos arquivos de novo depois
+});
+
+let nomesExistentes = new Set();
+
+// garante que dois arquivos nunca se sobrescrevem: se "lua.mp3" já existe
+// (no bucket ou na leva que está subindo agora), vira "lua (2).mp3" e por aí vai
+function nomeSemColisao(nomeOriginal) {
+  if (!nomesExistentes.has(nomeOriginal)) return nomeOriginal;
+  const pontoIdx = nomeOriginal.lastIndexOf('.');
+  const base = pontoIdx > 0 ? nomeOriginal.slice(0, pontoIdx) : nomeOriginal;
+  const ext = pontoIdx > 0 ? nomeOriginal.slice(pontoIdx) : '';
+  let n = 2;
+  let candidato = `${base} (${n})${ext}`;
+  while (nomesExistentes.has(candidato)) { n++; candidato = `${base} (${n})${ext}`; }
+  return candidato;
+}
+
+async function handleFiles(files) {
+  if (!files.length) return;
+
+  for (const file of files) {
+    const nomeFinal = nomeSemColisao(file.name);
+    nomesExistentes.add(nomeFinal); // reserva já, pra dois arquivos da mesma leva não colidirem entre si
+
+    const item = document.createElement('div');
+    item.className = 'fila-item';
+    item.innerHTML = `<span class="nome">${nomeFinal}</span><span class="estado">enviando...</span>`;
+    filaEl.appendChild(item);
+    const estadoEl = item.querySelector('.estado');
+
+    try {
+      const { error } = await sb.storage.from(BUCKET).upload(nomeFinal, file, { upsert: false });
+      if (error) throw error;
+      estadoEl.textContent = 'enviado ✓';
+      estadoEl.classList.add('ok');
+    } catch (err) {
+      estadoEl.textContent = 'falhou: ' + err.message;
+      estadoEl.classList.add('erro');
+      nomesExistentes.delete(nomeFinal);
+    }
+  }
+
+  await carregarFaixas();
+  // limpa a fila de status depois de um tempo, pra não acumular pra sempre
+  setTimeout(() => { filaEl.innerHTML = ''; }, 4000);
+}
+
+// ============================================================
+// lista de faixas publicadas + excluir
+// ============================================================
+async function carregarFaixas() {
+  const lista = document.getElementById('trackLista');
+  const { data, error } = await sb.storage.from(BUCKET).list('', { sortBy: { column: 'name', order: 'asc' } });
+  if (error) {
+    lista.innerHTML = `<div id="vazio">erro ao carregar: ${error.message}</div>`;
+    return;
+  }
+  const arquivos = (data || []).filter(f => f.name && !f.name.startsWith('.'));
+  nomesExistentes = new Set(arquivos.map(f => f.name));
+
+  if (!arquivos.length) {
+    lista.innerHTML = `<div id="vazio">nenhum áudio publicado ainda.</div>`;
+    return;
+  }
+
+  lista.innerHTML = arquivos.map(f => `
+    <div class="track-linha" data-nome="${f.name}">
+      <span class="nome">${f.name.replace(/\.[^.]+$/, '')}</span>
+      <button class="del">excluir</button>
+    </div>
+  `).join('');
+
+  lista.querySelectorAll('.track-linha').forEach(row => {
+    row.querySelector('.del').addEventListener('click', async () => {
+      const nome = row.dataset.nome;
+      if (!confirm(`Excluir "${nome}"? Não dá pra desfazer.`)) return;
+      const { error } = await sb.storage.from(BUCKET).remove([nome]);
+      if (error) { alert('erro ao excluir: ' + error.message); return; }
+      await carregarFaixas();
+    });
+  });
+}
+
+checkSession();
+</script>
+
+<script>window.SITE_CHROME = { headerCta: { label: "Sair", onclick: "document.getElementById('logoutLink').click()" } };</script>
+<script src="assets/site-chrome.js" defer></script>
+<script src="assets/space-bg.js" defer></script>
+<script src="assets/theme-toggle.js" defer></script>
+<script src="assets/nav-menu.js" defer></script>
+<script src="assets/ceu-agora.js" defer></script>
+</body>
+</html>

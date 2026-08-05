@@ -909,26 +909,6 @@
         <div class="mini-toggle active" id="rhythmCrossfadeToggle" data-on="1">alternância automática: ligada</div>
       </div>
     </div>
-
-    <!-- área do admin: só aparece funcional depois de login -->
-    <div class="a-row" style="grid-column:1 / -1; border-top:1px dashed rgba(179,18,23,0.15); padding-top:14px; margin-top:4px;">
-      <div class="mono" id="rhythmAdminLink" style="font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--stone); cursor:pointer;">área do admin ▾</div>
-      <div id="rhythmAdminPanel" style="display:none; margin-top:10px;">
-        <div id="rhythmLoginBox">
-          <div class="shape-btn" id="rhythmLoginBtn" style="display:inline-block;">entrar com Google</div>
-          <div class="mono" id="rhythmLoginStatus" style="font-size:10px; color:var(--stone); margin-top:6px;"></div>
-        </div>
-        <div id="rhythmUploadBox" style="display:none;">
-          <div class="mono" style="font-size:10.5px; color:var(--sand); margin-bottom:8px;">logado como admin</div>
-          <label class="preset-btn" id="rhythmUploadBtn" style="display:inline-block; cursor:pointer; width:auto;">
-            + adicionar áudio
-            <input type="file" id="rhythmFileInput" accept="audio/*" multiple style="display:none;">
-          </label>
-          <div class="shape-btn" id="rhythmLogoutBtn" style="display:inline-block; margin-left:8px;">sair</div>
-          <div class="mono" id="rhythmUploadStatus" style="font-size:10px; color:var(--stone); margin-top:6px;"></div>
-        </div>
-      </div>
-    </div>
   </div>
   </div>
 </div>
@@ -1813,32 +1793,9 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
     rhythmCrossfadeSeconds: 40
   };
 
-  // ---- Supabase Storage: os áudios ficam no bucket, valem pra todo mundo que abrir o site ----
-  // leitura é pública (qualquer visitante ouve); upload/remoção exigem login com a conta Google
-  // do admin (a policy no Supabase já trava por UID, isso aqui é só pra esconder/mostrar a UI certa)
-  const RHYTHM_ADMIN_EMAIL = 'micaelfacciodev@gmail.com';
-  let rhythmIsAdmin = false;
-
-  async function rhythmCheckSession(){
-    const { data: { session } } = await sb.auth.getSession();
-    rhythmIsAdmin = !!session && (session.user.email || '').toLowerCase() === RHYTHM_ADMIN_EMAIL;
-    return rhythmIsAdmin;
-  }
-
-  async function rhythmLoginGoogle(){
-    const { error } = await sb.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: window.location.href }
-    });
-    if (error) throw error;
-    // o navegador é redirecionado pro Google e depois volta pra essa página;
-    // rhythmCheckSession() roda de novo no carregamento seguinte
-  }
-
-  async function rhythmLogout(){
-    await sb.auth.signOut();
-    rhythmIsAdmin = false;
-  }
+  // ---- Supabase Storage: leitura pública do bucket de ritmo. Upload e
+  // remoção agora vivem numa página própria (admin-ritmo.html), não aqui,
+  // o Deriva só toca o que já está publicado. ----
 
   // lista os arquivos do bucket e monta a URL pública de cada um
   async function rhythmListTracks(){
@@ -1851,17 +1808,6 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
         name: f.name,
         publicUrl: sb.storage.from(RHYTHM_BUCKET).getPublicUrl(f.name).data.publicUrl
       }));
-  }
-
-  async function rhythmUploadFile(file){
-    // mantém o nome original; upsert:true permite reenviar substituindo o mesmo nome
-    const { error } = await sb.storage.from(RHYTHM_BUCKET).upload(file.name, file, { upsert: true });
-    if (error) throw error;
-  }
-
-  async function rhythmDeleteFile(path){
-    const { error } = await sb.storage.from(RHYTHM_BUCKET).remove([path]);
-    if (error) throw error;
   }
 
   let rhythmTracks = [];   // [{ id, name, publicUrl }] carregado do Supabase Storage
@@ -2279,33 +2225,6 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
       });
 
       row.appendChild(selectBtn);
-
-      // botão de remover só aparece pra quem está logado como admin
-      if (rhythmIsAdmin){
-        const delBtn = document.createElement('div');
-        delBtn.className = 'shape-btn';
-        delBtn.style.cssText = 'flex:0 0 auto; padding:7px 10px; color:var(--stone);';
-        delBtn.textContent = '×';
-        delBtn.title = 'remover';
-        delBtn.addEventListener('click', async (e) => {
-          e.stopPropagation();
-          try {
-            await rhythmDeleteFile(track.id);
-          } catch (err) {
-            console.warn('Erro ao remover áudio:', err);
-            return;
-          }
-          delete rhythmBuffers[track.id];
-          rhythmTracks = rhythmTracks.filter(t => t.id !== track.id);
-          if (state.rhythmTrackId === track.id){
-            state.rhythmTrackId = rhythmTracks.length ? rhythmTracks[0].id : null;
-            if (state.rhythmOn) await applyRhythmOn(state.rhythmTrackId ? true : false);
-          }
-          renderRhythmTrackList();
-        });
-        row.appendChild(delBtn);
-      }
-
       listEl.appendChild(row);
     });
   }
@@ -2313,25 +2232,6 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
   async function refreshRhythmTracks(){
     rhythmTracks = await rhythmListTracks();
     renderRhythmTrackList();
-  }
-
-  async function renderRhythmAdminUI(){
-    const loginBox = $('rhythmLoginBox');
-    const uploadBox = $('rhythmUploadBox');
-    const statusEl = $('rhythmLoginStatus');
-
-    const { data: { session } } = await sb.auth.getSession();
-    if (session && !rhythmIsAdmin){
-      // logou com Google, mas não é a conta admin: avisa e desloga
-      statusEl.textContent = 'essa conta Google não é a de admin do Deriva';
-      await sb.auth.signOut();
-    } else {
-      statusEl.textContent = '';
-    }
-
-    loginBox.style.display = rhythmIsAdmin ? 'none' : 'block';
-    uploadBox.style.display = rhythmIsAdmin ? 'block' : 'none';
-    renderRhythmTrackList(); // pra mostrar/esconder os botões de remover
   }
 
   function wireRhythmControls(){
@@ -2365,51 +2265,7 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
       else if (rhythmCrossfadeTimer) { clearTimeout(rhythmCrossfadeTimer); rhythmCrossfadeTimer = null; }
     });
 
-    // ---- área do admin: abrir/fechar, login, upload, logout ----
-    const adminLink = $('rhythmAdminLink');
-    const adminPanel = $('rhythmAdminPanel');
-    adminLink.addEventListener('click', () => {
-      const open = adminPanel.style.display === 'none';
-      adminPanel.style.display = open ? 'block' : 'none';
-      adminLink.textContent = open ? 'área do admin ▴' : 'área do admin ▾';
-    });
-
-    $('rhythmLoginBtn').addEventListener('click', async () => {
-      const statusEl = $('rhythmLoginStatus');
-      statusEl.textContent = 'redirecionando pro Google...';
-      try {
-        await rhythmLoginGoogle();
-      } catch (err) {
-        statusEl.textContent = 'não foi possível iniciar o login';
-      }
-    });
-
-    $('rhythmLogoutBtn').addEventListener('click', async () => {
-      await rhythmLogout();
-      renderRhythmAdminUI();
-    });
-
-    $('rhythmFileInput').addEventListener('change', async (e) => {
-      const files = Array.from(e.target.files || []);
-      if (!files.length) return;
-      const statusEl = $('rhythmUploadStatus');
-      statusEl.textContent = `enviando ${files.length} arquivo(s)...`;
-      let ok = 0;
-      for (const file of files){
-        try { await rhythmUploadFile(file); ok++; }
-        catch (err) { console.warn('Erro ao enviar', file.name, err); }
-      }
-      statusEl.textContent = `${ok} de ${files.length} arquivo(s) enviado(s)`;
-      await refreshRhythmTracks();
-      if (!state.rhythmTrackId && rhythmTracks.length) state.rhythmTrackId = rhythmTracks[0].id;
-      e.target.value = '';
-    });
-
-    (async () => {
-      await rhythmCheckSession();
-      renderRhythmAdminUI();
-      await refreshRhythmTracks();
-    })();
+    refreshRhythmTracks();
   }
   wireRhythmControls();
 
@@ -3876,26 +3732,6 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
 
 })();
 
-</script>
-<script>
-// vindo do admin.html (link "Ritmo (Deriva)"): abre a barra de áudio e a
-// área do admin já expandidas, e rola até lá, em vez de deixar tudo
-// fechado esperando três cliques manuais.
-if (window.location.hash === '#ritmo-admin') {
-  window.addEventListener('load', () => {
-    const audioToggle = document.getElementById('audioToggle');
-    const audioPanel = document.getElementById('audioPanel');
-    const adminLink = document.getElementById('rhythmAdminLink');
-    const adminPanel = document.getElementById('rhythmAdminPanel');
-
-    if (audioPanel && !audioPanel.classList.contains('open')) audioToggle?.click();
-    if (adminPanel && adminPanel.style.display === 'none') adminLink?.click();
-
-    setTimeout(() => {
-      document.getElementById('audioBar')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 150);
-  });
-}
 </script>
 <script src="assets/space-bg.js" defer></script>
 <script src="assets/theme-toggle.js" defer></script>
