@@ -464,6 +464,33 @@ pra manter os três sincronizados, já que agora commitamos direto.
 - Rótulos de aspecto reaproveitam a convenção do glossário (fricção = quadratura/oposição, corrente = trígono/sextil) — cores diferentes no widget pra cada categoria.
 - CSS em `assets/style.css` (seção "CÉU AGORA"), script incluído nas mesmas 33 páginas que já têm o header/footer padrão (mesmo `<script defer>`, sem precisar rodar antes de mais nada — não depende do markup do header/footer, só faz `document.body.appendChild`).
 
+**Sessão de 04/08 — dashboard.html: renderização da Janela do dia fechada com formato real confirmado:**
+- Depois da correção da coluna (entrada anterior), usuário testou de
+  novo — **calculou de verdade**, e a renderização "burra" (JSON bruto,
+  deixada de propósito desde a primeira conexão) fez exatamente o que
+  devia: capturou o formato real da resposta sem eu precisar adivinhar.
+- **Formato real confirmado** (não é suposição):
+  `{ leitura: { data, leitura: { data, destaque: { texto, territorio,
+  planeta_transito }, aspectos_transito: [...], planetas_transito:
+  [...] }, iching_convite_aceito, ... }, origem: "calculado"|"cache" }`
+  — "leitura" aninhado duas vezes (a linha da tabela `daily_readings`
+  tem uma coluna chamada `leitura` com o payload inteiro dentro).
+  `destaque.texto` já vem pronto, frase completa combinando planeta +
+  aspecto + território + leitura do grau simbólico — não precisei
+  montar nada, só exibir.
+- `dashboard.html` atualizado pra usar esse caminho real
+  (`data.leitura.leitura.destaque.texto`), removido o `<pre>` de debug
+  e as tentativas de formato-provável que não eram mais necessárias.
+  Testado (extração isolada com o JSON real que o usuário mandou) antes
+  de commitar.
+- **Estado no fim desta sessão**: pipeline completo funcionando de
+  ponta a ponta — login → ritual → mapa natal calculando certo (depois
+  do fix de 180° no ascendente) → mapa dinâmico no kit → dashboard
+  mostrando a janela do dia de verdade, com o texto pronto do
+  `compute-daily-window`. Não vi confirmação visual final do usuário
+  (só o JSON que ele mandou antes da minha correção), mas a extração
+  bate 1:1 com o dado real recebido.
+
 **Sessão de 04/08 — causa final do 500 (depois do fix de CPU): coluna errada em daily_readings:**
 - Depois da otimização de CPU (entrada anterior), duration caiu pra
   ~550ms (bem dentro do limite) mas o 500 continuou. Conseguimos o
