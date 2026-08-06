@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="meta-title">Enciclopédia | Caos Astral</title>
 <meta id="meta-desc" name="description" content="Símbolo da Enciclopédia Caos Astral.">
+<script src="assets/supabase-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   /* TODO: mesma observação das outras páginas, trocar pelos tokens reais do site. */
@@ -78,8 +79,8 @@
 
 <script>
   // TODO: mesmos valores das outras páginas.
-  const SUPABASE_URL = "https://pibwwyqjrsdwnzsiremx.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_kPxQ9BGs68o9lich7qWTKw_W83iNPgs";
+  const SUPABASE_URL = window.CAOS_SUPABASE_URL;
+  const SUPABASE_ANON_KEY = window.CAOS_SUPABASE_KEY;
 
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 

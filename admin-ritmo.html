@@ -104,8 +104,8 @@
 <footer class="site-footer" id="site-footer"></footer>
 
 <script>
-const SUPABASE_URL = 'https://pibwwyqjrsdwnzsiremx.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_kPxQ9BGs68o9lich7qWTKw_W83iNPgs';
+const SUPABASE_URL = window.CAOS_SUPABASE_URL;
+const SUPABASE_KEY = window.CAOS_SUPABASE_KEY;
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const BUCKET = 'deriva-ritmo';
 
@@ -252,6 +252,7 @@ checkSession();
 </script>
 
 <script>window.SITE_CHROME = { headerCta: { label: "Sair", onclick: "document.getElementById('logoutLink').click()" } };</script>
+<script src="assets/supabase-config.js"></script>
 <script src="assets/site-chrome.js" defer></script>
 <script src="assets/space-bg.js" defer></script>
 <script src="assets/theme-toggle.js" defer></script>

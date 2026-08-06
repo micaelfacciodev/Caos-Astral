@@ -209,8 +209,8 @@
   // ENGINE: mesma URL/chave publicável já usadas em admin-simbolos.html —
   // é seguro deixar no código-fonte, é a chave protegida por RLS, não a
   // service_role (ver CLAUDE.md, seção 4).
-  const SUPABASE_URL = 'https://pibwwyqjrsdwnzsiremx.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_kPxQ9BGs68o9lich7qWTKw_W83iNPgs';
+  const SUPABASE_URL = window.CAOS_SUPABASE_URL;
+  const SUPABASE_KEY = window.CAOS_SUPABASE_KEY;
   const { createClient } = supabase;
   const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -299,6 +299,7 @@
   });
 </script>
 <script>window.SITE_CHROME = { footerCta: { label: "Registrar minha primeira experiência", href: "diario" } };</script>
+<script src="assets/supabase-config.js"></script>
 <script src="assets/site-chrome.js" defer></script>
 <script src="assets/flash-decor.js" defer></script>
 <script src="assets/space-bg.js" defer></script>
