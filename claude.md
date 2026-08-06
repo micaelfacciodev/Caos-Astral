@@ -464,6 +464,42 @@ pra manter os três sincronizados, já que agora commitamos direto.
 - Rótulos de aspecto reaproveitam a convenção do glossário (fricção = quadratura/oposição, corrente = trígono/sextil) — cores diferentes no widget pra cada categoria.
 - CSS em `assets/style.css` (seção "CÉU AGORA"), script incluído nas mesmas 33 páginas que já têm o header/footer padrão (mesmo `<script defer>`, sem precisar rodar antes de mais nada — não depende do markup do header/footer, só faz `document.body.appendChild`).
 
+**Sessão de 04/08 — otimização opcional em compute-daily-window: detecção de retrogradação em 1 cálculo (não em 2):**
+- Usuário perguntou sobre a "lógica dos cálculos indo de uma pra outra
+  várias vezes" e se valia otimizar. Duas coisas diferentes:
+  - **Código duplicado** (Quíron/Exílio copiados em compute-natal-chart/
+    compute-daily-window/compute-synastry): recomendei **não mexer** —
+    já está documentado que uma tentativa de compartilhar isso num
+    arquivo separado quebrou o deploy 2x ("Module not found" no editor
+    do Supabase), foi por isso que ficou duplicado de propósito.
+  - **Retrogradação calculada 2x** (posição de hoje E de ontem, só pra
+    saber o sinal): essa sim tinha otimização real. `astronomy-engine`
+    tem `HelioState` (posição + velocidade num cálculo só). Usando o
+    sinal do momento angular geocêntrico (`x*vy - y*vx`), dá pra saber
+    se está retrógrado sem precisar de uma segunda data.
+- **Validado antes de aplicar**: comparei os dois métodos em 14 casos
+  (8 planetas normais × datas espalhadas no ano, incluindo uma
+  retrogradação real de Mercúrio em 15/03/2026) — bateu 14/14. Depois
+  comparei o tempo de execução real (Node, 200 execuções simuladas):
+  86% mais rápido nessa parte do cálculo.
+- **Escopo deliberadamente limitado**: só troquei a DETECÇÃO de
+  retrogradação, não o cálculo de posição (que continua exatamente
+  como estava, validado antes). E só pros 8 planetas "normais"
+  (Mercúrio a Plutão) — Quíron e Exílio continuam com o método antigo
+  (2 cálculos), porque a mecânica orbital deles é diferente (kepleriana
+  e vetor de excentricidade, não órbita padrão) e eu não validei esse
+  atalho especificamente pra eles.
+- Retestei o arquivo inteiro com o mesmo harness (Postgres... digo,
+  Node + TS real + astronomy-engine real) depois da mudança — ainda
+  devolve 200, resultado plausível (mesmos planetas retrógrados que a
+  resposta real do dia anterior tinha).
+- **Não apliquei em compute-natal-chart nem compute-synastry** — os
+  dois estão funcionando, cada redeploy é risco novo, e não há CPU
+  Time apertando neles no momento. Documentado aqui como padrão pronto
+  pra replicar lá SE algum dia precisar (ex: se o time adicionar mais
+  pontos calculados e algum desses dois começar a flertar com o limite
+  de 2s também).
+
 **Sessão de 04/08 — dashboard.html: renderização da Janela do dia fechada com formato real confirmado:**
 - Depois da correção da coluna (entrada anterior), usuário testou de
   novo — **calculou de verdade**, e a renderização "burra" (JSON bruto,
