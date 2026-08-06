@@ -75,15 +75,14 @@
   }
 
   /* ---------- grid de portais ---------- */
+  /* auto-fit: o navegador decide sozinho quantas colunas cabem, com no
+     mínimo 260px cada. Adicionar um 15º, 20º portal no futuro não exige
+     mexer aqui, a grade se reorganiza sozinha em qualquer contagem. */
   .portals{
     display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-  }
-  @media (max-width:900px){
-    .portals{ grid-template-columns:1fr 1fr; }
-  }
-  @media (max-width:560px){
-    .portals{ grid-template-columns:1fr; }
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap:1px;
+    background: rgba(179,18,23,0.12);
   }
 
   .portal{
@@ -95,8 +94,7 @@
     cursor:pointer;
     text-decoration:none;
     color:inherit;
-    border-right:1px solid rgba(179,18,23,0.12);
-    border-bottom:1px solid rgba(179,18,23,0.12);
+    background: var(--bg);
     filter:brightness(0.62) saturate(0.75);
     transition:filter 0.6s ease;
   }
@@ -106,24 +104,8 @@
   }
   .portal:hover{ filter:brightness(1) saturate(1); }
 
-  /* grade de 3 colunas: sem borda direita na 3ª coluna, sem borda embaixo na última linha */
-  .portal:nth-child(3n){ border-right:none; }
-  .portal:nth-last-child(-n+3):nth-child(3n+1),
-  .portal:nth-last-child(-n+3):nth-child(3n+1) ~ .portal{
-    border-bottom:none;
-  }
-  @media (max-width:900px){
-    .portal:nth-child(3n){ border-right:1px solid rgba(179,18,23,0.12); }
-    .portal:nth-child(2n){ border-right:none; }
-    .portal:nth-last-child(-n+3):nth-child(3n+1),
-    .portal:nth-last-child(-n+3):nth-child(3n+1) ~ .portal{
-      border-bottom:1px solid rgba(179,18,23,0.12);
-    }
-    .portal:nth-last-child(-n+2){ border-bottom:none; }
-  }
   @media (max-width:560px){
-    .portal{ border-right:none !important; border-bottom:1px solid rgba(179,18,23,0.12) !important; }
-    .portal:last-child{ border-bottom:none !important; }
+    .portals{ grid-template-columns: 1fr; }
   }
 
   .portal canvas{
@@ -679,6 +661,24 @@
     <div class="label">
       <span class="name">Batimento</span>
       <span class="hint">ECG ⋄ o pulso do contraponto, visível</span>
+    </div>
+  </a>
+
+  <a class="portal" id="p-fluxo" href="#" data-layer="fluxo">
+    <canvas id="c-fluxo"></canvas>
+    <div class="veil"></div>
+    <div class="label">
+      <span class="name">Fluxo</span>
+      <span class="hint">campo ⋄ limalha seguindo uma corrente invisível</span>
+    </div>
+  </a>
+
+  <a class="portal" id="p-caleidoscopio" href="#" data-layer="caleidoscopio">
+    <canvas id="c-caleidoscopio"></canvas>
+    <div class="veil"></div>
+    <div class="label">
+      <span class="name">Caleidoscópio</span>
+      <span class="hint">espelho ⋄ o mesmo fragmento, repetido em roda</span>
     </div>
   </a>
 
@@ -1721,6 +1721,112 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   previewControls.push({ pause(){ active = false; }, resume(){ if (!active) { active = true; requestAnimationFrame(frame); } } });
 })();
 
+// ---------- prévia: Fluxo, partículas seguindo um campo vetorial (ruído em senos) ----------
+(function(){
+  let active = true;
+  const { ctx, dim } = makeRetinaCanvas('c-fluxo');
+  const N = 90;
+  const parts = Array.from({length: N}, () => ({ x: Math.random(), y: Math.random(), life: Math.random() }));
+
+  // "campo de fluxo" barato: em vez de ruído de Perlin de verdade, soma de
+  // senos em fases diferentes já dá uma sensação orgânica de corrente/redemoinho
+  function anguloCampo(x, y, t){
+    return Math.sin(x * 3.2 + t * 0.4) * Math.PI
+         + Math.cos(y * 2.6 - t * 0.3) * Math.PI * 0.6;
+  }
+
+  let t = 0;
+  function frame(){
+    if (!active) return;
+    const w = dim.w, h = dim.h;
+    ctx.fillStyle = 'rgba(10,9,8,0.14)';
+    ctx.fillRect(0, 0, w, h);
+
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.lineWidth = 1;
+    for (const p of parts) {
+      const ang = anguloCampo(p.x, p.y, t);
+      const px = p.x * w, py = p.y * h;
+      const nx = p.x + Math.cos(ang) * 0.0026;
+      const ny = p.y + Math.sin(ang) * 0.0026;
+
+      ctx.strokeStyle = `rgba(216,183,161,${0.35 + p.life * 0.35})`;
+      ctx.beginPath();
+      ctx.moveTo(px, py);
+      ctx.lineTo(nx * w, ny * h);
+      ctx.stroke();
+
+      p.x = nx; p.y = ny; p.life -= 0.004;
+      if (p.life <= 0 || p.x < 0 || p.x > 1 || p.y < 0 || p.y > 1) {
+        p.x = Math.random(); p.y = Math.random(); p.life = 0.6 + Math.random() * 0.4;
+      }
+    }
+    ctx.globalCompositeOperation = 'source-over';
+
+    t += 0.012;
+    requestAnimationFrame(frame);
+  }
+  frame();
+  previewControls.push({ pause(){ active = false; }, resume(){ if (!active) { active = true; requestAnimationFrame(frame); } } });
+})();
+
+// ---------- prévia: Caleidoscópio, mesmo fragmento espelhado em N fatias ----------
+(function(){
+  let active = true;
+  const { ctx, dim } = makeRetinaCanvas('c-caleidoscopio');
+  const SLICES = 8;
+  const blobs = Array.from({length: 3}, (_, i) => ({
+    angBase: (i / 3) * Math.PI * 2,
+    angSpeed: 0.2 + i * 0.07,
+    rBase: 0.35 + i * 0.18,
+    rAmp: 0.1,
+    size: 0.16 - i * 0.03
+  }));
+
+  let t = 0;
+  function frame(){
+    if (!active) return;
+    const w = dim.w, h = dim.h;
+    ctx.fillStyle = 'rgba(10,9,8,0.2)';
+    ctx.fillRect(0, 0, w, h);
+
+    const cx = w / 2, cy = h / 2;
+    const maxR = Math.min(w, h) * 0.5;
+    const angleStep = (Math.PI * 2) / SLICES;
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < SLICES; i++) {
+      ctx.save();
+      ctx.rotate(i * angleStep);
+      if (i % 2 === 1) ctx.scale(1, -1);
+      for (const b of blobs) {
+        const ang = b.angBase + t * b.angSpeed;
+        const r = (b.rBase + Math.sin(t * 0.6 + b.angBase) * b.rAmp) * maxR;
+        const bx = Math.cos(ang) * r * 0.3 + Math.cos(ang * 1.3) * r * 0.15;
+        const by = Math.sin(ang) * r * 0.3;
+        const size = b.size * maxR;
+        const grad = ctx.createRadialGradient(bx, by, 0, bx, by, size);
+        grad.addColorStop(0, 'rgba(216,183,161,0.5)');
+        grad.addColorStop(1, 'rgba(179,18,23,0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(bx, by, size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+    ctx.restore();
+    ctx.globalCompositeOperation = 'source-over';
+
+    t += 0.012;
+    requestAnimationFrame(frame);
+  }
+  frame();
+  previewControls.push({ pause(){ active = false; }, resume(){ if (!active) { active = true; requestAnimationFrame(frame); } } });
+})();
+
 // ---------- ponte entre o motor de áudio e os efeitos visuais (pra reagir ao som) ----------
 const AudioBridge = { ctx: null, analyser: null, data: null };
 
@@ -2706,11 +2812,12 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
   // definição das 12 camadas
   // ============================================================
   const LAYERS = {};
-  const ORDER = ['rorschach','stars','wormhole','plasma','mandala','vortice','cimatica','fumaca','geometria','constelacao','olho','batimento'];
+  const ORDER = ['rorschach','stars','wormhole','plasma','mandala','vortice','cimatica','fumaca','geometria','constelacao','olho','batimento','fluxo','caleidoscopio'];
   const LABELS = {
     rorschach:'Rorschach', stars:'Estrelas', wormhole:'Wormhole', plasma:'Plasma',
     mandala:'Mandala', vortice:'Vórtice', cimatica:'Cimática', fumaca:'Fumaça',
-    geometria:'Geometria', constelacao:'Constelação', olho:'Olho', batimento:'Batimento'
+    geometria:'Geometria', constelacao:'Constelação', olho:'Olho', batimento:'Batimento',
+    fluxo:'Fluxo', caleidoscopio:'Caleidoscópio'
   };
 
   // ---------------- RORSCHACH (canvas próprio + filtro CSS) ----------------
@@ -3223,7 +3330,7 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
 
   // ---------------- CIMÁTICA ----------------
   (function(){
-    const cfg = { speed:1.0, detail:140, intensity:1.0 };
+    const cfg = { speed:1.0, detail:140, intensity:1.0, scale:1.0 };
     const off = document.createElement('canvas');
     const octx = off.getContext('2d');
     let OW = 140, OH = 140, img;
@@ -3243,9 +3350,9 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
       const n = 4+Math.sin(t*0.1)*2.5;
       const m = 6+Math.cos(t*0.075)*3;
       for (let y=0;y<OH;y++){
-        const ny=(y/OH)*Math.PI;
+        const ny=(y/OH)*Math.PI*cfg.scale;
         for (let x=0;x<OW;x++){
-          const nx=(x/OW)*Math.PI;
+          const nx=(x/OW)*Math.PI*cfg.scale;
           const v = Math.sin(n*nx)*Math.sin(m*ny) - Math.sin(m*nx)*Math.sin(n*ny);
           const nodal = 1 - Math.min(1, Math.abs(v)*3.4);
           const light = Math.round(Math.min(255, nodal*nodal*205*cfg.intensity*am));
@@ -3264,6 +3371,7 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
       cfg, draw,
       controls: [
         { type:'range', key:'speed', label:'Velocidade', min:20, max:300, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.speed=v/100; } },
+        { type:'range', key:'scale', label:'Escala do padrão', min:40, max:250, step:5, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.scale=100/v; } },
         { type:'range', key:'detail', label:'Detalhe (resolução)', min:60, max:220, step:10, fmt:v=>v, default:140, onChange(v){ cfg.detail=v; resizeOff(); } },
         { type:'range', key:'intensity', label:'Intensidade', min:50, max:150, step:5, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.intensity=v/100; } }
       ]
@@ -3334,15 +3442,19 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
       ctx.save();
       ctx.translate(cx,cy);
       ctx.lineWidth = 1.2;
+      // gera N camadas concêntricas de círculos (tipo Flor da Vida se estendendo);
+      // cada camada tem mais círculos e fica mais distante da anterior, alternando
+      // sentido e leve giro de fase pra não ficar tudo alinhado radialmente
       const centers = [[0,0]];
-      if (cfg.camadas >= 1){
-        for (let i=0;i<6;i++){ const a=rot+(i/6)*Math.PI*2; centers.push([Math.cos(a)*R*pulse, Math.sin(a)*R*pulse]); }
-      }
-      if (cfg.camadas >= 2){
-        for (let i=0;i<6;i++){ const a=rot+(i/6)*Math.PI*2+Math.PI/6; centers.push([Math.cos(a)*R*pulse*1.73, Math.sin(a)*R*pulse*1.73]); }
-      }
-      if (cfg.camadas >= 3){
-        for (let i=0;i<12;i++){ const a=rot-(i/12)*Math.PI*2; centers.push([Math.cos(a)*R*pulse*2.6, Math.sin(a)*R*pulse*2.6]); }
+      for (let L = 1; L <= cfg.camadas; L++){
+        const count = 6*L;
+        const raio = R*pulse*L*0.92;
+        const dir = (L % 2 === 0) ? -1 : 1;
+        const fase = (L % 2 === 0) ? Math.PI/count : 0;
+        for (let i=0;i<count;i++){
+          const a = dir*rot + fase + (i/count)*Math.PI*2;
+          centers.push([Math.cos(a)*raio, Math.sin(a)*raio]);
+        }
       }
       for (const [x,y] of centers){
         const alpha = Math.min(1, (0.22+0.12*Math.sin(t*0.6+x*0.01+y*0.01))*cfg.opacity*am);
@@ -3357,7 +3469,7 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
       controls: [
         { type:'range', key:'speed', label:'Velocidade', min:20, max:300, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.speed=v/100; } },
         { type:'range', key:'size', label:'Tamanho', min:50, max:200, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.size=v/100; } },
-        { type:'range', key:'camadas', label:'Camadas de círculos', min:1, max:3, step:1, fmt:v=>v, default:3, onChange(v){ cfg.camadas=v; } },
+        { type:'range', key:'camadas', label:'Camadas de círculos', min:1, max:8, step:1, fmt:v=>v, default:3, onChange(v){ cfg.camadas=v; } },
         { type:'range', key:'opacity', label:'Opacidade', min:20, max:100, step:5, fmt:v=>v+'%', default:60, onChange(v){ cfg.opacity=v/100; } }
       ]
     };
@@ -3405,9 +3517,9 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
     LAYERS.constelacao = {
       cfg, draw,
       controls: [
-        { type:'range', key:'count', label:'Quantidade de pontos', min:10, max:90, step:5, fmt:v=>v, default:46, onChange(v){ cfg.count=v; build(); } },
+        { type:'range', key:'count', label:'Quantidade de pontos', min:10, max:160, step:5, fmt:v=>v, default:46, onChange(v){ cfg.count=v; build(); } },
         { type:'range', key:'speed', label:'Velocidade', min:20, max:300, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.speed=v/100; } },
-        { type:'range', key:'reach', label:'Alcance das conexões', min:8, max:30, step:1, fmt:v=>v+'%', default:16, onChange(v){ cfg.reach=v; } },
+        { type:'range', key:'reach', label:'Alcance das conexões', min:8, max:45, step:1, fmt:v=>v+'%', default:16, onChange(v){ cfg.reach=v; } },
         { type:'range', key:'opacity', label:'Opacidade', min:20, max:100, step:5, fmt:v=>v+'%', default:70, onChange(v){ cfg.opacity=v/100; } }
       ]
     };
@@ -3503,6 +3615,110 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
         { type:'range', key:'speed', label:'Velocidade', min:20, max:300, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.speed=v/100; } },
         { type:'range', key:'amplitude', label:'Amplitude', min:50, max:200, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.amplitude=v/100; } },
         { type:'range', key:'lineWidth', label:'Espessura da linha', min:10, max:40, step:2, fmt:v=>(v/10).toFixed(1), default:18, onChange(v){ cfg.lineWidth=v/10; } }
+      ]
+    };
+  })();
+
+  // ---------------- FLUXO (campo vetorial, partículas seguindo corrente) ----------------
+  (function(){
+    const cfg = { count:220, speed:1.0, curvatura:1.0, trilha:0.85, opacity:0.8 };
+    let parts = [];
+    function build(){
+      parts = Array.from({length: cfg.count}, () => ({
+        x: Math.random(), y: Math.random(), life: Math.random()
+      }));
+    }
+    build();
+
+    function anguloCampo(x, y, t){
+      return Math.sin(x*3.2 + t*0.4) * Math.PI * cfg.curvatura
+           + Math.cos(y*2.6 - t*0.3) * Math.PI * 0.6 * cfg.curvatura;
+    }
+
+    let t = 0;
+    function draw(){
+      const w=dim.w, h=dim.h;
+      const am = audioMult();
+      ctx.lineWidth = 1;
+      for (const p of parts) {
+        const ang = anguloCampo(p.x, p.y, t);
+        const px = p.x*w, py = p.y*h;
+        const passo = 0.0026 * cfg.speed;
+        const nx = p.x + Math.cos(ang)*passo;
+        const ny = p.y + Math.sin(ang)*passo;
+
+        ctx.strokeStyle = `rgba(216,183,161,${(0.35+p.life*0.35)*cfg.opacity*am})`;
+        ctx.beginPath();
+        ctx.moveTo(px,py);
+        ctx.lineTo(nx*w, ny*h);
+        ctx.stroke();
+
+        p.x = nx; p.y = ny; p.life -= 0.004;
+        if (p.life <= 0 || p.x<0 || p.x>1 || p.y<0 || p.y>1) {
+          p.x = Math.random(); p.y = Math.random(); p.life = 0.6 + Math.random()*0.4;
+        }
+      }
+      t += 0.012*cfg.speed;
+    }
+    LAYERS.fluxo = {
+      cfg, draw,
+      // "trilha" aqui é só decorativo/futuro; o rastro em si já vem do fade
+      // global do canvas principal (control de Persistência no painel geral)
+      controls: [
+        { type:'range', key:'count', label:'Quantidade de partículas', min:40, max:500, step:10, fmt:v=>v, default:220, onChange(v){ cfg.count=v; build(); } },
+        { type:'range', key:'speed', label:'Velocidade', min:20, max:250, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.speed=v/100; } },
+        { type:'range', key:'curvatura', label:'Curvatura do campo', min:30, max:220, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.curvatura=v/100; } },
+        { type:'range', key:'opacity', label:'Opacidade', min:20, max:100, step:5, fmt:v=>v+'%', default:80, onChange(v){ cfg.opacity=v/100; } }
+      ]
+    };
+  })();
+
+  // ---------------- CALEIDOSCÓPIO (fragmento espelhado em N fatias) ----------------
+  (function(){
+    const cfg = { slices:8, blobs:3, speed:1.0, size:1.0, opacity:0.7 };
+    let t = 0;
+    function draw(){
+      const w=dim.w, h=dim.h;
+      const am = audioMult();
+      const cx=w/2, cy=h/2;
+      const maxR = Math.min(w,h)*0.5*cfg.size;
+      const angleStep = (Math.PI*2)/cfg.slices;
+
+      ctx.save();
+      ctx.translate(cx,cy);
+      for (let i=0;i<cfg.slices;i++){
+        ctx.save();
+        ctx.rotate(i*angleStep);
+        if (i%2===1) ctx.scale(1,-1);
+        for (let b=0; b<cfg.blobs; b++){
+          const angBase = (b/cfg.blobs)*Math.PI*2;
+          const angSpeed = 0.2 + b*0.07;
+          const rBase = 0.3 + b*(0.5/Math.max(cfg.blobs,1));
+          const ang = angBase + t*angSpeed*cfg.speed;
+          const r = (rBase + Math.sin(t*0.6*cfg.speed + angBase)*0.1) * maxR;
+          const bx = Math.cos(ang)*r*0.3 + Math.cos(ang*1.3)*r*0.15;
+          const by = Math.sin(ang)*r*0.3;
+          const size = (0.16 - b*(0.1/Math.max(cfg.blobs,1))) * maxR;
+          const alpha = Math.min(1, 0.5*cfg.opacity*am);
+          const grad = ctx.createRadialGradient(bx,by,0,bx,by,Math.max(size,1));
+          grad.addColorStop(0, `rgba(216,183,161,${alpha})`);
+          grad.addColorStop(1, 'rgba(179,18,23,0)');
+          ctx.fillStyle = grad;
+          ctx.beginPath(); ctx.arc(bx,by,Math.max(size,1),0,Math.PI*2); ctx.fill();
+        }
+        ctx.restore();
+      }
+      ctx.restore();
+      t += 0.012;
+    }
+    LAYERS.caleidoscopio = {
+      cfg, draw,
+      controls: [
+        { type:'range', key:'slices', label:'Fatias (espelhos)', min:4, max:20, step:1, fmt:v=>v, default:8, onChange(v){ cfg.slices=v; } },
+        { type:'range', key:'blobs', label:'Fragmentos girando', min:1, max:6, step:1, fmt:v=>v, default:3, onChange(v){ cfg.blobs=v; } },
+        { type:'range', key:'speed', label:'Velocidade', min:20, max:250, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.speed=v/100; } },
+        { type:'range', key:'size', label:'Tamanho', min:50, max:200, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.size=v/100; } },
+        { type:'range', key:'opacity', label:'Opacidade', min:20, max:100, step:5, fmt:v=>v+'%', default:70, onChange(v){ cfg.opacity=v/100; } }
       ]
     };
   })();
