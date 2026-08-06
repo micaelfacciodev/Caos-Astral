@@ -682,6 +682,24 @@
     </div>
   </a>
 
+  <a class="portal" id="p-reflexo" href="#" data-layer="reflexo">
+    <canvas id="c-reflexo"></canvas>
+    <div class="veil"></div>
+    <div class="label">
+      <span class="name">Reflexo</span>
+      <span class="hint">água ⋄ o que está em cima, tremendo lá embaixo</span>
+    </div>
+  </a>
+
+  <a class="portal" id="p-caustica" href="#" data-layer="caustica">
+    <canvas id="c-caustica"></canvas>
+    <div class="veil"></div>
+    <div class="label">
+      <span class="name">Cáustica</span>
+      <span class="hint">fundo de piscina ⋄ luz refratada em polígonos que respiram</span>
+    </div>
+  </a>
+
 </div>
 
 <!-- ---------- visual do portal aberto em overlay, sem sair da página ---------- -->
@@ -1827,6 +1845,111 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   previewControls.push({ pause(){ active = false; }, resume(){ if (!active) { active = true; requestAnimationFrame(frame); } } });
 })();
 
+// ---------- prévia: Reflexo, orbes espelhadas numa linha d'água ondulante ----------
+(function(){
+  let active = true;
+  const { ctx, dim } = makeRetinaCanvas('c-reflexo');
+  const orbs = Array.from({length: 3}, (_, i) => ({
+    baseX: 0.26 + i * 0.26 + Math.random() * 0.06,
+    baseY: 0.24 + Math.random() * 0.14,
+    r: 9 + i * 4,
+    phase: Math.random() * Math.PI * 2,
+    speed: 0.15 + i * 0.05
+  }));
+
+  let t = 0;
+  function frame(){
+    if (!active) return;
+    const w = dim.w, h = dim.h;
+    ctx.fillStyle = 'rgba(10,9,8,0.12)';
+    ctx.fillRect(0, 0, w, h);
+
+    const waterY = h * 0.58;
+
+    ctx.globalCompositeOperation = 'lighter';
+    for (const o of orbs) {
+      const x = (o.baseX + Math.sin(t * o.speed + o.phase) * 0.02) * w;
+      const y = o.baseY * h;
+
+      const grad = ctx.createRadialGradient(x, y, 0, x, y, o.r);
+      grad.addColorStop(0, 'rgba(216,183,161,0.6)');
+      grad.addColorStop(1, 'rgba(179,18,23,0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath(); ctx.arc(x, y, o.r, 0, Math.PI * 2); ctx.fill();
+
+      // reflexo espelhado, ondulando na horizontal e esmaecendo com a profundidade
+      const distY = waterY - y;
+      const refY = waterY + distY * 0.9;
+      const onda = Math.sin(t * 1.4 + y * 0.05) * 4;
+      const gradR = ctx.createRadialGradient(x + onda, refY, 0, x + onda, refY, o.r);
+      gradR.addColorStop(0, 'rgba(216,183,161,0.26)');
+      gradR.addColorStop(1, 'rgba(179,18,23,0)');
+      ctx.fillStyle = gradR;
+      ctx.beginPath(); ctx.arc(x + onda, refY, o.r, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalCompositeOperation = 'source-over';
+
+    ctx.strokeStyle = 'rgba(216,183,161,0.15)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, waterY); ctx.lineTo(w, waterY); ctx.stroke();
+
+    t += 0.02;
+    requestAnimationFrame(frame);
+  }
+  frame();
+  previewControls.push({ pause(){ active = false; }, resume(){ if (!active) { active = true; requestAnimationFrame(frame); } } });
+})();
+
+// ---------- prévia: Cáustica, malha distorcida tipo luz refratada no fundo de piscina ----------
+(function(){
+  let active = true;
+  const { ctx, dim } = makeRetinaCanvas('c-caustica');
+  const CORES = ['#0e6b7a', '#3fc9d1', '#eafcff'];
+  const cols = 12, rows = 8;
+
+  function vert(i, j, w, h, t){
+    const cellW = w / cols, cellH = h / rows;
+    const bx = i * cellW, by = j * cellH;
+    const dx = Math.sin(j * 0.6 + t * 0.8) * cellW * 0.35 + Math.sin(i * 0.35 - t * 0.5) * cellW * 0.25;
+    const dy = Math.cos(i * 0.5 - t * 0.6) * cellH * 0.35 + Math.cos(j * 0.4 + t * 0.4) * cellH * 0.25;
+    return [bx + dx, by + dy];
+  }
+
+  let t = 0;
+  function frame(){
+    if (!active) return;
+    const w = dim.w, h = dim.h;
+    ctx.fillStyle = '#081418';
+    ctx.fillRect(0, 0, w, h);
+
+    const cellW = w / cols, cellH = h / rows, areaBase = cellW * cellH;
+    ctx.globalCompositeOperation = 'lighter';
+    for (let j = 0; j < rows; j++) {
+      for (let i = 0; i < cols; i++) {
+        const p00 = vert(i, j, w, h, t), p10 = vert(i + 1, j, w, h, t);
+        const p11 = vert(i + 1, j + 1, w, h, t), p01 = vert(i, j + 1, w, h, t);
+        const area = Math.abs((p10[0]-p00[0])*(p01[1]-p00[1]) - (p01[0]-p00[0])*(p10[1]-p00[1])) * 0.5;
+        const ratio = area / areaBase;
+        const brilho = Math.max(0, Math.min(1, (1 - ratio) * 2.2));
+        if (brilho < 0.03) continue;
+        const cor = CORES[(i + j) % CORES.length];
+        const rHex = parseInt(cor.slice(1,3),16), gHex = parseInt(cor.slice(3,5),16), bHex = parseInt(cor.slice(5,7),16);
+        ctx.fillStyle = `rgba(${rHex},${gHex},${bHex},${brilho * 0.8})`;
+        ctx.beginPath();
+        ctx.moveTo(p00[0], p00[1]); ctx.lineTo(p10[0], p10[1]); ctx.lineTo(p11[0], p11[1]); ctx.lineTo(p01[0], p01[1]);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+    ctx.globalCompositeOperation = 'source-over';
+
+    t += 0.012;
+    requestAnimationFrame(frame);
+  }
+  frame();
+  previewControls.push({ pause(){ active = false; }, resume(){ if (!active) { active = true; requestAnimationFrame(frame); } } });
+})();
+
 // ---------- ponte entre o motor de áudio e os efeitos visuais (pra reagir ao som) ----------
 const AudioBridge = { ctx: null, analyser: null, data: null };
 
@@ -2812,12 +2935,12 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
   // definição das 12 camadas
   // ============================================================
   const LAYERS = {};
-  const ORDER = ['rorschach','stars','wormhole','plasma','mandala','vortice','cimatica','fumaca','geometria','constelacao','olho','batimento','fluxo','caleidoscopio'];
+  const ORDER = ['rorschach','stars','wormhole','plasma','mandala','vortice','cimatica','fumaca','geometria','constelacao','olho','batimento','fluxo','caleidoscopio','reflexo','caustica'];
   const LABELS = {
     rorschach:'Rorschach', stars:'Estrelas', wormhole:'Wormhole', plasma:'Plasma',
     mandala:'Mandala', vortice:'Vórtice', cimatica:'Cimática', fumaca:'Fumaça',
     geometria:'Geometria', constelacao:'Constelação', olho:'Olho', batimento:'Batimento',
-    fluxo:'Fluxo', caleidoscopio:'Caleidoscópio'
+    fluxo:'Fluxo', caleidoscopio:'Caleidoscópio', reflexo:'Reflexo', caustica:'Cáustica'
   };
 
   // ---------------- RORSCHACH (canvas próprio + filtro CSS) ----------------
@@ -3675,7 +3798,8 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
 
   // ---------------- CALEIDOSCÓPIO (fragmento espelhado em N fatias) ----------------
   (function(){
-    const cfg = { slices:8, blobs:3, speed:1.0, size:1.0, opacity:0.7 };
+    const CORES_PADRAO = ['#d8b7a1', '#c81212', '#f2c14e', '#7a3fc8', '#2fa38f'];
+    const cfg = { slices:8, blobs:3, speed:1.0, size:1.0, opacity:0.7, cores: ['#d8b7a1', '#c81212', '#f2c14e'] };
     let t = 0;
     function draw(){
       const w=dim.w, h=dim.h;
@@ -3700,9 +3824,11 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
           const by = Math.sin(ang)*r*0.3;
           const size = (0.16 - b*(0.1/Math.max(cfg.blobs,1))) * maxR;
           const alpha = Math.min(1, 0.5*cfg.opacity*am);
+          const corHex = cfg.cores[b % cfg.cores.length] || '#d8b7a1';
+          const { r: cr, g: cg, b: cb } = hexToRgb(corHex);
           const grad = ctx.createRadialGradient(bx,by,0,bx,by,Math.max(size,1));
-          grad.addColorStop(0, `rgba(216,183,161,${alpha})`);
-          grad.addColorStop(1, 'rgba(179,18,23,0)');
+          grad.addColorStop(0, `rgba(${cr},${cg},${cb},${alpha})`);
+          grad.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
           ctx.fillStyle = grad;
           ctx.beginPath(); ctx.arc(bx,by,Math.max(size,1),0,Math.PI*2); ctx.fill();
         }
@@ -3716,9 +3842,124 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
       controls: [
         { type:'range', key:'slices', label:'Fatias (espelhos)', min:4, max:20, step:1, fmt:v=>v, default:8, onChange(v){ cfg.slices=v; } },
         { type:'range', key:'blobs', label:'Fragmentos girando', min:1, max:6, step:1, fmt:v=>v, default:3, onChange(v){ cfg.blobs=v; } },
+        { type:'range', key:'numCores', label:'Número de cores', min:2, max:5, step:1, fmt:v=>v, default:3,
+          onChange(v){
+            while (cfg.cores.length < v) cfg.cores.push(CORES_PADRAO[cfg.cores.length % CORES_PADRAO.length]);
+            cfg.cores.length = v;
+            renderTabBody(currentTab);
+          } },
+        { type:'colors', key:'cores', label:'Cores do caleidoscópio' },
         { type:'range', key:'speed', label:'Velocidade', min:20, max:250, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.speed=v/100; } },
         { type:'range', key:'size', label:'Tamanho', min:50, max:200, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.size=v/100; } },
         { type:'range', key:'opacity', label:'Opacidade', min:20, max:100, step:5, fmt:v=>v+'%', default:70, onChange(v){ cfg.opacity=v/100; } }
+      ]
+    };
+  })();
+
+  // ---------------- REFLEXO (espelha de verdade o que está na tela, tipo água) ----------------
+  (function(){
+    const cfg = { linha:60, ondulacao:1.0, velocidade:1.0, detalhe:40, esmaecimento:1.0, opacity:0.7 };
+    let t = 0;
+    function draw(){
+      const w=dim.w, h=dim.h;
+      const am = audioMult();
+      const waterY = h*(cfg.linha/100);
+      const reflH = h - waterY;
+      if (reflH <= 2) return;
+
+      const strips = Math.max(4, Math.round(cfg.detalhe));
+      const stripH = reflH/strips;
+      const dprNow = canvas.width / Math.max(dim.w, 1); // drawImage lê o canvas em pixels reais, não na escala lógica
+
+      for (let i=0;i<strips;i++){
+        const dstY = waterY + i*stripH;
+        const mirroredY = waterY - (i+1)*stripH; // fatia correspondente espelhada, acima da linha d'água
+        if (mirroredY < 0) continue;
+
+        const onda = Math.sin(t*cfg.velocidade*1.4 + i*0.35) * cfg.ondulacao * 6 * (i/strips + 0.2);
+        const depthFade = Math.max(0, 1 - (i/strips)*cfg.esmaecimento);
+
+        ctx.globalAlpha = depthFade * cfg.opacity * am;
+        ctx.drawImage(
+          canvas,
+          0, mirroredY*dprNow, w*dprNow, Math.max(1, Math.ceil(stripH*dprNow)),
+          onda, dstY, w, Math.ceil(stripH)+1
+        );
+      }
+      ctx.globalAlpha = 1;
+      t += 0.016*cfg.velocidade;
+    }
+    LAYERS.reflexo = {
+      cfg, draw,
+      // reflete o próprio canvas (o que quer que esteja combinado nele nesse
+      // momento), então funciona melhor junto de outras camadas ativas por
+      // cima da linha d'água; sozinho, reflete só o rastro residual
+      controls: [
+        { type:'range', key:'linha', label:"Linha d'água", min:35, max:80, step:1, fmt:v=>v+'%', default:60, onChange(v){ cfg.linha=v; } },
+        { type:'range', key:'ondulacao', label:'Ondulação', min:0, max:250, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.ondulacao=v/100; } },
+        { type:'range', key:'velocidade', label:'Velocidade', min:20, max:250, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.velocidade=v/100; } },
+        { type:'range', key:'detalhe', label:'Detalhe (faixas)', min:10, max:80, step:5, fmt:v=>v, default:40, onChange(v){ cfg.detalhe=v; } },
+        { type:'range', key:'esmaecimento', label:'Esmaecimento com a profundidade', min:0, max:200, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.esmaecimento=v/100; } },
+        { type:'range', key:'opacity', label:'Opacidade', min:20, max:100, step:5, fmt:v=>v+'%', default:70, onChange(v){ cfg.opacity=v/100; } }
+      ]
+    };
+  })();
+
+  // ---------------- CÁUSTICA (malha distorcida, tipo luz refratada no fundo de piscina) ----------------
+  (function(){
+    const CORES_PADRAO_CAU = ['#0e6b7a', '#3fc9d1', '#eafcff', '#1a3fb3', '#7fe0d4'];
+    const cfg = { detalhe:14, distorcao:1.0, velocidade:1.0, intensidade:1.0, opacity:0.8, cores: ['#0e6b7a', '#3fc9d1', '#eafcff'] };
+    let t = 0;
+    function vert(i, j, cols, rows, w, h){
+      const cellW = w/cols, cellH = h/rows;
+      const bx = i*cellW, by = j*cellH;
+      const dx = Math.sin(j*0.6 + t*cfg.velocidade*0.8)*cellW*0.35*cfg.distorcao
+               + Math.sin(i*0.35 - t*cfg.velocidade*0.5)*cellW*0.25*cfg.distorcao;
+      const dy = Math.cos(i*0.5 - t*cfg.velocidade*0.6)*cellH*0.35*cfg.distorcao
+               + Math.cos(j*0.4 + t*cfg.velocidade*0.4)*cellH*0.25*cfg.distorcao;
+      return [bx+dx, by+dy];
+    }
+    function draw(){
+      const w=dim.w, h=dim.h;
+      const am = audioMult();
+      const cols = cfg.detalhe;
+      const rows = Math.max(4, Math.round(cfg.detalhe*0.65));
+      const areaBase = (w/cols)*(h/rows);
+
+      for (let j=0;j<rows;j++){
+        for (let i=0;i<cols;i++){
+          const p00=vert(i,j,cols,rows,w,h), p10=vert(i+1,j,cols,rows,w,h);
+          const p11=vert(i+1,j+1,cols,rows,w,h), p01=vert(i,j+1,cols,rows,w,h);
+          const area = Math.abs((p10[0]-p00[0])*(p01[1]-p00[1]) - (p01[0]-p00[0])*(p10[1]-p00[1])) * 0.5;
+          const ratio = area/areaBase;
+          const brilho = Math.max(0, Math.min(1, (1-ratio)*2.2)) * cfg.intensidade * am;
+          if (brilho < 0.02) continue;
+          const cor = cfg.cores[(i+j) % cfg.cores.length] || '#3fc9d1';
+          const { r, g, b } = hexToRgb(cor);
+          ctx.fillStyle = `rgba(${r},${g},${b},${Math.min(1,brilho)*cfg.opacity})`;
+          ctx.beginPath();
+          ctx.moveTo(p00[0],p00[1]); ctx.lineTo(p10[0],p10[1]); ctx.lineTo(p11[0],p11[1]); ctx.lineTo(p01[0],p01[1]);
+          ctx.closePath();
+          ctx.fill();
+        }
+      }
+      t += 0.012*cfg.velocidade;
+    }
+    LAYERS.caustica = {
+      cfg, draw,
+      controls: [
+        { type:'range', key:'detalhe', label:'Detalhe da malha', min:6, max:24, step:1, fmt:v=>v, default:14, onChange(v){ cfg.detalhe=v; } },
+        { type:'range', key:'distorcao', label:'Distorção', min:30, max:200, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.distorcao=v/100; } },
+        { type:'range', key:'velocidade', label:'Velocidade', min:20, max:250, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.velocidade=v/100; } },
+        { type:'range', key:'intensidade', label:'Intensidade do brilho', min:40, max:200, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.intensidade=v/100; } },
+        { type:'range', key:'numCores', label:'Número de cores', min:2, max:5, step:1, fmt:v=>v, default:3,
+          onChange(v){
+            while (cfg.cores.length < v) cfg.cores.push(CORES_PADRAO_CAU[cfg.cores.length % CORES_PADRAO_CAU.length]);
+            cfg.cores.length = v;
+            renderTabBody(currentTab);
+          } },
+        { type:'colors', key:'cores', label:'Cores da cáustica' },
+        { type:'range', key:'opacity', label:'Opacidade', min:20, max:100, step:5, fmt:v=>v+'%', default:80, onChange(v){ cfg.opacity=v/100; } }
       ]
     };
   })();
@@ -3862,6 +4103,27 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
         toggles.appendChild(btn);
       });
       wrap.appendChild(label); wrap.appendChild(toggles);
+      return wrap;
+    }
+    if (control.type === 'colors'){
+      wrap.className = 'e-row';
+      const label = document.createElement('label');
+      label.textContent = control.label;
+      wrap.appendChild(label);
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex; gap:8px; flex-wrap:wrap; margin-top:4px;';
+      layer.cfg[control.key].forEach((cor, i) => {
+        const inp = document.createElement('input');
+        inp.type = 'color';
+        inp.value = cor;
+        inp.style.cssText = 'width:36px; height:32px; border:1px solid rgba(179,18,23,0.4); background:none; cursor:pointer; padding:0; border-radius:4px;';
+        inp.addEventListener('input', (e) => {
+          layer.cfg[control.key][i] = e.target.value;
+          if (control.onChange) control.onChange();
+        });
+        row.appendChild(inp);
+      });
+      wrap.appendChild(row);
       return wrap;
     }
     return wrap;
