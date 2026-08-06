@@ -700,6 +700,15 @@
     </div>
   </a>
 
+  <a class="portal" id="p-bolhas" href="#" data-layer="bolhas">
+    <canvas id="c-bolhas"></canvas>
+    <div class="veil"></div>
+    <div class="label">
+      <span class="name">Bolhas</span>
+      <span class="hint">ar ⋄ subindo, balançando, até estourar no topo</span>
+    </div>
+  </a>
+
 </div>
 
 <!-- ---------- visual do portal aberto em overlay, sem sair da página ---------- -->
@@ -1950,6 +1959,55 @@ const previewControls = []; // pausa/retoma as prévias animadas de fundo (evita
   previewControls.push({ pause(){ active = false; }, resume(){ if (!active) { active = true; requestAnimationFrame(frame); } } });
 })();
 
+// ---------- prévia: Bolhas, subindo e balançando até estourar no topo ----------
+(function(){
+  let active = true;
+  const { ctx, dim } = makeRetinaCanvas('c-bolhas');
+  const N = 26;
+  function novaBolha(y){
+    return {
+      x: Math.random(),
+      y: y !== undefined ? y : Math.random(),
+      r: 2 + Math.random() * 7,
+      speed: 0.0011 + Math.random() * 0.0016,
+      wobbleFreq: 1 + Math.random() * 2,
+      wobbleAmp: 0.01 + Math.random() * 0.015,
+      phase: Math.random() * Math.PI * 2
+    };
+  }
+  const bolhas = Array.from({length: N}, () => novaBolha());
+
+  let t = 0;
+  function frame(){
+    if (!active) return;
+    const w = dim.w, h = dim.h;
+    ctx.fillStyle = 'rgba(10,9,8,0.16)';
+    ctx.fillRect(0, 0, w, h);
+
+    ctx.globalCompositeOperation = 'lighter';
+    for (const b of bolhas) {
+      b.y -= b.speed;
+      const x = (b.x + Math.sin(t * b.wobbleFreq + b.phase) * b.wobbleAmp) * w;
+      const y = b.y * h;
+
+      if (b.y < -0.03) Object.assign(b, novaBolha(1.03));
+
+      // corpo translúcido + destaque tipo reflexo de luz no canto superior
+      ctx.strokeStyle = 'rgba(216,183,161,0.4)';
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(x, y, b.r, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = 'rgba(216,183,161,0.9)';
+      ctx.beginPath(); ctx.arc(x - b.r * 0.32, y - b.r * 0.32, Math.max(0.6, b.r * 0.22), 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalCompositeOperation = 'source-over';
+
+    t += 0.02;
+    requestAnimationFrame(frame);
+  }
+  frame();
+  previewControls.push({ pause(){ active = false; }, resume(){ if (!active) { active = true; requestAnimationFrame(frame); } } });
+})();
+
 // ---------- ponte entre o motor de áudio e os efeitos visuais (pra reagir ao som) ----------
 const AudioBridge = { ctx: null, analyser: null, data: null };
 
@@ -2935,12 +2993,13 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
   // definição das 12 camadas
   // ============================================================
   const LAYERS = {};
-  const ORDER = ['rorschach','stars','wormhole','plasma','mandala','vortice','cimatica','fumaca','geometria','constelacao','olho','batimento','fluxo','caleidoscopio','reflexo','caustica'];
+  const ORDER = ['rorschach','stars','wormhole','plasma','mandala','vortice','cimatica','fumaca','geometria','constelacao','olho','batimento','fluxo','caleidoscopio','reflexo','caustica','bolhas'];
   const LABELS = {
     rorschach:'Rorschach', stars:'Estrelas', wormhole:'Wormhole', plasma:'Plasma',
     mandala:'Mandala', vortice:'Vórtice', cimatica:'Cimática', fumaca:'Fumaça',
     geometria:'Geometria', constelacao:'Constelação', olho:'Olho', batimento:'Batimento',
-    fluxo:'Fluxo', caleidoscopio:'Caleidoscópio', reflexo:'Reflexo', caustica:'Cáustica'
+    fluxo:'Fluxo', caleidoscopio:'Caleidoscópio', reflexo:'Reflexo', caustica:'Cáustica',
+    bolhas:'Bolhas'
   };
 
   // ---------------- RORSCHACH (canvas próprio + filtro CSS) ----------------
@@ -3959,6 +4018,60 @@ const AudioBridge = { ctx: null, analyser: null, data: null };
             renderTabBody(currentTab);
           } },
         { type:'colors', key:'cores', label:'Cores da cáustica' },
+        { type:'range', key:'opacity', label:'Opacidade', min:20, max:100, step:5, fmt:v=>v+'%', default:80, onChange(v){ cfg.opacity=v/100; } }
+      ]
+    };
+  })();
+
+  // ---------------- BOLHAS (subindo, balançando, estourando no topo) ----------------
+  (function(){
+    const cfg = { count:60, speed:1.0, size:1.0, oscilacao:1.0, opacity:0.8, cores: ['#d8b7a1'] };
+    let bolhas = [];
+    function novaBolha(y){
+      return {
+        x: Math.random(),
+        y: y !== undefined ? y : Math.random(),
+        r: 2 + Math.random()*7,
+        speedBase: 0.0011 + Math.random()*0.0016,
+        wobbleFreq: 1 + Math.random()*2,
+        wobbleAmp: 0.01 + Math.random()*0.015,
+        phase: Math.random()*Math.PI*2
+      };
+    }
+    function build(){ bolhas = Array.from({length: cfg.count}, () => novaBolha()); }
+    build();
+
+    let t = 0;
+    function draw(){
+      const w=dim.w, h=dim.h;
+      const am = audioMult();
+      const cor = cfg.cores[0] || '#d8b7a1';
+      const { r: cr, g: cg, b: cb } = hexToRgb(cor);
+
+      for (const b of bolhas) {
+        b.y -= b.speedBase*cfg.speed;
+        const x = (b.x + Math.sin(t*b.wobbleFreq + b.phase)*b.wobbleAmp*cfg.oscilacao) * w;
+        const y = b.y * h;
+        const raio = b.r*cfg.size;
+
+        if (b.y < -0.03) Object.assign(b, novaBolha(1.03));
+
+        ctx.strokeStyle = `rgba(${cr},${cg},${cb},${0.4*cfg.opacity*am})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.arc(x, y, raio, 0, Math.PI*2); ctx.stroke();
+        ctx.fillStyle = `rgba(${cr},${cg},${cb},${0.9*cfg.opacity*am})`;
+        ctx.beginPath(); ctx.arc(x - raio*0.32, y - raio*0.32, Math.max(0.6, raio*0.22), 0, Math.PI*2); ctx.fill();
+      }
+      t += 0.02*cfg.speed;
+    }
+    LAYERS.bolhas = {
+      cfg, draw,
+      controls: [
+        { type:'range', key:'count', label:'Quantidade', min:10, max:200, step:5, fmt:v=>v, default:60, onChange(v){ cfg.count=v; build(); } },
+        { type:'range', key:'speed', label:'Velocidade de subida', min:20, max:250, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.speed=v/100; } },
+        { type:'range', key:'size', label:'Tamanho', min:30, max:250, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.size=v/100; } },
+        { type:'range', key:'oscilacao', label:'Balanço lateral', min:0, max:250, step:10, fmt:v=>(v/100).toFixed(2)+'x', default:100, onChange(v){ cfg.oscilacao=v/100; } },
+        { type:'colors', key:'cores', label:'Cor das bolhas' },
         { type:'range', key:'opacity', label:'Opacidade', min:20, max:100, step:5, fmt:v=>v+'%', default:80, onChange(v){ cfg.opacity=v/100; } }
       ]
     };
