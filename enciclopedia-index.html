@@ -88,8 +88,8 @@
 <footer class="site-footer" id="site-footer"></footer>
 
 <script>
-  const SUPABASE_URL = "https://pibwwyqjrsdwnzsiremx.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_kPxQ9BGs68o9lich7qWTKw_W83iNPgs";
+  const SUPABASE_URL = window.CAOS_SUPABASE_URL;
+  const SUPABASE_ANON_KEY = window.CAOS_SUPABASE_KEY;
 
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   let entradas = [];
@@ -160,6 +160,7 @@
   carregar();
 </script>
 
+<script src="assets/supabase-config.js"></script>
 <script src="assets/site-chrome.js" defer></script>
 <script src="assets/flash-decor.js" defer></script>
 <script src="assets/space-bg.js" defer></script>

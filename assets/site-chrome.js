@@ -104,8 +104,11 @@
 
   // credenciais públicas do Supabase (anon/publishable key — protegida por
   // RLS, seguro deixar no código-fonte, ver claude.md seção 4)
-  var SUPABASE_URL = 'https://pibwwyqjrsdwnzsiremx.supabase.co';
-  var SUPABASE_KEY = 'sb_publishable_kPxQ9BGs68o9lich7qWTKw_W83iNPgs';
+  // Lê de assets/supabase-config.js (fonte única). O fallback abaixo
+  // só entra em ação se, por algum motivo, essa página carregar
+  // site-chrome.js sem antes carregar supabase-config.js.
+  var SUPABASE_URL = window.CAOS_SUPABASE_URL || 'https://pibwwyqjrsdwnzsiremx.supabase.co';
+  var SUPABASE_KEY = window.CAOS_SUPABASE_KEY || 'sb_publishable_kPxQ9BGs68o9lich7qWTKw_W83iNPgs';
 
   function currentSlug() {
     var last = location.pathname.split('/').pop() || '';
