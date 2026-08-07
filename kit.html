@@ -72,7 +72,7 @@
           <p class="eyebrow center"><span class="glyph">☰</span> dados do kit</p>
         </div>
         <table class="data-table">
-          <thead><tr><th>Peça</th><th>Signo</th><th>Território</th><th>Grau</th></tr></thead>
+          <thead><tr><th>Peça</th><th>Signo</th><th>Território (Casa)</th><th>Grau</th></tr></thead>
           <tbody id="kit-data-body">
             <!-- preenchido dinamicamente pelo script no fim do arquivo -->
           </tbody>
@@ -91,12 +91,12 @@
         <h2>Seis cards, seis funções</h2>
       </div>
       <div class="card-grid" id="vocabularioGrid">
-        <div class="card"><span class="glyph mono">☉</span><h3>Núcleo</h3><p>O motor que não se negocia. Signo solar, a força que anima.</p></div>
-        <div class="card"><span class="glyph mono">▲</span><h3>Máscara</h3><p>A interface que o mundo vê primeiro. Ascendente.</p></div>
-        <div class="card"><span class="glyph mono">☽</span><h3>Fome</h3><p>O apetite cru que pede satisfação. Signo lunar, o que recebe e gesta.</p></div>
-        <div class="card"><span class="glyph mono">⌂</span><h3>Territórios</h3><p>As doze áreas onde núcleo e fome operam. Casas astrológicas.</p></div>
-        <div class="card scar" style="border-top:1px solid var(--accent);"><span class="glyph mono">⚷</span><h3>Cicatriz</h3><p>O que sobrou depois que a dor já fez seu trabalho. Quíron, órbita kepleriana real, via JPL SBDB.</p></div>
-        <div class="card scar" style="border-top:1px solid var(--accent);"><span class="glyph mono">⚸</span><h3>Exílio</h3><p>O que foi expulso antes de virar cicatriz. Lilith Negra verdadeira, apogeu real da órbita da Lua, não a versão média.</p></div>
+        <div class="card"><span class="glyph mono">☉</span><span class="original-name">Signo solar</span><h3>Núcleo</h3><p>O motor que não se negocia. A força que anima.</p></div>
+        <div class="card"><span class="glyph mono">▲</span><span class="original-name">Ascendente</span><h3>Máscara</h3><p>A interface que o mundo vê primeiro.</p></div>
+        <div class="card"><span class="glyph mono">☽</span><span class="original-name">Signo lunar</span><h3>Fome</h3><p>O apetite cru que pede satisfação. O que recebe e gesta.</p></div>
+        <div class="card"><span class="glyph mono">⌂</span><span class="original-name">Casas astrológicas</span><h3>Territórios</h3><p>As doze áreas onde núcleo e fome operam.</p></div>
+        <div class="card scar" style="border-top:1px solid var(--accent);"><span class="glyph mono">⚷</span><span class="original-name">Posição de Quíron</span><h3>Cicatriz</h3><p>O que sobrou depois que a dor já fez seu trabalho. Órbita kepleriana real, via JPL SBDB.</p></div>
+        <div class="card scar" style="border-top:1px solid var(--accent);"><span class="glyph mono">⚸</span><span class="original-name">Lilith Negra (verdadeira)</span><h3>Exílio</h3><p>O que foi expulso antes de virar cicatriz. Apogeu real da órbita da Lua, não a versão média.</p></div>
       </div>
       <!-- os 6 cards acima são o fallback estático (SEO / JS desligado);
            assim que o Supabase responde, initVocabularioGrid() substitui pelo conteúdo real do banco -->
@@ -169,7 +169,7 @@
     try {
       const { data, error } = await sb
         .from('vocabulario')
-        .select('termo, definicao_curta, glyph, destaque')
+        .select('termo, termo_original, definicao_curta, glyph, destaque')
         .eq('categoria', 'mapa_individual')
         .order('ordem');
       if (error || !data || !data.length) return; // mantém o fallback estático em caso de erro
@@ -177,6 +177,7 @@
       grid.innerHTML = data.map(v => `
         <div class="card${v.destaque ? ' scar' : ''}"${v.destaque ? ' style="border-top:1px solid var(--accent);"' : ''}>
           <span class="glyph mono">${v.glyph || '·'}</span>
+          ${v.termo_original ? `<span class="original-name">${v.termo_original}</span>` : ''}
           <h3>${v.termo}</h3>
           <p>${v.definicao_curta}</p>
         </div>
@@ -193,10 +194,10 @@
   ];
 
   const PIECE_LABELS = {
-    sun: 'Núcleo', moon: 'Fome', mercury: 'Mercúrio', venus: 'Vênus',
+    sun: 'Núcleo (Signo solar)', moon: 'Fome (Signo lunar)', mercury: 'Mercúrio', venus: 'Vênus',
     mars: 'Marte', jupiter: 'Júpiter', saturn: 'Saturno', uranus: 'Urano',
     neptune: 'Netuno', pluto: 'Plutão', chiron: 'Cicatriz (Quíron)',
-    exilio: 'Exílio',
+    exilio: 'Exílio (Lilith Negra)',
   };
   // ordem de exibição: peças centrais primeiro (Núcleo, Máscara, Fome),
   // depois os planetas pessoais/sociais/transpessoais, depois Quíron e
@@ -425,7 +426,7 @@
     // casas de signo inteiro, o ascendente sempre abre o território 1.
     if (chart.ascendente != null) {
       const { signo, grau } = signoEGrauDeLongitude(chart.ascendente);
-      tbody.appendChild(renderRow('Máscara', signo, territorioLabel(houseLabels, 1), grau, false));
+      tbody.appendChild(renderRow('Máscara (Ascendente)', signo, territorioLabel(houseLabels, 1), grau, false));
     }
 
     const fome = planetasByChave.get('moon');
