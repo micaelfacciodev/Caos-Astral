@@ -311,7 +311,8 @@ section.tight{ padding:70px 0; }
 }
 .card{ background:var(--bg); padding:34px 26px; transition:background .25s ease; }
 .card:hover{ background:var(--bg-panel); }
-.card .glyph{ font-family:'IBM Plex Mono', monospace; color:var(--accent-bright); font-size:1.3rem; margin-bottom:18px; display:block; }
+.card .glyph{ font-family:'IBM Plex Mono', monospace; color:var(--accent-bright); font-size:1.3rem; margin-bottom:6px; display:block; }
+.card .original-name{ font-family:'IBM Plex Mono', monospace; font-size:0.78rem; letter-spacing:0.02em; color:var(--ink-dim); text-transform:none; margin-bottom:10px; display:block; }
 .card h3{ margin-bottom:12px; color:var(--ink); }
 .card p{ font-size:0.94rem; }
 .card.locked{ position:relative; }
