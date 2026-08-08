@@ -26,8 +26,16 @@
 
   // ── Pool ────────────────────────────────────────────────────
   async function getPool() {
+    // Só usa cache se ele tiver pelo menos 1 imagem. Um pool vazio
+    // (tabela ainda sem dado, ou 404 de uma visita anterior) nunca é
+    // cacheado como resultado válido — sem isso, a primeira visita
+    // depois de criar a tabela travava um "[]" na sessionStorage e o
+    // efeito não voltava a aparecer nem depois de cadastrar símbolos.
     const cached = sessionStorage.getItem(CACHE_KEY);
-    if (cached) return JSON.parse(cached);
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
     try {
       // ENGINE: espera tabela `simbolos_astrologicos` (colunas: image_url text, decor boolean)
       // com RLS de leitura pública (select livre), ver spec no CLAUDE.md.
@@ -41,7 +49,7 @@
       const pool = (Array.isArray(rows) ? rows : [])
         .map(row => row.image_url)
         .filter(Boolean);
-      sessionStorage.setItem(CACHE_KEY, JSON.stringify(pool));
+      if (pool.length > 0) sessionStorage.setItem(CACHE_KEY, JSON.stringify(pool));
       return pool;
     } catch {
       // Sem tabela/dado ainda, decoração fica desligada, sem quebrar nada.
