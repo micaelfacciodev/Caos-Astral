@@ -23,6 +23,7 @@ Documento de referência única. Qualquer conta/agente trabalhando no projeto (f
 | **Cicatriz** | Posição de Quíron | O que sobrou depois que a dor já fez seu trabalho | fechado |
 | **Retorno** | Revolução solar | O mapa do ano, núcleo completa uma volta e retorna ao ponto de nascimento | fechado |
 | **Marcos** | Trânsitos lentos/pesados (Saturno, Urano, Plutão) | Sinalização de janelas de longo prazo | pendente, aprovado conceitualmente, sem especificação técnica ainda |
+| **L4 / L5** | Pontos Trojanos Terra-Lua (Nuvens de Kordylewski) | Par de pontos vazios calculados a ±60° da Lua natal, sem raiz histórica (ver `enciclopedia_simbolos`, slug `pontos-l4-l5`). Cálculo e rótulo técnico cru ("L4"/"L5") já em `planets` (migration 0014), mas SEM rótulo poético Caos Astral ainda, ao contrário de todo outro ponto do sistema (Núcleo, Fome, Exílio etc.) | pendente, mecânica de cálculo fechada, nome de marca em aberto — debater antes de expor em UI de produto além do widget "Céu agora" e do mapa do kit |
 | **Território de ofício** | Mapa vocacional/carreira | Recorte do kit focado em território profissional (sem sistema novo) | pendente |
 | **Símbolo do grau** | Símbolo Sabiano | Interpretação do grau exato (1°-30°) de um planeta ou cúspide, redigida em voz Caos Astral a partir da base de 1925 (domínio público) | fechado conceitualmente, aguardando redação adaptada dos 360 textos |
 

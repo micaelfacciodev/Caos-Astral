@@ -207,14 +207,14 @@
   // depois os planetas pessoais/sociais/transpessoais, depois Quíron e
   // Exílio, depois os três ângulos derivados
   const PLANET_ORDER = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter',
-    'saturn', 'uranus', 'neptune', 'pluto', 'chiron', 'exilio'];
+    'saturn', 'uranus', 'neptune', 'pluto', 'chiron', 'exilio', 'l4', 'l5'];
 
   // glifos — mesmo padrão usado em assets/ceu-agora.js, pra consistência
   // visual entre o widget "céu agora" e o mapa do kit
   const PLANET_GLYPHS = {
     sun: '☉', moon: '☽', mercury: '☿', venus: '♀', mars: '♂',
     jupiter: '♃', saturn: '♄', uranus: '♅', neptune: '♆', pluto: '♇',
-    chiron: '⚷', exilio: '⚸',
+    chiron: '⚷', exilio: '⚸', l4: '◐', l5: '◑',
   };
   const SIGN_GLYPHS = ['♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏', '♐', '♑', '♒', '♓'];
 
@@ -370,7 +370,7 @@
     pontos.forEach((p) => {
       const pos = posByChave.get(p.chave);
       if (!pos) return;
-      const cor = (p.chave === 'chiron' || p.chave === 'exilio') ? 'var(--accent-bright)' : 'var(--ink)';
+      const cor = (p.chave === 'chiron' || p.chave === 'exilio' || p.chave === 'l4' || p.chave === 'l5') ? 'var(--accent-bright)' : 'var(--ink)';
       svg += `<text x="${pos.x.toFixed(1)}" y="${pos.y.toFixed(1)}" font-family="IBM Plex Mono" font-size="14" fill="${cor}" text-anchor="middle" dominant-baseline="middle">${PLANET_GLYPHS[p.chave]}</text>`;
       if (p.retrogrado) {
         svg += `<text x="${(pos.x + 9).toFixed(1)}" y="${(pos.y - 7).toFixed(1)}" font-family="IBM Plex Mono" font-size="7" fill="var(--accent)">r</text>`;
