@@ -22,12 +22,12 @@
      igual ao comportamento anterior. */
   .kit-dashboard{
     display:grid;
-    grid-template-columns: minmax(0,1fr) 380px;
+    grid-template-columns: 380px minmax(0,1fr);
     gap:56px;
     align-items:start;
     margin-bottom:60px;
   }
-  .kit-wheel-box{ max-width:640px; margin:0 auto; }
+  .kit-wheel-box{ width:100%; max-width:640px; margin:0 auto; }
   /* sem isso, o SVG renderiza no tamanho intrínseco do viewBox
      (400x400px) e ignora a largura real do container — era o motivo
      do mapa parecer pequeno mesmo antes desse layout novo. */
@@ -36,7 +36,7 @@
   .kit-sidebar{
     background:var(--bg-panel-2);
     border:1px solid var(--line);
-    padding:22px 22px 8px;
+    padding:16px 22px 8px;
     /* acompanha o scroll da página enquanto a roda for mais alta que
        a coluna de dados — comportamento clássico de sidebar de
        dashboard. 24px de respiro do topo pra não colar no header. */
@@ -47,6 +47,25 @@
   }
   .kit-sidebar .section-head{ margin-bottom:16px; }
 
+  .kit-sidebar-toggle-btn{
+    background:none; border:1px solid var(--line); color:var(--ink-faint);
+    width:28px; height:28px; cursor:pointer; font-family:'IBM Plex Mono', monospace;
+    font-size:0.9rem; line-height:1; display:flex; align-items:center; justify-content:center;
+    margin-bottom:14px; padding:0;
+  }
+  .kit-sidebar-toggle-btn:hover{ color:var(--ink); border-color:var(--line-bright); }
+
+  /* estado colapsado — só entra em vigor acima do breakpoint mobile,
+     de propósito: em telas estreitas o dashboard já empilha em coluna
+     única (regra @media max-width:860px mais abaixo), e as duas coisas
+     não devem competir entre si */
+  @media (min-width:861px){
+    .kit-dashboard.sidebar-collapsed{ grid-template-columns: 48px minmax(0,1fr); }
+    .kit-dashboard.sidebar-collapsed .kit-sidebar{ padding:16px 10px 8px; }
+    .kit-dashboard.sidebar-collapsed .kit-sidebar-inner{ display:none; }
+    .kit-dashboard.sidebar-collapsed .kit-sidebar-toggle-btn{ margin-bottom:0; }
+  }
+
   .data-table{ width:100%; border-collapse:collapse; font-family:'IBM Plex Mono', monospace; font-size:0.78rem; }
   .data-table th{ text-align:left; color:var(--ink-faint); font-weight:400; padding:8px 10px; border-bottom:1px solid var(--line-bright); text-transform:uppercase; letter-spacing:0.05em; font-size:0.66rem; position:sticky; top:0; background:var(--bg-panel-2); }
   .data-table td{ padding:10px 10px; border-bottom:1px solid var(--line); color:var(--ink-dim); }
@@ -56,6 +75,7 @@
   @media (max-width:860px){
     .kit-dashboard{ grid-template-columns:1fr; gap:32px; }
     .kit-sidebar{ position:static; max-height:none; }
+    #kit-sidebar-toggle{ display:none; }
   }
 
   .kit-empty-state, .kit-error-state{
@@ -102,6 +122,21 @@
 
       <div id="kit-content" style="display:none;">
         <div class="kit-dashboard">
+          <aside class="kit-sidebar">
+            <button type="button" id="kit-sidebar-toggle" class="kit-sidebar-toggle-btn" aria-expanded="true" aria-controls="kit-sidebar-inner" title="Recolher coluna de dados">‹</button>
+            <div class="kit-sidebar-inner" id="kit-sidebar-inner">
+              <div class="section-head" style="margin-bottom:20px;">
+                <p class="eyebrow"><span class="glyph">☰</span> dados do kit</p>
+              </div>
+              <table class="data-table">
+                <thead><tr><th>Peça</th><th>Signo</th><th>Território</th><th>Grau</th></tr></thead>
+                <tbody id="kit-data-body">
+                  <!-- preenchido dinamicamente pelo script no fim do arquivo -->
+                </tbody>
+              </table>
+            </div>
+          </aside>
+
           <div class="kit-wheel-box">
             <svg viewBox="0 0 400 400" id="kit-wheel-svg">
               <circle cx="200" cy="200" r="182" fill="none" stroke="var(--line-bright)" stroke-width="1"/>
@@ -109,18 +144,6 @@
               <circle cx="200" cy="200" r="62" fill="none" stroke="var(--line)" stroke-width="0.6"/>
             </svg>
           </div>
-
-          <aside class="kit-sidebar">
-            <div class="section-head" style="margin-bottom:20px;">
-              <p class="eyebrow"><span class="glyph">☰</span> dados do kit</p>
-            </div>
-            <table class="data-table">
-              <thead><tr><th>Peça</th><th>Signo</th><th>Território</th><th>Grau</th></tr></thead>
-              <tbody id="kit-data-body">
-                <!-- preenchido dinamicamente pelo script no fim do arquivo -->
-              </tbody>
-            </table>
-          </aside>
         </div>
       </div>
 
@@ -545,6 +568,33 @@
   }
 
   document.getElementById('kit-retry').addEventListener('click', loadKit);
+
+  // --- colapsar/expandir a coluna lateral de dados ---
+  // Persistido em localStorage (preferência de UI do usuário nesse
+  // navegador, não dado sensível — try/catch porque localStorage pode
+  // falhar em modo privado/restrito e isso não deve quebrar o kit).
+  (function initSidebarToggle() {
+    const dash = document.querySelector('.kit-dashboard');
+    const btn = document.getElementById('kit-sidebar-toggle');
+    if (!dash || !btn) return;
+
+    function apply(collapsed) {
+      dash.classList.toggle('sidebar-collapsed', collapsed);
+      btn.textContent = collapsed ? '›' : '‹';
+      btn.setAttribute('aria-expanded', String(!collapsed));
+      btn.title = collapsed ? 'Expandir coluna de dados' : 'Recolher coluna de dados';
+    }
+
+    let collapsed = false;
+    try { collapsed = localStorage.getItem('caosAstralKitSidebarCollapsed') === '1'; } catch (e) { /* ignora */ }
+    apply(collapsed);
+
+    btn.addEventListener('click', () => {
+      collapsed = !collapsed;
+      apply(collapsed);
+      try { localStorage.setItem('caosAstralKitSidebarCollapsed', collapsed ? '1' : '0'); } catch (e) { /* ignora */ }
+    });
+  })();
 
   loadKit();
 })();
