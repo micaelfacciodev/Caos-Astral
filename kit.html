@@ -14,12 +14,50 @@
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
 <style>
-  .kit-wheel-box{ max-width:420px; margin:0 auto 60px; }
-  .data-table{ width:100%; border-collapse:collapse; font-family:'IBM Plex Mono', monospace; font-size:0.85rem; }
-  .data-table th{ text-align:left; color:var(--ink-faint); font-weight:400; padding:10px 14px; border-bottom:1px solid var(--line-bright); text-transform:uppercase; letter-spacing:0.05em; font-size:0.7rem; }
-  .data-table td{ padding:12px 14px; border-bottom:1px solid var(--line); color:var(--ink-dim); }
+  /* --- dashboard do kit: mapa grande à esquerda, dados fixos numa
+     coluna lateral à direita — mesmo breakpoint (860px) já usado em
+     .feature-split no design system (assets/style.css), pra ficar
+     consistente com o resto do site em vez de inventar um breakpoint
+     novo. Abaixo de 860px empilha (mapa em cima, dados embaixo),
+     igual ao comportamento anterior. */
+  .kit-dashboard{
+    display:grid;
+    grid-template-columns: minmax(0,1fr) 380px;
+    gap:56px;
+    align-items:start;
+    margin-bottom:60px;
+  }
+  .kit-wheel-box{ max-width:640px; margin:0 auto; }
+  /* sem isso, o SVG renderiza no tamanho intrínseco do viewBox
+     (400x400px) e ignora a largura real do container — era o motivo
+     do mapa parecer pequeno mesmo antes desse layout novo. */
+  #kit-wheel-svg{ width:100%; height:auto; display:block; }
+
+  .kit-sidebar{
+    background:var(--bg-panel-2);
+    border:1px solid var(--line);
+    padding:22px 22px 8px;
+    /* acompanha o scroll da página enquanto a roda for mais alta que
+       a coluna de dados — comportamento clássico de sidebar de
+       dashboard. 24px de respiro do topo pra não colar no header. */
+    position:sticky;
+    top:24px;
+    max-height:calc(100vh - 48px);
+    overflow-y:auto;
+  }
+  .kit-sidebar .section-head{ margin-bottom:16px; }
+
+  .data-table{ width:100%; border-collapse:collapse; font-family:'IBM Plex Mono', monospace; font-size:0.78rem; }
+  .data-table th{ text-align:left; color:var(--ink-faint); font-weight:400; padding:8px 10px; border-bottom:1px solid var(--line-bright); text-transform:uppercase; letter-spacing:0.05em; font-size:0.66rem; position:sticky; top:0; background:var(--bg-panel-2); }
+  .data-table td{ padding:10px 10px; border-bottom:1px solid var(--line); color:var(--ink-dim); }
   .data-table td.strong{ color:var(--ink); }
   .data-table td.retro{ color:var(--accent); font-size:0.72rem; margin-left:6px; }
+
+  @media (max-width:860px){
+    .kit-dashboard{ grid-template-columns:1fr; gap:32px; }
+    .kit-sidebar{ position:static; max-height:none; }
+  }
+
   .kit-empty-state, .kit-error-state{
     max-width:520px; margin:0 auto 40px; padding:22px 24px; border:1px solid var(--line-bright);
     background:var(--bg-panel-2); text-align:center; font-family:'IBM Plex Sans', sans-serif;
@@ -63,23 +101,27 @@
       </div>
 
       <div id="kit-content" style="display:none;">
-        <div class="kit-wheel-box">
-          <svg viewBox="0 0 400 400" id="kit-wheel-svg">
-            <circle cx="200" cy="200" r="182" fill="none" stroke="var(--line-bright)" stroke-width="1"/>
-            <circle cx="200" cy="200" r="155" fill="none" stroke="var(--line)" stroke-width="0.6"/>
-            <circle cx="200" cy="200" r="62" fill="none" stroke="var(--line)" stroke-width="0.6"/>
-          </svg>
-        </div>
+        <div class="kit-dashboard">
+          <div class="kit-wheel-box">
+            <svg viewBox="0 0 400 400" id="kit-wheel-svg">
+              <circle cx="200" cy="200" r="182" fill="none" stroke="var(--line-bright)" stroke-width="1"/>
+              <circle cx="200" cy="200" r="155" fill="none" stroke="var(--line)" stroke-width="0.6"/>
+              <circle cx="200" cy="200" r="62" fill="none" stroke="var(--line)" stroke-width="0.6"/>
+            </svg>
+          </div>
 
-        <div class="section-head center" style="margin-bottom:20px;">
-          <p class="eyebrow center"><span class="glyph">☰</span> dados do kit</p>
+          <aside class="kit-sidebar">
+            <div class="section-head" style="margin-bottom:20px;">
+              <p class="eyebrow"><span class="glyph">☰</span> dados do kit</p>
+            </div>
+            <table class="data-table">
+              <thead><tr><th>Peça</th><th>Signo</th><th>Território</th><th>Grau</th></tr></thead>
+              <tbody id="kit-data-body">
+                <!-- preenchido dinamicamente pelo script no fim do arquivo -->
+              </tbody>
+            </table>
+          </aside>
         </div>
-        <table class="data-table">
-          <thead><tr><th>Peça</th><th>Signo</th><th>Território (Casa)</th><th>Grau</th></tr></thead>
-          <tbody id="kit-data-body">
-            <!-- preenchido dinamicamente pelo script no fim do arquivo -->
-          </tbody>
-        </table>
       </div>
 
     </div>
