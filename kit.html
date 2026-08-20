@@ -173,7 +173,7 @@
     try {
       const { data, error } = await sb
         .from('vocabulario')
-        .select('termo, termo_original, definicao_curta, glyph, destaque')
+        .select('termo, substitui, definicao_curta, glyph, destaque')
         .eq('categoria', 'mapa_individual')
         .order('ordem');
       if (error || !data || !data.length) return; // mantém o fallback estático em caso de erro
@@ -181,7 +181,7 @@
       grid.innerHTML = data.map(v => `
         <div class="card${v.destaque ? ' scar' : ''}"${v.destaque ? ' style="border-top:1px solid var(--accent);"' : ''}>
           <span class="glyph mono">${v.glyph || '·'}</span>
-          ${v.termo_original ? `<span class="original-name">${v.termo_original}</span>` : ''}
+          ${v.substitui ? `<span class="original-name">${v.substitui}</span>` : ''}
           <h3>${v.termo}</h3>
           <p>${v.definicao_curta}</p>
         </div>
