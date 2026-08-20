@@ -36,6 +36,8 @@
     { key: 'pluto', label: 'Plutão', glyph: '♇', body: 'Pluto' },
     { key: 'chiron', label: 'Quíron', glyph: '⚷', custom: true },
     { key: 'exilio', label: 'Lilith', glyph: '⚸', lilith: true },
+    { key: 'l4', label: 'Sofia', glyph: '◐', l4l5: 'l4', neverRetro: true },
+    { key: 'l5', label: 'Saklas', glyph: '◑', l4l5: 'l5', neverRetro: true },
   ];
 
   var ASPECTS = [
@@ -106,6 +108,21 @@
     return norm360(ecl.elon);
   }
 
+  // ---- L4 / L5 (Nuvens de Kordylewski, nomeados Sofia/Saklas no
+  // Caos Astral): não têm mecânica orbital própria, são definidos como
+  // ±60° da longitude da Lua no instante (triângulo equilátero
+  // Terra-Lua-ponto, Lagrange 1772). Ver enciclopedia_simbolos slug
+  // "pontos-l4-l5" e supabase/functions/_shared/l4l5.ts (mesmo
+  // cálculo, versão Deno/Edge Function). Sofia = L4, adiantado (+60°,
+  // na direção do movimento da Lua); Saklas = L5, atrasado (-60°).
+  // Não oscilam de forma independente (sempre 120° um do outro), por
+  // isso 'neverRetro' em BODIES: não fazem sentido como retrógrados,
+  // eles só "seguem" a Lua.
+  function l4l5GeocentricLongitude(Astronomy, date, which) {
+    var moonLon = geoEclipticLongitude(Astronomy, 'Moon', date);
+    return norm360(moonLon + (which === 'l4' ? 60 : -60));
+  }
+
   // ---- Lilith (True Black Moon Lilith = apogeu osculante da órbita
   // lunar): chave interna continua 'exilio' (mesmo ponto que o resto do
   // produto chama de Exílio), mas o RÓTULO aqui é "Lilith" de propósito
@@ -156,6 +173,8 @@
         ? chironGeocentricLongitude(now, Astronomy)
         : b.lilith
         ? lilithGeocentricLongitude(Astronomy, now)
+        : b.l4l5
+        ? l4l5GeocentricLongitude(Astronomy, now, b.l4l5)
         : geoEclipticLongitude(Astronomy, b.body, now);
       var retro = false;
       if (!b.neverRetro) {
@@ -164,6 +183,8 @@
           ? chironGeocentricLongitude(prev, Astronomy)
           : b.lilith
           ? lilithGeocentricLongitude(Astronomy, prev)
+          : b.l4l5
+          ? l4l5GeocentricLongitude(Astronomy, prev, b.l4l5)
           : geoEclipticLongitude(Astronomy, b.body, prev);
         var diff = lon - prevLon;
         if (diff > 180) diff -= 360;
