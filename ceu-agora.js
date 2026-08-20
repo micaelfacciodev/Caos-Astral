@@ -36,8 +36,8 @@
     { key: 'pluto', label: 'Plutão', glyph: '♇', body: 'Pluto' },
     { key: 'chiron', label: 'Quíron', glyph: '⚷', custom: true },
     { key: 'exilio', label: 'Lilith', glyph: '⚸', lilith: true },
-    { key: 'l4', label: 'L4', glyph: '◐', l4l5: 'l4', neverRetro: true },
-    { key: 'l5', label: 'L5', glyph: '◑', l4l5: 'l5', neverRetro: true },
+    { key: 'l4', label: 'Sofia', glyph: '◐', l4l5: 'l4', neverRetro: true },
+    { key: 'l5', label: 'Saklas', glyph: '◑', l4l5: 'l5', neverRetro: true },
   ];
 
   var ASPECTS = [
