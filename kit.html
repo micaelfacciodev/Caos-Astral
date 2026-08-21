@@ -103,8 +103,8 @@
   <section class="page-hero">
     <div class="wrap-narrow">
       <p class="eyebrow center"><span class="glyph">◈</span> o kit</p>
-      <h1>Seu kit não é sua personalidade. É sua ferramenta de uso.</h1>
-      <p class="sub">Esqueça "signo de touro, ascendente em leão". Aqui, seu mapa vira um kit de operação, cada peça calculada com precisão real, em um mapa toroidal 3D.</p>
+      <h1>Seu kit não é personalidade. É ferramenta de uso.</h1>
+      <p class="sub">Esqueça "signo de touro, ascendente em leão". Aqui, seu mapa vira um kit de operação, cada peça calculada com precisão real, inclusive Quíron e Exílio.</p>
     </div>
   </section>
 
@@ -143,6 +143,7 @@
               <circle cx="200" cy="200" r="155" fill="none" stroke="var(--line)" stroke-width="0.6"/>
               <circle cx="200" cy="200" r="62" fill="none" stroke="var(--line)" stroke-width="0.6"/>
             </svg>
+            <a href="mapa-3d/" id="kit-ver-3d" class="btn btn-ghost mono" style="display:none;margin-top:12px;">Ver em 3D →</a>
           </div>
         </div>
       </div>
@@ -529,6 +530,14 @@
     if (chart.meio_ceu != null) {
       const ic = signoEGrauDeLongitude(chart.meio_ceu + 180);
       tbody.appendChild(renderRow('Fundo do Céu', ic.signo, territorioLabel(houseLabels, 4), ic.grau, false));
+    }
+
+    try {
+      sessionStorage.setItem('caosAstralChart', JSON.stringify(chart));
+      const linkVer3D = document.getElementById('kit-ver-3d');
+      if (linkVer3D) linkVer3D.style.display = 'inline-block';
+    } catch (e) {
+      console.warn('não consegui preparar o link do mapa 3D:', e);
     }
 
     showOnly('kit-content');
