@@ -26,7 +26,7 @@ import { arcoNaSuperficie, TORUS_R, TORUS_R_TUBE } from '../lib/toroidalCoords';
 
 export const ASPECT_VISUAL = {
   conjunction: { kind: 'burst', color: '#eaeaea' },
-  opposition: { kind: 'axis', color: '#c14a3c', width: 2.4 },
+  opposition: { kind: 'birkeland', color: '#c14a3c', width: 2.4, opacity: 0.85, jitter: true },
   square: { kind: 'birkeland', color: '#ff6a2c', width: 2.2, opacity: 0.9, jitter: true },
   trine: { kind: 'birkeland', color: '#33d6c9', width: 1.8, opacity: 0.7, jitter: false },
   sextile: { kind: 'birkeland', color: '#33d6c9', width: 1, opacity: 0.55, jitter: false },

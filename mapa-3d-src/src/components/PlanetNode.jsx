@@ -17,6 +17,12 @@ const GLYPHS = {
   chiron: '⚷', exilio: '⚸', l4: '◐', l5: '◑',
 };
 
+const NOMES = {
+  sun: 'Núcleo', moon: 'Fome', mercury: 'Mercúrio', venus: 'Vênus', mars: 'Marte',
+  jupiter: 'Júpiter', saturn: 'Saturno', uranus: 'Urano', neptune: 'Netuno', pluto: 'Plutão',
+  chiron: 'Cicatriz', exilio: 'Exílio', l4: 'Sofia', l5: 'Saklas',
+};
+
 export function PlanetNode({ ponto }) {
   if (!ponto) return null;
   const { x, y, z, chave, retrogrado } = ponto;
@@ -29,8 +35,11 @@ export function PlanetNode({ ponto }) {
           <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={3} toneMapped={false} />
         </mesh>
         <pointLight color="#ffffff" intensity={4} distance={2.5} />
-        <Text position={[0, 0.32, 0]} fontSize={0.18} color="#ffffff">
+        <Text position={[0, 0.34, 0]} fontSize={0.26} color="#ffffff">
           {GLYPHS.l4}
+        </Text>
+        <Text position={[0, 0.6, 0]} fontSize={0.15} color="#ffffff" outlineWidth={0.01} outlineColor="#000000">
+          {NOMES.l4}
         </Text>
       </group>
     );
@@ -47,8 +56,11 @@ export function PlanetNode({ ponto }) {
           <ringGeometry args={[0.16, 0.19, 32]} />
           <meshBasicMaterial color="#7a1f1f" transparent opacity={0.8} side={2} />
         </mesh>
-        <Text position={[0, 0.32, 0]} fontSize={0.18} color="#c14a3c">
+        <Text position={[0, 0.34, 0]} fontSize={0.26} color="#c14a3c">
           {GLYPHS.l5}
+        </Text>
+        <Text position={[0, 0.6, 0]} fontSize={0.15} color="#c14a3c" outlineWidth={0.01} outlineColor="#000000">
+          {NOMES.l5}
         </Text>
       </group>
     );
@@ -67,9 +79,12 @@ export function PlanetNode({ ponto }) {
           toneMapped={false}
         />
       </mesh>
-      <Text position={[0, 0.22, 0]} fontSize={0.15} color={destaque ? '#f2c14e' : '#ffffff'}>
+      <Text position={[0, 0.24, 0]} fontSize={0.22} color={destaque ? '#f2c14e' : '#ffffff'} outlineWidth={0.008} outlineColor="#000000">
         {GLYPHS[chave] ?? chave}
         {retrogrado ? ' R' : ''}
+      </Text>
+      <Text position={[0, 0.46, 0]} fontSize={0.13} color={destaque ? '#f2c14e' : '#cfcfcf'} outlineWidth={0.008} outlineColor="#000000">
+        {NOMES[chave] ?? chave}
       </Text>
     </group>
   );

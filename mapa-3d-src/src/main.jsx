@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import NatalTorus3D from './components/NatalTorus3D.jsx';
+import Legend from './components/Legend.jsx';
 import { chartExemplo } from './chartExemplo.js';
 
 // Ponte com o motor real: kit.html (a página onde o chart já é
@@ -33,6 +34,9 @@ if (usandoExemplo) {
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <NatalTorus3D chart={chart} />
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <NatalTorus3D chart={chart} />
+      <Legend />
+    </div>
   </React.StrictMode>
 );
