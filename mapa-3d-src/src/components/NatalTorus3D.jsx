@@ -27,19 +27,26 @@ import { PlanetNode } from './PlanetNode';
 
 function TorusMesh({ R, r }) {
   return (
-    <mesh rotation={[Math.PI / 2, 0, 0]}>
-      <torusGeometry args={[R, r, 32, 96]} />
-      <meshStandardMaterial
-        color="#0a0a12"
-        emissive="#141428"
-        emissiveIntensity={0.5}
-        metalness={0.4}
-        roughness={0.35}
-        wireframe={false}
-        transparent
-        opacity={0.55}
-      />
-    </mesh>
+    <group rotation={[Math.PI / 2, 0, 0]}>
+      <mesh>
+        <torusGeometry args={[R, r, 32, 96]} />
+        <meshStandardMaterial
+          color="#2a2a45"
+          emissive="#3a3a70"
+          emissiveIntensity={0.7}
+          metalness={0.3}
+          roughness={0.45}
+          transparent
+          opacity={0.85}
+        />
+      </mesh>
+      {/* contorno da malha por cima, pra ficar claro que é um toroide
+          mesmo quando o material sólido ficar escuro contra o fundo */}
+      <mesh>
+        <torusGeometry args={[R, r, 16, 48]} />
+        <meshBasicMaterial color="#7a7ac0" wireframe transparent opacity={0.25} />
+      </mesh>
+    </group>
   );
 }
 
@@ -87,8 +94,9 @@ export function NatalTorusScene({ chart, R = TORUS_R, r = TORUS_R_TUBE }) {
 export default function NatalTorus3D({ chart }) {
   return (
     <Canvas camera={{ position: [0, -9, 6], fov: 45 }} style={{ width: '100%', height: '100%', background: '#000' }}>
-      <ambientLight intensity={0.25} />
-      <directionalLight position={[5, 5, 8]} intensity={0.6} />
+      <ambientLight intensity={0.55} />
+      <directionalLight position={[5, 5, 8]} intensity={0.8} />
+      <directionalLight position={[-6, -4, -6]} intensity={0.3} color="#7a7ac0" />
       <NatalTorusScene chart={chart} />
       <OrbitControls enablePan={false} minDistance={4} maxDistance={20} />
     </Canvas>
