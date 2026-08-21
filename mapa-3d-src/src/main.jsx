@@ -3,15 +3,33 @@ import ReactDOM from 'react-dom/client';
 import NatalTorus3D from './components/NatalTorus3D.jsx';
 import { chartExemplo } from './chartExemplo.js';
 
-// Ponte com o motor real: se a página que carrega esse bundle já
-// calculou o chart (o mesmo objeto que alimenta buildWheelSVG em
-// kit.html), ela só precisa fazer:
-//
-//   window.__CAOS_CHART__ = chart;
-//
-// ANTES desse script rodar. Sem isso, cai no chart de exemplo, só
-// pra visualização isolada / desenvolvimento.
-const chart = window.__CAOS_CHART__ ?? chartExemplo;
+// Ponte com o motor real: kit.html (a página onde o chart já é
+// calculado hoje pro SVG 2D) grava o mesmo objeto em sessionStorage
+// antes de linkar pra essa página, chave 'caosAstralChart'.
+// sessionStorage é por aba, mesma origem, então sobrevive à
+// navegação normal de um clique em link (não abrir em aba nova).
+function lerChartReal() {
+  if (window.__CAOS_CHART__) return window.__CAOS_CHART__;
+  try {
+    const raw = sessionStorage.getItem('caosAstralChart');
+    if (raw) return JSON.parse(raw);
+  } catch (e) {
+    console.warn('não consegui ler o chart de sessionStorage:', e);
+  }
+  return null;
+}
+
+const chart = lerChartReal() ?? chartExemplo;
+const usandoExemplo = chart === chartExemplo;
+
+if (usandoExemplo) {
+  const aviso = document.createElement('div');
+  aviso.textContent = 'mapa de exemplo — sem dado real conectado';
+  aviso.style.cssText =
+    'position:fixed;top:10px;left:10px;color:#c14a3c;font:12px monospace;' +
+    'background:rgba(0,0,0,.6);padding:4px 8px;z-index:10;pointer-events:none;';
+  document.body.appendChild(aviso);
+}
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
