@@ -75,6 +75,25 @@ export function planetaParaToroide(
 }
 
 /**
+ * Anel do horizonte — o equador externo do tubo (phi = 0) dando a
+ * volta completa em theta. Não é o anel-guia abstrato do toroide
+ * (esse fica no raio R, sem nunca tocar a superfície) — é o círculo
+ * de raio R+r, z=0, que É a linha onde a superfície do donut cruza o
+ * plano do horizonte em qualquer ponto do zodíaco. Representa a
+ * pessoa em pé no centro, com o horizonte se estendendo 360° ao redor
+ * dela — dia acima (phi>0, rumo a Sofia/L4), noite abaixo (phi<0,
+ * rumo a Saklas/L5).
+ */
+export function anelHorizonte({ R = TORUS_R, r = TORUS_R_TUBE, segments = 128 } = {}) {
+  const pts = [];
+  for (let i = 0; i <= segments; i++) {
+    const theta = (i / segments) * Math.PI * 2;
+    pts.push(toroidalToCartesian(theta, 0, R, r));
+  }
+  return pts;
+}
+
+/**
  * Amostra pontos ao longo da SUPERFÍCIE do toroide entre dois theta
  * (caminho angular mais curto), interpolando phi entre os dois
  * extremos e adicionando uma leve "bolha" de phi no meio do trajeto

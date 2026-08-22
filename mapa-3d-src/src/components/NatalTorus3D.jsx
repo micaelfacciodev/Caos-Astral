@@ -24,6 +24,7 @@ import {
 import { calcularFlowMap } from '../lib/l4l5Distortion';
 import { AspectArc } from './AspectArc';
 import { PlanetNode } from './PlanetNode';
+import { Horizon } from './Horizon';
 
 function TorusMesh({ R, r }) {
   return (
@@ -57,9 +58,21 @@ export function NatalTorusScene({ chart, R = TORUS_R, r = TORUS_R_TUBE }) {
     return ascSignIdx * 30;
   }, [chart?.ascendente]);
 
+  // Meio do Céu real, usado pra calcular a altura acima/abaixo do
+  // horizonte (ver l4l5Distortion.js). Fallback documentado: se o
+  // mapa não trouxer meio_ceu (dado antigo ou ausente), aproxima por
+  // ascendente+270° — só correto pra latitude ~0, mas evita quebrar
+  // a cena; a camada de horizonte fica "aproximada" nesse caso, não
+  // some, já que o resto do produto sempre calcula o MC de verdade.
+  const meioCeu = useMemo(() => {
+    if (chart?.meio_ceu != null) return chart.meio_ceu;
+    if (chart?.ascendente != null) return norm360(chart.ascendente + 270);
+    return null;
+  }, [chart?.meio_ceu, chart?.ascendente]);
+
   const flowMap = useMemo(
-    () => calcularFlowMap(chart?.planetas ?? [], chart?.aspectos ?? []),
-    [chart?.planetas, chart?.aspectos]
+    () => calcularFlowMap(chart?.planetas ?? [], chart?.aspectos ?? [], meioCeu),
+    [chart?.planetas, chart?.aspectos, meioCeu]
   );
 
   // pontos convertidos, indexados por chave — usado tanto pros
@@ -76,6 +89,7 @@ export function NatalTorusScene({ chart, R = TORUS_R, r = TORUS_R_TUBE }) {
   return (
     <group>
       <TorusMesh R={R} r={r} />
+      <Horizon R={R} r={r} />
 
       {[...pontosPorChave.values()].map((ponto) => (
         <PlanetNode key={ponto.chave} ponto={ponto} />
