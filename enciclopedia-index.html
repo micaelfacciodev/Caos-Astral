@@ -1,174 +1,20 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<script>(function(){try{var t=localStorage.getItem('caosastral-theme');if(t==='light'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches))document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Enciclopédia dos Símbolos | Caos Astral</title>
-<link rel="icon" href="favicon.ico" sizes="any">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="description" content="Acervo de símbolos da Magia do Caos, astrologia e tradições esotéricas: origem histórica, significado e correspondências.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/supabase-config.js"></script>
-<style>
-  /* só o que é específico desta página (grid de cards, filtros, cadeado de tier pago);
-     cores e tipografia agora vêm de assets/style.css, nada de paleta própria aqui */
-  .filtros{ display:flex; gap:0.6rem; justify-content:center; flex-wrap:wrap; margin:0 0 40px; }
-  .filtros button{
-    background:var(--bg-panel); border:1px solid var(--line); color:var(--ink-dim);
-    padding:8px 16px; border-radius:999px; font-family:'IBM Plex Mono',monospace;
-    font-size:0.78rem; cursor:pointer; transition:border-color .15s ease, color .15s ease;
-  }
-  .filtros button:hover{ color:var(--ink); }
-  .filtros button.ativo{ border-color:var(--accent-bright); color:var(--accent-bright); }
-
-  .grid{
-    display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:1px;
-    background:var(--line); border:1px solid var(--line);
-  }
-  .card{
-    background:var(--bg); padding:22px 20px; text-decoration:none; color:var(--ink);
-    display:block; transition:background .2s ease;
-  }
-  .card:hover{ background:var(--bg-panel); }
-  .card .cat{ font-family:'IBM Plex Mono',monospace; font-size:0.68rem; color:var(--ink-faint); text-transform:uppercase; letter-spacing:0.06em; }
-  .card h3{ margin:8px 0 6px; font-size:1.05rem; }
-  .card p{ margin:0; font-size:0.85rem; color:var(--ink-dim); line-height:1.5; }
-  .cadeado{ float:right; font-size:0.9rem; color:var(--accent-bright); }
-  .card.bloqueado{ opacity:0.7; }
-
-  .cta-pago{
-    max-width:640px; margin:0 auto 40px; padding:20px 26px; text-align:center;
-    background:var(--bg-panel); border:1px solid var(--accent); border-radius:0;
-  }
-  .cta-pago p{ color:var(--ink-dim); font-size:0.92rem; margin:0; }
-  .cta-pago a{
-    display:inline-block; margin-top:12px; background:var(--accent-bright); color:var(--bg);
-    padding:9px 20px; text-decoration:none; font-family:'IBM Plex Mono',monospace;
-    font-size:0.8rem; letter-spacing:0.04em;
-  }
-  #carregando{ text-align:center; color:var(--ink-faint); padding:60px 0; font-family:'IBM Plex Mono',monospace; font-size:0.85rem; }
-</style>
+<meta http-equiv="refresh" content="0; url=enciclopedia">
+<link rel="canonical" href="enciclopedia">
+<title>Enciclopédia | Caos Astral</title>
+<script>location.replace('enciclopedia' + location.search);</script>
 </head>
 <body>
-<div id="space-bg" aria-hidden="true">
-  <div class="nebula"></div>
-  <div class="stars-static" id="stars-static"></div>
-  <canvas id="space-canvas"></canvas>
-</div>
-
-<header class="site-header" id="site-header"></header>
-
-<main>
-  <section class="page-hero">
-    <div class="wrap-narrow">
-      <p class="eyebrow center"><span class="glyph">✦</span> enciclopédia / acervo</p>
-      <h1>Enciclopédia dos Símbolos</h1>
-      <p class="sub">Origem histórica, significado e correspondências de cada símbolo, separando o que é evidência documentada do que é interpretação moderna.</p>
-    </div>
-  </section>
-
-  <section class="tight">
-    <div class="wrap">
-      <div class="cta-pago">
-        <p>Parte do acervo é aberta gratuitamente. O acervo completo (alquimia, hermetismo, cabala, runas, wicca e mais) faz parte dos planos pagos.</p>
-        <a href="planos">Ver planos</a>
-      </div>
-
-      <div class="filtros" id="filtros"></div>
-
-      <div id="carregando">carregando acervo…</div>
-      <div class="grid" id="grid" style="display:none;"></div>
-    </div>
-  </section>
-</main>
-
-<footer class="site-footer" id="site-footer"></footer>
-
-<script>
-  const SUPABASE_URL = window.CAOS_SUPABASE_URL;
-  const SUPABASE_ANON_KEY = window.CAOS_SUPABASE_KEY;
-
-  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  let entradas = [];
-  let categoriaAtiva = "";
-
-  async function carregar() {
-    // usa a view enciclopedia_indice_publico (0013_enciclopedia_simbolos.sql), que expõe
-    // metadados de TODOS os verbetes (inclusive pagos) sem vazar o conteúdo protegido,
-    // assim os cards pagos aparecem com cadeado em vez de sumir.
-    const { data, error } = await sb
-      .from("enciclopedia_indice_publico")
-      .select("slug, nome, categoria, tier, significado")
-      .order("categoria")
-      .order("nome");
-
-    document.getElementById("carregando").style.display = "none";
-
-    if (error) {
-      document.getElementById("grid").innerHTML = `<p>Erro ao carregar: ${error.message}</p>`;
-      document.getElementById("grid").style.display = "grid";
-      return;
-    }
-
-    entradas = data || [];
-    montarFiltros();
-    render();
-  }
-
-  function montarFiltros() {
-    const categorias = [...new Set(entradas.map(e => e.categoria).filter(Boolean))];
-    const container = document.getElementById("filtros");
-    container.innerHTML = `<button data-cat="" class="ativo">todas</button>` +
-      categorias.map(c => `<button data-cat="${c}">${c}</button>`).join("");
-
-    container.querySelectorAll("button").forEach(btn => {
-      btn.addEventListener("click", () => {
-        categoriaAtiva = btn.dataset.cat;
-        container.querySelectorAll("button").forEach(b => b.classList.remove("ativo"));
-        btn.classList.add("ativo");
-        render();
-      });
-    });
-  }
-
-  function render() {
-    const grid = document.getElementById("grid");
-    grid.style.display = "grid";
-    const filtradas = categoriaAtiva
-      ? entradas.filter(e => e.categoria === categoriaAtiva)
-      : entradas;
-
-    if (!filtradas.length) {
-      grid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:var(--ink-faint); padding:40px 0;">Nenhum símbolo cadastrado ainda.</p>`;
-      return;
-    }
-
-    grid.innerHTML = filtradas.map(e => `
-      <a class="card ${e.tier === 'pago' ? 'bloqueado' : ''}"
-         href="${e.tier === 'pago' ? 'planos' : 'enciclopedia-verbete?slug=' + e.slug}">
-        ${e.tier === 'pago' ? '<span class="cadeado">🔒</span>' : ''}
-        <div class="cat">${e.categoria || ''}</div>
-        <h3>${e.nome}</h3>
-        <p>${(e.significado || "").slice(0, 90)}${e.significado && e.significado.length > 90 ? "…" : ""}</p>
-      </a>
-    `).join("");
-  }
-
-  carregar();
-</script>
-
-<script src="assets/site-chrome.js" defer></script>
-<script src="assets/flash-decor.js" defer></script>
-<script src="assets/space-bg.js" defer></script>
-<script src="assets/theme-toggle.js" defer></script>
-<script src="assets/nav-menu.js" defer></script>
-<script src="assets/ceu-agora.js" defer></script>
+<!--
+  22/08: esta página foi fundida em enciclopedia.html (o acervo
+  dinâmico e a página estática de conceitos viraram uma coisa só,
+  com "conceito" como mais um filtro de categoria). Este arquivo
+  fica só como redirect pra quem tinha o link antigo salvo/indexado
+  — não apagar sem checar analytics/backlinks primeiro.
+-->
+<p><a href="enciclopedia">Ir para a Enciclopédia →</a></p>
 </body>
 </html>
