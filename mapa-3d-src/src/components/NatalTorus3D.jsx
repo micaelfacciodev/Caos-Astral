@@ -27,8 +27,18 @@ import { PlanetNode } from './PlanetNode';
 import { Horizon } from './Horizon';
 
 function TorusMesh({ R, r }) {
+  // SEM rotação no group: THREE.TorusGeometry já usa a mesma
+  // parametrização de toroidalToCartesian (x,y = anel maior em função
+  // de theta/u, z = deslocamento no tubo em função de phi/v). Uma
+  // rotação aqui desalinharia a malha visível (que ficaria com o
+  // "furo" apontando pra outro eixo) dos pontos calculados em
+  // PlanetNode/AspectArc/Horizon, que usam essas mesmas coordenadas
+  // cruas sem nenhuma rotação — foi exatamente esse desalinhamento
+  // que ficou visível quando o disco do horizonte (Horizon.jsx) foi
+  // desenhado no plano "certo" (z=0) e pareceu perpendicular ao
+  // toroide em vez de coincidir com o equador dele.
   return (
-    <group rotation={[Math.PI / 2, 0, 0]}>
+    <group>
       <mesh>
         <torusGeometry args={[R, r, 32, 96]} />
         <meshStandardMaterial
