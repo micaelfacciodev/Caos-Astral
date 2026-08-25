@@ -20,11 +20,10 @@
  * dropdown "Entrar" (Google + e-mail/senha via Supabase Auth, mesmas
  * credenciais/chamadas de ritual-de-entrada.html) com link "Criar
  * agora" pro ritual de entrada. Login bem-sucedido (Google ou
- * e-mail/senha) redireciona pro `dashboard` — não pro `kit` — porque o
- * dashboard é o hub e ainda funciona (fallback gracioso) mesmo com
- * compute-natal-chart/compute-daily-window fora do ar; o kit hoje trava
- * numa tela de erro morta quando o cálculo falha (ver claude.md,
- * pendência do compute-natal-chart).
+ * e-mail/senha) redireciona pro `kit` — o kit é o hub do ecossistema
+ * (mapa natal, janela do dia, grid de produtos, prévia do diário,
+ * tudo numa página só, ver kit.html). `dashboard` continua existindo
+ * à parte, só pra encerrar conta.
  *
  * Detecção de sessão é OTIMISTA: lê direto a chave que o supabase-js
  * já guarda em localStorage (sem carregar a lib nem validar com o
@@ -172,8 +171,8 @@
       '      <button type="button" class="btn btn-ghost mono" id="navAccountToggle" aria-expanded="false">' + label + ' <span class="nav-account-caret">▾</span></button>\n' +
       '      <div class="auth-dropdown" id="navAccountDropdown">\n' +
       '        <div class="auth-account-email">' + (email || label) + '</div>\n' +
-      '        <a href="dashboard" class="auth-account-link">Meu ecossistema</a>\n' +
-      '        <a href="kit" class="auth-account-link">Meu kit</a>\n' +
+      '        <a href="kit" class="auth-account-link">Meu ecossistema</a>\n' +
+      '        <a href="dashboard" class="auth-account-link">Minha conta</a>\n' +
       '        <button type="button" class="btn btn-ghost mono" id="navBtnSair" style="width:100%; margin-top:12px;">Sair</button>\n' +
       '      </div>\n' +
       '    </div>'
@@ -307,7 +306,7 @@
     document.getElementById('navBtnGoogle').addEventListener('click', function () {
       getAuthClient().then(function (sb) {
         // mesma pasta da página atual (preserva o base path, ex.: /Caos-Astral/),
-        // trocando só o arquivo final por dashboard — consistente com o
+        // trocando só o arquivo final por kit — consistente com o
         // e-mail/senha logo abaixo. NÃO confundir com o botão Google
         // de dentro de ritual-de-entrada.html, que é outro código e
         // continua voltando pra si mesmo de propósito (precisa terminar
@@ -315,7 +314,7 @@
         var dir = window.location.pathname.replace(/[^/]*$/, '');
         sb.auth.signInWithOAuth({
           provider: 'google',
-          options: { redirectTo: window.location.origin + dir + 'dashboard' },
+          options: { redirectTo: window.location.origin + dir + 'kit' },
         });
       });
     });
@@ -328,10 +327,8 @@
       getAuthClient().then(function (sb) {
         sb.auth.signInWithPassword({ email: email, password: senha }).then(function (res) {
           if (res.error) { showError('e-mail ou senha incorretos.'); return; }
-          // dashboard é o hub — funciona mesmo com compute-daily-window/
-          // compute-natal-chart fora do ar (mostra fallback gracioso em
-          // vez de travar numa tela de erro, como o kit faz hoje)
-          window.location.href = 'dashboard';
+          // kit é o hub do ecossistema (ver comentário no topo do arquivo)
+          window.location.href = 'kit';
         });
       });
     });
