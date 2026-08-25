@@ -13,6 +13,78 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
+<style>
+  .kit-dashboard{
+    display:grid;
+    grid-template-columns: 380px minmax(0,1fr);
+    gap:56px;
+    align-items:start;
+    margin-bottom:40px;
+  }
+  .kit-wheel-box{ width:100%; max-width:640px; margin:0 auto; }
+  #ressonancia-wheel-svg{ width:100%; height:auto; display:block; }
+
+  .kit-sidebar{
+    background:var(--bg-panel-2);
+    border:1px solid var(--line);
+    padding:16px 22px 8px;
+    position:sticky; top:24px;
+    max-height:calc(100vh - 48px);
+    overflow-y:auto;
+  }
+  .kit-sidebar .section-head{ margin-bottom:16px; }
+
+  .data-table{ width:100%; border-collapse:collapse; font-family:'IBM Plex Mono', monospace; font-size:0.78rem; }
+  .data-table th{ text-align:left; color:var(--ink-faint); font-weight:400; padding:8px 10px; border-bottom:1px solid var(--line-bright); text-transform:uppercase; letter-spacing:0.05em; font-size:0.66rem; position:sticky; top:0; background:var(--bg-panel-2); }
+  .data-table td{ padding:10px 10px; border-bottom:1px solid var(--line); color:var(--ink-dim); }
+  .data-table td.strong{ color:var(--ink); }
+  .data-table td.retro{ color:var(--accent); font-size:0.72rem; margin-left:6px; }
+
+  @media (max-width:860px){
+    .kit-dashboard{ grid-template-columns:1fr; gap:32px; }
+    .kit-sidebar{ position:static; max-height:none; }
+  }
+
+  .kit-empty-state, .kit-error-state{
+    max-width:520px; margin:0 auto 40px; padding:22px 24px; border:1px solid var(--line-bright);
+    background:var(--bg-panel-2); text-align:center; font-family:'IBM Plex Sans', sans-serif;
+  }
+  .kit-error-state{ border-color:var(--accent); }
+  .kit-loading-state{
+    max-width:520px; margin:0 auto 40px; text-align:center; font-family:'IBM Plex Mono', monospace;
+    font-size:0.85rem; color:var(--ink-faint);
+  }
+
+  .ress-form-box{ max-width:420px; margin:0 auto 32px; text-align:left; }
+  .ress-anteriores{
+    max-width:420px; margin:0 auto 28px; font-family:'IBM Plex Mono', monospace; font-size:0.78rem;
+  }
+  .ress-anteriores summary{ cursor:pointer; color:var(--ink-faint); text-transform:uppercase; letter-spacing:0.05em; font-size:0.7rem; margin-bottom:10px; }
+  .ress-anteriores ul{ list-style:none; padding:0; margin:8px 0 0; }
+  .ress-anteriores li{ padding:8px 0; border-bottom:1px solid var(--line); }
+  .ress-anteriores button{
+    background:none; border:none; color:var(--ink-dim); font-family:inherit; font-size:inherit;
+    cursor:pointer; text-align:left; padding:0; width:100%;
+  }
+  .ress-anteriores button:hover{ color:var(--ink); }
+
+  .ress-meta{
+    max-width:640px; margin:0 auto 20px; text-align:center; font-family:'IBM Plex Mono', monospace;
+    font-size:0.85rem; color:var(--ink-faint);
+  }
+  .ress-meta strong{ color:var(--ink); font-weight:500; }
+
+  .ress-aspectos{
+    max-width:640px; margin:0 auto 40px; display:grid; grid-template-columns:1fr 1fr; gap:28px;
+    font-family:'IBM Plex Mono', monospace; font-size:0.8rem;
+  }
+  .ress-aspectos h4{ font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-faint); margin-bottom:10px; font-weight:400; }
+  .ress-aspectos ul{ list-style:none; padding:0; margin:0; }
+  .ress-aspectos li{ padding:6px 0; border-bottom:1px solid var(--line); color:var(--ink-dim); }
+  @media (max-width:600px){ .ress-aspectos{ grid-template-columns:1fr; } }
+
+  .ress-section-title{ text-align:center; margin-bottom:20px; }
+</style>
 </head>
 <body>
 <div id="space-bg" aria-hidden="true">
@@ -32,18 +104,6 @@
     </div>
   </section>
 
-  <section class="tight">
-    <div class="wrap" style="max-width:420px;">
-      <div class="diagram-box" style="max-width:340px;">
-        <svg viewBox="0 0 300 300">
-          <circle cx="118" cy="150" r="95" fill="none" stroke="var(--ink-dim)" stroke-width="1"/>
-          <circle cx="182" cy="150" r="95" fill="none" stroke="var(--ink-dim)" stroke-width="1"/>
-          <path d="M150,72 A95,95 0 0 1 150,228 A95,95 0 0 1 150,72 Z" fill="var(--accent)" opacity="0.18" stroke="var(--accent-bright)" stroke-width="1"/>
-        </svg>
-      </div>
-    </div>
-  </section>
-
   <hr class="rule">
 
   <section class="bg-panel">
@@ -59,15 +119,511 @@
     </div>
   </section>
 
-  <!-- ENGINE: sinastria reaproveita o mesmo motor modular (planeta x casa x aspecto) usado no kit
-       individual, sobrepondo dois conjuntos de posições. O Terceiro requer cálculo de pontos médios
-       (composite chart), motor separado, mas usa o mesmo dicionário de interpretação de núcleo/
-       fome/máscara/território aplicado às posições compostas. -->
+  <hr class="rule">
+
+  <section class="tight">
+    <div class="wrap">
+
+      <!-- estados controlados pelo script no fim do arquivo -->
+      <div id="ress-loading" class="kit-loading-state" style="display:none;">Calculando a câmara de ressonância…</div>
+      <div id="ress-empty" class="kit-empty-state" style="display:none;">
+        Você ainda não abriu seu kit. <a href="ritual-de-entrada" class="link-out mono">Abrir agora →</a>
+      </div>
+      <div id="ress-error" class="kit-error-state" style="display:none;">
+        <span id="ress-error-msg">Não consegui calcular a sinastria agora.</span>
+        <div><button type="button" id="ress-retry" class="btn btn-ghost mono" style="margin-top:10px;">Voltar ao formulário</button></div>
+      </div>
+
+      <div id="ress-form-box" class="ress-form-box" style="display:none;">
+        <h2 style="margin-bottom:10px;">Dados de nascimento do parceiro</h2>
+        <p class="step-hint">✦ ainda não lemos o mapa de outra conta cadastrada — só dados manuais por enquanto.</p>
+        <div class="field"><label>Nome (opcional)</label><input type="text" id="ress-nome" placeholder="Nome do parceiro" autocomplete="off"></div>
+        <div class="field"><label>Data de nascimento</label><input type="date" id="ress-data"></div>
+        <div class="field"><label>Hora de nascimento</label><input type="time" id="ress-hora"></div>
+        <div class="field"><label>Cidade de nascimento</label><input type="text" id="ress-cidade" placeholder="Cidade, estado, país" autocomplete="off"></div>
+        <button type="button" id="ress-calcular" class="btn btn-solid mono">Abrir a câmara</button>
+
+        <details class="ress-anteriores" id="ress-anteriores-box" style="display:none;">
+          <summary>Leituras anteriores</summary>
+          <ul id="ress-anteriores-lista"></ul>
+        </details>
+      </div>
+
+      <div id="ress-content" style="display:none;">
+        <p class="ress-meta">
+          Sinastria com <strong id="ress-nome-atual">—</strong>
+        </p>
+
+        <div class="section-head ress-section-title">
+          <p class="eyebrow center"><span class="glyph">☰</span> câmara de ressonância</p>
+          <h2>Onde os dois kits se tocam</h2>
+        </div>
+        <div class="ress-aspectos">
+          <div><h4>Fricção</h4><ul id="ress-friccoes"></ul></div>
+          <div><h4>Corrente</h4><ul id="ress-correntes"></ul></div>
+        </div>
+
+        <hr class="rule">
+
+        <div class="section-head ress-section-title" style="margin-top:32px;">
+          <p class="eyebrow center"><span class="glyph">◐◑</span> o terceiro</p>
+          <h2>O mapa composto</h2>
+        </div>
+
+        <div class="kit-dashboard">
+          <aside class="kit-sidebar">
+            <div class="section-head" style="margin-bottom:20px;">
+              <p class="eyebrow"><span class="glyph">☰</span> dados do terceiro</p>
+            </div>
+            <table class="data-table">
+              <thead><tr><th>Peça</th><th>Signo</th><th>Território</th><th>Grau</th></tr></thead>
+              <tbody id="ress-data-body"></tbody>
+            </table>
+          </aside>
+
+          <div class="kit-wheel-box">
+            <svg viewBox="0 0 400 400" id="ressonancia-wheel-svg">
+              <circle cx="200" cy="200" r="182" fill="none" stroke="var(--line-bright)" stroke-width="1"/>
+              <circle cx="200" cy="200" r="155" fill="none" stroke="var(--line)" stroke-width="0.6"/>
+              <circle cx="200" cy="200" r="62" fill="none" stroke="var(--line)" stroke-width="0.6"/>
+            </svg>
+          </div>
+        </div>
+
+        <div style="text-align:center;margin-top:32px;">
+          <button type="button" id="ress-nova" class="btn btn-ghost mono">Nova leitura →</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
   <div class="wrap"><div class="gate-note">Resultado resumido é gratuito (corrente ou fricção predominante). Leitura completa, todos os territórios, todo o mapa de O Terceiro, é pagamento único, vendido sempre junto, nunca separado. <a href="planos" class="link-out mono" style="border:none;">Ver planos →</a></div></div>
 </main>
 
 <footer class="site-footer" id="site-footer"></footer>
+
+<!-- tz-lookup: acha o fuso IANA a partir de lat/long, pra calcular o
+     utc_offset histórico exato do nascimento do parceiro (mesmo
+     serviço/lógica do ritual de entrada) -->
+<script src="https://cdn.jsdelivr.net/npm/tz-lookup@6.1.25/tz.js"></script>
+<!-- SDK do Supabase (v2, build UMD) — expõe window.supabase.createClient -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="assets/supabase-config.js"></script>
+
+<script>
+// ============================================================
+// CAOS ASTRAL — ressonancia.html: sinastria + O Terceiro de verdade
+//
+// O que faz:
+// 1. Confere sessão. Sem sessão, estado vazio (precisa do próprio
+//    mapa natal já calculado — compute-synastry recusa sem isso).
+// 2. Mostra o formulário de dados de nascimento do parceiro (nome
+//    opcional, data, hora, cidade) — sinastria com conta cadastrada
+//    ainda não existe (pendência conhecida, ver claude.md seção 7).
+// 3. Geocodifica a cidade do parceiro via Nominatim e calcula o
+//    utc_offset histórico exato via tz-lookup (mesma lógica do ritual
+//    de entrada, replicada aqui porque é o parceiro, não o próprio
+//    usuário, quem está sendo geocodificado agora).
+// 4. Invoca `compute-synastry`. A resposta traz:
+//    - synastry_aspects: aspectos cruzados (Câmara de ressonância)
+//    - composite_chart: O Terceiro (ascendente numérico, planetas,
+//      aspectos internos) — reaproveita o mesmo motor de desenho de
+//      roda usado em kit.html/retorno.html.
+// 5. Mantém uma lista de leituras anteriores (synastry_readings do
+//    usuário), pra reabrir sem recalcular.
+// ============================================================
+(function () {
+  'use strict';
+
+  const SUPABASE_URL = window.CAOS_SUPABASE_URL;
+  const SUPABASE_KEY = window.CAOS_SUPABASE_KEY;
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const SIGN_NAMES = [
+    'áries', 'touro', 'gêmeos', 'câncer', 'leão', 'virgem',
+    'libra', 'escorpião', 'sagitário', 'capricórnio', 'aquário', 'peixes',
+  ];
+  const PIECE_LABELS = {
+    sun: 'Núcleo', moon: 'Fome', mercury: 'Mercúrio', venus: 'Vênus',
+    mars: 'Marte', jupiter: 'Júpiter', saturn: 'Saturno', uranus: 'Urano',
+    neptune: 'Netuno', pluto: 'Plutão', chiron: 'Cicatriz (Quíron)',
+    exilio: 'Exílio (Lilith Negra)', l4: 'L4 (Trojano Terra-Lua)', l5: 'L5 (Trojano Terra-Lua)',
+  };
+  const PLANET_ORDER = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter',
+    'saturn', 'uranus', 'neptune', 'pluto', 'chiron', 'exilio', 'l4', 'l5'];
+  const PLANET_GLYPHS = {
+    sun: '☉', moon: '☽', mercury: '☿', venus: '♀', mars: '♂',
+    jupiter: '♃', saturn: '♄', uranus: '♅', neptune: '♆', pluto: '♇',
+    chiron: '⚷', exilio: '⚸', l4: '◐', l5: '◑',
+  };
+  const SIGN_GLYPHS = ['♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏', '♐', '♑', '♒', '♓'];
+  const ASPECT_STYLE = {
+    square: { cor: '#c14a3c', largura: 1, traco: null },
+    opposition: { cor: '#c14a3c', largura: 1, traco: null },
+    trine: { cor: '#6ea36b', largura: 1, traco: null },
+    sextile: { cor: '#6ea36b', largura: 0.8, traco: null },
+    conjunction: { cor: 'var(--ink-faint)', largura: 0.6, traco: '2,2' },
+  };
+
+  function capitalize(s) { if (!s) return '—'; return s.charAt(0).toUpperCase() + s.slice(1); }
+  function norm360(x) { x = x % 360; if (x < 0) x += 360; return x; }
+
+  function signoEGrauDeLongitude(lonDeg) {
+    const lon = norm360(lonDeg);
+    const signIdx = Math.floor(lon / 30);
+    const lonInSign = lon - signIdx * 30;
+    const grau = Math.min(Math.max(Math.floor(lonInSign) + 1, 1), 30);
+    return { signo: SIGN_NAMES[signIdx], grau };
+  }
+
+  function showOnly(id) {
+    ['ress-loading', 'ress-empty', 'ress-error', 'ress-form-box', 'ress-content'].forEach((elId) => {
+      document.getElementById(elId).style.display = (elId === id) ? '' : 'none';
+    });
+  }
+
+  async function fetchHouseLabels() {
+    const map = new Map();
+    try {
+      const { data, error } = await sb.from('houses').select('numero, rotulo_caos');
+      if (error) throw error;
+      (data || []).forEach((h) => map.set(h.numero, h.rotulo_caos));
+    } catch (e) {
+      console.error('não consegui buscar rótulos de território:', e);
+    }
+    return map;
+  }
+
+  function territorioLabel(map, numero) {
+    return map.get(numero) || `Território ${numero}`;
+  }
+
+  function renderRow(label, signo, territorio, grau, retro) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="strong">${label}</td>
+      <td>${capitalize(signo)}</td>
+      <td>${territorio}</td>
+      <td>${grau}${retro ? ' <span class="retro" title="Eco (retrógrado)">R</span>' : ''}</td>
+    `;
+    return tr;
+  }
+
+  // --- geocodificação via Nominatim (mesmo serviço do ritual de entrada) ---
+  async function geocodeCidade(texto) {
+    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(texto)}`;
+    const r = await fetch(url, { headers: { 'Accept-Language': 'pt-BR' } });
+    if (!r.ok) throw new Error('Nominatim respondeu com erro.');
+    const data = await r.json();
+    if (!data || !data.length) throw new Error('não encontrei essa cidade — tente ser mais específico (ex: "cidade, estado, país").');
+    return { latitude: parseFloat(data[0].lat), longitude: parseFloat(data[0].lon) };
+  }
+
+  // --- offset UTC histórico exato pra data/hora/local do parceiro,
+  // mesma lógica usada no ritual de entrada (considera DST vigente na
+  // ÉPOCA do nascimento, não o de hoje) ---
+  function offsetParaData(tzName, ano, mes, dia, hora, min) {
+    const dataBase = new Date(Date.UTC(ano, mes - 1, dia, hora, min, 0));
+    const fmt = new Intl.DateTimeFormat('en-US', {
+      timeZone: tzName, hourCycle: 'h23',
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
+    });
+    const partes = {};
+    fmt.formatToParts(dataBase).forEach((p) => { partes[p.type] = p.value; });
+    const comoVistoNoFuso = Date.UTC(+partes.year, +partes.month - 1, +partes.day, +partes.hour, +partes.minute, +partes.second);
+    return (comoVistoNoFuso - dataBase.getTime()) / 3600000;
+  }
+
+  // ------------------------------------------------------------
+  // roda do mapa — mesmo motor de kit.html/retorno.html
+  // (buildWheelSVG), aplicado aqui em cima de `composite_chart`.
+  // ------------------------------------------------------------
+  const WHEEL_CX = 200, WHEEL_CY = 200;
+
+  function wheelXY(lonDeg, radius, rotationOffset) {
+    const screenLon = norm360(lonDeg - rotationOffset);
+    const phi = (180 - screenLon) * Math.PI / 180;
+    return { x: WHEEL_CX + radius * Math.cos(phi), y: WHEEL_CY + radius * Math.sin(phi) };
+  }
+
+  function buildWheelSVG(chart) {
+    const ascendente = chart.ascendente;
+    if (ascendente == null) return null;
+
+    const ascSignIdx = Math.floor(norm360(ascendente) / 30);
+    const rotationOffset = ascSignIdx * 30;
+
+    const R_OUTER = 182, R_SIGN_IN = 155, R_HOUSE_LABEL = 168;
+    const R_PLANET_A = 130, R_PLANET_B = 106, R_ASPECT = 62;
+
+    let svg = '';
+    svg += `<circle cx="${WHEEL_CX}" cy="${WHEEL_CY}" r="${R_OUTER}" fill="none" stroke="var(--line-bright)" stroke-width="1"/>`;
+    svg += `<circle cx="${WHEEL_CX}" cy="${WHEEL_CY}" r="${R_SIGN_IN}" fill="none" stroke="var(--line)" stroke-width="0.6"/>`;
+    svg += `<circle cx="${WHEEL_CX}" cy="${WHEEL_CY}" r="${R_ASPECT}" fill="none" stroke="var(--line)" stroke-width="0.6"/>`;
+
+    for (let h = 0; h < 12; h++) {
+      const lonSetor = rotationOffset + h * 30;
+      const p1 = wheelXY(lonSetor, 0, rotationOffset);
+      const p2 = wheelXY(lonSetor, R_SIGN_IN, rotationOffset);
+      const opacity = h === 0 ? '1' : '0.5';
+      svg += `<line x1="${p1.x.toFixed(1)}" y1="${p1.y.toFixed(1)}" x2="${p2.x.toFixed(1)}" y2="${p2.y.toFixed(1)}" stroke="var(--ink-dim)" stroke-width="${h === 0 ? 1 : 0.6}" opacity="${opacity}"/>`;
+
+      const signIdx = Math.floor(norm360(lonSetor) / 30);
+      const signMid = wheelXY(lonSetor + 15, (R_OUTER + R_SIGN_IN) / 2, rotationOffset);
+      svg += `<text x="${signMid.x.toFixed(1)}" y="${signMid.y.toFixed(1)}" font-family="IBM Plex Mono" font-size="13" fill="var(--ink-dim)" text-anchor="middle" dominant-baseline="middle">${SIGN_GLYPHS[signIdx]}</text>`;
+
+      const houseNumPos = wheelXY(lonSetor + 4, R_HOUSE_LABEL, rotationOffset);
+      svg += `<text x="${houseNumPos.x.toFixed(1)}" y="${houseNumPos.y.toFixed(1)}" font-family="IBM Plex Mono" font-size="8" fill="var(--ink-faint)" text-anchor="middle">${h + 1}</text>`;
+    }
+
+    const pontos = (chart.planetas || [])
+      .filter((p) => PLANET_GLYPHS[p.chave])
+      .slice()
+      .sort((a, b) => norm360(a.longitude) - norm360(b.longitude));
+
+    const posByChave = new Map();
+    let raioAnterior = R_PLANET_A;
+    let lonAnterior = null;
+    pontos.forEach((p) => {
+      const lon = norm360(p.longitude);
+      const raio = (lonAnterior != null && Math.abs(lon - lonAnterior) < 7) ? R_PLANET_B : R_PLANET_A;
+      posByChave.set(p.chave, wheelXY(lon, raio, rotationOffset));
+      raioAnterior = raio;
+      lonAnterior = lon;
+    });
+
+    (chart.aspectos || []).forEach((asp) => {
+      const style = ASPECT_STYLE[asp.aspecto];
+      if (!style) return;
+      const a = (chart.planetas || []).find((p) => p.chave === asp.planeta_a);
+      const b = (chart.planetas || []).find((p) => p.chave === asp.planeta_b);
+      if (!a || !b) return;
+      const p1 = wheelXY(a.longitude, R_ASPECT, rotationOffset);
+      const p2 = wheelXY(b.longitude, R_ASPECT, rotationOffset);
+      const dash = style.traco ? ` stroke-dasharray="${style.traco}"` : '';
+      svg += `<line x1="${p1.x.toFixed(1)}" y1="${p1.y.toFixed(1)}" x2="${p2.x.toFixed(1)}" y2="${p2.y.toFixed(1)}" stroke="${style.cor}" stroke-width="${style.largura}" opacity="0.55"${dash}/>`;
+    });
+
+    pontos.forEach((p) => {
+      const pos = posByChave.get(p.chave);
+      if (!pos) return;
+      const cor = (p.chave === 'chiron' || p.chave === 'exilio' || p.chave === 'l4' || p.chave === 'l5') ? 'var(--accent-bright)' : 'var(--ink)';
+      svg += `<text x="${pos.x.toFixed(1)}" y="${pos.y.toFixed(1)}" font-family="IBM Plex Mono" font-size="14" fill="${cor}" text-anchor="middle" dominant-baseline="middle">${PLANET_GLYPHS[p.chave]}</text>`;
+      if (p.retrogrado) {
+        svg += `<text x="${(pos.x + 9).toFixed(1)}" y="${(pos.y - 7).toFixed(1)}" font-family="IBM Plex Mono" font-size="7" fill="var(--accent)">r</text>`;
+      }
+    });
+
+    // O Terceiro não tem Meio do Céu calculado (composto só define
+    // ascendente por ponto médio) — só ASC/DESC ganham marcador aqui.
+    const angulos = [['ASC', ascendente], ['DESC', ascendente + 180]];
+    if (chart.meio_ceu != null) {
+      angulos.push(['MC', chart.meio_ceu], ['IC', chart.meio_ceu + 180]);
+    }
+    angulos.forEach(([label, lon]) => {
+      const pOuter = wheelXY(lon, R_OUTER, rotationOffset);
+      const pInner = wheelXY(lon, R_OUTER - 10, rotationOffset);
+      svg += `<line x1="${pOuter.x.toFixed(1)}" y1="${pOuter.y.toFixed(1)}" x2="${pInner.x.toFixed(1)}" y2="${pInner.y.toFixed(1)}" stroke="var(--accent)" stroke-width="1.4"/>`;
+      const pLabel = wheelXY(lon, R_OUTER + 10, rotationOffset);
+      svg += `<text x="${pLabel.x.toFixed(1)}" y="${pLabel.y.toFixed(1)}" font-family="IBM Plex Mono" font-size="8" fill="var(--accent)" text-anchor="middle">${label}</text>`;
+    });
+
+    return svg;
+  }
+
+  function renderWheel(chart) {
+    const svgEl = document.getElementById('ressonancia-wheel-svg');
+    const conteudo = buildWheelSVG(chart);
+    if (conteudo) svgEl.innerHTML = conteudo;
+  }
+
+  // classifica fricção/corrente pro resumo textual: usa o rótulo já
+  // decidido no servidor (rotulo_aspecto — vem de aspects.rotulo_caos
+  // pra quadratura/oposição/trígono/sextil, e da regra de temperamento
+  // benéfico+benéfico / malefico+malefico só pra conjunção, ver
+  // claude.md seção 5). Não reclassifica pelo lado do cliente.
+  function classificar(asp) {
+    if (asp.rotulo_aspecto === 'fricção' || asp.rotulo_aspecto === 'corrente') return asp.rotulo_aspecto;
+    return null;
+  }
+
+  function renderSinastria(synastryAspects, partnerNome) {
+    const friccoesEl = document.getElementById('ress-friccoes');
+    const correntesEl = document.getElementById('ress-correntes');
+    friccoesEl.innerHTML = '';
+    correntesEl.innerHTML = '';
+
+    const nomeParceiro = partnerNome || 'parceiro(a)';
+
+    (synastryAspects || []).forEach((asp) => {
+      const classe = classificar(asp);
+      if (!classe) return;
+      const labelMeu = PIECE_LABELS[asp.planeta_a] || asp.planeta_a;
+      const labelDele = PIECE_LABELS[asp.planeta_b] || asp.planeta_b;
+      const li = document.createElement('li');
+      li.textContent = `seu(sua) ${labelMeu} × ${nomeParceiro} ${labelDele}`;
+      (classe === 'fricção' ? friccoesEl : correntesEl).appendChild(li);
+    });
+
+    if (!friccoesEl.children.length) friccoesEl.innerHTML = '<li style="color:var(--ink-faint);">nenhuma no momento</li>';
+    if (!correntesEl.children.length) correntesEl.innerHTML = '<li style="color:var(--ink-faint);">nenhuma no momento</li>';
+  }
+
+  async function renderTerceiro(compositeChart) {
+    const chart = {
+      ascendente: compositeChart.ascendente,
+      meio_ceu: null,
+      planetas: compositeChart.planetas || [],
+      aspectos: compositeChart.aspectos || [],
+    };
+
+    renderWheel(chart);
+
+    const houseLabels = await fetchHouseLabels();
+    const tbody = document.getElementById('ress-data-body');
+    tbody.innerHTML = '';
+    const planetasByChave = new Map(chart.planetas.map((p) => [p.chave, p]));
+
+    const nucleo = planetasByChave.get('sun');
+    if (nucleo) {
+      tbody.appendChild(renderRow('Núcleo', nucleo.signo, territorioLabel(houseLabels, nucleo.casa), nucleo.grau_no_signo, false));
+    }
+
+    if (chart.ascendente != null) {
+      const { signo, grau } = signoEGrauDeLongitude(chart.ascendente);
+      tbody.appendChild(renderRow('Máscara (Ascendente)', signo, territorioLabel(houseLabels, 1), grau, false));
+    }
+
+    const fome = planetasByChave.get('moon');
+    if (fome) {
+      tbody.appendChild(renderRow('Fome', fome.signo, territorioLabel(houseLabels, fome.casa), fome.grau_no_signo, false));
+    }
+
+    PLANET_ORDER.filter((k) => k !== 'sun' && k !== 'moon').forEach((chave) => {
+      const p = planetasByChave.get(chave);
+      if (!p) return;
+      tbody.appendChild(renderRow(PIECE_LABELS[chave], p.signo, territorioLabel(houseLabels, p.casa), p.grau_no_signo, false));
+    });
+  }
+
+  async function renderLeitura(leitura) {
+    document.getElementById('ress-nome-atual').textContent = leitura.partner_nome || 'parceiro(a)';
+    renderSinastria(leitura.synastry_aspects, leitura.partner_nome);
+    await renderTerceiro(leitura.composite_chart || {});
+    showOnly('ress-content');
+  }
+
+  async function carregarAnteriores(userId) {
+    const box = document.getElementById('ress-anteriores-box');
+    const lista = document.getElementById('ress-anteriores-lista');
+    try {
+      const { data, error } = await sb
+        .from('synastry_readings')
+        .select('id, partner_nome, partner_cidade_nascimento, created_at')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(8);
+      if (error) throw error;
+      if (!data || !data.length) return;
+
+      lista.innerHTML = '';
+      data.forEach((row) => {
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        const dt = row.created_at ? new Date(row.created_at).toLocaleDateString('pt-BR') : '';
+        btn.textContent = `${row.partner_nome || 'parceiro(a)'} ${row.partner_cidade_nascimento ? '· ' + row.partner_cidade_nascimento : ''} — ${dt}`;
+        btn.addEventListener('click', () => abrirLeituraSalva(row.id));
+        li.appendChild(btn);
+        lista.appendChild(li);
+      });
+      box.style.display = '';
+    } catch (e) {
+      console.error('não consegui buscar leituras anteriores:', e);
+    }
+  }
+
+  async function abrirLeituraSalva(id) {
+    showOnly('ress-loading');
+    try {
+      const { data, error } = await sb.from('synastry_readings').select('*').eq('id', id).single();
+      if (error) throw error;
+      await renderLeitura(data);
+    } catch (e) {
+      console.error('erro ao abrir leitura salva:', e);
+      document.getElementById('ress-error-msg').textContent = 'Não consegui abrir essa leitura agora.';
+      showOnly('ress-error');
+    }
+  }
+
+  async function calcular({ nome, cidade, data, hora }) {
+    showOnly('ress-loading');
+    try {
+      const geo = await geocodeCidade(cidade);
+      const [ano, mes, dia] = data.split('-').map(Number);
+      const [horaN, minN] = hora.split(':').map(Number);
+
+      let utcOffset;
+      try {
+        const fusoIANA = tzlookup(geo.latitude, geo.longitude);
+        utcOffset = offsetParaData(fusoIANA, ano, mes, dia, horaN, minN);
+      } catch (e) {
+        console.error('tz-lookup falhou pro parceiro, caindo pro fuso do navegador como fallback:', e);
+        utcOffset = -(new Date().getTimezoneOffset() / 60);
+      }
+
+      const body = {
+        partner_nome: nome || null,
+        partner_cidade: cidade,
+        partner_data: data,
+        partner_hora: hora,
+        partner_utc_offset: utcOffset,
+        partner_latitude: geo.latitude,
+        partner_longitude: geo.longitude,
+      };
+
+      const { data: resp, error } = await sb.functions.invoke('compute-synastry', { body });
+      if (error) throw error;
+      if (resp && resp.error) throw new Error(resp.error);
+
+      await renderLeitura(resp.leitura);
+    } catch (e) {
+      console.error('erro ao calcular sinastria:', e);
+      const msg = (e && e.message) || '';
+      document.getElementById('ress-error-msg').textContent = msg.includes('mapa natal')
+        ? 'Você precisa abrir seu kit (mapa natal) antes de usar a Câmara de Ressonância.'
+        : (msg.includes('cidade') ? msg : 'Não consegui calcular a sinastria agora.');
+      showOnly('ress-error');
+    }
+  }
+
+  async function loadRessonancia() {
+    showOnly('ress-loading');
+
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) { showOnly('ress-empty'); return; }
+
+    showOnly('ress-form-box');
+    carregarAnteriores(session.user.id);
+  }
+
+  document.getElementById('ress-calcular').addEventListener('click', () => {
+    const nome = document.getElementById('ress-nome').value.trim();
+    const cidade = document.getElementById('ress-cidade').value.trim();
+    const data = document.getElementById('ress-data').value;
+    const hora = document.getElementById('ress-hora').value;
+    if (!cidade || !data || !hora) return;
+    calcular({ nome, cidade, data, hora });
+  });
+
+  document.getElementById('ress-retry').addEventListener('click', () => showOnly('ress-form-box'));
+  document.getElementById('ress-nova').addEventListener('click', () => showOnly('ress-form-box'));
+
+  loadRessonancia();
+})();
+</script>
+
 <script src="assets/site-chrome.js" defer></script>
 <script src="assets/flash-decor.js" defer></script>
 <script src="assets/space-bg.js" defer></script>

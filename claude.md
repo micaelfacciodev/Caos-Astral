@@ -165,8 +165,26 @@ motor astrológico; se precisar zerar isso também, apagar manualmente).
 - `profiles` — 1:1 com `auth.users`, criado automaticamente via trigger no primeiro login Google.
 - `natal_charts` — uma linha por usuário (upsert). ascendente, meio_ceu, planetas (jsonb), aspectos (jsonb).
 - `daily_readings` — uma linha por usuário por dia. `iching_convite_aceito` pro handoff com I Ching (seção 6).
-- `synastry_readings` — sinastria (câmara de ressonância). `composite_chart` jsonb é onde O Terceiro vive. **Tem Edge Function: `compute-synastry`** — só funciona com dados manuais do parceiro por enquanto (ver seção 5 e pendência de consentimento, seção 7).
-- `solar_returns` — retorno (revolução solar). `user_id`, `ano` (unique juntos), `data_exata`, `latitude`/`longitude`/`cidade` do ano em questão (não é a de nascimento). **Tem Edge Function: `compute-solar-return`.**
+- `synastry_readings` — sinastria (câmara de ressonância). Colunas reais
+  (confirmadas via `information_schema.columns`, 24/08): `id`, `user_id`,
+  `partner_nome`, `partner_data_nascimento`, `partner_hora_nascimento`,
+  `partner_cidade_nascimento`, `partner_latitude`, `partner_longitude`,
+  `partner_utc_offset`, `synastry_aspects` (jsonb — aspectos cruzados),
+  `composite_chart` (jsonb — O Terceiro vive aqui: `ascendente`,
+  `ascendente_signo`, `planetas`, `aspectos`), `created_at`. **Tem Edge
+  Function: `compute-synastry`** — só funciona com dados manuais do
+  parceiro por enquanto (ver seção 5 e pendência de consentimento, seção
+  7). RLS: só SELECT/INSERT (sem UPDATE — cada leitura é uma linha nova,
+  não upsert).
+- `solar_returns` — retorno (revolução solar). Colunas reais
+  (confirmadas via `information_schema.columns`, 24/08): `id`,
+  `user_id`, `ano` (unique juntos), `data_exata`, `latitude`,
+  `longitude`, `cidade` do ano em questão (não é a de nascimento),
+  `resultado` (jsonb — `ascendente`, `ascendente_signo`,
+  `ascendente_grau_simbolico`, `meio_ceu`, `meio_ceu_signo`, `planetas`,
+  `aspectos`, `computado_em`), `created_at`. **Tem Edge Function:
+  `compute-solar-return`.** RLS: SELECT/INSERT/UPDATE (upsert por
+  `user_id,ano`).
 - `intent_anchors` *(antiga `sigil_journal`, separada)* — a âncora de intenção em si. **Ainda não recebe gravação real do front** (gerador já existe, ver seção 9, mas não persiste ainda).
 - `diario_gnose` *(antiga `sigil_journal`, separada)* — registro livre de prática, com FK opcional pra `daily_readings` e pra `intent_anchors`.
 
@@ -392,6 +410,33 @@ embutidos:
       ler o mapa de outro usuário. Precisa de mecanismo de consentimento
       (ex: tabela de convites aceitos + policy adicional) antes de
       suportar `partner_user_id` de verdade.
+- [x] **🔴 RESOLVIDO (24/08, via Supabase MCP) — `compute-solar-return` e
+      `compute-synastry` gravavam em colunas inexistentes.** Achado ao
+      conectar o MCP do Supabase e comparar `information_schema.columns`
+      contra o `index.ts` real de cada function (não estava em nenhum
+      lugar do repo — só existiam no Dashboard). `solar_returns` real é
+      `id, user_id, ano, data_exata, latitude, longitude, cidade,
+      resultado (jsonb), created_at`; a function tentava gravar
+      `planetas`/`aspectos`/`computado_em` como colunas soltas, que não
+      existem — o upsert falhava com "column does not exist" e a leitura
+      nunca chegava a ser salva, mesmo com o cálculo em si correto (bug
+      silencioso pro usuário: parecia travado, mas o motor astronômico
+      sempre funcionou). Mesma causa em `synastry_readings` — tentava
+      gravar `partner_user_id`/`partner_manual`/`resultado`, nenhum dos
+      três existe; real é `partner_nome, partner_data_nascimento,
+      partner_hora_nascimento, partner_cidade_nascimento,
+      partner_latitude, partner_longitude, partner_utc_offset,
+      synastry_aspects, composite_chart`. As duas functions foram
+      reescritas pra gravar nas colunas reais (v6 de cada uma, ACTIVE) —
+      ver seção 4 pros nomes exatos agora. Aproveitado pra também
+      persistir `ascendente`/`meio_ceu` numéricos dentro de
+      `resultado` (solar_returns), que antes só existiam na resposta
+      HTTP e se perdiam ao reler o retorno salvo depois — necessário
+      pro front desenhar a roda do mapa com precisão real. `compute-
+      synastry` ganhou suporte a `partner_cidade` no body (coluna já
+      existia, function não aceitava o campo). Front-end (`retorno.html`,
+      `ressonancia.html`) reescrito na mesma sessão pra consumir as
+      duas functions de ponta a ponta.
 - [ ] Migrar rótulos hardcoded de `compute-natal-chart` pra buscar do
       banco, se algo vier a depender de rótulo de planeta/aspecto ali
       (hoje só grava a chave do aspecto, não é urgente).
@@ -400,9 +445,16 @@ embutidos:
 - [ ] Confirmar entrada de "Deriva" no glossário oficial — ferramenta já
       existe no front (seção 9), mas não está descrita no
       `glossario-caos-astral.md` ainda.
-- [ ] UI do front: campo de "localização do ano" em `/retorno`, formulário
-      de nascimento do parceiro em `/ressonancia`, persistência real da
-      Âncora de Intenção (ver seção 2).
+- [x] **RESOLVIDO (24/08)** — UI do front: campo de "localização do ano"
+      em `/retorno` (com Nominatim) e formulário de nascimento do
+      parceiro em `/ressonancia` (Nominatim + tz-lookup, mesmo padrão do
+      ritual de entrada) implementados e ligados às Edge Functions
+      reais. Ambas as páginas agora: checam sessão, mostram estado vazio/
+      erro/formulário/resultado, desenham a roda do mapa (mesmo motor de
+      `kit.html`) e uma tabela de dados. `/ressonancia` também lista
+      leituras anteriores (`synastry_readings` do usuário) pra reabrir
+      sem recalcular. Persistência real da Âncora de Intenção continua
+      pendente (não fazia parte deste trabalho).
 - [ ] **Itens de arquivo do front**: `caos-astral-landing.html` e
       `raizes-simbolos-sabianos.html` já foram removidos (ver seção 9).
       Ainda em aberto: destino de `oraculo.html` caso tenha ficado
