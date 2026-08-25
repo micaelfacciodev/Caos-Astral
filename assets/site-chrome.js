@@ -13,17 +13,17 @@
  * — isso é exatamente o que esse arquivo existe pra evitar (menu
  * divergindo por página, um por agente que passou por ali).
  *
- * CTA do header — três estados. (1) Override manual (dashboard logado,
+ * CTA do header — três estados. (1) Override manual (kit logado,
  * admin) -> CTA simples de sempre, sem checar nada. (2) Sem override +
  * sessão salva no navegador -> mostra o e-mail com um menu de conta
- * (Meu ecossistema / Meu kit / Sair). (3) Sem override + sem sessão ->
- * dropdown "Entrar" (Google + e-mail/senha via Supabase Auth, mesmas
- * credenciais/chamadas de ritual-de-entrada.html) com link "Criar
- * agora" pro ritual de entrada. Login bem-sucedido (Google ou
- * e-mail/senha) redireciona pro `kit` — o kit é o hub do ecossistema
+ * (Meu kit / Sair). (3) Sem override + sem sessão -> dropdown "Entrar"
+ * (Google + e-mail/senha via Supabase Auth, mesmas credenciais/
+ * chamadas de ritual-de-entrada.html) com link "Criar agora" pro
+ * ritual de entrada. Login bem-sucedido (Google ou e-mail/senha)
+ * redireciona pro `kit` — desde 25/08 é o hub único do ecossistema
  * (mapa natal, janela do dia, grid de produtos, prévia do diário,
- * tudo numa página só, ver kit.html). `dashboard` continua existindo
- * à parte, só pra encerrar conta.
+ * encerrar conta, tudo numa página só, ver kit.html). dashboard.html
+ * foi apagado nessa data (nunca teve nada indexado).
  *
  * Detecção de sessão é OTIMISTA: lê direto a chave que o supabase-js
  * já guarda em localStorage (sem carregar a lib nem validar com o
@@ -171,8 +171,7 @@
       '      <button type="button" class="btn btn-ghost mono" id="navAccountToggle" aria-expanded="false">' + label + ' <span class="nav-account-caret">▾</span></button>\n' +
       '      <div class="auth-dropdown" id="navAccountDropdown">\n' +
       '        <div class="auth-account-email">' + (email || label) + '</div>\n' +
-      '        <a href="kit" class="auth-account-link">Meu ecossistema</a>\n' +
-      '        <a href="dashboard" class="auth-account-link">Minha conta</a>\n' +
+      '        <a href="kit" class="auth-account-link">Meu kit</a>\n' +
       '        <button type="button" class="btn btn-ghost mono" id="navBtnSair" style="width:100%; margin-top:12px;">Sair</button>\n' +
       '      </div>\n' +
       '    </div>'

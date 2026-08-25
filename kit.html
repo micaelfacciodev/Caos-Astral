@@ -15,17 +15,15 @@
 <link rel="stylesheet" href="assets/style.css">
 <style>
   /* ============================================================
-     O KIT — agora é o dashboard do ecossistema inteiro, não só o
-     mapa individual. Estrutura: sidebar fixa à esquerda (navegação
-     entre todos os produtos, colapsável, persistida em localStorage)
-     + coluna principal com Janela do dia, mapa natal, vocabulário,
-     grid de produtos e prévia do diário — o que antes vivia
-     espalhado entre kit.html e dashboard.html.
+     O KIT — o dashboard do ecossistema inteiro, não só o mapa
+     individual. Estrutura: sidebar fixa à esquerda (navegação entre
+     todos os produtos, colapsável, persistida em localStorage) +
+     coluna principal com Janela do dia, mapa natal, vocabulário, grid
+     de produtos, prévia do diário e encerrar conta — o que antes
+     vivia espalhado entre kit.html e dashboard.html.
 
-     dashboard.html continua existindo à parte só pra conta (encerrar
-     conta é uma ação rara e sensível, não precisa competir por
-     espaço aqui) — o link "Minha conta" no rodapé da sidebar leva
-     pra lá.
+     dashboard.html foi apagado em 25/08 (absorvido por completo aqui,
+     nunca teve nada indexado — seguro remover sem deixar stub).
      ============================================================ */
 
   /* header do site é fixed, ~92px de altura (72px min-height do
@@ -176,6 +174,23 @@
   .jp-row .jp-tag{ display:inline-block; margin-left:10px; color:var(--accent-bright); font-family:'IBM Plex Mono', monospace; font-size:0.72rem; }
   .jp-row p{ margin-top:6px; color:var(--ink-dim); font-size:0.92rem; }
   .journal-empty{ color:var(--ink-faint); font-style:italic; font-size:0.92rem; }
+
+  /* ---- encerrar conta (portado de dashboard.html, apagado em 25/08) ---- */
+  .danger-panel{ border:1px solid var(--line); padding:30px 36px; }
+  .danger-panel h3{ font-size:1rem; color:var(--ink); margin-bottom:8px; }
+  .danger-panel p{ font-size:0.9rem; color:var(--ink-dim); margin-bottom:18px; max-width:560px; }
+  .danger-panel .field{ max-width:360px; }
+  .danger-btn{
+    background:transparent; border:1px solid var(--accent-bright); color:var(--accent-bright);
+    font-family:'IBM Plex Mono', monospace; font-size:0.85rem; padding:12px 22px; cursor:pointer;
+    transition:background .2s ease, color .2s ease;
+  }
+  .danger-btn:hover{ background:var(--accent-bright); color:var(--bg); }
+  .danger-btn:disabled{ opacity:0.4; cursor:not-allowed; }
+  .danger-btn:disabled:hover{ background:transparent; color:var(--accent-bright); }
+  .danger-msg{ font-family:'IBM Plex Mono', monospace; font-size:0.8rem; margin-top:14px; }
+  .danger-msg.err{ color:var(--accent-bright); }
+  .danger-msg.ok{ color:var(--ink-dim); }
 </style>
 </head>
 <body>
@@ -222,7 +237,7 @@
     </div>
 
     <div class="dash-sidebar-footer">
-      <a href="dashboard" class="dash-nav-link" title="Minha conta"><span class="dash-nav-glyph">⚙</span><span class="dash-nav-text">Minha conta</span></a>
+      <a href="#minha-conta" class="dash-nav-link" title="Minha conta"><span class="dash-nav-glyph">⚙</span><span class="dash-nav-text">Minha conta</span></a>
     </div>
   </aside>
 
@@ -434,6 +449,29 @@
       </section>
 
       <div class="wrap"><div class="gate-note">Este produto é gratuito, sempre, mapa completo calculado, Quíron e Exílio inclusos. Leitura expandida de todos os territórios, frições e correntes fica na assinatura. <a href="planos" class="link-out mono" style="border:none;">Ver planos →</a></div></div>
+
+      <hr class="rule">
+
+      <!-- ENGINE: seção abaixo chama a Edge Function `delete-account` (ver
+           supabase/functions/delete-account/index.ts), atende LGPD art. 18, VI
+           (eliminação). Exige digitar "APAGAR MINHA CONTA" antes de habilitar
+           o botão, pra evitar exclusão acidental. Portado de
+           dashboard.html (apagado em 25/08, absorvido por completo
+           aqui). -->
+      <section class="tight" id="minha-conta">
+        <div class="wrap-narrow">
+          <div class="danger-panel">
+            <h3>Encerrar minha conta</h3>
+            <p>Isso apaga sua conta e todos os dados associados (Kit, Diário, Âncoras, consultas do Oráculo) de forma permanente. Não tem como desfazer. Se quiser só remover uma entrada específica do Diário, faça isso direto na página do <a href="diario" style="color:var(--ink); border-bottom:1px solid var(--line-bright);">Diário</a>, não precisa apagar a conta inteira.</p>
+            <div class="field">
+              <label>Digite "APAGAR MINHA CONTA" pra confirmar</label>
+              <input type="text" id="inpConfirmaExclusao" autocomplete="off" placeholder="APAGAR MINHA CONTA">
+            </div>
+            <button class="danger-btn" id="btnExcluirConta" disabled>Excluir minha conta permanentemente</button>
+            <div class="danger-msg" id="msgExclusao"></div>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 </div>
@@ -895,6 +933,48 @@
       collapsed = !collapsed;
       apply(collapsed);
       try { localStorage.setItem('caosAstralDashSidebarCollapsed', collapsed ? '1' : '0'); } catch (e) { /* ignora */ }
+    });
+  })();
+
+  // --- encerrar conta (portado de dashboard.html) — reaproveita o
+  // client `sb` já criado no topo desta IIFE, mesma chave anon/RLS ---
+  (function initExclusaoConta() {
+    const inpConfirma = document.getElementById('inpConfirmaExclusao');
+    const btnExcluir = document.getElementById('btnExcluirConta');
+    const msgExclusao = document.getElementById('msgExclusao');
+    if (!inpConfirma || !btnExcluir || !msgExclusao) return;
+
+    inpConfirma.addEventListener('input', () => {
+      btnExcluir.disabled = inpConfirma.value.trim() !== 'APAGAR MINHA CONTA';
+    });
+
+    btnExcluir.addEventListener('click', async () => {
+      btnExcluir.disabled = true;
+      msgExclusao.textContent = 'Apagando...';
+      msgExclusao.className = 'danger-msg';
+
+      const { data: { session } } = await sb.auth.getSession();
+      if (!session) {
+        msgExclusao.textContent = 'Sessão não encontrada. Faça login de novo antes de tentar.';
+        msgExclusao.className = 'danger-msg err';
+        return;
+      }
+
+      const { data, error } = await sb.functions.invoke('delete-account', {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+
+      if (error || data?.error) {
+        msgExclusao.textContent = 'Não deu pra apagar agora: ' + (error?.message || data?.error) + '. Tente de novo ou peça ajuda por e-mail.';
+        msgExclusao.className = 'danger-msg err';
+        btnExcluir.disabled = false;
+        return;
+      }
+
+      msgExclusao.textContent = 'Conta apagada. Redirecionando...';
+      msgExclusao.className = 'danger-msg ok';
+      await sb.auth.signOut();
+      setTimeout(() => { window.location.href = 'index'; }, 1500);
     });
   })();
 
