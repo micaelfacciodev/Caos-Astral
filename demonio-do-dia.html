@@ -46,7 +46,7 @@
     background:var(--bg-panel-2); border:1px solid var(--line);
     padding:14px; margin:0 0 8px; text-align:center;
   }
-  .dd-fig svg{ display:block; width:100%; max-width:270px; height:auto; margin:0 auto; cursor:pointer; touch-action:manipulation; }
+  .dd-fig svg{ display:block; width:100%; max-width:340px; height:auto; margin:0 auto; cursor:pointer; touch-action:manipulation; }
   .dd-dica{ color:var(--ink-faint); font-size:0.82rem; margin:0 0 32px; }
   .dd-ondas{ background:var(--bg-panel-2); border:1px solid var(--line); padding:14px 16px; margin:0 0 14px; }
   .dd-ondas svg{ display:block; width:100%; height:auto; }
@@ -99,13 +99,12 @@
       </div>
 
       <div class="dd-fig">
-        <svg id="dd-svg" viewBox="0 0 300 620" role="img" aria-label="Figura humana com um ponto para cada demônio da lista. Toque numa região para ver o demônio mais próximo.">
-          <g id="dd-corpo-o"></g>
-          <g id="dd-corpo-f"></g>
+        <svg id="dd-svg" viewBox="0 0 700 1258" role="img" aria-label="Gravura anatômica de um corpo humano com um ponto para cada demônio da lista. Toque numa região para ver o demônio mais próximo.">
+          <image id="dd-corpo" x="0" y="0" width="700" height="1258" href="assets/corpo-vesalius.webp" opacity="0.7"></image>
           <g id="dd-marcas"></g>
         </svg>
       </div>
-      <p class="dd-dica">Toque numa região do corpo para ver o demônio mais próximo. O contorno marca o demônio de hoje.</p>
+      <p class="dd-dica">Toque numa região do corpo para ver o demônio mais próximo. O contorno tracejado marca o demônio de hoje. <span id="dd-credito"></span></p>
 
       <div class="prose">
         <h2>Ondas de hoje</h2>
@@ -119,6 +118,7 @@
         <p>O Apócrifo de João é um texto gnóstico do século II. Ele conta que Yaldabaoth, também chamado Saklas, e os arcontes sob seu comando modelaram o corpo de Adão membro por membro, e nomeia um poder para cada parte, da cabeça aos pés.</p>
         <p>A lista usada aqui tem 72 entradas. Duas perderam o nome numa lacuna do manuscrito e algumas leituras são incertas, o que aparece marcado em cada card.</p>
         <p>O demônio do dia sai de uma correspondência do Caos Astral: cada entrada ocupa 5° da eclíptica (72 vezes 5° dão 360°), e vale a entrada da faixa em que o Sol está. O texto não liga esses nomes a datas nem a signos. A correspondência é uma decisão de design, escolhida por utilidade.</p>
+        <p>A Goécia (Ars Goetia, primeira parte do Lemegeton, um grimório do século XVII) também traz 72 nomes, mas é outra lista, sem relação com o Apócrifo de João. O número coincide e as entradas não. A divisão em faixas de 5° é a mesma que ocultistas dos séculos XIX e XX aplicaram aos espíritos da Goécia e aos 72 anjos do Shem ha-Mephorash. Aqui ela serve a uma razão prática: 72 vezes 5° dão 360°.</p>
         <p>O gatilho é escrita autoral. Descreve onde a atenção costuma se prender quando aquela parte do corpo está em foco. Funciona como ferramenta de leitura, e o que fazer com ele fica com quem lê.</p>
 
         <h2>Ver no texto</h2>
@@ -174,53 +174,53 @@
   }
 
   // ---- figura ----
-  var OUT = [], FIL = [];
-  function line(d, w) {
-    OUT.push('<path d="' + d + '" style="fill:none;stroke:var(--line-bright);stroke-width:' + (w + 2) + '" stroke-linecap="round" stroke-linejoin="round"/>');
-    FIL.push('<path d="' + d + '" style="fill:none;stroke:var(--bg-panel);stroke-width:' + w + '" stroke-linecap="round" stroke-linejoin="round"/>');
+  function setupFigure() {
+    var f = DATA.figura;
+    $('dd-svg').setAttribute('viewBox', '0 0 ' + f.largura + ' ' + f.altura);
+    var im = $('dd-corpo');
+    im.setAttribute('href', f.imagem);
+    im.setAttribute('width', f.largura);
+    im.setAttribute('height', f.altura);
+    $('dd-credito').textContent = f.credito;
   }
-  function shape(t, a) {
-    OUT.push('<' + t + ' ' + a + ' style="fill:var(--line-bright);stroke:var(--line-bright);stroke-width:2" stroke-linejoin="round"/>');
-    FIL.push('<' + t + ' ' + a + ' style="fill:var(--bg-panel);stroke:none"/>');
-  }
-  shape('ellipse', 'cx="150" cy="50" rx="30" ry="38"');
-  line('M150 84L150 116', 26);
-  shape('polygon', 'points="100,116 200,116 208,190 196,260 192,300 200,332 100,332 108,300 104,260 92,190"');
-  line('M102 128L72 208', 22); line('M72 208L46 296', 18);
-  line('M198 128L228 208', 22); line('M228 208L254 296', 18);
-  shape('ellipse', 'cx="44" cy="313" rx="11" ry="17"'); shape('ellipse', 'cx="256" cy="313" rx="11" ry="17"');
-  line('M124 332L121 438', 44); line('M176 332L179 438', 44);
-  line('M121 438L117 562', 30); line('M179 438L183 562', 30);
-  shape('ellipse', 'cx="112" cy="584" rx="18" ry="12"'); shape('ellipse', 'cx="188" cy="584" rx="18" ry="12"');
-  $('dd-corpo-o').innerHTML = OUT.join('');
-  $('dd-corpo-f').innerHTML = FIL.join('');
 
   function renderFigure() {
+    var f = DATA.figura, W = f.largura, H = f.altura, k = W / 300;
     var d = DATA.demonios, s = d[state.sel], t = d[state.hoje], h = '';
+    function n1(v) { return v.toFixed(1); }
     d.forEach(function (x) {
       x.pts.forEach(function (p) {
-        h += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="2.2" style="fill:var(--ink-faint)"/>';
+        h += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + n1(4 * k) + '" style="fill:var(--bg-panel-2);opacity:0.85"/>' +
+             '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + n1(2.4 * k) + '" style="fill:var(--ink)"/>';
       });
     });
     if (t !== s) {
       t.pts.forEach(function (p) {
-        h += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="6" style="fill:none;stroke:var(--ink-dim);stroke-width:1.5"/>';
+        h += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + n1(7 * k) + '" style="fill:none;stroke:var(--ink);stroke-width:' + n1(1.5 * k) + ';stroke-dasharray:' + n1(3 * k) + ' ' + n1(3 * k) + '"/>';
       });
     }
     if (s.sistemico) {
-      h += '<rect x="90" y="8" width="120" height="590" rx="14" style="fill:none;stroke:var(--accent-bright);stroke-width:2;stroke-dasharray:5 4"/>';
+      h += '<rect x="' + n1(W * 0.04) + '" y="8" width="' + n1(W * 0.92) + '" height="' + (H - 16) + '" rx="' + n1(10 * k) + '" style="fill:none;stroke:var(--accent-bright);stroke-width:' + n1(2 * k) + ';stroke-dasharray:' + n1(6 * k) + ' ' + n1(5 * k) + '"/>';
     } else if (s.pts.length) {
-      if (s.n === 48) h += '<path d="M150 130L150 250" style="fill:none;stroke:var(--accent-bright);stroke-width:3"/>';
+      if (s.n === 48) {
+        h += '<path d="M' + s.pts.map(function (p) { return p[0] + ' ' + p[1]; }).join('L') + '" style="fill:none;stroke:var(--accent-bright);stroke-width:' + n1(3 * k) + '"/>';
+      }
       s.pts.forEach(function (p) {
-        h += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="10" style="fill:none;stroke:var(--accent-bright);stroke-width:1.5"/>' +
-             '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="5" style="fill:var(--accent-bright)"/>';
+        h += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + n1(10 * k) + '" style="fill:var(--bg-panel-2);opacity:0.6;stroke:var(--accent-bright);stroke-width:' + n1(1.5 * k) + '"/>' +
+             '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + n1(5 * k) + '" style="fill:var(--accent-bright)"/>';
       });
+      var nm = s.nome || 'nome perdido', fs = 12 * k, fs2 = 11 * k, pad = 13 * k;
+      var w = Math.max(nm.length * fs * 0.6, s.parte.length * fs2 * 0.58);
       var x = s.pts[0][0], y = s.pts[0][1], an, tx;
-      if (x < 150) { if (x >= 95) { an = 'end'; tx = x - 13; } else { an = 'start'; tx = x + 13; } }
-      else { if (x <= 205) { an = 'start'; tx = x + 13; } else { an = 'end'; tx = x - 13; } }
-      var halo = 'paint-order:stroke;stroke:var(--bg-panel-2);stroke-width:4;stroke-linejoin:round';
-      h += '<text x="' + tx + '" y="' + (y - 1) + '" text-anchor="' + an + '" style="font-size:13px;font-weight:500;fill:var(--ink);' + halo + '">' + esc(s.nome || 'nome perdido') + '</text>' +
-           '<text x="' + tx + '" y="' + (y + 13) + '" text-anchor="' + an + '" style="font-size:12px;fill:var(--ink-dim);' + halo + '">' + esc(s.parte) + '</text>';
+      if (x < W / 2) { if (x - pad >= w) { an = 'end'; tx = x - pad; } else { an = 'start'; tx = x + pad; } }
+      else { if (x + pad + w <= W) { an = 'start'; tx = x + pad; } else { an = 'end'; tx = x - pad; } }
+      var yb = Math.min(Math.max(y, fs + 6), H - 13 * k - 8);
+      var halo = 'fill:none;stroke:var(--bg-panel-2);stroke-width:' + n1(4 * k) + ';stroke-linejoin:round';
+      function txt(yy, size, weight, fill, extra, str) {
+        return '<text x="' + n1(tx) + '" y="' + n1(yy) + '" text-anchor="' + an + '" style="font-size:' + n1(size) + 'px;font-weight:' + weight + ';' + extra + '">' + esc(str) + '</text>';
+      }
+      h += txt(yb, fs, 500, '', halo, nm) + txt(yb + 13 * k, fs2, 400, '', halo, s.parte) +
+           txt(yb, fs, 500, '', 'fill:var(--ink)', nm) + txt(yb + 13 * k, fs2, 400, '', 'fill:var(--ink-dim)', s.parte);
     }
     $('dd-marcas').innerHTML = h;
   }
@@ -284,7 +284,7 @@
     $('dd-hoje').addEventListener('click', function () { select(state.hoje); });
     $('dd-svg').addEventListener('click', function (e) {
       var r = $('dd-svg').getBoundingClientRect();
-      var px = (e.clientX - r.left) / r.width * 300, py = (e.clientY - r.top) / r.height * 620;
+      var px = (e.clientX - r.left) / r.width * DATA.figura.largura, py = (e.clientY - r.top) / r.height * DATA.figura.altura;
       var best = -1, bd = Infinity;
       DATA.demonios.forEach(function (d, i) {
         d.pts.forEach(function (p) {
@@ -310,7 +310,7 @@
     state.sol = eclon('Sun', now);
     state.hoje = Math.min(71, Math.floor(state.sol / DATA.correspondencia.graus_por_demonio));
     state.sel = state.hoje;
-    renderCard(); renderFigure(); renderWaves(now); bind();
+    setupFigure(); renderCard(); renderFigure(); renderWaves(now); bind();
   }).catch(falha);
 })();
 </script>

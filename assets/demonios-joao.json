@@ -12,6 +12,12 @@
   "graus_por_demonio": 5,
   "regra": "indice = floor(longitude eclíptica geocêntrica do Sol / 5); demônio = lista[indice]"
  },
+ "figura": {
+  "imagem": "assets/corpo-vesalius.webp",
+  "largura": 700,
+  "altura": 1258,
+  "credito": "Gravura do De humani corporis fabrica, de Andreas Vesalius (1543), domínio público. O arquivo é uma versão em traço claro sobre fundo transparente, gerada a partir da imagem original."
+ },
  "elementos": [
   "Fogo",
   "Terra",
@@ -48,8 +54,8 @@
    "sistemico": false,
    "pts": [
     [
-     150,
-     22
+     345,
+     20
     ]
    ],
    "gatilho": "quem quer te empurrar decisões e ideias prontas"
@@ -62,8 +68,8 @@
    "sistemico": false,
    "pts": [
     [
-     150,
-     36
+     350,
+     55
     ]
    ],
    "gatilho": "a mente repetindo o mesmo pensamento"
@@ -76,8 +82,8 @@
    "sistemico": false,
    "pts": [
     [
-     137,
-     48
+     315,
+     85
     ]
    ],
    "gatilho": "o que você julga na primeira olhada"
@@ -90,8 +96,8 @@
    "sistemico": false,
    "pts": [
     [
-     163,
-     48
+     366,
+     93
     ]
    ],
    "gatilho": "a cena que parece pior do que é"
@@ -104,8 +110,8 @@
    "sistemico": false,
    "pts": [
     [
-     118,
-     54
+     275,
+     108
     ]
    ],
    "gatilho": "o comentário dito sem cuidado"
@@ -118,8 +124,8 @@
    "sistemico": false,
    "pts": [
     [
-     182,
-     54
+     393,
+     110
     ]
    ],
    "gatilho": "a crítica que chega de passagem"
@@ -132,8 +138,8 @@
    "sistemico": false,
    "pts": [
     [
-     150,
-     58
+     308,
+     118
     ]
    ],
    "gatilho": "o palpite ruim que ainda não virou fato"
@@ -146,8 +152,8 @@
    "sistemico": false,
    "pts": [
     [
-     150,
-     71
+     312,
+     148
     ]
    ],
    "gatilho": "a palavra que escapa antes da hora, sua ou dos outros"
@@ -160,8 +166,8 @@
    "sistemico": false,
    "pts": [
     [
-     150,
-     77
+     324,
+     142
     ]
    ],
    "gatilho": "a vontade de morder a resposta"
@@ -174,12 +180,12 @@
    "sistemico": false,
    "pts": [
     [
-     141,
-     78
+     338,
+     152
     ],
     [
-     159,
-     78
+     358,
+     144
     ]
    ],
    "gatilho": "o que precisa ser mastigado devagar"
@@ -192,12 +198,12 @@
    "sistemico": false,
    "pts": [
     [
-     144,
-     85
+     325,
+     170
     ],
     [
-     156,
-     85
+     345,
+     168
     ]
    ],
    "gatilho": "o que você engole calado"
@@ -210,8 +216,8 @@
    "sistemico": false,
    "pts": [
     [
-     150,
-     88
+     335,
+     160
     ]
    ],
    "gatilho": "o engasgo no meio da frase"
@@ -224,8 +230,8 @@
    "sistemico": false,
    "pts": [
     [
-     150,
-     101
+     382,
+     180
     ]
    ],
    "gatilho": "o peso de sustentar todo mundo"
@@ -238,8 +244,8 @@
    "sistemico": false,
    "pts": [
     [
-     150,
-     110
+     375,
+     212
     ]
    ],
    "gatilho": "a rigidez de quem não quer ceder"
@@ -252,8 +258,8 @@
    "sistemico": false,
    "pts": [
     [
-     150,
-     94
+     345,
+     190
     ]
    ],
    "gatilho": "o que ficou por dizer"
@@ -266,8 +272,8 @@
    "sistemico": false,
    "pts": [
     [
-     110,
-     128
+     235,
+     245
     ]
    ],
    "gatilho": "a responsabilidade que não é sua"
@@ -280,8 +286,8 @@
    "sistemico": false,
    "pts": [
     [
-     190,
-     128
+     500,
+     235
     ]
    ],
    "gatilho": "o pedido que chega sem aviso",
@@ -295,8 +301,8 @@
    "sistemico": false,
    "pts": [
     [
-     72,
-     208
+     170,
+     458
     ]
    ],
    "gatilho": "o desvio de rota imposto por outra pessoa"
@@ -309,8 +315,8 @@
    "sistemico": false,
    "pts": [
     [
-     228,
-     208
+     525,
+     470
     ]
    ],
    "gatilho": "quem ocupa o seu espaço",
@@ -324,8 +330,8 @@
    "sistemico": false,
    "pts": [
     [
-     58,
-     252
+     131,
+     543
     ]
    ],
    "gatilho": "a tarefa repetida",
@@ -339,8 +345,8 @@
    "sistemico": false,
    "pts": [
     [
-     242,
-     252
+     571,
+     543
     ]
    ],
    "gatilho": "o esforço sem retorno imediato",
@@ -354,8 +360,8 @@
    "sistemico": false,
    "pts": [
     [
-     44,
-     300
+     63,
+     669
     ]
    ],
    "gatilho": "o que não sai do jeito que você faz"
@@ -368,8 +374,8 @@
    "sistemico": false,
    "pts": [
     [
-     256,
-     300
+     634,
+     674
     ]
    ],
    "gatilho": "o que escorrega entre os dedos"
@@ -382,8 +388,8 @@
    "sistemico": false,
    "pts": [
     [
-     40,
-     324
+     52,
+     715
     ]
    ],
    "gatilho": "o detalhe pequeno que trava tudo"
@@ -396,8 +402,8 @@
    "sistemico": false,
    "pts": [
     [
-     260,
-     324
+     628,
+     722
     ]
    ],
    "gatilho": "o toque errado no botão errado"
@@ -410,12 +416,12 @@
    "sistemico": false,
    "pts": [
     [
-     44,
-     340
+     46,
+     738
     ],
     [
-     256,
-     340
+     628,
+     745
     ]
    ],
    "gatilho": "a irritação superficial"
@@ -428,8 +434,8 @@
    "sistemico": false,
    "pts": [
     [
-     126,
-     172
+     275,
+     350
     ]
    ],
    "gatilho": "quem cobra cuidado sem oferecer"
@@ -442,8 +448,8 @@
    "sistemico": false,
    "pts": [
     [
-     174,
-     172
+     430,
+     352
     ]
    ],
    "gatilho": "a carência dos outros"
@@ -456,8 +462,8 @@
    "sistemico": false,
    "pts": [
     [
-     96,
-     140
+     208,
+     300
     ]
    ],
    "gatilho": "o só mais uma coisa"
@@ -470,8 +476,8 @@
    "sistemico": false,
    "pts": [
     [
-     204,
-     140
+     538,
+     322
     ]
    ],
    "gatilho": "o pedido de última hora"
@@ -484,8 +490,8 @@
    "sistemico": false,
    "pts": [
     [
-     150,
-     232
+     345,
+     445
     ]
    ],
    "gatilho": "a decisão que você sente antes de pensar"
@@ -498,8 +504,8 @@
    "sistemico": false,
    "pts": [
     [
-     150,
-     252
+     334,
+     491
     ]
    ],
    "gatilho": "quem só fala de si"
@@ -512,8 +518,8 @@
    "sistemico": false,
    "pts": [
     [
-     150,
-     272
+     345,
+     545
     ]
    ],
    "gatilho": "o nó que não é seu para desatar"
@@ -526,8 +532,8 @@
    "sistemico": false,
    "pts": [
     [
-     122,
-     196
+     255,
+     420
     ]
    ],
    "gatilho": "o que aperta e não deixa respirar"
@@ -540,8 +546,8 @@
    "sistemico": false,
    "pts": [
     [
-     178,
-     196
+     452,
+     420
     ]
    ],
    "gatilho": "a cobrança apertada"
@@ -554,8 +560,8 @@
    "sistemico": false,
    "pts": [
     [
-     112,
-     300
+     243,
+     525
     ]
    ],
    "gatilho": "a mudança de rumo no meio do caminho"
@@ -568,8 +574,8 @@
    "sistemico": false,
    "pts": [
     [
-     188,
-     300
+     455,
+     530
     ]
    ],
    "gatilho": "o ritmo dos outros diferente do seu"
@@ -600,8 +606,8 @@
    "sistemico": false,
    "pts": [
     [
-     166,
-     208
+     392,
+     432
     ]
    ],
    "gatilho": "o que você engoliu por educação"
@@ -614,8 +620,8 @@
    "sistemico": false,
    "pts": [
     [
-     158,
-     164
+     375,
+     350
     ]
    ],
    "gatilho": "a pessoa que você esperava e não veio"
@@ -628,12 +634,12 @@
    "sistemico": false,
    "pts": [
     [
-     128,
-     145
+     300,
+     312
     ],
     [
-     172,
-     145
+     410,
+     312
     ]
    ],
    "gatilho": "o ar pesado do ambiente"
@@ -646,8 +652,8 @@
    "sistemico": false,
    "pts": [
     [
-     132,
-     210
+     292,
+     428
     ]
    ],
    "gatilho": "a raiva antiga que reaparece por um motivo novo"
@@ -660,8 +666,8 @@
    "sistemico": false,
    "pts": [
     [
-     184,
-     224
+     462,
+     452
     ]
    ],
    "gatilho": "a preocupação que gira sem sair do lugar"
@@ -674,8 +680,8 @@
    "sistemico": false,
    "pts": [
     [
-     162,
-     264
+     372,
+     520
     ]
    ],
    "gatilho": "o que demora a se resolver"
@@ -688,12 +694,12 @@
    "sistemico": false,
    "pts": [
     [
-     128,
-     238
+     292,
+     482
     ],
     [
-     172,
-     238
+     405,
+     482
     ]
    ],
    "gatilho": "o medo escondido atrás da pressa"
@@ -715,20 +721,20 @@
    "sistemico": false,
    "pts": [
     [
-     150,
-     130
+     343,
+     240
     ],
     [
-     150,
-     170
+     343,
+     330
     ],
     [
-     150,
-     210
+     343,
+     420
     ],
     [
-     150,
-     250
+     343,
+     500
     ]
    ],
    "gatilho": "o peso de ser o pilar"
@@ -777,8 +783,8 @@
    "sistemico": false,
    "pts": [
     [
-     126,
-     330
+     262,
+     568
     ]
    ],
    "gatilho": "quem senta em cima da sua vez",
@@ -792,8 +798,8 @@
    "sistemico": false,
    "pts": [
     [
-     174,
-     330
+     432,
+     572
     ]
    ],
    "gatilho": "o que ainda não dá para entender",
@@ -807,8 +813,8 @@
    "sistemico": false,
    "pts": [
     [
-     150,
-     354
+     336,
+     660
     ]
    ],
    "gatilho": "a provocação que pede resposta"
@@ -821,8 +827,8 @@
    "sistemico": false,
    "pts": [
     [
-     150,
-     341
+     331,
+     632
     ]
    ],
    "gatilho": "o impulso que pede pressa"
@@ -835,8 +841,8 @@
    "sistemico": false,
    "pts": [
     [
-     122,
-     400
+     290,
+     740
     ]
    ],
    "gatilho": "a subida que precisa ser feita"
@@ -849,8 +855,8 @@
    "sistemico": false,
    "pts": [
     [
-     178,
-     400
+     450,
+     730
     ]
    ],
    "gatilho": "o caminho mais longo"
@@ -863,8 +869,8 @@
    "sistemico": false,
    "pts": [
     [
-     122,
-     532
+     360,
+     985
     ]
    ],
    "gatilho": "o que aparece de repente",
@@ -878,8 +884,8 @@
    "sistemico": false,
    "pts": [
     [
-     176,
-     246
+     416,
+     490
     ]
    ],
    "gatilho": "o alarme falso",
@@ -893,8 +899,8 @@
    "sistemico": false,
    "pts": [
     [
-     121,
-     470
+     325,
+     950
     ]
    ],
    "gatilho": "o passo que não anda no seu ritmo"
@@ -907,8 +913,8 @@
    "sistemico": false,
    "pts": [
     [
-     179,
-     470
+     450,
+     960
     ]
    ],
    "gatilho": "a fila e a espera"
@@ -921,8 +927,8 @@
    "sistemico": false,
    "pts": [
     [
-     119,
-     503
+     320,
+     1025
     ]
    ],
    "gatilho": "a batida no móvel"
@@ -935,8 +941,8 @@
    "sistemico": false,
    "pts": [
     [
-     181,
-     503
+     470,
+     1040
     ]
    ],
    "gatilho": "o pequeno tropeço que faz perder a linha"
@@ -949,8 +955,8 @@
    "sistemico": false,
    "pts": [
     [
-     121,
-     438
+     315,
+     870
     ]
    ],
    "gatilho": "ter que ceder"
@@ -963,8 +969,8 @@
    "sistemico": false,
    "pts": [
     [
-     179,
-     438
+     430,
+     885
     ]
    ],
    "gatilho": "a humildade forçada"
@@ -977,8 +983,8 @@
    "sistemico": false,
    "pts": [
     [
-     112,
-     578
+     315,
+     1190
     ]
    ],
    "gatilho": "o chão que não é como você esperava"
@@ -991,8 +997,8 @@
    "sistemico": false,
    "pts": [
     [
-     108,
-     598
+     285,
+     1225
     ]
    ],
    "gatilho": "a quina do dia"
@@ -1005,8 +1011,8 @@
    "sistemico": false,
    "pts": [
     [
-     188,
-     578
+     530,
+     1170
     ]
    ],
    "gatilho": "o caminho que muda"
@@ -1019,8 +1025,8 @@
    "sistemico": false,
    "pts": [
     [
-     192,
-     598
+     550,
+     1200
     ]
    ],
    "gatilho": "o desvio miúdo"
@@ -1033,12 +1039,12 @@
    "sistemico": false,
    "pts": [
     [
-     104,
-     606
+     283,
+     1235
     ],
     [
-     196,
-     606
+     556,
+     1212
     ]
    ],
    "gatilho": "a coisa mínima que incomoda o dia todo"

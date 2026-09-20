@@ -8,6 +8,7 @@ Registro de 20/09/2026. Segue a regra do `claude.md`: nenhuma mudança de schema
 |---|---|---|---|
 | `demonio-do-dia.html` | raiz | 1 | não |
 | `demonios-joao.json` | `assets/` | 1 | não |
+| `corpo-vesalius.webp` | `assets/` | 1 | não |
 | `0017_demonio_checkins.sql` | `supabase/migrations/`, só quando a fase 2 for aprovada | 2 | sim |
 
 A integração GitHub com Supabase aplica sozinha tudo que entra em `supabase/migrations/` na `main`. Por isso a 0017 ficou fora do commit da fase 1 e só entra no repo quando a fase 2 for aprovada.
@@ -43,6 +44,8 @@ A página não usa "janela" para Sofia. "Janela" continua sendo só trânsito do
 4. Revisar os 72 gatilhos e a regra v0 de irritabilidade (Fogo alta, Terra e Ar médias, Água baixa). Atenção ao tom das entradas 55 e 56.
 5. Direitos da tradução. A página traz só nomes e partes do corpo, sem reproduzir o texto. Para trazer trechos, é preciso licença do tradutor ou tradução própria a partir do copta.
 6. Conferir na sinopse Waldstein e Wisse as entradas 17, 19 (nomes perdidos), 20, 21, 53, 54, 59 (leituras incertas) e 72 (sem parte). Os nomes variam entre os manuscritos BG, II, III e IV.
+7. Figura. A página usa uma gravura de Vesalius (De humani corporis fabrica, 1543) no lugar da silhueta, convertida em traço claro sobre fundo transparente (`assets/corpo-vesalius.webp`, 174 KB). A gravura é de domínio público, mas vale confirmar a procedência do arquivo original enviado. As 72 posições dos pontos foram calibradas a olho sobre a imagem e precisam de revisão anatômica, principalmente as de órgãos internos (coração, fígado, baço, rins), que só estão indicadas por região.
+8. Goécia. A página tem um parágrafo que distingue a lista do Apócrifo da Ars Goetia (outra lista de 72 nomes) e explica que a divisão em faixas de 5° é a mesma que ocultistas dos séculos XIX e XX aplicaram aos espíritos da Goécia e aos 72 anjos do Shem ha-Mephorash. Conferir essa afirmação sobre a tradição posterior antes de ampliar o texto.
 
 ## 5. Fase 2: check-in e clima coletivo
 
