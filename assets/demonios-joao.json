@@ -1,0 +1,1057 @@
+{
+ "versao": 1,
+ "fonte": {
+  "obra": "Apócrifo de João",
+  "manuscrito": "Nag Hammadi, códice II (NHC II,1), versão longa",
+  "traducao": "Frederik Wisse, The Nag Hammadi Library in English",
+  "url": "https://earlychristianwritings.com/text/apocryphonjohn.html",
+  "nota": "Este arquivo guarda só nomes e partes do corpo. Não reproduz o texto da tradução. Nomes variam entre manuscritos (BG, II, III, IV); conferir na sinopse Waldstein e Wisse antes de tratar qualquer grafia como definitiva."
+ },
+ "correspondencia": {
+  "tipo": "decisão de design do Caos Astral, não consta no texto",
+  "graus_por_demonio": 5,
+  "regra": "indice = floor(longitude eclíptica geocêntrica do Sol / 5); demônio = lista[indice]"
+ },
+ "elementos": [
+  "Fogo",
+  "Terra",
+  "Ar",
+  "Água"
+ ],
+ "temas_saklas": [
+  "conflito e urgência",
+  "escassez e controle",
+  "bug mental e ansiedade",
+  "apego e fantasmas emocionais"
+ ],
+ "temas_sofia": [
+  "centelha e ação",
+  "geometria e prática",
+  "ressonância e mente",
+  "corrente e absorção"
+ ],
+ "irritabilidade_por_elemento_saklas": {
+  "regra": "v0, provisória, autoral. Ordem: fogo, terra, ar, água. Escala de 1 a 3.",
+  "niveis": [
+   3,
+   2,
+   2,
+   1
+  ]
+ },
+ "demonios": [
+  {
+   "n": 1,
+   "nome": "Eteraphaope-Abron",
+   "parte": "cabeça",
+   "parte_en": "head",
+   "sistemico": false,
+   "pts": [
+    [
+     150,
+     22
+    ]
+   ],
+   "gatilho": "quem quer te empurrar decisões e ideias prontas"
+  },
+  {
+   "n": 2,
+   "nome": "Meniggesstroeth",
+   "parte": "cérebro",
+   "parte_en": "brain",
+   "sistemico": false,
+   "pts": [
+    [
+     150,
+     36
+    ]
+   ],
+   "gatilho": "a mente repetindo o mesmo pensamento"
+  },
+  {
+   "n": 3,
+   "nome": "Asterechme",
+   "parte": "olho direito",
+   "parte_en": "right eye",
+   "sistemico": false,
+   "pts": [
+    [
+     137,
+     48
+    ]
+   ],
+   "gatilho": "o que você julga na primeira olhada"
+  },
+  {
+   "n": 4,
+   "nome": "Thaspomocha",
+   "parte": "olho esquerdo",
+   "parte_en": "left eye",
+   "sistemico": false,
+   "pts": [
+    [
+     163,
+     48
+    ]
+   ],
+   "gatilho": "a cena que parece pior do que é"
+  },
+  {
+   "n": 5,
+   "nome": "Yeronumos",
+   "parte": "orelha direita",
+   "parte_en": "right ear",
+   "sistemico": false,
+   "pts": [
+    [
+     118,
+     54
+    ]
+   ],
+   "gatilho": "o comentário dito sem cuidado"
+  },
+  {
+   "n": 6,
+   "nome": "Bissoum",
+   "parte": "orelha esquerda",
+   "parte_en": "left ear",
+   "sistemico": false,
+   "pts": [
+    [
+     182,
+     54
+    ]
+   ],
+   "gatilho": "a crítica que chega de passagem"
+  },
+  {
+   "n": 7,
+   "nome": "Akioreim",
+   "parte": "nariz",
+   "parte_en": "nose",
+   "sistemico": false,
+   "pts": [
+    [
+     150,
+     58
+    ]
+   ],
+   "gatilho": "o palpite ruim que ainda não virou fato"
+  },
+  {
+   "n": 8,
+   "nome": "Banen-Ephroum",
+   "parte": "lábios",
+   "parte_en": "lips",
+   "sistemico": false,
+   "pts": [
+    [
+     150,
+     71
+    ]
+   ],
+   "gatilho": "a palavra que escapa antes da hora, sua ou dos outros"
+  },
+  {
+   "n": 9,
+   "nome": "Amen",
+   "parte": "dentes",
+   "parte_en": "teeth",
+   "sistemico": false,
+   "pts": [
+    [
+     150,
+     77
+    ]
+   ],
+   "gatilho": "a vontade de morder a resposta"
+  },
+  {
+   "n": 10,
+   "nome": "Ibikan",
+   "parte": "molares",
+   "parte_en": "molars",
+   "sistemico": false,
+   "pts": [
+    [
+     141,
+     78
+    ],
+    [
+     159,
+     78
+    ]
+   ],
+   "gatilho": "o que precisa ser mastigado devagar"
+  },
+  {
+   "n": 11,
+   "nome": "Basiliademe",
+   "parte": "amígdalas",
+   "parte_en": "tonsils",
+   "sistemico": false,
+   "pts": [
+    [
+     144,
+     85
+    ],
+    [
+     156,
+     85
+    ]
+   ],
+   "gatilho": "o que você engole calado"
+  },
+  {
+   "n": 12,
+   "nome": "Achcha",
+   "parte": "úvula",
+   "parte_en": "uvula",
+   "sistemico": false,
+   "pts": [
+    [
+     150,
+     88
+    ]
+   ],
+   "gatilho": "o engasgo no meio da frase"
+  },
+  {
+   "n": 13,
+   "nome": "Adaban",
+   "parte": "pescoço",
+   "parte_en": "neck",
+   "sistemico": false,
+   "pts": [
+    [
+     150,
+     101
+    ]
+   ],
+   "gatilho": "o peso de sustentar todo mundo"
+  },
+  {
+   "n": 14,
+   "nome": "Chaaman",
+   "parte": "vértebras",
+   "parte_en": "vertebrae",
+   "sistemico": false,
+   "pts": [
+    [
+     150,
+     110
+    ]
+   ],
+   "gatilho": "a rigidez de quem não quer ceder"
+  },
+  {
+   "n": 15,
+   "nome": "Dearcho",
+   "parte": "garganta",
+   "parte_en": "throat",
+   "sistemico": false,
+   "pts": [
+    [
+     150,
+     94
+    ]
+   ],
+   "gatilho": "o que ficou por dizer"
+  },
+  {
+   "n": 16,
+   "nome": "Tebar",
+   "parte": "ombro direito",
+   "parte_en": "right shoulder",
+   "sistemico": false,
+   "pts": [
+    [
+     110,
+     128
+    ]
+   ],
+   "gatilho": "a responsabilidade que não é sua"
+  },
+  {
+   "n": 17,
+   "nome": null,
+   "parte": "ombro esquerdo",
+   "parte_en": "left shoulder",
+   "sistemico": false,
+   "pts": [
+    [
+     190,
+     128
+    ]
+   ],
+   "gatilho": "o pedido que chega sem aviso",
+   "obs": "Nome perdido em lacuna no manuscrito."
+  },
+  {
+   "n": 18,
+   "nome": "Mniarcon",
+   "parte": "cotovelo direito",
+   "parte_en": "right elbow",
+   "sistemico": false,
+   "pts": [
+    [
+     72,
+     208
+    ]
+   ],
+   "gatilho": "o desvio de rota imposto por outra pessoa"
+  },
+  {
+   "n": 19,
+   "nome": null,
+   "parte": "cotovelo esquerdo",
+   "parte_en": "left elbow",
+   "sistemico": false,
+   "pts": [
+    [
+     228,
+     208
+    ]
+   ],
+   "gatilho": "quem ocupa o seu espaço",
+   "obs": "Nome perdido em lacuna no manuscrito."
+  },
+  {
+   "n": 20,
+   "nome": "Abitrion",
+   "parte": "antebraço direito",
+   "parte_en": "right underarm",
+   "sistemico": false,
+   "pts": [
+    [
+     58,
+     252
+    ]
+   ],
+   "gatilho": "a tarefa repetida",
+   "obs": "Leitura incerta na tradução ('underarm')."
+  },
+  {
+   "n": 21,
+   "nome": "Evanthen",
+   "parte": "antebraço esquerdo",
+   "parte_en": "left underarm",
+   "sistemico": false,
+   "pts": [
+    [
+     242,
+     252
+    ]
+   ],
+   "gatilho": "o esforço sem retorno imediato",
+   "obs": "Leitura incerta na tradução ('underarm')."
+  },
+  {
+   "n": 22,
+   "nome": "Krys",
+   "parte": "mão direita",
+   "parte_en": "right hand",
+   "sistemico": false,
+   "pts": [
+    [
+     44,
+     300
+    ]
+   ],
+   "gatilho": "o que não sai do jeito que você faz"
+  },
+  {
+   "n": 23,
+   "nome": "Beluai",
+   "parte": "mão esquerda",
+   "parte_en": "left hand",
+   "sistemico": false,
+   "pts": [
+    [
+     256,
+     300
+    ]
+   ],
+   "gatilho": "o que escorrega entre os dedos"
+  },
+  {
+   "n": 24,
+   "nome": "Treneu",
+   "parte": "dedos da mão direita",
+   "parte_en": "fingers of the right hand",
+   "sistemico": false,
+   "pts": [
+    [
+     40,
+     324
+    ]
+   ],
+   "gatilho": "o detalhe pequeno que trava tudo"
+  },
+  {
+   "n": 25,
+   "nome": "Balbel",
+   "parte": "dedos da mão esquerda",
+   "parte_en": "fingers of the left hand",
+   "sistemico": false,
+   "pts": [
+    [
+     260,
+     324
+    ]
+   ],
+   "gatilho": "o toque errado no botão errado"
+  },
+  {
+   "n": 26,
+   "nome": "Kriman",
+   "parte": "unhas das mãos",
+   "parte_en": "nails of the hands",
+   "sistemico": false,
+   "pts": [
+    [
+     44,
+     340
+    ],
+    [
+     256,
+     340
+    ]
+   ],
+   "gatilho": "a irritação superficial"
+  },
+  {
+   "n": 27,
+   "nome": "Astrops",
+   "parte": "seio direito",
+   "parte_en": "right breast",
+   "sistemico": false,
+   "pts": [
+    [
+     126,
+     172
+    ]
+   ],
+   "gatilho": "quem cobra cuidado sem oferecer"
+  },
+  {
+   "n": 28,
+   "nome": "Barroph",
+   "parte": "seio esquerdo",
+   "parte_en": "left breast",
+   "sistemico": false,
+   "pts": [
+    [
+     174,
+     172
+    ]
+   ],
+   "gatilho": "a carência dos outros"
+  },
+  {
+   "n": 29,
+   "nome": "Baoum",
+   "parte": "articulação do ombro direito",
+   "parte_en": "right shoulder joint",
+   "sistemico": false,
+   "pts": [
+    [
+     96,
+     140
+    ]
+   ],
+   "gatilho": "o só mais uma coisa"
+  },
+  {
+   "n": 30,
+   "nome": "Ararim",
+   "parte": "articulação do ombro esquerdo",
+   "parte_en": "left shoulder joint",
+   "sistemico": false,
+   "pts": [
+    [
+     204,
+     140
+    ]
+   ],
+   "gatilho": "o pedido de última hora"
+  },
+  {
+   "n": 31,
+   "nome": "Areche",
+   "parte": "ventre",
+   "parte_en": "belly",
+   "sistemico": false,
+   "pts": [
+    [
+     150,
+     232
+    ]
+   ],
+   "gatilho": "a decisão que você sente antes de pensar"
+  },
+  {
+   "n": 32,
+   "nome": "Phthave",
+   "parte": "umbigo",
+   "parte_en": "navel",
+   "sistemico": false,
+   "pts": [
+    [
+     150,
+     252
+    ]
+   ],
+   "gatilho": "quem só fala de si"
+  },
+  {
+   "n": 33,
+   "nome": "Senaphim",
+   "parte": "abdômen",
+   "parte_en": "abdomen",
+   "sistemico": false,
+   "pts": [
+    [
+     150,
+     272
+    ]
+   ],
+   "gatilho": "o nó que não é seu para desatar"
+  },
+  {
+   "n": 34,
+   "nome": "Arachethopi",
+   "parte": "costelas direitas",
+   "parte_en": "right ribs",
+   "sistemico": false,
+   "pts": [
+    [
+     122,
+     196
+    ]
+   ],
+   "gatilho": "o que aperta e não deixa respirar"
+  },
+  {
+   "n": 35,
+   "nome": "Zabedo",
+   "parte": "costelas esquerdas",
+   "parte_en": "left ribs",
+   "sistemico": false,
+   "pts": [
+    [
+     178,
+     196
+    ]
+   ],
+   "gatilho": "a cobrança apertada"
+  },
+  {
+   "n": 36,
+   "nome": "Barias",
+   "parte": "quadril direito",
+   "parte_en": "right hip",
+   "sistemico": false,
+   "pts": [
+    [
+     112,
+     300
+    ]
+   ],
+   "gatilho": "a mudança de rumo no meio do caminho"
+  },
+  {
+   "n": 37,
+   "nome": "Phnouth",
+   "parte": "quadril esquerdo",
+   "parte_en": "left hip",
+   "sistemico": false,
+   "pts": [
+    [
+     188,
+     300
+    ]
+   ],
+   "gatilho": "o ritmo dos outros diferente do seu"
+  },
+  {
+   "n": 38,
+   "nome": "Abenlenarchei",
+   "parte": "medula",
+   "parte_en": "marrow",
+   "sistemico": true,
+   "pts": [],
+   "gatilho": "o cansaço que vem de fundo"
+  },
+  {
+   "n": 39,
+   "nome": "Chnoumeninorin",
+   "parte": "ossos",
+   "parte_en": "bones",
+   "sistemico": true,
+   "pts": [],
+   "gatilho": "o que resiste a mudar"
+  },
+  {
+   "n": 40,
+   "nome": "Gesole",
+   "parte": "estômago",
+   "parte_en": "stomach",
+   "sistemico": false,
+   "pts": [
+    [
+     166,
+     208
+    ]
+   ],
+   "gatilho": "o que você engoliu por educação"
+  },
+  {
+   "n": 41,
+   "nome": "Agromauna",
+   "parte": "coração",
+   "parte_en": "heart",
+   "sistemico": false,
+   "pts": [
+    [
+     158,
+     164
+    ]
+   ],
+   "gatilho": "a pessoa que você esperava e não veio"
+  },
+  {
+   "n": 42,
+   "nome": "Bano",
+   "parte": "pulmões",
+   "parte_en": "lungs",
+   "sistemico": false,
+   "pts": [
+    [
+     128,
+     145
+    ],
+    [
+     172,
+     145
+    ]
+   ],
+   "gatilho": "o ar pesado do ambiente"
+  },
+  {
+   "n": 43,
+   "nome": "Sostrapal",
+   "parte": "fígado",
+   "parte_en": "liver",
+   "sistemico": false,
+   "pts": [
+    [
+     132,
+     210
+    ]
+   ],
+   "gatilho": "a raiva antiga que reaparece por um motivo novo"
+  },
+  {
+   "n": 44,
+   "nome": "Anesimalar",
+   "parte": "baço",
+   "parte_en": "spleen",
+   "sistemico": false,
+   "pts": [
+    [
+     184,
+     224
+    ]
+   ],
+   "gatilho": "a preocupação que gira sem sair do lugar"
+  },
+  {
+   "n": 45,
+   "nome": "Thopithro",
+   "parte": "intestinos",
+   "parte_en": "intestines",
+   "sistemico": false,
+   "pts": [
+    [
+     162,
+     264
+    ]
+   ],
+   "gatilho": "o que demora a se resolver"
+  },
+  {
+   "n": 46,
+   "nome": "Biblo",
+   "parte": "rins",
+   "parte_en": "kidneys",
+   "sistemico": false,
+   "pts": [
+    [
+     128,
+     238
+    ],
+    [
+     172,
+     238
+    ]
+   ],
+   "gatilho": "o medo escondido atrás da pressa"
+  },
+  {
+   "n": 47,
+   "nome": "Roeror",
+   "parte": "tendões",
+   "parte_en": "sinews",
+   "sistemico": true,
+   "pts": [],
+   "gatilho": "a tensão de estar sempre pronto"
+  },
+  {
+   "n": 48,
+   "nome": "Taphreo",
+   "parte": "coluna do corpo",
+   "parte_en": "spine of the body",
+   "sistemico": false,
+   "pts": [
+    [
+     150,
+     130
+    ],
+    [
+     150,
+     170
+    ],
+    [
+     150,
+     210
+    ],
+    [
+     150,
+     250
+    ]
+   ],
+   "gatilho": "o peso de ser o pilar"
+  },
+  {
+   "n": 49,
+   "nome": "Ipouspoboba",
+   "parte": "veias",
+   "parte_en": "veins",
+   "sistemico": true,
+   "pts": [],
+   "gatilho": "o assunto que sempre volta"
+  },
+  {
+   "n": 50,
+   "nome": "Bineborin",
+   "parte": "artérias",
+   "parte_en": "arteries",
+   "sistemico": true,
+   "pts": [],
+   "gatilho": "a pressa que vem de fora"
+  },
+  {
+   "n": 51,
+   "nome": "Atoimenpsephei",
+   "parte": "os sopros que estão em todos os membros",
+   "parte_en": "the breaths in all the limbs",
+   "sistemico": true,
+   "pts": [],
+   "gatilho": "a respiração curta de quem se apressa"
+  },
+  {
+   "n": 52,
+   "nome": "Entholleia",
+   "parte": "toda a carne",
+   "parte_en": "all the flesh",
+   "sistemico": true,
+   "pts": [],
+   "gatilho": "o corpo cobrando descanso"
+  },
+  {
+   "n": 53,
+   "nome": "Bedouk",
+   "parte": "nádega direita",
+   "parte_en": "right buttock (?)",
+   "sistemico": false,
+   "pts": [
+    [
+     126,
+     330
+    ]
+   ],
+   "gatilho": "quem senta em cima da sua vez",
+   "obs": "Parte posterior, marcada no quadril na figura. A tradução traz interrogação."
+  },
+  {
+   "n": 54,
+   "nome": "Arabeei",
+   "parte": "parte incerta",
+   "parte_en": "left penis",
+   "sistemico": false,
+   "pts": [
+    [
+     174,
+     330
+    ]
+   ],
+   "gatilho": "o que ainda não dá para entender",
+   "obs": "A tradução diz 'left penis'; trecho provavelmente corrompido, conferir em outro manuscrito."
+  },
+  {
+   "n": 55,
+   "nome": "Eilo",
+   "parte": "testículos",
+   "parte_en": "testicles",
+   "sistemico": false,
+   "pts": [
+    [
+     150,
+     354
+    ]
+   ],
+   "gatilho": "a provocação que pede resposta"
+  },
+  {
+   "n": 56,
+   "nome": "Sorma",
+   "parte": "genitais",
+   "parte_en": "genitals",
+   "sistemico": false,
+   "pts": [
+    [
+     150,
+     341
+    ]
+   ],
+   "gatilho": "o impulso que pede pressa"
+  },
+  {
+   "n": 57,
+   "nome": "Gorma-Kaiochlabar",
+   "parte": "coxa direita",
+   "parte_en": "right thigh",
+   "sistemico": false,
+   "pts": [
+    [
+     122,
+     400
+    ]
+   ],
+   "gatilho": "a subida que precisa ser feita"
+  },
+  {
+   "n": 58,
+   "nome": "Nebrith",
+   "parte": "coxa esquerda",
+   "parte_en": "left thigh",
+   "sistemico": false,
+   "pts": [
+    [
+     178,
+     400
+    ]
+   ],
+   "gatilho": "o caminho mais longo"
+  },
+  {
+   "n": 59,
+   "nome": "Pserem",
+   "parte": "rins da perna direita",
+   "parte_en": "kidneys of the right leg",
+   "sistemico": false,
+   "pts": [
+    [
+     122,
+     532
+    ]
+   ],
+   "gatilho": "o que aparece de repente",
+   "obs": "Leitura estranha na tradução; conferir."
+  },
+  {
+   "n": 60,
+   "nome": "Asaklas",
+   "parte": "rim esquerdo",
+   "parte_en": "left kidney",
+   "sistemico": false,
+   "pts": [
+    [
+     176,
+     246
+    ]
+   ],
+   "gatilho": "o alarme falso",
+   "obs": "O nome lembra Saklas."
+  },
+  {
+   "n": 61,
+   "nome": "Ormaoth",
+   "parte": "perna direita",
+   "parte_en": "right leg",
+   "sistemico": false,
+   "pts": [
+    [
+     121,
+     470
+    ]
+   ],
+   "gatilho": "o passo que não anda no seu ritmo"
+  },
+  {
+   "n": 62,
+   "nome": "Emenun",
+   "parte": "perna esquerda",
+   "parte_en": "left leg",
+   "sistemico": false,
+   "pts": [
+    [
+     179,
+     470
+    ]
+   ],
+   "gatilho": "a fila e a espera"
+  },
+  {
+   "n": 63,
+   "nome": "Knyx",
+   "parte": "canela direita",
+   "parte_en": "right shin-bone",
+   "sistemico": false,
+   "pts": [
+    [
+     119,
+     503
+    ]
+   ],
+   "gatilho": "a batida no móvel"
+  },
+  {
+   "n": 64,
+   "nome": "Tupelon",
+   "parte": "canela esquerda",
+   "parte_en": "left shin-bone",
+   "sistemico": false,
+   "pts": [
+    [
+     181,
+     503
+    ]
+   ],
+   "gatilho": "o pequeno tropeço que faz perder a linha"
+  },
+  {
+   "n": 65,
+   "nome": "Achiel",
+   "parte": "joelho direito",
+   "parte_en": "right knee",
+   "sistemico": false,
+   "pts": [
+    [
+     121,
+     438
+    ]
+   ],
+   "gatilho": "ter que ceder"
+  },
+  {
+   "n": 66,
+   "nome": "Phnene",
+   "parte": "joelho esquerdo",
+   "parte_en": "left knee",
+   "sistemico": false,
+   "pts": [
+    [
+     179,
+     438
+    ]
+   ],
+   "gatilho": "a humildade forçada"
+  },
+  {
+   "n": 67,
+   "nome": "Phiouthrom",
+   "parte": "pé direito",
+   "parte_en": "right foot",
+   "sistemico": false,
+   "pts": [
+    [
+     112,
+     578
+    ]
+   ],
+   "gatilho": "o chão que não é como você esperava"
+  },
+  {
+   "n": 68,
+   "nome": "Boabel",
+   "parte": "dedos do pé direito",
+   "parte_en": "its toes",
+   "sistemico": false,
+   "pts": [
+    [
+     108,
+     598
+    ]
+   ],
+   "gatilho": "a quina do dia"
+  },
+  {
+   "n": 69,
+   "nome": "Trachoun",
+   "parte": "pé esquerdo",
+   "parte_en": "left foot",
+   "sistemico": false,
+   "pts": [
+    [
+     188,
+     578
+    ]
+   ],
+   "gatilho": "o caminho que muda"
+  },
+  {
+   "n": 70,
+   "nome": "Phikna",
+   "parte": "dedos do pé esquerdo",
+   "parte_en": "its toes",
+   "sistemico": false,
+   "pts": [
+    [
+     192,
+     598
+    ]
+   ],
+   "gatilho": "o desvio miúdo"
+  },
+  {
+   "n": 71,
+   "nome": "Miamai",
+   "parte": "unhas dos pés",
+   "parte_en": "nails of the feet",
+   "sistemico": false,
+   "pts": [
+    [
+     104,
+     606
+    ],
+    [
+     196,
+     606
+    ]
+   ],
+   "gatilho": "a coisa mínima que incomoda o dia todo"
+  },
+  {
+   "n": 72,
+   "nome": "Labernioum",
+   "parte": "parte não preservada",
+   "parte_en": null,
+   "sistemico": false,
+   "pts": [],
+   "gatilho": "a onda que ainda não tem nome",
+   "obs": "A lista termina com travessão; parte não preservada na tradução."
+  }
+ ]
+}

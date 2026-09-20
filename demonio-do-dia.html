@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<script>(function(){try{var t=localStorage.getItem('caosastral-theme');if(t==='light'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches))document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demônio do dia, Caos Astral</title>
+<meta name="description" content="72 poderes do Apócrifo de João, um por parte do corpo, cruzados com a posição do Sol. Calculado no navegador, sem cadastro.">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .dd-card{
+    background:var(--bg-panel); border:1px solid var(--line);
+    padding:24px 26px; margin:0 0 14px;
+  }
+  .dd-meta{
+    font-family:'IBM Plex Mono', monospace; font-size:0.72rem; letter-spacing:0.05em;
+    text-transform:uppercase; color:var(--ink-faint);
+  }
+  .dd-nome{
+    font-family:'Unbounded', sans-serif; font-weight:600; font-size:1.7rem;
+    line-height:1.15; margin:8px 0 6px; overflow-wrap:anywhere;
+  }
+  .dd-parte{ color:var(--ink-dim); margin:0; }
+  .dd-parte strong{ color:var(--ink); font-weight:500; }
+  .dd-sol{ color:var(--ink-dim); font-size:0.92rem; margin:14px 0 0; }
+  .dd-gatilho{ border-top:1px solid var(--line); margin-top:16px; padding-top:14px; }
+  .dd-gatilho .dd-meta{ margin-bottom:4px; }
+  .dd-gatilho p{ margin:0; font-size:1.05rem; }
+  .dd-obs{ color:var(--ink-dim); font-size:0.88rem; margin:12px 0 0; }
+  .dd-tag{
+    display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:0.62rem;
+    letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-faint);
+    border:1px solid var(--line-bright); padding:2px 7px; margin-left:8px; vertical-align:middle;
+    white-space:nowrap;
+  }
+  .dd-legenda{ color:var(--ink-dim); font-size:0.85rem; margin:0 0 28px; }
+  .dd-nav{ display:flex; flex-wrap:wrap; gap:10px; margin:0 0 18px; }
+  .dd-fig{
+    background:var(--bg-panel-2); border:1px solid var(--line);
+    padding:14px; margin:0 0 8px; text-align:center;
+  }
+  .dd-fig svg{ display:block; width:100%; max-width:270px; height:auto; margin:0 auto; cursor:pointer; touch-action:manipulation; }
+  .dd-dica{ color:var(--ink-faint); font-size:0.82rem; margin:0 0 32px; }
+  .dd-ondas{ background:var(--bg-panel-2); border:1px solid var(--line); padding:14px 16px; margin:0 0 14px; }
+  .dd-ondas svg{ display:block; width:100%; height:auto; }
+  .dd-seg{ list-style:none; margin:6px 0 18px; padding:0; }
+  .dd-seg li{ margin:6px 0; font-size:0.95rem; }
+  .dd-seg .dd-quando{ font-family:'IBM Plex Mono', monospace; font-size:0.8rem; color:var(--ink-dim); margin-right:6px; }
+  .dd-seg .dd-tema{ font-weight:500; }
+  .dd-seg .dd-quem{ color:var(--ink-dim); }
+  .dd-sub{ font-family:'IBM Plex Mono', monospace; font-size:0.74rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-faint); margin:22px 0 4px; }
+  .dd-nota{ color:var(--ink-dim); font-size:0.85rem; margin:0 0 32px; }
+  .dd-erro{ color:var(--ink-dim); }
+  .dd-svg-txt{ font-family:'IBM Plex Mono', monospace; font-size:12px; fill:var(--ink-dim); }
+</style>
+</head>
+<body>
+<div id="space-bg" aria-hidden="true">
+  <div class="nebula"></div>
+  <div class="stars-static" id="stars-static"></div>
+  <canvas id="space-canvas"></canvas>
+</div>
+
+<header class="site-header" id="site-header"></header>
+
+<main>
+  <section class="page-hero">
+    <div class="wrap-narrow">
+      <p class="eyebrow center"><span class="glyph">✦</span> demônio do dia</p>
+      <h1>O que forma o corpo hoje</h1>
+      <p class="sub">72 poderes do Apócrifo de João, um por parte do corpo, cruzados com a posição do Sol.</p>
+    </div>
+  </section>
+
+  <section class="tight">
+    <div class="wrap-narrow">
+
+      <div class="dd-card" id="dd-card" aria-live="polite">
+        <p class="dd-erro" id="dd-carregando">Calculando a posição do Sol.</p>
+        <noscript><p class="dd-erro">O demônio do dia é calculado no navegador e precisa de JavaScript ligado.</p></noscript>
+      </div>
+      <p class="dd-legenda">
+        <span class="dd-tag" style="margin-left:0">Do texto</span> nome e parte do corpo.
+        <span class="dd-tag">Calculado</span> posição do Sol, da Lua, de Sofia e de Saklas.
+        <span class="dd-tag">Autoral</span> gatilho e regra de irritabilidade.
+      </p>
+
+      <div class="dd-nav">
+        <button type="button" class="btn btn-ghost" id="dd-prev">Anterior</button>
+        <button type="button" class="btn btn-ghost" id="dd-hoje">Voltar ao de hoje</button>
+        <button type="button" class="btn btn-ghost" id="dd-next">Próximo</button>
+      </div>
+
+      <div class="dd-fig">
+        <svg id="dd-svg" viewBox="0 0 300 620" role="img" aria-label="Figura humana com um ponto para cada demônio da lista. Toque numa região para ver o demônio mais próximo.">
+          <g id="dd-corpo-o"></g>
+          <g id="dd-corpo-f"></g>
+          <g id="dd-marcas"></g>
+        </svg>
+      </div>
+      <p class="dd-dica">Toque numa região do corpo para ver o demônio mais próximo. O contorno marca o demônio de hoje.</p>
+
+      <div class="prose">
+        <h2>Ondas de hoje</h2>
+        <p>Sofia e Saklas ficam a 60° à frente e atrás da Lua e trocam de signo junto com ela, a cada dois dias e pouco. O gráfico usa o elemento de Saklas para estimar, hora a hora, o tipo de atrito do dia. Abaixo dele, o elemento de Sofia indica o tipo de abertura.</p>
+      </div>
+      <div class="dd-ondas" id="dd-ondas"><p class="dd-erro">Calculando a Lua.</p></div>
+      <p class="dd-nota">Irritabilidade possível, regra provisória (v0, autoral): sobe conforme o tema de Saklas, com fogo em nível alto, terra e ar em nível médio e água em nível baixo. A barra em destaque é a hora atual. Quando houver check-ins suficientes, essa regra será comparada com dados reais.</p>
+
+      <div class="prose">
+        <h2>O que este instrumento simula</h2>
+        <p>O Apócrifo de João é um texto gnóstico do século II. Ele conta que Yaldabaoth, também chamado Saklas, e os arcontes sob seu comando modelaram o corpo de Adão membro por membro, e nomeia um poder para cada parte, da cabeça aos pés.</p>
+        <p>A lista usada aqui tem 72 entradas. Duas perderam o nome numa lacuna do manuscrito e algumas leituras são incertas, o que aparece marcado em cada card.</p>
+        <p>O demônio do dia sai de uma correspondência do Caos Astral: cada entrada ocupa 5° da eclíptica (72 vezes 5° dão 360°), e vale a entrada da faixa em que o Sol está. O texto não liga esses nomes a datas nem a signos. A correspondência é uma decisão de design, escolhida por utilidade.</p>
+        <p>O gatilho é escrita autoral. Descreve onde a atenção costuma se prender quando aquela parte do corpo está em foco. Funciona como ferramenta de leitura, e o que fazer com ele fica com quem lê.</p>
+
+        <h2>Ver no texto</h2>
+        <p>Fonte: Apócrifo de João, códice II de Nag Hammadi (NHC II,1), versão longa, no trecho da formação do corpo. Os nomes seguem a tradução de Frederik Wisse. Esta página traz apenas nomes e partes do corpo, sem reproduzir o texto. A tradução completa está em <a href="https://earlychristianwritings.com/text/apocryphonjohn.html" target="_blank" rel="noopener noreferrer">earlychristianwritings.com</a>.</p>
+        <p>Os nomes variam entre os manuscritos, e a grafia aqui não é definitiva. Para conferir página e linha, a referência é a sinopse de Waldstein e Wisse.</p>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<script src="assets/supabase-config.js"></script>
+<script src="assets/site-chrome.js" defer></script>
+<script src="assets/flash-decor.js" defer></script>
+<script src="assets/space-bg.js" defer></script>
+<script src="assets/theme-toggle.js" defer></script>
+<script src="assets/nav-menu.js" defer></script>
+<script src="assets/ceu-agora.js" defer></script>
+
+<script>
+(function () {
+  'use strict';
+
+  var SIGNS = ['Áries','Touro','Gêmeos','Câncer','Leão','Virgem','Libra','Escorpião','Sagitário','Capricórnio','Aquário','Peixes'];
+  var DATA = null, A = null;
+  var state = { sel: 0, hoje: 0, sol: 0 };
+
+  function norm(x) { x = x % 360; if (x < 0) x += 360; return x; }
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function fmtLon(l) { return (l % 30).toFixed(1).replace('.', ',') + '° de ' + SIGNS[Math.floor(l / 30)]; }
+  function $(id) { return document.getElementById(id); }
+
+  function loadAstronomy() {
+    if (window.Astronomy) return Promise.resolve(window.Astronomy);
+    return new Promise(function (resolve, reject) {
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.js';
+      s.onload = function () { window.Astronomy ? resolve(window.Astronomy) : reject(new Error('astronomy')); };
+      s.onerror = function () { reject(new Error('astronomy')); };
+      document.head.appendChild(s);
+    });
+  }
+
+  function eclon(body, date) {
+    var gv = A.GeoVector(A.Body[body], date, true);
+    return norm(A.Ecliptic(gv).elon);
+  }
+
+  // ---- figura ----
+  var OUT = [], FIL = [];
+  function line(d, w) {
+    OUT.push('<path d="' + d + '" style="fill:none;stroke:var(--line-bright);stroke-width:' + (w + 2) + '" stroke-linecap="round" stroke-linejoin="round"/>');
+    FIL.push('<path d="' + d + '" style="fill:none;stroke:var(--bg-panel);stroke-width:' + w + '" stroke-linecap="round" stroke-linejoin="round"/>');
+  }
+  function shape(t, a) {
+    OUT.push('<' + t + ' ' + a + ' style="fill:var(--line-bright);stroke:var(--line-bright);stroke-width:2" stroke-linejoin="round"/>');
+    FIL.push('<' + t + ' ' + a + ' style="fill:var(--bg-panel);stroke:none"/>');
+  }
+  shape('ellipse', 'cx="150" cy="50" rx="30" ry="38"');
+  line('M150 84L150 116', 26);
+  shape('polygon', 'points="100,116 200,116 208,190 196,260 192,300 200,332 100,332 108,300 104,260 92,190"');
+  line('M102 128L72 208', 22); line('M72 208L46 296', 18);
+  line('M198 128L228 208', 22); line('M228 208L254 296', 18);
+  shape('ellipse', 'cx="44" cy="313" rx="11" ry="17"'); shape('ellipse', 'cx="256" cy="313" rx="11" ry="17"');
+  line('M124 332L121 438', 44); line('M176 332L179 438', 44);
+  line('M121 438L117 562', 30); line('M179 438L183 562', 30);
+  shape('ellipse', 'cx="112" cy="584" rx="18" ry="12"'); shape('ellipse', 'cx="188" cy="584" rx="18" ry="12"');
+  $('dd-corpo-o').innerHTML = OUT.join('');
+  $('dd-corpo-f').innerHTML = FIL.join('');
+
+  function renderFigure() {
+    var d = DATA.demonios, s = d[state.sel], t = d[state.hoje], h = '';
+    d.forEach(function (x) {
+      x.pts.forEach(function (p) {
+        h += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="2.2" style="fill:var(--ink-faint)"/>';
+      });
+    });
+    if (t !== s) {
+      t.pts.forEach(function (p) {
+        h += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="6" style="fill:none;stroke:var(--ink-dim);stroke-width:1.5"/>';
+      });
+    }
+    if (s.sistemico) {
+      h += '<rect x="90" y="8" width="120" height="590" rx="14" style="fill:none;stroke:var(--accent-bright);stroke-width:2;stroke-dasharray:5 4"/>';
+    } else if (s.pts.length) {
+      if (s.n === 48) h += '<path d="M150 130L150 250" style="fill:none;stroke:var(--accent-bright);stroke-width:3"/>';
+      s.pts.forEach(function (p) {
+        h += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="10" style="fill:none;stroke:var(--accent-bright);stroke-width:1.5"/>' +
+             '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="5" style="fill:var(--accent-bright)"/>';
+      });
+      var x = s.pts[0][0], y = s.pts[0][1], an, tx;
+      if (x < 150) { if (x >= 95) { an = 'end'; tx = x - 13; } else { an = 'start'; tx = x + 13; } }
+      else { if (x <= 205) { an = 'start'; tx = x + 13; } else { an = 'end'; tx = x - 13; } }
+      var halo = 'paint-order:stroke;stroke:var(--bg-panel-2);stroke-width:4;stroke-linejoin:round';
+      h += '<text x="' + tx + '" y="' + (y - 1) + '" text-anchor="' + an + '" style="font-size:13px;font-weight:500;fill:var(--ink);' + halo + '">' + esc(s.nome || 'nome perdido') + '</text>' +
+           '<text x="' + tx + '" y="' + (y + 13) + '" text-anchor="' + an + '" style="font-size:12px;fill:var(--ink-dim);' + halo + '">' + esc(s.parte) + '</text>';
+    }
+    $('dd-marcas').innerHTML = h;
+  }
+
+  // ---- card ----
+  function renderCard() {
+    var d = DATA.demonios[state.sel], eHoje = state.sel === state.hoje;
+    var h = '<div class="dd-meta">' + (eHoje ? 'Demônio do dia' : 'Demônio') + ' · ' + d.n + ' de 72</div>' +
+      '<div class="dd-nome">' + esc(d.nome || 'Nome perdido') + '</div>' +
+      '<p class="dd-parte">Criador de: <strong>' + esc(d.parte) + '</strong><span class="dd-tag">Do texto</span></p>';
+    if (d.sistemico) h += '<p class="dd-obs">Atravessa o corpo inteiro, sem ponto único na figura.</p>';
+    if (eHoje) {
+      var a = state.hoje * 5;
+      h += '<p class="dd-sol">Sol a ' + fmtLon(state.sol) + ', faixa de ' + a + '° a ' + (a + 5) + '° da eclíptica.<span class="dd-tag">Calculado</span></p>';
+    }
+    h += '<div class="dd-gatilho"><div class="dd-meta">' + (eHoje ? 'Gatilho a observar hoje' : 'Gatilho associado') + '<span class="dd-tag">Autoral</span></div>' +
+      '<p>' + esc(d.gatilho.charAt(0).toUpperCase() + d.gatilho.slice(1)) + '.</p></div>';
+    if (d.obs) h += '<p class="dd-obs">' + esc(d.obs) + '</p>';
+    $('dd-card').innerHTML = h;
+  }
+
+  // ---- ondas ----
+  function segs(arr, temas, quem) {
+    var out = [], s = 0;
+    for (var i = 1; i <= 24; i++) {
+      if (i === 24 || arr[i] !== arr[s]) {
+        out.push('<li><span class="dd-quando">' + s + 'h às ' + i + 'h</span><span class="dd-tema">' + esc(temas[arr[s]]) + '</span> <span class="dd-quem">(' + quem + ' em ' + esc(DATA.elementos[arr[s]]) + ')</span></li>');
+        s = i;
+      }
+    }
+    return out.join('');
+  }
+
+  function renderWaves(now) {
+    var y = now.getFullYear(), m = now.getMonth(), dd = now.getDate();
+    var eS = [], eF = [], h;
+    for (h = 0; h < 24; h++) {
+      var moon = eclon('Moon', new Date(y, m, dd, h, 30));
+      eS.push(Math.floor(norm(moon - 60) / 30) % 4);
+      eF.push(Math.floor(norm(moon + 60) / 30) % 4);
+    }
+    var niv = DATA.irritabilidade_por_elemento_saklas.niveis, cur = now.getHours();
+    var svg = '<svg viewBox="0 0 300 118" role="img" aria-label="Irritabilidade possível por hora, regra provisória"><line x1="10" y1="90" x2="290" y2="90" style="stroke:var(--line-bright);stroke-width:1"/>';
+    for (var i = 0; i < 24; i++) {
+      var l = niv[eS[i]] * 25;
+      svg += '<rect x="' + (10 + i * 11.7).toFixed(1) + '" y="' + (90 - l) + '" width="10" height="' + l + '" rx="2" style="fill:' + (i === cur ? 'var(--accent-bright)' : 'var(--ink-faint)') + '"/>';
+    }
+    svg += '<text class="dd-svg-txt" x="10" y="110">0h</text><text class="dd-svg-txt" x="150" y="110" text-anchor="middle">12h</text><text class="dd-svg-txt" x="290" y="110" text-anchor="end">24h</text></svg>';
+    $('dd-ondas').innerHTML =
+      '<div class="dd-sub" style="margin-top:0">Irritabilidade possível<span class="dd-tag">Autoral</span></div>' + svg +
+      '<div class="dd-sub">Atrito do dia<span class="dd-tag">Calculado</span></div><ul class="dd-seg">' + segs(eS, DATA.temas_saklas, 'Saklas') + '</ul>' +
+      '<div class="dd-sub">Abertura do dia<span class="dd-tag">Calculado</span></div><ul class="dd-seg" style="margin-bottom:0">' + segs(eF, DATA.temas_sofia, 'Sofia') + '</ul>';
+  }
+
+  // ---- interação ----
+  function select(i) { state.sel = (i + 72) % 72; renderCard(); renderFigure(); }
+
+  function bind() {
+    $('dd-prev').addEventListener('click', function () { select(state.sel - 1); });
+    $('dd-next').addEventListener('click', function () { select(state.sel + 1); });
+    $('dd-hoje').addEventListener('click', function () { select(state.hoje); });
+    $('dd-svg').addEventListener('click', function (e) {
+      var r = $('dd-svg').getBoundingClientRect();
+      var px = (e.clientX - r.left) / r.width * 300, py = (e.clientY - r.top) / r.height * 620;
+      var best = -1, bd = Infinity;
+      DATA.demonios.forEach(function (d, i) {
+        d.pts.forEach(function (p) {
+          var dx = p[0] - px, dy = p[1] - py, q = dx * dx + dy * dy;
+          if (q < bd) { bd = q; best = i; }
+        });
+      });
+      if (best >= 0) select(best);
+    });
+  }
+
+  function falha() {
+    $('dd-card').innerHTML = '<p class="dd-erro">Não foi possível carregar o cálculo agora. Recarregue a página em instantes.</p>';
+    $('dd-ondas').innerHTML = '';
+  }
+
+  Promise.all([
+    fetch('assets/demonios-joao.json').then(function (r) { if (!r.ok) throw new Error('json'); return r.json(); }),
+    loadAstronomy()
+  ]).then(function (res) {
+    DATA = res[0]; A = res[1];
+    var now = new Date();
+    state.sol = eclon('Sun', now);
+    state.hoje = Math.min(71, Math.floor(state.sol / DATA.correspondencia.graus_por_demonio));
+    state.sel = state.hoje;
+    renderCard(); renderFigure(); renderWaves(now); bind();
+  }).catch(falha);
+})();
+</script>
+</body>
+</html>
