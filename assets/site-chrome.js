@@ -66,6 +66,7 @@
         ['ancora', 'Âncora'],
         ['deriva', 'Deriva'],
         ['oraculo', 'Oráculo'],
+        ['demonio-do-dia', 'Demônio do dia'],
         ['diario', 'Diário'],
       ],
     },

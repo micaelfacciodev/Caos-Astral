@@ -79,8 +79,10 @@ priorizado.
 /ritual-de-entrada (onboarding) · /kit · /retorno · /ressonancia · /ancora
 /deriva · /oraculo (tema escuro padrão) · /diario · /blog · /planos
 ```
-Menu canônico atual (12 itens): Kit, Retorno, O Terceiro, Âncora, Deriva,
-Oráculo, Diário, Raízes, Blog, Manifesto, Intento, Planos.
+Menu canônico atual (13 itens): Kit, Retorno, O Terceiro, Âncora, Deriva,
+Oráculo, Demônio do dia, Diário, Raízes, Blog, Manifesto, Intento, Planos.
+(Demônio do dia entrou em 20/09 no grupo Ferramentas; ver
+ADENDO-DEMONIO-DO-DIA.md. O termo ainda está pendente no glossário.)
 
 ### Pendências de UI abertas pro front
 - `/retorno` precisa de um campo de **localização do ano** ("onde você vai

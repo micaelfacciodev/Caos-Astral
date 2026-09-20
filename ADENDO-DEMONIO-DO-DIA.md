@@ -39,7 +39,7 @@ A página não usa "janela" para Sofia. "Janela" continua sendo só trânsito do
 
 1. Fechar o termo "demônio do dia" no glossário.
 2. Fechar Sofia e Saklas como nomes exibidos em UI.
-3. Link no menu. O menu canônico tem 12 itens. A página existe em `/demonio-do-dia` sem link. Sugestão: começar por um link no Kit ou no rodapé.
+3. Link no menu. Feito em 20/09: item "Demônio do dia" no grupo Ferramentas de `assets/site-chrome.js`, depois de Oráculo. O menu canônico passou de 12 para 13 itens. Se o nome mudar no glossário, mudar só o `NAV_GROUPS`.
 4. Revisar os 72 gatilhos e a regra v0 de irritabilidade (Fogo alta, Terra e Ar médias, Água baixa). Atenção ao tom das entradas 55 e 56.
 5. Direitos da tradução. A página traz só nomes e partes do corpo, sem reproduzir o texto. Para trazer trechos, é preciso licença do tradutor ou tradução própria a partir do copta.
 6. Conferir na sinopse Waldstein e Wisse as entradas 17, 19 (nomes perdidos), 20, 21, 53, 54, 59 (leituras incertas) e 72 (sem parte). Os nomes variam entre os manuscritos BG, II, III e IV.
